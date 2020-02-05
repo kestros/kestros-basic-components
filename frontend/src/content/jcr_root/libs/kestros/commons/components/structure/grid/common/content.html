@@ -1,0 +1,28 @@
+<sly data-sly-use.grid="${'io.kestros.commons.components.basic.structure.grid.Grid'}"/>
+
+<div>
+  <sly data-sly-test="${grid.numberOfColumns == 2}">
+    <sly
+        data-sly-resource="${'column-1' @ resourceType='kestros/commons/components/content-area'}"/>
+    <sly
+        data-sly-resource="${'column-2' @ resourceType='kestros/commons/components/content-area'}"/>
+  </sly>
+  <sly data-sly-test="${grid.numberOfColumns == 3}">
+    <sly
+        data-sly-resource="${'column-1' @ resourceType='kestros/commons/components/content-area'}"/>
+    <sly
+        data-sly-resource="${'column-2' @ resourceType='kestros/commons/components/content-area'}"/>
+    <sly
+        data-sly-resource="${'column-3' @ resourceType='kestros/commons/components/content-area'}"/>
+  </sly>
+  <sly data-sly-test="${grid.numberOfColumns == 4}">
+    <sly
+        data-sly-resource="${'column-1' @ resourceType='kestros/commons/components/content-area'}"/>
+    <sly
+        data-sly-resource="${'column-2' @ resourceType='kestros/commons/components/content-area'}"/>
+    <sly
+        data-sly-resource="${'column-3' @ resourceType='kestros/commons/components/content-area'}"/>
+    <sly
+        data-sly-resource="${'column-4' @ resourceType='kestros/commons/components/content-area'}"/>
+  </sly>
+</div>
