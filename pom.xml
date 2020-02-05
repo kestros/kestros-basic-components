@@ -19,9 +19,14 @@
   <description></description>
   <packaging>pom</packaging>
 
+  <modules>
+    <module>core</module>
+    <module>frontend</module>
+  </modules>
+
   <dependencyManagement>
     <dependencies>
-      <dependency>
+      <dependency>  
         <groupId>io.kestros.cms</groupId>
         <artifactId>kestros-cms-foundation-core</artifactId>
         <version>0.0.1-SNAPSHOT</version>

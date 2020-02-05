@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workspaceFilter version="1.0">
+
+  <filter root="/libs/kestros/commons/components/structure/container" mode="replace"/>
+  <filter root="/libs/kestros/commons/components/structure/grid" mode="replace"/>
+  <filter root="/libs/kestros/commons/components/structure/navigation" mode="replace"/>
+
+  <filter root="/libs/kestros/commons/components/content/heading" mode="replace"/>
+  <filter root="/libs/kestros/commons/components/content/richtext" mode="replace"/>
+  <filter root="/libs/kestros/commons/components/content/text" mode="replace"/>
+
+</workspaceFilter>
