@@ -1,0 +1,6 @@
+<sly
+    data-sly-use.navigation="${'com.slingware.kestros.commons.components.basic.structure.navigation.Navigation'}"/>
+
+<ul data-sly-list.page="${navigation.navigationPages}">
+  <li><a href="${page.path}.html">${page.title}</a></li>
+</ul>
