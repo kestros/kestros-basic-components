@@ -22,7 +22,7 @@ import org.apache.sling.models.annotations.Model;
        resourceType = {"kestros/commons/components/structure/navigation"})
 public class Navigation extends BaseComponent {
 
-  @JsonIgnoreProperties("components")
+  @JsonIgnoreProperties({"components", "childPages"})
   public List<BaseContentPage> getNavigationPages() {
     try {
       return getRootPage().getChildPages();
