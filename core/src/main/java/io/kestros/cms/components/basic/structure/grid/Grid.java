@@ -11,11 +11,15 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @StructuredModel(validationService = GridValidationService.class)
 @Model(adaptables = Resource.class,
        resourceType = "kestros/commons/components/structure/grid")
 public class Grid extends BaseComponent {
+
+  private static final Logger LOG = LoggerFactory.getLogger(Grid.class);
 
   public int getNumberOfColumns() {
     return getProperty("columns", 3);
@@ -26,10 +30,8 @@ public class Grid extends BaseComponent {
     for (int i = 1; i < getNumberOfColumns() + 1; i++) {
       try {
         columns.add(getChildAsType("column-" + i, this, ContentArea.class));
-      } catch (InvalidResourceTypeException e) {
-        // todo log.
-      } catch (ChildResourceNotFoundException e) {
-        // todo log.
+      } catch (ChildResourceNotFoundException | InvalidResourceTypeException e) {
+        LOG.error("Unable to render 'column-{}' under Grid '{}'. {}", i, getPath(), e.getMessage());
       }
     }
     return columns;
