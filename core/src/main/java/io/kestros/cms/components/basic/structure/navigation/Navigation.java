@@ -4,6 +4,7 @@ import static io.kestros.commons.structuredslingmodels.utils.SlingModelUtils.get
 import static io.kestros.commons.structuredslingmodels.utils.SlingModelUtils.getParentResourceAsType;
 import static io.kestros.commons.structuredslingmodels.utils.SlingModelUtils.getResourceAsType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.kestros.cms.foundation.content.BaseComponent;
 import io.kestros.cms.foundation.content.pages.BaseContentPage;
@@ -33,8 +34,8 @@ public class Navigation extends BaseComponent {
     return Collections.emptyList();
   }
 
-
-  protected BaseContentPage getRootPage() throws NoValidAncestorException {
+  @JsonIgnore
+  public BaseContentPage getRootPage() throws NoValidAncestorException {
     String rootPagePath = getProperty("rootPage", StringUtils.EMPTY);
 
     try {
