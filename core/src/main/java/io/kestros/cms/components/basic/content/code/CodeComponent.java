@@ -19,9 +19,11 @@
 package io.kestros.cms.components.basic.content.code;
 
 import io.kestros.cms.components.basic.content.text.TextComponent;
+import io.kestros.commons.structuredslingmodels.annotation.StructuredModel;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
+@StructuredModel(validationService = CodeComponentValidationService.class)
 @Model(adaptables = Resource.class,
        resourceType = "kestros/commons/components/content/code")
 public class CodeComponent extends TextComponent {
