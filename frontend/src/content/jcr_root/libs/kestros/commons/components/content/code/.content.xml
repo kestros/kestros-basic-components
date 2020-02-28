@@ -17,16 +17,10 @@
   ~
   -->
 
-<workspaceFilter version="1.0">
-
-  <filter root="/libs/kestros/commons/components/structure/container" mode="replace"/>
-  <filter root="/libs/kestros/commons/components/structure/grid" mode="replace"/>
-  <filter root="/libs/kestros/commons/components/structure/navigation" mode="replace"/>
-  <filter root="/libs/kestros/commons/components/structure/top-navigation" mode="replace"/>
-
-  <filter root="/libs/kestros/commons/components/content/code" mode="replace"/>
-  <filter root="/libs/kestros/commons/components/content/heading" mode="replace"/>
-  <filter root="/libs/kestros/commons/components/content/richtext" mode="replace"/>
-  <filter root="/libs/kestros/commons/components/content/text" mode="replace"/>
-
-</workspaceFilter>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+  jcr:primaryType="kes:ComponentType"
+  jcr:title="Code"
+  jcr:description="Render code snippets."
+  componentGroup="Content Components"
+  sling:resourceSuperType="kestros/commons/components/kestros-parent"
+  fontAwesomeIcon="fas fa-code"/>
