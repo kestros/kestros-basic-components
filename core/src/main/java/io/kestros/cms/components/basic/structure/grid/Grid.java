@@ -22,7 +22,7 @@ import static io.kestros.commons.structuredslingmodels.utils.SlingModelUtils.get
 
 import io.kestros.cms.foundation.content.BaseComponent;
 import io.kestros.cms.foundation.content.components.contentarea.ContentArea;
-import io.kestros.commons.structuredslingmodels.annotation.StructuredModel;
+import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
 import io.kestros.commons.structuredslingmodels.exceptions.ChildResourceNotFoundException;
 import io.kestros.commons.structuredslingmodels.exceptions.InvalidResourceTypeException;
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ import org.apache.sling.models.annotations.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@StructuredModel(validationService = GridValidationService.class)
+@KestrosModel(validationService = GridValidationService.class)
 @Model(adaptables = Resource.class,
        resourceType = "kestros/commons/components/structure/grid")
 public class Grid extends BaseComponent {

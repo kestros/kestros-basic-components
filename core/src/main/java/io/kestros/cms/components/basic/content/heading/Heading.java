@@ -20,11 +20,11 @@ package io.kestros.cms.components.basic.content.heading;
 
 import io.kestros.cms.components.basic.content.text.TextComponent;
 import io.kestros.cms.components.basic.content.text.TextComponentValidationService;
-import io.kestros.commons.structuredslingmodels.annotation.StructuredModel;
+import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
-@StructuredModel(validationService = TextComponentValidationService.class)
+@KestrosModel(validationService = TextComponentValidationService.class)
 @Model(adaptables = Resource.class,
        resourceType = "kestros/commons/components/content/heading")
 public class Heading extends TextComponent {

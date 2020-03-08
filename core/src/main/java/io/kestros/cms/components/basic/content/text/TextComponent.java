@@ -19,12 +19,12 @@
 package io.kestros.cms.components.basic.content.text;
 
 import io.kestros.cms.foundation.content.BaseComponent;
-import io.kestros.commons.structuredslingmodels.annotation.StructuredModel;
+import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
-@StructuredModel(validationService = TextComponentValidationService.class)
+@KestrosModel(validationService = TextComponentValidationService.class)
 @Model(adaptables = Resource.class,
        resourceType = {"kestros/commons/components/content/text",
            "kestros/commons/components/content/richtext"})
