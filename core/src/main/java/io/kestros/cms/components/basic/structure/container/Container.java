@@ -23,6 +23,9 @@ import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
+/**
+ * Basic container component.
+ */
 @KestrosModel(validationService = ContainerValidationService.class)
 @Model(adaptables = Resource.class,
        resourceType = "kestros/commons/components/structure/container")
