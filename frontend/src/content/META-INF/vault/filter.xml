@@ -26,6 +26,7 @@
 
   <filter root="/libs/kestros/commons/components/content/code" mode="replace"/>
   <filter root="/libs/kestros/commons/components/content/heading" mode="replace"/>
+  <filter root="/libs/kestros/commons/components/content/page-title" mode="replace"/>
   <filter root="/libs/kestros/commons/components/content/richtext" mode="replace"/>
   <filter root="/libs/kestros/commons/components/content/text" mode="replace"/>
 
