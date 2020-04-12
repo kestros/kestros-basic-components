@@ -20,7 +20,7 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
   jcr:primaryType="kes:ComponentType"
   jcr:title="Heading"
-  jcr:description="Container component for Headings on a page or section"
+  jcr:description="Basic heading component, with configurable text and heading level."
   componentGroup="Content Components"
   sling:resourceSuperType="kestros/commons/components/kestros-parent"
   fontAwesomeIcon="fa fa-heading"/>
