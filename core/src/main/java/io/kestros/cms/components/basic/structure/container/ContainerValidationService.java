@@ -22,6 +22,9 @@ import io.kestros.commons.structuredslingmodels.validation.ModelValidationMessag
 import io.kestros.commons.structuredslingmodels.validation.ModelValidationService;
 import io.kestros.commons.structuredslingmodels.validation.ModelValidator;
 
+/**
+ * Validation Service for the {@link Container} component.
+ */
 public class ContainerValidationService extends ModelValidationService {
 
   @Override

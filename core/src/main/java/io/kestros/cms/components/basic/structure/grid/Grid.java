@@ -32,6 +32,9 @@ import org.apache.sling.models.annotations.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Basic grid component.
+ */
 @KestrosModel(validationService = GridValidationService.class)
 @Model(adaptables = Resource.class,
        resourceType = "kestros/commons/components/structure/grid")
@@ -39,10 +42,20 @@ public class Grid extends BaseComponent {
 
   private static final Logger LOG = LoggerFactory.getLogger(Grid.class);
 
+  /**
+   * Number of columns to display.
+   *
+   * @return Number of columns to display.
+   */
   public int getNumberOfColumns() {
     return getProperty("columns", 3);
   }
 
+  /**
+   * The grid's column resources.
+   *
+   * @return The grid's column resources.
+   */
   public List<ContentArea> getColumns() {
     List<ContentArea> columns = new ArrayList<>();
     for (int i = 1; i < getNumberOfColumns() + 1; i++) {

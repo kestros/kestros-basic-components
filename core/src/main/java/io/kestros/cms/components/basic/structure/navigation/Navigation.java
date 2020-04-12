@@ -39,12 +39,20 @@ import org.apache.sling.models.annotations.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Basic navigation component.
+ */
 @Model(adaptables = Resource.class,
        resourceType = {"kestros/commons/components/structure/navigation"})
 public class Navigation extends BaseComponent {
 
   private static final Logger LOG = LoggerFactory.getLogger(Navigation.class);
 
+  /**
+   * List of all pages to be shown in the navigation.
+   *
+   * @return List of all pages to be shown in the navigation.
+   */
   @JsonIgnoreProperties({"components", "childPages"})
   public List<BaseContentPage> getNavigationPages() {
     try {
@@ -56,6 +64,13 @@ public class Navigation extends BaseComponent {
     return Collections.emptyList();
   }
 
+  /**
+   * Page which will act as the root of the current Navigation component.  If no path is provided,
+   * will return the Page which contains the current Navigation component.
+   *
+   * @return Page which will act as the root of the current Navigation component.
+   * @throws NoValidAncestorException No containing page could be found.
+   */
   @JsonIgnore
   public BaseContentPage getRootPage() throws NoValidAncestorException {
     String rootPagePath = getProperty("rootPage", StringUtils.EMPTY);

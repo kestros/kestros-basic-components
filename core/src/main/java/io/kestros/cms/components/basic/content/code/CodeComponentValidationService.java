@@ -24,8 +24,10 @@ import io.kestros.commons.structuredslingmodels.validation.ModelValidationServic
 import io.kestros.commons.structuredslingmodels.validation.ModelValidator;
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * Validation service for the {@link CodeComponent} component.
+ */
 public class CodeComponentValidationService extends ModelValidationService {
-
 
   @Override
   public TextComponent getModel() {

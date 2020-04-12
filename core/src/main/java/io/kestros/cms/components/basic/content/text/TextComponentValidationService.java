@@ -23,6 +23,9 @@ import io.kestros.commons.structuredslingmodels.validation.ModelValidationServic
 import io.kestros.commons.structuredslingmodels.validation.ModelValidator;
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * Validation service for the {@link TextComponent} component.
+ */
 public class TextComponentValidationService extends ModelValidationService {
 
   @Override

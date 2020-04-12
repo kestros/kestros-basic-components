@@ -24,11 +24,19 @@ import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
+/**
+ * Basic Heading component.
+ */
 @KestrosModel(validationService = TextComponentValidationService.class)
 @Model(adaptables = Resource.class,
        resourceType = "kestros/commons/components/content/heading")
 public class Heading extends TextComponent {
 
+  /**
+   * Heading level.
+   *
+   * @return Heading level.
+   */
   public String getLevel() {
     return getProperty("level", "h1");
   }

@@ -23,11 +23,19 @@ import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
+/**
+ * Component for displaying text as code snippets.
+ */
 @KestrosModel(validationService = CodeComponentValidationService.class)
 @Model(adaptables = Resource.class,
        resourceType = "kestros/commons/components/content/code")
 public class CodeComponent extends TextComponent {
 
+  /**
+   * Language to show the code snippet as.
+   *
+   * @return Language to show the code snippet as.
+   */
   public String getLanguage() {
     return getProperty("language", "html");
   }

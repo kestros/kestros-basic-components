@@ -24,12 +24,20 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
+/**
+ * Basic text component.
+ */
 @KestrosModel(validationService = TextComponentValidationService.class)
 @Model(adaptables = Resource.class,
        resourceType = {"kestros/commons/components/content/text",
            "kestros/commons/components/content/richtext"})
 public class TextComponent extends BaseComponent {
 
+  /**
+   * Text to display.
+   *
+   * @return Text to display.
+   */
   public String getText() {
     return getProperty("text", StringUtils.EMPTY);
   }
