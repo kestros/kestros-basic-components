@@ -16,9 +16,8 @@
   ~
   */-->
 <sly
-    data-sly-use.navigation="${'io.kestros.cms.components.basic.structure.navigation.Navigation'}"/>
+    data-sly-use.navigation="${'io.kestros.cms.components.basic.structure.navigation.TopNavigation'}"/>
 
-<h1>${navigation.containingPage.title}</h1>
 <ul>
   <li><a href="${navigation.rootPage.path}.html">${navigation.rootPage.title}</a></li>
   <ul data-sly-list.page="${navigation.navigationPages}">
