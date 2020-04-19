@@ -32,7 +32,8 @@
   <artifactId>kestros-basic-components-frontend</artifactId>
 
   <name>Kestros Basic Components - Frontend Package</name>
-
+  <packaging>content-package</packaging>
+  
   <build>
     <resources>
       <resource>
