@@ -25,6 +25,7 @@
   <filter root="/libs/kestros/commons/components/structure/top-navigation" mode="replace"/>
 
   <filter root="/libs/kestros/commons/components/content/alert" mode="replace"/>
+  <filter root="/libs/kestros/commons/components/content/button" mode="replace"/>
   <filter root="/libs/kestros/commons/components/content/code" mode="replace"/>
   <filter root="/libs/kestros/commons/components/content/heading" mode="replace"/>
   <filter root="/libs/kestros/commons/components/content/page-title" mode="replace"/>
