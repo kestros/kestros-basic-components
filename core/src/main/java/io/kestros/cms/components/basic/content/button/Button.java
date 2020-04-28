@@ -19,6 +19,7 @@
 package io.kestros.cms.components.basic.content.button;
 
 import io.kestros.cms.components.basic.content.text.TextComponent;
+import io.kestros.cms.foundation.content.ComponentRequestContext;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
 import org.apache.commons.lang3.StringUtils;
@@ -28,7 +29,8 @@ import org.apache.sling.models.annotations.Model;
 /**
  * Basic button component.
  */
-@KestrosModel(validationService = ButtonValidationService.class)
+@KestrosModel(validationService = ButtonValidationService.class,
+              contextModel = ComponentRequestContext.class)
 @Model(adaptables = Resource.class,
        resourceType = "kestros/commons/components/content/button")
 public class Button extends TextComponent {
@@ -39,6 +41,7 @@ public class Button extends TextComponent {
    * @return Where the button will link off to.
    */
   @KestrosProperty(description = "URL the button links to.",
+                   jcrPropertyName = "link",
                    configurable = true,
                    sampleValue = "https://kestros.io")
   public String getLink() {

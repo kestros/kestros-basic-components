@@ -19,7 +19,7 @@
 package io.kestros.cms.components.basic.content.pagetitle;
 
 import io.kestros.cms.foundation.content.pages.BaseContentPage;
-import io.kestros.commons.structuredslingmodels.BaseSlingRequest;
+import io.kestros.commons.structuredslingmodels.BaseRequestContext;
 import io.kestros.commons.structuredslingmodels.exceptions.InvalidResourceTypeException;
 import io.kestros.commons.structuredslingmodels.exceptions.ResourceNotFoundException;
 import io.kestros.commons.structuredslingmodels.utils.SlingModelUtils;
@@ -31,7 +31,7 @@ import org.apache.sling.models.annotations.Model;
  * Provides the title of the requested page the the PageTitle component.
  */
 @Model(adaptables = SlingHttpServletRequest.class)
-public class PageTitleContext extends BaseSlingRequest {
+public class PageTitleContext extends BaseRequestContext {
 
   /**
    * Requested page's title.
