@@ -44,6 +44,13 @@
     </license>
   </licenses>
 
+  <scm>
+    <connection>scm:git:git://github.com/kestros/kestros-basic-components.git</connection>
+    <developerConnection>scm:git:ssh://github.com:kestros/kestros-basic-components.git
+    </developerConnection>
+    <url>https://github.com/kestros/kestros-basic-components/tree/master</url>
+  </scm>
+
   <modules>
     <module>core</module>
     <module>frontend</module>
