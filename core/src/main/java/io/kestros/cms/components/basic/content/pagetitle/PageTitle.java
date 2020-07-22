@@ -16,33 +16,34 @@
  *
  */
 
-package io.kestros.cms.components.basic.structure.navigation;
+package io.kestros.cms.components.basic.content.pagetitle;
 
-import static io.kestros.commons.structuredslingmodels.utils.SlingModelUtils.getFirstAncestorOfType;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.kestros.cms.foundation.content.pages.BaseContentPage;
-import io.kestros.cms.foundation.content.sites.BaseSite;
+import io.kestros.cms.foundation.content.BaseComponent;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
-import io.kestros.commons.structuredslingmodels.exceptions.NoValidAncestorException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
 /**
- * Top Navigation which acts the same as {@link Navigation}, but the Site root is always the
- * RootPage.
+ * Component for displaying the current page title as a heading.
  */
-@KestrosModel()
+@KestrosModel(contextModel = PageTitleContext.class)
 @Model(adaptables = Resource.class,
-       resourceType = {"kestros/commons/components/structure/top-navigation"})
-public class TopNavigation extends Navigation {
+       resourceType = "kestros/commons/components/content/page-title")
+public class PageTitle extends BaseComponent {
 
-  @JsonIgnore
-  @Override
-  @KestrosProperty(description = "The current site's top level page.")
-  public BaseContentPage getRootPage() throws NoValidAncestorException {
-    return getFirstAncestorOfType(this, BaseSite.class);
+  /**
+   * Heading level.
+   *
+   * @return Heading level.
+   */
+  @KestrosProperty(description = "Heading level",
+                   defaultValue = "h1",
+                   configurable = true,
+                   sampleValue = "h1",
+                   jcrPropertyName = "level")
+  public String getLevel() {
+    return getProperty("level", "h1");
   }
 
 }

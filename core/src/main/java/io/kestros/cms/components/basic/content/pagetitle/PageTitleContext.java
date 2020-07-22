@@ -18,34 +18,39 @@
 
 package io.kestros.cms.components.basic.content.pagetitle;
 
+import static io.kestros.commons.structuredslingmodels.utils.SlingModelUtils.getResourceAsType;
+
+import io.kestros.cms.foundation.content.ComponentRequestContext;
 import io.kestros.cms.foundation.content.pages.BaseContentPage;
-import io.kestros.commons.structuredslingmodels.BaseRequestContext;
-import io.kestros.commons.structuredslingmodels.exceptions.InvalidResourceTypeException;
-import io.kestros.commons.structuredslingmodels.exceptions.ResourceNotFoundException;
-import io.kestros.commons.structuredslingmodels.utils.SlingModelUtils;
+import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
+import io.kestros.commons.structuredslingmodels.exceptions.ModelAdaptionException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Model;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Provides the title of the requested page the the PageTitle component.
  */
 @Model(adaptables = SlingHttpServletRequest.class)
-public class PageTitleContext extends BaseRequestContext {
+public class PageTitleContext extends ComponentRequestContext {
+
+  private static final Logger LOG = LoggerFactory.getLogger(PageTitleContext.class);
 
   /**
    * Requested page's title.
    *
    * @return Requested page's title.
    */
-  public String getText() {
+  @KestrosProperty(description = "Title of the page the component is rendered on.")
+  public String getPageTitle() {
     try {
-      return SlingModelUtils.getResourceAsType(getRequest().getRequestURI().split(".html")[0],
+      return getResourceAsType(getRequest().getRequestURI().split(".html")[0],
           getRequest().getResourceResolver(), BaseContentPage.class).getDisplayTitle();
-    } catch (InvalidResourceTypeException e) {
-      e.printStackTrace();
-    } catch (ResourceNotFoundException e) {
-      e.printStackTrace();
+    } catch (ModelAdaptionException e) {
+      LOG.warn("Unable to find text for page title component {}. {}.", getBaseResource().getPath(),
+          e.getMessage());
     }
     return StringUtils.EMPTY;
   }

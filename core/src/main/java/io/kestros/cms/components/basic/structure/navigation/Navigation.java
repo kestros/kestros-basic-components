@@ -27,6 +27,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.kestros.cms.foundation.content.BaseComponent;
 import io.kestros.cms.foundation.content.pages.BaseContentPage;
 import io.kestros.cms.foundation.content.sites.BaseSite;
+import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
+import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
 import io.kestros.commons.structuredslingmodels.exceptions.InvalidResourceTypeException;
 import io.kestros.commons.structuredslingmodels.exceptions.NoParentResourceException;
 import io.kestros.commons.structuredslingmodels.exceptions.NoValidAncestorException;
@@ -42,6 +44,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Basic navigation component.
  */
+@KestrosModel()
 @Model(adaptables = Resource.class,
        resourceType = {"kestros/commons/components/structure/navigation"})
 public class Navigation extends BaseComponent {
@@ -53,6 +56,7 @@ public class Navigation extends BaseComponent {
    *
    * @return List of all pages to be shown in the navigation.
    */
+  @KestrosProperty(description = "Children of the root page.")
   @JsonIgnoreProperties({"components", "childPages"})
   public List<BaseContentPage> getNavigationPages() {
     try {
@@ -72,6 +76,10 @@ public class Navigation extends BaseComponent {
    * @throws NoValidAncestorException No containing page could be found.
    */
   @JsonIgnore
+  @KestrosProperty(description = "The page the navigation list is built from.",
+                   configurable = true,
+                   jcrPropertyName = "rootPage",
+                   defaultValue = "[site root]")
   public BaseContentPage getRootPage() throws NoValidAncestorException {
     String rootPagePath = getProperty("rootPage", StringUtils.EMPTY);
 

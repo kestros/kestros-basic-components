@@ -20,6 +20,7 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
   xmlns:jcr="http://www.jcp.org/jcr/1.0"
   jcr:primaryType="kes:ComponentType"
+  sling:resourceSuperType="kestros/commons/components/kestros-parent"
   jcr:title="Navigation"
-  componentGroup="Layout Components"
-  sling:resourceSuperType="kestros/commons/components/kestros-parent"/>
+  jcr:description="Navigation list of child pages from a specified root page."
+  componentGroup="Navigation Components"/>
