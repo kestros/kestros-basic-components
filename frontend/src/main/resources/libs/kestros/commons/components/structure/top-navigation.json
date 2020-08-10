@@ -1,0 +1,7 @@
+{
+  "jcr:primaryType": "kes:ComponentType",
+  "sling:resourceSuperType": "kestros/commons/components/kestros-parent",
+  "jcr:title": "Top Navigation",
+  "jcr:description": "Root level navigation list.",
+  "componentGroup": "Navigation Components"
+}

@@ -1,0 +1,8 @@
+{
+  "jcr:primaryType": "kes:ComponentType",
+  "jcr:title": "Grid",
+  "jcr:description": "Grid component for multi-column layouts",
+  "componentGroup": "Layout Components",
+  "sling:resourceSuperType": "kestros/commons/components/kestros-parent",
+  "fontAwesomeIcon": "fa fa-columns"
+}
