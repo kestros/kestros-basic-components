@@ -23,6 +23,8 @@ import static io.kestros.commons.structuredslingmodels.utils.SlingModelUtils.get
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.kestros.cms.foundation.content.pages.BaseContentPage;
 import io.kestros.cms.foundation.content.sites.BaseSite;
+import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
+import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
 import io.kestros.commons.structuredslingmodels.exceptions.NoValidAncestorException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
@@ -31,12 +33,14 @@ import org.apache.sling.models.annotations.Model;
  * Top Navigation which acts the same as {@link Navigation}, but the Site root is always the
  * RootPage.
  */
+@KestrosModel()
 @Model(adaptables = Resource.class,
        resourceType = {"kestros/commons/components/structure/top-navigation"})
 public class TopNavigation extends Navigation {
 
   @JsonIgnore
   @Override
+  @KestrosProperty(description = "The current site's top level page.")
   public BaseContentPage getRootPage() throws NoValidAncestorException {
     return getFirstAncestorOfType(this, BaseSite.class);
   }

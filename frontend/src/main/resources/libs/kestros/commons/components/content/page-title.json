@@ -1,0 +1,8 @@
+{
+  "jcr:primaryType": "kes:ComponentType",
+  "sling:resourceSuperType": "kestros/commons/components/kestros-parent",
+  "jcr:title": "Page Title",
+  "jcr:description": "Displays the current page title as a heading",
+  "componentGroup": "Content Components",
+  "fontAwesomeIcon": "fa fa-heading"
+}

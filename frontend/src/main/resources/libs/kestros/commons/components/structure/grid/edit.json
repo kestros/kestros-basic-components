@@ -1,0 +1,43 @@
+{
+  "jcr:primaryType": "nt:unstructured",
+  "sling:resourceType": "kestros/cms/dialog",
+  "jcr:title": "Edit",
+  "content-area": {
+    "jcr:primaryType": "nt:unstructured",
+    "tabs": {
+      "jcr:primaryType": "nt:unstructured",
+      "sling:resourceType": "kestros/cms/general/tabs",
+      "container": true,
+      "general": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms/general/container",
+        "jcr:title": "General",
+        "container": true,
+        "columns": {
+          "jcr:primaryType": "nt:unstructured",
+          "sling:resourceType": "kestros/cms/fields/radio-list-field",
+          "label": "Columns",
+          "propertyName": "columns",
+          "options": {
+            "jcr:primaryType": "nt:unstructured",
+            "two": {
+              "jcr:primaryType": "nt:unstructured",
+              "text": "Two Columns",
+              "value": 2
+            },
+            "three": {
+              "jcr:primaryType": "nt:unstructured",
+              "text": "Three Columns",
+              "value": 3
+            },
+            "four": {
+              "jcr:primaryType": "nt:unstructured",
+              "text": "Four Columns",
+              "value": 4
+            }
+          }
+        }
+      }
+    }
+  }
+}

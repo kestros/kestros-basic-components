@@ -39,7 +39,7 @@ public class TextComponent extends BaseComponent {
    *
    * @return Text to display.
    */
-  @KestrosProperty(description = "test",
+  @KestrosProperty(description = "Element text.",
                    jcrPropertyName = "text",
                    configurable = true)
   public String getText() {

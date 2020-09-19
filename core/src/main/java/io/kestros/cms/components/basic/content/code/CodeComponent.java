@@ -20,6 +20,7 @@ package io.kestros.cms.components.basic.content.code;
 
 import io.kestros.cms.components.basic.content.text.TextComponent;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
+import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
@@ -31,11 +32,17 @@ import org.apache.sling.models.annotations.Model;
        resourceType = "kestros/commons/components/content/code")
 public class CodeComponent extends TextComponent {
 
+
   /**
    * Language to show the code snippet as.
    *
    * @return Language to show the code snippet as.
    */
+  @KestrosProperty(description = "Language to show the code snippet as.",
+                   configurable = true,
+                   sampleValue = "html",
+                   defaultValue = "html",
+                   jcrPropertyName = "language")
   public String getLanguage() {
     return getProperty("language", "html");
   }
