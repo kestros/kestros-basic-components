@@ -21,6 +21,7 @@ package io.kestros.cms.components.basic.content.heading;
 import io.kestros.cms.components.basic.content.text.TextComponent;
 import io.kestros.cms.components.basic.content.text.TextComponentValidationService;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
+import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
@@ -37,6 +38,11 @@ public class Heading extends TextComponent {
    *
    * @return Heading level.
    */
+  @KestrosProperty(description = "Heading level",
+                   defaultValue = "h1",
+                   configurable = true,
+                   sampleValue = "h1",
+                   jcrPropertyName = "level")
   public String getLevel() {
     return getProperty("level", "h1");
   }

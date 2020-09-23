@@ -40,7 +40,7 @@
             <h1 jcr:primaryType="nt:unstructured"
               text="h1"
               value="h1"
-              initialValue="true"/>
+              selected="true"/>
             <h2 jcr:primaryType="nt:unstructured"
               text="h2"
               value="h2"/>

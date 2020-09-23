@@ -43,7 +43,7 @@
             <three jcr:primaryType="nt:unstructured"
               text="Three Columns"
               value="3"
-              initialValue="true"/>
+              selected="true"/>
             <four jcr:primaryType="nt:unstructured"
               text="Four Columns"
               value="4"/>

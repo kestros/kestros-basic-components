@@ -23,6 +23,7 @@ import static io.kestros.commons.structuredslingmodels.utils.SlingModelUtils.get
 import io.kestros.cms.foundation.content.BaseComponent;
 import io.kestros.cms.foundation.content.components.contentarea.ContentArea;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
+import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
 import io.kestros.commons.structuredslingmodels.exceptions.ChildResourceNotFoundException;
 import io.kestros.commons.structuredslingmodels.exceptions.InvalidResourceTypeException;
 import java.util.ArrayList;
@@ -47,6 +48,11 @@ public class Grid extends BaseComponent {
    *
    * @return Number of columns to display.
    */
+  @KestrosProperty(description = "Number of columns to display.",
+                   configurable = true,
+                   jcrPropertyName = "columns",
+                   defaultValue = "3",
+                   sampleValue = "3")
   public int getNumberOfColumns() {
     return getProperty("columns", 3);
   }
@@ -56,6 +62,7 @@ public class Grid extends BaseComponent {
    *
    * @return The grid's column resources.
    */
+  @KestrosProperty(description = "The grid's column resources.")
   public List<ContentArea> getColumns() {
     List<ContentArea> columns = new ArrayList<>();
     for (int i = 1; i < getNumberOfColumns() + 1; i++) {

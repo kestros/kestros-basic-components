@@ -25,13 +25,13 @@
   <parent>
     <groupId>io.kestros.commons</groupId>
     <artifactId>kestros-parent-strict</artifactId>
-    <version>0.0.6</version>
+    <version>0.1.2</version>
     <relativePath/>
   </parent>
 
   <groupId>io.kestros.cms</groupId>
   <artifactId>kestros-basic-components</artifactId>
-  <version>0.0.1</version>
+  <version>0.1.0</version>
 
   <name>Kestros Basic Components</name>
   <description></description>
@@ -44,6 +44,13 @@
     </license>
   </licenses>
 
+  <scm>
+    <connection>scm:git:git://github.com/kestros/kestros-basic-components.git</connection>
+    <developerConnection>scm:git:ssh://github.com:kestros/kestros-basic-components.git
+    </developerConnection>
+    <url>https://github.com/kestros/kestros-basic-components/tree/master</url>
+  </scm>
+
   <modules>
     <module>core</module>
     <module>frontend</module>
@@ -54,7 +61,7 @@
       <dependency>
         <groupId>io.kestros.cms</groupId>
         <artifactId>kestros-cms-foundation-core</artifactId>
-        <version>0.0.1</version>
+        <version>0.1.0</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

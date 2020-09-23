@@ -20,6 +20,7 @@ package io.kestros.cms.components.basic.content.text;
 
 import io.kestros.cms.foundation.content.BaseComponent;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
+import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
@@ -38,6 +39,9 @@ public class TextComponent extends BaseComponent {
    *
    * @return Text to display.
    */
+  @KestrosProperty(description = "Element text.",
+                   jcrPropertyName = "text",
+                   configurable = true)
   public String getText() {
     return getProperty("text", StringUtils.EMPTY);
   }
