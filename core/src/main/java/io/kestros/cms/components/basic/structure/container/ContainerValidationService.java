@@ -18,34 +18,38 @@
 
 package io.kestros.cms.components.basic.structure.container;
 
-import io.kestros.commons.structuredslingmodels.validation.ModelValidationMessageType;
-import io.kestros.commons.structuredslingmodels.validation.ModelValidationService;
-import io.kestros.commons.structuredslingmodels.validation.ModelValidator;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import io.kestros.commons.structuredslingmodels.BaseSlingModel;
+import io.kestros.commons.validation.ModelValidationMessageType;
+import io.kestros.commons.validation.models.ModelValidator;
+import io.kestros.commons.validation.services.ModelValidatorRegistrationService;
+import java.util.Collections;
+import java.util.List;
+import org.osgi.service.component.annotations.Component;
 
 /**
  * Validation Service for the {@link Container} component.
  */
-public class ContainerValidationService extends ModelValidationService {
+@Component(immediate = true,
+           service = ModelValidatorRegistrationService.class)
+public class ContainerValidationService implements ModelValidatorRegistrationService {
+
 
   @Override
-  public Container getModel() {
-    return (Container) getGenericModel();
+  public Class<? extends BaseSlingModel> getModelType() {
+    return Container.class;
   }
 
   @Override
-  public void registerBasicValidators() {
-    addBasicValidator(hasChild());
+  public List<ModelValidator> getModelValidators() {
+    return Collections.singletonList(hasChild());
   }
 
-  @Override
-  public void registerDetailedValidators() {
-    return;
-  }
-
+  @SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC_ANON")
   ModelValidator hasChild() {
-    return new ModelValidator() {
+    return new ModelValidator<Container>() {
       @Override
-      public boolean isValid() {
+      public Boolean isValidCheck() {
         return !getModel().getChildren().isEmpty();
       }
 
@@ -55,9 +59,15 @@ public class ContainerValidationService extends ModelValidationService {
       }
 
       @Override
+      public String getDetailedMessage() {
+        return "";
+      }
+
+      @Override
       public ModelValidationMessageType getType() {
         return ModelValidationMessageType.WARNING;
       }
     };
   }
+
 }

@@ -29,8 +29,7 @@ import org.apache.sling.models.annotations.Model;
 /**
  * Basic button component.
  */
-@KestrosModel(validationService = ButtonValidationService.class,
-              contextModel = ComponentRequestContext.class)
+@KestrosModel(contextModel = ComponentRequestContext.class)
 @Model(adaptables = Resource.class,
        resourceType = "kestros/commons/components/content/button")
 public class Button extends TextComponent {

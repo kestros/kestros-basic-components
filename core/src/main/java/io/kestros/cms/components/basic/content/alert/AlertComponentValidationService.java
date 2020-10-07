@@ -18,19 +18,21 @@
 
 package io.kestros.cms.components.basic.content.alert;
 
-import io.kestros.cms.components.basic.content.text.TextComponent;
-import io.kestros.cms.foundation.content.ComponentRequestContext;
-import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
-import org.apache.sling.api.resource.Resource;
-import org.apache.sling.models.annotations.Model;
+import io.kestros.cms.components.basic.content.text.TextComponentValidationService;
+import io.kestros.commons.structuredslingmodels.BaseSlingModel;
+import io.kestros.commons.validation.services.ModelValidatorRegistrationService;
+import org.osgi.service.component.annotations.Component;
 
 /**
- * Component used for displaying various levels of alert messages (defined by {@link
- * io.kestros.cms.foundation.componenttypes.variation.ComponentVariation}s.
+ * Validation Service for the {@link AlertComponent} Component.
  */
-@KestrosModel(contextModel = ComponentRequestContext.class)
-@Model(adaptables = Resource.class,
-       resourceType = "kestros/commons/components/content/alert")
-public class AlertComponent extends TextComponent {
+@Component(immediate = true,
+           service = ModelValidatorRegistrationService.class)
+public class AlertComponentValidationService extends TextComponentValidationService {
+
+  @Override
+  public Class<? extends BaseSlingModel> getModelType() {
+    return AlertComponent.class;
+  }
 
 }

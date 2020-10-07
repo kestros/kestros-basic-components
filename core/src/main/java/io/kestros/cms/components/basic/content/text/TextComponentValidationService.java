@@ -18,35 +18,39 @@
 
 package io.kestros.cms.components.basic.content.text;
 
-import io.kestros.commons.structuredslingmodels.validation.ModelValidationMessageType;
-import io.kestros.commons.structuredslingmodels.validation.ModelValidationService;
-import io.kestros.commons.structuredslingmodels.validation.ModelValidator;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import io.kestros.commons.structuredslingmodels.BaseSlingModel;
+import io.kestros.commons.validation.ModelValidationMessageType;
+import io.kestros.commons.validation.models.ModelValidator;
+import io.kestros.commons.validation.services.ModelValidatorRegistrationService;
+import java.util.Collections;
+import java.util.List;
 import org.apache.commons.lang3.StringUtils;
+import org.osgi.service.component.annotations.Component;
 
 /**
  * Validation service for the {@link TextComponent} component.
  */
-public class TextComponentValidationService extends ModelValidationService {
+@Component(immediate = true,
+           service = ModelValidatorRegistrationService.class)
+public class TextComponentValidationService implements ModelValidatorRegistrationService {
+
 
   @Override
-  public TextComponent getModel() {
-    return (TextComponent) getGenericModel();
+  public Class<? extends BaseSlingModel> getModelType() {
+    return TextComponent.class;
   }
 
   @Override
-  public void registerBasicValidators() {
-    addBasicValidator(hasText());
+  public List<ModelValidator> getModelValidators() {
+    return Collections.singletonList(hasText());
   }
 
-  @Override
-  public void registerDetailedValidators() {
-    return;
-  }
-
+  @SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC_ANON")
   ModelValidator hasText() {
-    return new ModelValidator() {
+    return new ModelValidator<TextComponent>() {
       @Override
-      public boolean isValid() {
+      public Boolean isValidCheck() {
         return StringUtils.isNotEmpty(getModel().getText());
       }
 
@@ -56,10 +60,16 @@ public class TextComponentValidationService extends ModelValidationService {
       }
 
       @Override
+      public String getDetailedMessage() {
+        return "'text' property must be configured.";
+      }
+
+      @Override
       public ModelValidationMessageType getType() {
         return ModelValidationMessageType.ERROR;
       }
     };
   }
+
 
 }

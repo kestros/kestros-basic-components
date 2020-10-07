@@ -21,10 +21,10 @@ package io.kestros.cms.components.basic.content.text;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 
-import io.kestros.commons.structuredslingmodels.validation.ModelValidationMessageType;
+import io.kestros.commons.validation.ModelValidationMessageType;
+import io.kestros.commons.validation.models.ModelValidator;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.sling.api.resource.Resource;
@@ -54,31 +54,10 @@ public class TextComponentValidationServiceTest {
   }
 
   @Test
-  public void testGetModel() {
-    textComponent = new TextComponent();
-    doReturn(textComponent).when(textComponentValidationService).getGenericModel();
-
-    assertEquals(textComponent, textComponentValidationService.getModel());
-  }
-
-  @Test
   public void testRegisterBasicValidators() {
     textComponent = new TextComponent();
-    doReturn(textComponent).when(textComponentValidationService).getGenericModel();
 
-    textComponentValidationService.registerBasicValidators();
-
-    assertEquals(1, textComponentValidationService.getBasicValidators().size());
-  }
-
-  @Test
-  public void testRegisterDetailedValidators() {
-    textComponent = new TextComponent();
-    doReturn(textComponent).when(textComponentValidationService).getGenericModel();
-
-    textComponentValidationService.registerDetailedValidators();
-
-    assertEquals(0, textComponentValidationService.getDetailedValidators().size());
+    assertEquals(1, textComponentValidationService.getModelValidators().size());
   }
 
   @Test
@@ -88,9 +67,10 @@ public class TextComponentValidationServiceTest {
 
     textComponent = resource.adaptTo(TextComponent.class);
 
-    doReturn(textComponent).when(textComponentValidationService).getGenericModel();
+    ModelValidator validator = textComponentValidationService.hasText();
+    validator.setModel(textComponent);
 
-    assertTrue(textComponentValidationService.hasText().isValid());
+    assertTrue(validator.isValidCheck());
   }
 
   @Test
@@ -99,11 +79,11 @@ public class TextComponentValidationServiceTest {
 
     textComponent = resource.adaptTo(TextComponent.class);
 
-    doReturn(textComponent).when(textComponentValidationService).getGenericModel();
+    ModelValidator validator = textComponentValidationService.hasText();
+    validator.setModel(textComponent);
 
-    assertFalse(textComponentValidationService.hasText().isValid());
-    assertEquals("Text is configured.", textComponentValidationService.hasText().getMessage());
-    assertEquals(ModelValidationMessageType.ERROR,
-        textComponentValidationService.hasText().getType());
+    assertFalse(validator.isValidCheck());
+    assertEquals("Text is configured.", validator.getMessage());
+    assertEquals(ModelValidationMessageType.ERROR, validator.getType());
   }
 }

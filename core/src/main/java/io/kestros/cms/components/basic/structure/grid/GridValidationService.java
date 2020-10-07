@@ -18,33 +18,38 @@
 
 package io.kestros.cms.components.basic.structure.grid;
 
-import io.kestros.commons.structuredslingmodels.validation.ModelValidationMessageType;
-import io.kestros.commons.structuredslingmodels.validation.ModelValidationService;
-import io.kestros.commons.structuredslingmodels.validation.ModelValidator;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import io.kestros.commons.structuredslingmodels.BaseSlingModel;
+import io.kestros.commons.validation.ModelValidationMessageType;
+import io.kestros.commons.validation.models.ModelValidator;
+import io.kestros.commons.validation.services.ModelValidatorRegistrationService;
+import java.util.Collections;
+import java.util.List;
+import org.osgi.service.component.annotations.Component;
 
 /**
  * Validation Service for the {@link Grid} component.
  */
-public class GridValidationService extends ModelValidationService {
+@Component(immediate = true,
+           service = ModelValidatorRegistrationService.class)
+public class GridValidationService implements ModelValidatorRegistrationService {
+
 
   @Override
-  public Grid getModel() {
-    return (Grid) getGenericModel();
+  public Class<? extends BaseSlingModel> getModelType() {
+    return Grid.class;
   }
 
   @Override
-  public void registerBasicValidators() {
-    addBasicValidator(columnsAreContentAreas());
+  public List<ModelValidator> getModelValidators() {
+    return Collections.singletonList(columnsAreContentAreas());
   }
 
-  @Override
-  public void registerDetailedValidators() {
-  }
-
+  @SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC_ANON")
   ModelValidator columnsAreContentAreas() {
-    return new ModelValidator() {
+    return new ModelValidator<Grid>() {
       @Override
-      public boolean isValid() {
+      public Boolean isValidCheck() {
         return getModel().getColumns().size() == getModel().getNumberOfColumns();
       }
 
@@ -54,9 +59,15 @@ public class GridValidationService extends ModelValidationService {
       }
 
       @Override
+      public String getDetailedMessage() {
+        return "";
+      }
+
+      @Override
       public ModelValidationMessageType getType() {
         return ModelValidationMessageType.ERROR;
       }
     };
   }
+
 }

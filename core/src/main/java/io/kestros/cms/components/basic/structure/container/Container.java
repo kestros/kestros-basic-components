@@ -26,7 +26,7 @@ import org.apache.sling.models.annotations.Model;
 /**
  * Basic container component.
  */
-@KestrosModel(validationService = ContainerValidationService.class)
+@KestrosModel
 @Model(adaptables = Resource.class,
        resourceType = "kestros/commons/components/structure/container")
 public class Container extends BaseComponent {

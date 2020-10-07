@@ -28,7 +28,7 @@ import org.apache.sling.models.annotations.Model;
 /**
  * Basic text component.
  */
-@KestrosModel(validationService = TextComponentValidationService.class)
+@KestrosModel()
 @Model(adaptables = Resource.class,
        resourceType = {"kestros/commons/components/content/text",
            "kestros/commons/components/content/richtext"})

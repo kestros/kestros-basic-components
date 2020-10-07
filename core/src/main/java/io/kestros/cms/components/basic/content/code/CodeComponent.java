@@ -27,7 +27,7 @@ import org.apache.sling.models.annotations.Model;
 /**
  * Component for displaying text as code snippets.
  */
-@KestrosModel(validationService = CodeComponentValidationService.class)
+@KestrosModel()
 @Model(adaptables = Resource.class,
        resourceType = "kestros/commons/components/content/code")
 public class CodeComponent extends TextComponent {
