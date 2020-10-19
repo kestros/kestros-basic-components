@@ -28,7 +28,7 @@ import org.apache.sling.models.annotations.Model;
 /**
  * Basic Heading component.
  */
-@KestrosModel(validationService = TextComponentValidationService.class)
+@KestrosModel()
 @Model(adaptables = Resource.class,
        resourceType = "kestros/commons/components/content/heading")
 public class Heading extends TextComponent {

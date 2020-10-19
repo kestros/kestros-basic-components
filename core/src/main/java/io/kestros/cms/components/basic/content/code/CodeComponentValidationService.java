@@ -18,42 +18,50 @@
 
 package io.kestros.cms.components.basic.content.code;
 
-import io.kestros.cms.components.basic.content.text.TextComponent;
-import io.kestros.commons.structuredslingmodels.validation.ModelValidationMessageType;
-import io.kestros.commons.structuredslingmodels.validation.ModelValidationService;
-import io.kestros.commons.structuredslingmodels.validation.ModelValidator;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import io.kestros.commons.structuredslingmodels.BaseSlingModel;
+import io.kestros.commons.validation.ModelValidationMessageType;
+import io.kestros.commons.validation.models.ModelValidator;
+import io.kestros.commons.validation.services.ModelValidatorRegistrationService;
+import java.util.Collections;
+import java.util.List;
 import org.apache.commons.lang3.StringUtils;
+import org.osgi.service.component.annotations.Component;
 
 /**
  * Validation service for the {@link CodeComponent} component.
  */
-public class CodeComponentValidationService extends ModelValidationService {
+@Component(immediate = true,
+           service = ModelValidatorRegistrationService.class)
+public class CodeComponentValidationService implements ModelValidatorRegistrationService {
+
 
   @Override
-  public TextComponent getModel() {
-    return (CodeComponent) getGenericModel();
+  public Class<? extends BaseSlingModel> getModelType() {
+    return CodeComponent.class;
   }
 
   @Override
-  public void registerBasicValidators() {
-    addBasicValidator(hasCode());
+  public List<ModelValidator> getModelValidators() {
+    return Collections.singletonList(hasCode());
   }
 
-  @Override
-  public void registerDetailedValidators() {
-    return;
-  }
-
+  @SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC_ANON")
   ModelValidator hasCode() {
-    return new ModelValidator() {
+    return new ModelValidator<CodeComponent>() {
       @Override
-      public boolean isValid() {
+      public Boolean isValidCheck() {
         return StringUtils.isNotEmpty(getModel().getText());
       }
 
       @Override
       public String getMessage() {
         return "Code is configured.";
+      }
+
+      @Override
+      public String getDetailedMessage() {
+        return "'code' property must be configured on the Component resource.";
       }
 
       @Override

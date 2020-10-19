@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Basic grid component.
  */
-@KestrosModel(validationService = GridValidationService.class)
+@KestrosModel
 @Model(adaptables = Resource.class,
        resourceType = "kestros/commons/components/structure/grid")
 public class Grid extends BaseComponent {

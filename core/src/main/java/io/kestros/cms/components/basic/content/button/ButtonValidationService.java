@@ -18,44 +18,57 @@
 
 package io.kestros.cms.components.basic.content.button;
 
-import static io.kestros.commons.structuredslingmodels.validation.ModelValidationMessageType.WARNING;
 
+import static io.kestros.commons.validation.ModelValidationMessageType.WARNING;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.components.basic.content.text.TextComponentValidationService;
-import io.kestros.commons.structuredslingmodels.validation.ModelValidationMessageType;
-import io.kestros.commons.structuredslingmodels.validation.ModelValidator;
+import io.kestros.commons.structuredslingmodels.BaseSlingModel;
+import io.kestros.commons.validation.ModelValidationMessageType;
+import io.kestros.commons.validation.models.ModelValidator;
+import io.kestros.commons.validation.services.ModelValidatorRegistrationService;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.lang3.StringUtils;
+import org.osgi.service.component.annotations.Component;
 
 /**
  * Validation Service for the {@link Button} Component.
  */
+@Component(immediate = true,
+           service = ModelValidatorRegistrationService.class)
 public class ButtonValidationService extends TextComponentValidationService {
 
   @Override
-  public Button getModel() {
-    return (Button) getGenericModel();
+  public Class<? extends BaseSlingModel> getModelType() {
+    return Button.class;
   }
 
   @Override
-  public void registerBasicValidators() {
-    super.registerBasicValidators();
-    addBasicValidator(hasLink());
+  public List<ModelValidator> getModelValidators() {
+    List<ModelValidator> modelValidators = new ArrayList<>();
+    modelValidators.addAll(super.getModelValidators());
+    modelValidators.add(hasLink());
+    return modelValidators;
   }
 
-  @Override
-  public void registerDetailedValidators() {
-    return;
-  }
 
+  @SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC_ANON")
   ModelValidator hasLink() {
-    return new ModelValidator() {
+    return new ModelValidator<Button>() {
       @Override
-      public boolean isValid() {
+      public Boolean isValidCheck() {
         return StringUtils.isNotBlank(getModel().getLink());
       }
 
       @Override
       public String getMessage() {
         return "Has link.";
+      }
+
+      @Override
+      public String getDetailedMessage() {
+        return "'link' property must be configured on the Component resource.";
       }
 
       @Override
