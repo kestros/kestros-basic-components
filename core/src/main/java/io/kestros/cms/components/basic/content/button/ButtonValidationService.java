@@ -52,7 +52,6 @@ public class ButtonValidationService extends TextComponentValidationService {
     return modelValidators;
   }
 
-
   @SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC_ANON")
   ModelValidator hasLink() {
     return new ModelValidator<Button>() {
@@ -63,7 +62,7 @@ public class ButtonValidationService extends TextComponentValidationService {
 
       @Override
       public String getMessage() {
-        return "Has link.";
+        return "Link has been configured.";
       }
 
       @Override
