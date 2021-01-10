@@ -26,11 +26,15 @@ import io.kestros.cms.components.basic.content.text.TextComponentValidationServi
 import io.kestros.commons.structuredslingmodels.BaseSlingModel;
 import io.kestros.commons.validation.ModelValidationMessageType;
 import io.kestros.commons.validation.models.ModelValidator;
+import io.kestros.commons.validation.services.ModelValidatorRegistrationHandlerService;
 import io.kestros.commons.validation.services.ModelValidatorRegistrationService;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 /**
  * Validation Service for the {@link Button} Component.
@@ -38,6 +42,15 @@ import org.osgi.service.component.annotations.Component;
 @Component(immediate = true,
            service = ModelValidatorRegistrationService.class)
 public class ButtonValidationService extends TextComponentValidationService {
+
+  @Reference(cardinality = ReferenceCardinality.OPTIONAL,
+             policyOption = ReferencePolicyOption.GREEDY)
+  private ModelValidatorRegistrationHandlerService modelValidatorRegistrationHandlerService;
+
+  @Override
+  public ModelValidatorRegistrationHandlerService getModelValidatorRegistrationHandlerService() {
+    return modelValidatorRegistrationHandlerService;
+  }
 
   @Override
   public Class<? extends BaseSlingModel> getModelType() {

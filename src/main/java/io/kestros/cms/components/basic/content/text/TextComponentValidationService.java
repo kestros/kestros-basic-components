@@ -21,20 +21,34 @@ package io.kestros.cms.components.basic.content.text;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.commons.structuredslingmodels.BaseSlingModel;
 import io.kestros.commons.validation.ModelValidationMessageType;
+import io.kestros.commons.validation.models.BaseModelValidationRegistrationService;
 import io.kestros.commons.validation.models.ModelValidator;
+import io.kestros.commons.validation.services.ModelValidatorRegistrationHandlerService;
 import io.kestros.commons.validation.services.ModelValidatorRegistrationService;
 import java.util.Collections;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 /**
  * Validation service for the {@link TextComponent} component.
  */
 @Component(immediate = true,
            service = ModelValidatorRegistrationService.class)
-public class TextComponentValidationService implements ModelValidatorRegistrationService {
+public class TextComponentValidationService extends BaseModelValidationRegistrationService
+    implements ModelValidatorRegistrationService {
 
+  @Reference(cardinality = ReferenceCardinality.OPTIONAL,
+             policyOption = ReferencePolicyOption.GREEDY)
+  private ModelValidatorRegistrationHandlerService modelValidatorRegistrationHandlerService;
+
+  @Override
+  public ModelValidatorRegistrationHandlerService getModelValidatorRegistrationHandlerService() {
+    return modelValidatorRegistrationHandlerService;
+  }
 
   @Override
   public Class<? extends BaseSlingModel> getModelType() {
