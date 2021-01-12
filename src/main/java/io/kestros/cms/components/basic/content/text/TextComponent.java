@@ -18,7 +18,7 @@
 
 package io.kestros.cms.components.basic.content.text;
 
-import io.kestros.cms.foundation.content.BaseComponent;
+import io.kestros.cms.sitebuilding.api.models.BaseComponent;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
 import org.apache.commons.lang3.StringUtils;

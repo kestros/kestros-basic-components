@@ -24,9 +24,9 @@ import static io.kestros.commons.structuredslingmodels.utils.SlingModelUtils.get
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import io.kestros.cms.foundation.content.BaseComponent;
-import io.kestros.cms.foundation.content.pages.BaseContentPage;
-import io.kestros.cms.foundation.content.sites.BaseSite;
+import io.kestros.cms.sitebuilding.api.models.BaseComponent;
+import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
+import io.kestros.cms.sitebuilding.api.models.BaseSite;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
 import io.kestros.commons.structuredslingmodels.exceptions.InvalidResourceTypeException;

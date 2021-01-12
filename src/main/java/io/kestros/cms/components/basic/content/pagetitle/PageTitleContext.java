@@ -20,8 +20,8 @@ package io.kestros.cms.components.basic.content.pagetitle;
 
 import static io.kestros.commons.structuredslingmodels.utils.SlingModelUtils.getResourceAsType;
 
-import io.kestros.cms.foundation.content.ComponentRequestContext;
-import io.kestros.cms.foundation.content.pages.BaseContentPage;
+import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
+import io.kestros.cms.sitebuilding.api.models.ComponentRequestContext;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
 import io.kestros.commons.structuredslingmodels.exceptions.ModelAdaptionException;
 import org.apache.commons.lang3.StringUtils;

@@ -20,8 +20,12 @@ package io.kestros.cms.components.basic.content.alert;
 
 import io.kestros.cms.components.basic.content.text.TextComponentValidationService;
 import io.kestros.commons.structuredslingmodels.BaseSlingModel;
+import io.kestros.commons.validation.services.ModelValidatorRegistrationHandlerService;
 import io.kestros.commons.validation.services.ModelValidatorRegistrationService;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 /**
  * Validation Service for the {@link AlertComponent} Component.
@@ -29,6 +33,15 @@ import org.osgi.service.component.annotations.Component;
 @Component(immediate = true,
            service = ModelValidatorRegistrationService.class)
 public class AlertComponentValidationService extends TextComponentValidationService {
+
+  @Reference(cardinality = ReferenceCardinality.OPTIONAL,
+             policyOption = ReferencePolicyOption.GREEDY)
+  private ModelValidatorRegistrationHandlerService modelValidatorRegistrationHandlerService;
+
+  @Override
+  public ModelValidatorRegistrationHandlerService getModelValidatorRegistrationHandlerService() {
+    return modelValidatorRegistrationHandlerService;
+  }
 
   @Override
   public Class<? extends BaseSlingModel> getModelType() {

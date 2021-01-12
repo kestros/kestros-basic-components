@@ -21,8 +21,8 @@ package io.kestros.cms.components.basic.structure.navigation;
 import static io.kestros.commons.structuredslingmodels.utils.SlingModelUtils.getFirstAncestorOfType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.kestros.cms.foundation.content.pages.BaseContentPage;
-import io.kestros.cms.foundation.content.sites.BaseSite;
+import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
+import io.kestros.cms.sitebuilding.api.models.BaseSite;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
 import io.kestros.commons.structuredslingmodels.exceptions.NoValidAncestorException;

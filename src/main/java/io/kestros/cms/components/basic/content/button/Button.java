@@ -19,7 +19,7 @@
 package io.kestros.cms.components.basic.content.button;
 
 import io.kestros.cms.components.basic.content.text.TextComponent;
-import io.kestros.cms.foundation.content.ComponentRequestContext;
+import io.kestros.cms.sitebuilding.api.models.ComponentRequestContext;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
 import org.apache.commons.lang3.StringUtils;
