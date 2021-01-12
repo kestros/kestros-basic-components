@@ -20,8 +20,8 @@ package io.kestros.cms.components.basic.structure.grid;
 
 import static io.kestros.commons.structuredslingmodels.utils.SlingModelUtils.getChildAsType;
 
-import io.kestros.cms.foundation.content.BaseComponent;
-import io.kestros.cms.foundation.content.components.contentarea.ContentArea;
+import io.kestros.cms.sitebuilding.api.models.BaseComponent;
+import io.kestros.cms.sitebuilding.api.models.ContentArea;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
 import io.kestros.commons.structuredslingmodels.exceptions.ChildResourceNotFoundException;

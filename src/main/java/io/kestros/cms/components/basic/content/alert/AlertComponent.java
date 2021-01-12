@@ -19,14 +19,15 @@
 package io.kestros.cms.components.basic.content.alert;
 
 import io.kestros.cms.components.basic.content.text.TextComponent;
-import io.kestros.cms.foundation.content.ComponentRequestContext;
+import io.kestros.cms.componenttypes.api.models.ComponentVariation;
+import io.kestros.cms.sitebuilding.api.models.ComponentRequestContext;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
 /**
  * Component used for displaying various levels of alert messages (defined by {@link
- * io.kestros.cms.foundation.componenttypes.variation.ComponentVariation}s.
+ * ComponentVariation}.
  */
 @KestrosModel(contextModel = ComponentRequestContext.class)
 @Model(adaptables = Resource.class,
