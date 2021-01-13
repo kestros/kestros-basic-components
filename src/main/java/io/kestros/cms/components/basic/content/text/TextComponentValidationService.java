@@ -38,8 +38,7 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
  */
 @Component(immediate = true,
            service = ModelValidatorRegistrationService.class)
-public class TextComponentValidationService extends BaseModelValidationRegistrationService
-    implements ModelValidatorRegistrationService {
+public class TextComponentValidationService extends BaseModelValidationRegistrationService {
 
   @Reference(cardinality = ReferenceCardinality.OPTIONAL,
              policyOption = ReferencePolicyOption.GREEDY)
