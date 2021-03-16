@@ -1,0 +1,8 @@
+{
+  "jcr:primaryType": "kes:ComponentType",
+  "jcr:title": "Card",
+  "jcr:description": "",
+  "componentGroup": "Content Components",
+  "sling:resourceSuperType": "kestros/commons/components/kestros-parent",
+  "fontAwesomeIcon": "fa fa-window-maximize"
+}
