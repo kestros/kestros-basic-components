@@ -19,6 +19,7 @@
 package io.kestros.cms.components.basic.content.code;
 
 import io.kestros.cms.components.basic.content.text.TextComponent;
+import io.kestros.cms.sitebuilding.api.models.ComponentRequestContext;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
 import org.apache.sling.api.resource.Resource;
@@ -27,7 +28,7 @@ import org.apache.sling.models.annotations.Model;
 /**
  * Component for displaying text as code snippets.
  */
-@KestrosModel()
+@KestrosModel(contextModel = ComponentRequestContext.class)
 @Model(adaptables = Resource.class,
        resourceType = "kestros/commons/components/content/code")
 public class CodeComponent extends TextComponent {
