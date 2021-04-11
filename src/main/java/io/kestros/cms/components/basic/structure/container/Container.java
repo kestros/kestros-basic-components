@@ -34,6 +34,11 @@ import org.apache.sling.models.annotations.Model;
        resourceType = "kestros/commons/components/structure/container")
 public class Container extends BaseComponent {
 
+  /**
+   * Background image style attribute value.
+   *
+   * @return Background image style attribute value.
+   */
   public String getBackgroundImageStyle() {
     if (StringUtils.isNotEmpty(getBackgroundImage())) {
       return String.format("background-image: url('%s');", getBackgroundImage());
@@ -41,6 +46,11 @@ public class Container extends BaseComponent {
     return StringUtils.EMPTY;
   }
 
+  /**
+   * Background image path.
+   *
+   * @return Background image path.
+   */
   public String getBackgroundImage() {
     try {
       return SlingModelUtils.getChildAsBaseResource("backgroundImage", this).getPath();

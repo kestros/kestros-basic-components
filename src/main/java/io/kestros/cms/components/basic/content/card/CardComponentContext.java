@@ -1,3 +1,21 @@
+/*
+ *      Copyright (C) 2020  Kestros, Inc.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ */
+
 package io.kestros.cms.components.basic.content.card;
 
 import io.kestros.cms.componenttypes.api.exceptions.ComponentTypeRetrievalException;
@@ -25,6 +43,9 @@ import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 
+/**
+ * Card Component request context.
+ */
 @Model(adaptables = SlingHttpServletRequest.class)
 public class CardComponentContext extends ComponentRequestContext {
 
@@ -42,8 +63,11 @@ public class CardComponentContext extends ComponentRequestContext {
 
   private List<ComponentVariation> appliedButtonVariations = null;
 
-  private ComponentUiFrameworkView buttonView = null;
-
+  /**
+   * Button inline variations.
+   *
+   * @return Button inline variations.
+   */
   public String getButtonInlineVariations() {
     final StringBuilder variationsStringBuilder = new StringBuilder();
     ParentComponent parentComponent = getRequest().getResource().adaptTo(ParentComponent.class);
@@ -61,6 +85,11 @@ public class CardComponentContext extends ComponentRequestContext {
     return variationsStringBuilder.toString();
   }
 
+  /**
+   * Applied button variations.
+   *
+   * @return Applied button variations.
+   */
   @Nonnull
   public List<ComponentVariation> getAppliedButtonVariations() {
     if (appliedButtonVariations != null) {
