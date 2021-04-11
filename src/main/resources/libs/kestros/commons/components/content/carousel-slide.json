@@ -1,6 +1,0 @@
-{
-  "jcr:primaryType": "kes:ComponentType",
-  "jcr:title": "Carousel Slide",
-  "componentGroup": "Content Components",
-  "sling:resourceSuperType": "kestros/commons/components/kestros-parent"
-}

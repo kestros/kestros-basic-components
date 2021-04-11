@@ -1,6 +1,0 @@
-{
-  "jcr:primaryType": "kes:ComponentType",
-  "jcr:title": "Video",
-  "componentGroup": "Content Components",
-  "sling:resourceSuperType": "kestros/commons/components/kestros-parent"
-}
