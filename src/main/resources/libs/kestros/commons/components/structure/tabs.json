@@ -1,5 +1,0 @@
-{
-  "jcr:primaryType": "kes:ComponentType",
-  "jcr:title": "Tabs",
-  "sling:resourceSuperType": "kestros/commons/components/kestros-parent"
-}
