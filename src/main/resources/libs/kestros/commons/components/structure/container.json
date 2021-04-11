@@ -4,7 +4,11 @@
   "jcr:description": "Base level container for all components including the grid",
   "componentGroup": "Layout Components",
   "sling:resourceSuperType": "kestros/commons/components/kestros-parent",
-  "allowedComponentTypes": ["group:Content Components","group:Layout Components"],
-  "fontAwesomeIcon": "far fa-square"
+  "allowedComponentTypes": [
+    "group:Content Components",
+    "group:Layout Components"
+  ],
+  "fontAwesomeIcon": "far fa-square",
+  "unwrap": true
 }
 

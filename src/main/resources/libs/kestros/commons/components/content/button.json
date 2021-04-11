@@ -4,5 +4,6 @@
   "jcr:description": "Basic button and Call-to-Action",
   "componentGroup": "Content Components",
   "sling:resourceSuperType": "kestros/commons/components/kestros-parent",
-  "fontAwesomeIcon": "far fa-hand-pointer"
+  "fontAwesomeIcon": "far fa-hand-pointer",
+  "unwrap": true
 }

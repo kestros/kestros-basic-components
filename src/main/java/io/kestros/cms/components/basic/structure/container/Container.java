@@ -20,6 +20,9 @@ package io.kestros.cms.components.basic.structure.container;
 
 import io.kestros.cms.sitebuilding.api.models.BaseComponent;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
+import io.kestros.commons.structuredslingmodels.exceptions.ChildResourceNotFoundException;
+import io.kestros.commons.structuredslingmodels.utils.SlingModelUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
@@ -31,4 +34,18 @@ import org.apache.sling.models.annotations.Model;
        resourceType = "kestros/commons/components/structure/container")
 public class Container extends BaseComponent {
 
+  public String getBackgroundImageStyle() {
+    if (StringUtils.isNotEmpty(getBackgroundImage())) {
+      return String.format("background-image: url('%s');", getBackgroundImage());
+    }
+    return StringUtils.EMPTY;
+  }
+
+  public String getBackgroundImage() {
+    try {
+      return SlingModelUtils.getChildAsBaseResource("backgroundImage", this).getPath();
+    } catch (ChildResourceNotFoundException e) {
+      return StringUtils.EMPTY;
+    }
+  }
 }

@@ -19,6 +19,10 @@
 package io.kestros.cms.components.basic.content.card;
 
 import io.kestros.cms.sitebuilding.api.models.BaseComponent;
+import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
+import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
+import io.kestros.commons.structuredslingmodels.exceptions.ChildResourceNotFoundException;
+import io.kestros.commons.structuredslingmodels.utils.SlingModelUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
@@ -26,15 +30,19 @@ import org.apache.sling.models.annotations.Model;
 /**
  * Card component.
  */
+@KestrosModel(contextModel = CardComponentContext.class)
 @Model(adaptables = Resource.class,
        resourceType = "kestros/commons/components/content/card")
 public class CardComponent extends BaseComponent {
+
+
 
   /**
    * Where the button will link off to.
    *
    * @return Where the button will link off to.
    */
+  @KestrosProperty(description = "Endpoint the card call to action button links to.")
   public String getLink() {
     return getProperty("link", StringUtils.EMPTY);
   }
@@ -44,8 +52,13 @@ public class CardComponent extends BaseComponent {
    *
    * @return Card image.
    */
+  @KestrosProperty(description = "Card image.")
   public String getImage() {
-    return getProperty("image", StringUtils.EMPTY);
+    try {
+      return SlingModelUtils.getChildAsBaseResource("image", this).getPath();
+    } catch (ChildResourceNotFoundException e) {
+      return StringUtils.EMPTY;
+    }
   }
 
   /**
