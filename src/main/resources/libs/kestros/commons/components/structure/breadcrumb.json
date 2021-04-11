@@ -1,0 +1,6 @@
+{
+  "jcr:primaryType": "kes:ComponentType",
+  "jcr:title": "Breadcrumb",
+  "sling:resourceSuperType": "kestros/commons/components/kestros-parent"
+}
+

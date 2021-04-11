@@ -16,10 +16,9 @@
  *
  */
 
-package io.kestros.cms.components.basic.content.card;
+package io.kestros.cms.components.basic.content.image;
 
 import io.kestros.cms.sitebuilding.api.models.BaseComponent;
-import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
 import io.kestros.commons.structuredslingmodels.exceptions.ChildResourceNotFoundException;
 import io.kestros.commons.structuredslingmodels.utils.SlingModelUtils;
@@ -28,31 +27,18 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
 /**
- * Card component.
+ * Image Component.
  */
-@KestrosModel(contextModel = CardComponentContext.class)
 @Model(adaptables = Resource.class,
-       resourceType = "kestros/commons/components/content/card")
-public class CardComponent extends BaseComponent {
-
-
+       resourceType = "kestros/commons/components/content/image-component")
+public class ImageComponent extends BaseComponent {
 
   /**
-   * Where the button will link off to.
+   * Image path.
    *
-   * @return Where the button will link off to.
+   * @return Image path.
    */
-  @KestrosProperty(description = "Endpoint the card call to action button links to.")
-  public String getLink() {
-    return getProperty("link", StringUtils.EMPTY);
-  }
-
-  /**
-   * Card image.
-   *
-   * @return Card image.
-   */
-  @KestrosProperty(description = "Card image.")
+  @KestrosProperty(description = "Image path.")
   public String getImage() {
     try {
       return SlingModelUtils.getChildAsBaseResource("image", this).getPath();
@@ -62,21 +48,12 @@ public class CardComponent extends BaseComponent {
   }
 
   /**
-   * Card image alt text.
+   * Image alt text.
    *
-   * @return Card image alt text.
+   * @return Image alt text.
    */
-  public String getImageAltText() {
-    return getProperty("imageAltText", StringUtils.EMPTY);
-  }
-
-  /**
-   * Card call to action text.
-   *
-   * @return Card call to action text.
-   */
-  public String getCallToActionText() {
-    return getProperty("callToActionText", StringUtils.EMPTY);
+  public String getAltText() {
+    return getProperty("altText", StringUtils.EMPTY);
   }
 
 }

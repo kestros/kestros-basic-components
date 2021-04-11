@@ -1,0 +1,6 @@
+{
+  "jcr:primaryType": "kes:ComponentType",
+  "jcr:title": "File Download",
+  "componentGroup": "Content Components",
+  "sling:resourceSuperType": "kestros/commons/components/kestros-parent"
+}

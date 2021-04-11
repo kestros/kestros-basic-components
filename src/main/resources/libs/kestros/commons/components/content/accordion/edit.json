@@ -13,11 +13,12 @@
         "sling:resourceType": "kestros/cms/general/container",
         "jcr:title": "General",
         "container": true,
-        "background-image": {
+        "text": {
           "jcr:primaryType": "nt:unstructured",
-          "sling:resourceType": "kestros/cms/fields/file-upload",
-          "label": "Background Image",
-          "propertyName": "backgroundImage"
+          "sling:resourceType": "kestros/cms/fields/textarea",
+          "label": "Alert Message",
+          "propertyName": "text",
+          "autofocus": true
         }
       }
     }
