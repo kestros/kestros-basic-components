@@ -15,6 +15,7 @@
   ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
   ~
   */-->
-<sly data-sly-use.text="${'io.kestros.cms.components.basic.content.text.TextComponent'}"/>
+<sly data-sly-use.text="${'io.kestros.cms.components.basic.content.text.TextComponent'}"
+     data-sly-use.context="${'io.kestros.cms.sitebuilding.api.models.ComponentRequestContext'}"/>
 
-<p>${text.text}</p>
+<p class="${context.inlineVariations}">${text.text}</p>
