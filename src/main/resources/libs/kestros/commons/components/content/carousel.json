@@ -1,6 +1,7 @@
 {
   "jcr:primaryType": "kes:ComponentType",
   "jcr:title": "Carousel",
+  "jcr:description": "Rotating content/image container.",
   "componentGroup": "Content Components",
   "sling:resourceSuperType": "kestros/commons/components/kestros-parent"
 }

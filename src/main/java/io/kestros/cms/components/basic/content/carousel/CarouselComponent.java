@@ -20,6 +20,8 @@ package io.kestros.cms.components.basic.content.carousel;
 
 import io.kestros.cms.sitebuilding.api.models.BaseComponent;
 import io.kestros.commons.structuredslingmodels.BaseResource;
+import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
+import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
 import io.kestros.commons.structuredslingmodels.exceptions.ChildResourceNotFoundException;
 import io.kestros.commons.structuredslingmodels.utils.SlingModelUtils;
 import java.util.Collections;
@@ -31,6 +33,7 @@ import org.apache.sling.models.annotations.Model;
 /**
  * Carousel Component.
  */
+@KestrosModel
 @Model(adaptables = Resource.class,
        resourceType = "kestros/commons/components/content/carousel")
 public class CarouselComponent extends BaseComponent {
@@ -41,6 +44,7 @@ public class CarouselComponent extends BaseComponent {
    * @return Slides root resource.
    * @throws ChildResourceNotFoundException Resource not found.
    */
+  @KestrosProperty(description = "slides root resource")
   public BaseResource getSlidesRootResource() throws ChildResourceNotFoundException {
     return SlingModelUtils.getChildAsBaseResource("slides", this);
   }
@@ -50,6 +54,7 @@ public class CarouselComponent extends BaseComponent {
    *
    * @return All contained slides.
    */
+  @KestrosProperty(description = "slides")
   public List<CarouselSlide> getSlides() {
     try {
       return SlingModelUtils.getChildrenOfType(getSlidesRootResource(), CarouselSlide.class);
@@ -64,6 +69,7 @@ public class CarouselComponent extends BaseComponent {
    *
    * @return Previous text.
    */
+  @KestrosProperty(description = "previous text")
   public String getPreviousText() {
     return getProperty("previousText", StringUtils.EMPTY);
   }
@@ -73,6 +79,7 @@ public class CarouselComponent extends BaseComponent {
    *
    * @return Next text.
    */
+  @KestrosProperty(description = "next text")
   public String getNextText() {
     return getProperty("nextText", StringUtils.EMPTY);
   }
@@ -82,6 +89,7 @@ public class CarouselComponent extends BaseComponent {
    *
    * @return Whether to include slide indicators.
    */
+  @KestrosProperty(description = "include indicators")
   public Boolean isIncludeIndicators() {
     return getProperty("includeIndicators", Boolean.FALSE);
   }
@@ -91,6 +99,7 @@ public class CarouselComponent extends BaseComponent {
    *
    * @return Whether to include controls.
    */
+  @KestrosProperty(description = "include controls")
   public Boolean isIncludeControls() {
     return getProperty("includeControls", Boolean.FALSE);
   }

@@ -1,6 +1,7 @@
 {
   "jcr:primaryType": "kes:ComponentType",
   "jcr:title": "Image",
+  "jcr:description": "Include image assets.",
   "componentGroup": "Content Components",
   "sling:resourceSuperType": "kestros/commons/components/kestros-parent"
 }

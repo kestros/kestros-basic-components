@@ -19,6 +19,8 @@
 package io.kestros.cms.components.basic.content.carousel;
 
 import io.kestros.cms.components.basic.content.image.ImageComponent;
+import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
+import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
@@ -26,6 +28,7 @@ import org.apache.sling.models.annotations.Model;
 /**
  * Carousel Slide component.
  */
+@KestrosModel()
 @Model(adaptables = Resource.class,
        resourceType = "kestros/commons/components/content/carousel-slide")
 public class CarouselSlide extends ImageComponent {
@@ -35,6 +38,7 @@ public class CarouselSlide extends ImageComponent {
    *
    * @return Slide caption.
    */
+  @KestrosProperty(description = "slide caption")
   public String getCaption() {
     return getProperty("caption", StringUtils.EMPTY);
   }

@@ -19,6 +19,7 @@
 package io.kestros.cms.components.basic.content.image;
 
 import io.kestros.cms.sitebuilding.api.models.BaseComponent;
+import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
 import io.kestros.commons.structuredslingmodels.exceptions.ChildResourceNotFoundException;
 import io.kestros.commons.structuredslingmodels.utils.SlingModelUtils;
@@ -29,8 +30,9 @@ import org.apache.sling.models.annotations.Model;
 /**
  * Image Component.
  */
+@KestrosModel()
 @Model(adaptables = Resource.class,
-       resourceType = "kestros/commons/components/content/image-component")
+       resourceType = "kestros/commons/components/content/image")
 public class ImageComponent extends BaseComponent {
 
   /**
@@ -52,6 +54,7 @@ public class ImageComponent extends BaseComponent {
    *
    * @return Image alt text.
    */
+  @KestrosProperty(description = "Image alt text.")
   public String getAltText() {
     return getProperty("altText", StringUtils.EMPTY);
   }

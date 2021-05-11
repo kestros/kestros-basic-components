@@ -20,6 +20,7 @@ package io.kestros.cms.components.basic.structure.container;
 
 import io.kestros.cms.sitebuilding.api.models.BaseComponent;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
+import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
 import io.kestros.commons.structuredslingmodels.exceptions.ChildResourceNotFoundException;
 import io.kestros.commons.structuredslingmodels.utils.SlingModelUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -39,6 +40,10 @@ public class Container extends BaseComponent {
    *
    * @return Background image style attribute value.
    */
+  @KestrosProperty(description = "HTML attribute value for background image.",
+                   defaultValue = "",
+                   sampleValue = "background-image: url('/sample-image.png');",
+                   jcrPropertyName = "backgroundImage")
   public String getBackgroundImageStyle() {
     if (StringUtils.isNotEmpty(getBackgroundImage())) {
       return String.format("background-image: url('%s');", getBackgroundImage());
@@ -51,6 +56,11 @@ public class Container extends BaseComponent {
    *
    * @return Background image path.
    */
+  @KestrosProperty(description = "Background image path.",
+                   configurable = true,
+                   defaultValue = "",
+                   sampleValue = "/sample-image.png",
+                   jcrPropertyName = "backgroundImage")
   public String getBackgroundImage() {
     try {
       return SlingModelUtils.getChildAsBaseResource("backgroundImage", this).getPath();

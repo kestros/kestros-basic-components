@@ -35,14 +35,14 @@ import org.apache.sling.models.annotations.Model;
        resourceType = "kestros/commons/components/content/card")
 public class CardComponent extends BaseComponent {
 
-
-
   /**
    * Where the button will link off to.
    *
    * @return Where the button will link off to.
    */
-  @KestrosProperty(description = "Endpoint the card call to action button links to.")
+  @KestrosProperty(description = "Endpoint the card call to action button links to.",
+                   configurable = true,
+                   jcrPropertyName = "link")
   public String getLink() {
     return getProperty("link", StringUtils.EMPTY);
   }
@@ -52,7 +52,9 @@ public class CardComponent extends BaseComponent {
    *
    * @return Card image.
    */
-  @KestrosProperty(description = "Card image.")
+  @KestrosProperty(description = "Card image.",
+                   configurable = true,
+                   jcrPropertyName = "image")
   public String getImage() {
     try {
       return SlingModelUtils.getChildAsBaseResource("image", this).getPath();
@@ -66,6 +68,9 @@ public class CardComponent extends BaseComponent {
    *
    * @return Card image alt text.
    */
+  @KestrosProperty(description = "Image alt text.",
+                   configurable = true,
+                   jcrPropertyName = "imageAltText")
   public String getImageAltText() {
     return getProperty("imageAltText", StringUtils.EMPTY);
   }
@@ -75,6 +80,9 @@ public class CardComponent extends BaseComponent {
    *
    * @return Card call to action text.
    */
+  @KestrosProperty(description = "Call to action text.",
+                   configurable = true,
+                   jcrPropertyName = "callToActionText")
   public String getCallToActionText() {
     return getProperty("callToActionText", StringUtils.EMPTY);
   }

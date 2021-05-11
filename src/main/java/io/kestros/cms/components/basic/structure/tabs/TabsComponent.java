@@ -19,12 +19,14 @@
 package io.kestros.cms.components.basic.structure.tabs;
 
 import io.kestros.cms.sitebuilding.api.models.BaseComponent;
+import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
 /**
  * Tabbed container component.
  */
+@KestrosModel()
 @Model(adaptables = Resource.class,
        resourceType = "kestros/commons/components/structure/tabs")
 public class TabsComponent extends BaseComponent {
