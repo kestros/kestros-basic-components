@@ -1,0 +1,7 @@
+{
+  "jcr:primaryType": "kes:ComponentType",
+  "jcr:title": "Accordion Section",
+  "jcr:description": "Expandable/collapsable content section(s).",
+  "componentGroup": "Content Components",
+  "sling:resourceSuperType": "kestros/commons/components/kestros-parent"
+}

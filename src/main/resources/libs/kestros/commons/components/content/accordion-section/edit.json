@@ -13,26 +13,12 @@
         "sling:resourceType": "kestros/cms/general/container",
         "jcr:title": "General",
         "container": true,
-        "heading": {
-          "jcr:primaryType": "nt:unstructured",
-          "sling:resourceType": "kestros/cms/fields/textfield",
-          "label": "Heading",
-          "propertyName": "heading",
-          "autofocus": true
-        },
-        "icon": {
-          "jcr:primaryType": "nt:unstructured",
-          "sling:resourceType": "kestros/cms/fields/icon-selector",
-          "label": "Icon",
-          "propertyName": "icon",
-          "autofocus": false
-        },
         "text": {
           "jcr:primaryType": "nt:unstructured",
           "sling:resourceType": "kestros/cms/fields/textarea",
           "label": "Alert Message",
           "propertyName": "text",
-          "autofocus": false
+          "autofocus": true
         }
       }
     }

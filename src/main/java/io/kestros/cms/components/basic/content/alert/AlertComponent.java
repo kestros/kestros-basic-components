@@ -22,6 +22,8 @@ import io.kestros.cms.components.basic.content.text.TextComponent;
 import io.kestros.cms.componenttypes.api.models.ComponentVariation;
 import io.kestros.cms.sitebuilding.api.models.ComponentRequestContext;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
+import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
+import org.apache.commons.lang.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
@@ -33,5 +35,27 @@ import org.apache.sling.models.annotations.Model;
 @Model(adaptables = Resource.class,
        resourceType = "kestros/commons/components/content/alert")
 public class AlertComponent extends TextComponent {
+
+  /**
+   * Alert heading.
+   * @return Alert heading.
+   */
+  @KestrosProperty(description = "Alert heading text.",
+                   configurable = true,
+                   jcrPropertyName = "heading")
+  public String getHeading() {
+    return getProperty("heading", StringUtils.EMPTY);
+  }
+
+  /**
+   * Alert icon.
+   * @return Alert icon.
+   */
+  @KestrosProperty(description = "Displayed icon.",
+                   configurable = true,
+                   jcrPropertyName = "icon")
+  public String getIcon() {
+    return getProperty("icon", StringUtils.EMPTY);
+  }
 
 }
