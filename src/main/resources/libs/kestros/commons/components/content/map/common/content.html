@@ -16,11 +16,11 @@
   ~
   */-->
 <sly data-sly-use.component="${'io.kestros.cms.sitebuilding.api.models.BaseComponent'}"
-     data-sly-use.container="${'io.kestros.cms.components.basic.structure.tabs.TabsComponent'}"
-     data-sly-use.context="${'io.kestros.cms.sitebuilding.api.models.ComponentRequestContext'}"
-     data-sly-use.parentComponentEditContext="${'io.kestros.cms.sitebuilding.api.models.ParentComponentEditContext'}"/>
+     data-sly-use.map="${'io.kestros.cms.components.basic.content.map.MapComponent'}"
+     data-sly-use.context="${'io.kestros.cms.sitebuilding.api.models.ComponentRequestContext'}"/>
+<sly data-sly-test="${component.componentUiFrameworkView.templatesPath}"
+     data-sly-use.templates="${component.componentUiFrameworkView.templatesPath}"/>
 
-<div class="${context.inlineVariations}">
-  <sly
-      data-sly-resource="${'content' @ resourceType='kestros/commons/components/content-area'}"/>
-</div>
+<p>Address: ${map.address}</p>
+<p>Marker Heading: ${map.heading}</p>
+<p>Marker Description: ${map.description}</p>

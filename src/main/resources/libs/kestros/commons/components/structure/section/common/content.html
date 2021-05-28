@@ -16,11 +16,13 @@
   ~
   */-->
 <sly data-sly-use.component="${'io.kestros.cms.sitebuilding.api.models.BaseComponent'}"
-     data-sly-use.container="${'io.kestros.cms.components.basic.structure.tabs.TabsComponent'}"
+     data-sly-use.section="${'io.kestros.cms.components.basic.structure.section.SectionComponent'}"
      data-sly-use.context="${'io.kestros.cms.sitebuilding.api.models.ComponentRequestContext'}"
      data-sly-use.parentComponentEditContext="${'io.kestros.cms.sitebuilding.api.models.ParentComponentEditContext'}"/>
 
 <div class="${context.inlineVariations}">
+  <h3 data-sly-test="${section.heading}">${section.heading}</h3>
+  <p data-sly-test="${section.description}">${section.description}</p>
   <sly
       data-sly-resource="${'content' @ resourceType='kestros/commons/components/content-area'}"/>
 </div>

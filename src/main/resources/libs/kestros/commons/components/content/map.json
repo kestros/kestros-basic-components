@@ -1,7 +1,7 @@
 {
   "jcr:primaryType": "kes:ComponentType",
-  "jcr:title": "Accordion Section",
-  "jcr:description": "Expandable/collapsable content section(s).",
+  "jcr:title": "Map",
+  "jcr:description": "Pin locations to a map.",
   "componentGroup": "Content Components",
   "sling:resourceSuperType": "kestros/commons/components/kestros-parent"
 }

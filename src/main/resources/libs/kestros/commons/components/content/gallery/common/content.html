@@ -17,6 +17,8 @@
   */-->
 
 <sly
-    data-sly-use.alert="${'io.kestros.cms.components.basic.content.alert.AlertComponent'}"/>
+    data-sly-use.gallery="${'io.kestros.cms.components.basic.content.gallery.GalleryComponent'}"/>
 
-<p>${alert.text}</p>
+<ul data-sly-list.image="${gallery.imagePaths}">
+  <li><a href="${image}">image</a></li>
+</ul>
