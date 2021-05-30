@@ -11,12 +11,9 @@ import org.apache.sling.models.annotations.Model;
 public class GalleryComponent extends BaseComponent {
 
   public List<String> getImagePaths() {
-    return Arrays.asList("https://images.unsplash.com/photo-1516483638261-f4dbaf036963?ixid"
-                         + "=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2"
-                         + ".1&auto=format&fit=crop&w=633&q=80",
-        "https://images.unsplash.com/photo-1515859005217-8a1f08870f59?ixid"
-        + "=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aXRhbHl8ZW58MHx8MHx8&ixlib=rb-1.2"
-        + ".1&auto=format&fit=crop&w=500&q=60",
+    return Arrays.asList("https://images.unsplash.com/photo-1515859005217-8a1f08870f59?ixid"
+                         + "=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aXRhbHl8ZW58MHx8MHx8&ixlib=rb-1.2"
+                         + ".1&auto=format&fit=crop&w=500&q=60",
         "https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?ixid"
         + "=MnwxMjA3fDB8MHxzZWFyY2h8M3x8aXRhbHl8ZW58MHx8MHx8&ixlib=rb-1.2"
         + ".1&auto=format&fit=crop&w=500&q=60",
@@ -48,6 +45,9 @@ public class GalleryComponent extends BaseComponent {
         + ".1&auto=format&fit=crop&w=500&q=60",
         "https://images.unsplash.com/photo-1492110182377-95eee14016e1?ixid"
         + "=MnwxMjA3fDB8MHxzZWFyY2h8Mzl8fGl0YWx5fGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2"
-        + ".1&auto=format&fit=crop&w=500&q=60");
+        + ".1&auto=format&fit=crop&w=500&q=60",
+        "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?ixid"
+        + "=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2"
+        + ".1&auto=format&fit=crop&w=633&q=80");
   }
 }

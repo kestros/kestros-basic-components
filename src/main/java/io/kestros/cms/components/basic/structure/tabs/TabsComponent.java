@@ -18,8 +18,14 @@
 
 package io.kestros.cms.components.basic.structure.tabs;
 
+import io.kestros.cms.components.basic.structure.section.SectionComponent;
 import io.kestros.cms.sitebuilding.api.models.BaseComponent;
+import io.kestros.commons.structuredslingmodels.BaseResource;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
+import io.kestros.commons.structuredslingmodels.exceptions.ChildResourceNotFoundException;
+import io.kestros.commons.structuredslingmodels.utils.SlingModelUtils;
+import java.util.Collections;
+import java.util.List;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
@@ -30,5 +36,15 @@ import org.apache.sling.models.annotations.Model;
 @Model(adaptables = Resource.class,
        resourceType = "kestros/commons/components/structure/tabs")
 public class TabsComponent extends BaseComponent {
+
+  public List<SectionComponent> getSections() {
+    try {
+      BaseResource contentResource = SlingModelUtils.getChildAsBaseResource("content", this);
+      return SlingModelUtils.getChildrenOfType(contentResource, SectionComponent.class);
+    } catch (ChildResourceNotFoundException e) {
+      e.printStackTrace();
+    }
+    return Collections.emptyList();
+  }
 
 }
