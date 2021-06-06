@@ -37,6 +37,11 @@ import org.apache.sling.models.annotations.Model;
        resourceType = "kestros/commons/components/structure/tabs")
 public class TabsComponent extends BaseComponent {
 
+  /**
+   * Tab sections.
+   *
+   * @return Tab sections.
+   */
   public List<SectionComponent> getSections() {
     try {
       BaseResource contentResource = SlingModelUtils.getChildAsBaseResource("content", this);
