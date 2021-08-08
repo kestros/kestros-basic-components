@@ -18,7 +18,10 @@
 
 package io.kestros.cms.components.basic.content.image;
 
+import io.kestros.cms.modeltypes.annotations.ExternalizedResource;
 import io.kestros.cms.sitebuilding.api.models.BaseComponent;
+import io.kestros.cms.sitebuilding.api.models.BaseSite;
+import io.kestros.commons.structuredslingmodels.BaseResource;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
 import io.kestros.commons.structuredslingmodels.exceptions.ChildResourceNotFoundException;
@@ -43,10 +46,17 @@ public class ImageComponent extends BaseComponent {
   @KestrosProperty(description = "Image path.")
   public String getImage() {
     try {
-      return SlingModelUtils.getChildAsBaseResource("image", this).getPath();
+      return getImageResource().getPath();
     } catch (ChildResourceNotFoundException e) {
       return StringUtils.EMPTY;
     }
+  }
+
+  @ExternalizedResource(mimeType = "",
+                        extension = "",
+                        trimPathToNearest = BaseSite.class)
+  public BaseResource getImageResource() throws ChildResourceNotFoundException {
+    return SlingModelUtils.getChildAsBaseResource("image", this);
   }
 
   /**
