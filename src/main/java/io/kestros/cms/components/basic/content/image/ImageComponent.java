@@ -52,6 +52,11 @@ public class ImageComponent extends BaseComponent {
     }
   }
 
+  /**
+   * Image Resource.
+   * @return Image Resource.
+   * @throws ChildResourceNotFoundException If image resource is not found.
+   */
   @ExternalizedResource(mimeType = "",
                         extension = "",
                         trimPathToNearest = BaseSite.class)
