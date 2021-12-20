@@ -19,7 +19,7 @@
 package io.kestros.cms.components.basic.structure.container;
 
 /**
- * Container model for {@link ContainerComponent}.
+ * Container model for Container components.
  */
 public interface ContainerModel {
 
