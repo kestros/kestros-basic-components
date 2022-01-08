@@ -19,6 +19,7 @@
 package io.kestros.cms.components.basic.structure.container;
 
 import io.kestros.cms.sitebuilding.api.models.BaseComponent;
+import io.kestros.cms.sitebuilding.api.models.ContentArea;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
 import io.kestros.commons.structuredslingmodels.exceptions.ChildResourceNotFoundException;
@@ -33,7 +34,7 @@ import org.apache.sling.models.annotations.Model;
 @KestrosModel
 @Model(adaptables = Resource.class,
        resourceType = "kestros/commons/components/structure/container")
-public class Container extends BaseComponent {
+public class Container extends ContentArea {
 
   /**
    * Background image style attribute value.

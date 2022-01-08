@@ -3,7 +3,7 @@
   "jcr:title": "Container",
   "jcr:description": "Base level container for all components including the grid",
   "componentGroup": "Layout Components",
-  "sling:resourceSuperType": "kestros/commons/components/kestros-parent",
+  "sling:resourceSuperType": "kestros/commons/components/content-area",
   "allowedComponentTypes": [
     "group:Content Components",
     "group:Layout Components"
