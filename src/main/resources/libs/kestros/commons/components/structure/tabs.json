@@ -2,6 +2,9 @@
   "jcr:primaryType": "kes:ComponentType",
   "jcr:title": "Tabs",
   "jcr:description": "Shows and hides displayed content based on active tab.",
-  "sling:resourceSuperType": "kestros/commons/components/kestros-parent",
-  "componentGroup": "Layout Components"
+  "sling:resourceSuperType": "/libs/kestros/commons/components/content-area",
+  "componentGroup": "Layout Components",
+  "allowedComponentTypes": [
+    "kestros/commons/components/structure/section"
+  ]
 }

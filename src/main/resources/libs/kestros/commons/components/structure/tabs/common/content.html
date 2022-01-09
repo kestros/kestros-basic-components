@@ -21,6 +21,6 @@
      data-sly-use.parentComponentEditContext="${'io.kestros.cms.sitebuilding.api.models.ParentComponentEditContext'}"/>
 
 <div class="${context.inlineVariations}">
-  <sly
-      data-sly-resource="${'content' @ resourceType='kestros/commons/components/content-area'}"/>
+    <sly data-sly-use.includes="/libs/kestros/commons/components/includes.html"/>
+    <sly data-sly-call="${includes.contentArea}"/>
 </div>

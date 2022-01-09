@@ -23,6 +23,6 @@
 <div class="${context.inlineVariations}">
   <h3 data-sly-test="${section.heading}">${section.heading}</h3>
   <p data-sly-test="${section.description}">${section.description}</p>
-  <sly
-      data-sly-resource="${'content' @ resourceType='kestros/commons/components/content-area'}"/>
+  <sly data-sly-use.includes="/libs/kestros/commons/components/includes.html"/>
+  <sly data-sly-call="${includes.contentArea}"/>
 </div>
