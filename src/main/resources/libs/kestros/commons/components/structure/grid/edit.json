@@ -34,6 +34,16 @@
               "jcr:primaryType": "nt:unstructured",
               "text": "Four Columns",
               "value": 4
+            },
+            "five": {
+              "jcr:primaryType": "nt:unstructured",
+              "text": "Five Columns",
+              "value": 5
+            },
+            "six": {
+              "jcr:primaryType": "nt:unstructured",
+              "text": "Six Columns",
+              "value": 6
             }
           }
         }
