@@ -136,7 +136,7 @@ public class CardComponentContext extends ComponentRequestContext {
 
   private ComponentType getButtonComponentType() throws ComponentTypeRetrievalException {
     return componentTypeRetrievalService.getComponentType(
-        "kestros/commons/components/content/button");
+        "kestros/commons/components/content/button", getResourceResolver());
   }
 
   private ComponentUiFrameworkView getButtonView()
@@ -144,6 +144,6 @@ public class CardComponentContext extends ComponentRequestContext {
              InvalidUiFrameworkException, ComponentTypeRetrievalException,
              InvalidComponentTypeException, InvalidComponentUiFrameworkViewException {
     return componentUiFrameworkViewRetrievalService.getComponentUiFrameworkViewWithFallback(
-        getButtonComponentType(), getUiFramework());
+        getButtonComponentType(), getUiFramework(), getResourceResolver());
   }
 }

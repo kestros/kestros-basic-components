@@ -30,7 +30,7 @@
   </parent>
 
   <artifactId>kestros-basic-components</artifactId>
-  <version>0.1.6</version>
+  <version>0.1.7</version>
 
   <name>Kestros Basic Components</name>
   <description></description>
