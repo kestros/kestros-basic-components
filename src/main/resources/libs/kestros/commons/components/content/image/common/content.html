@@ -17,4 +17,9 @@
   */-->
 <sly data-sly-use.image="${'io.kestros.cms.components.basic.content.image.ImageComponent'}"/>
 
-<img style="max-width: 100%;" src="${image.image}"/>
+<sly data-sly-test="${!image.href}">
+    <img style="max-width: 100%;" src="${image.src}"/>
+</sly>
+<sly data-sly-test="${image.href}">
+    <a href="${image.href}"><img style="max-width: 100%;" src="${image.src}"/></a>
+</sly>

@@ -19,6 +19,13 @@
 package io.kestros.cms.components.basic.content.image;
 
 import io.kestros.cms.modeltypes.annotations.ExternalizedResource;
+import io.kestros.cms.modeltypes.html.AnchorModel;
+import io.kestros.cms.modeltypes.html.AnchorRelationship;
+import io.kestros.cms.modeltypes.html.AnchorTarget;
+import io.kestros.cms.modeltypes.html.CrossOrigin;
+import io.kestros.cms.modeltypes.html.ImageLoading;
+import io.kestros.cms.modeltypes.html.ImageModel;
+import io.kestros.cms.modeltypes.html.ReferrerPolicy;
 import io.kestros.cms.sitebuilding.api.models.BaseComponent;
 import io.kestros.cms.sitebuilding.api.models.BaseSite;
 import io.kestros.commons.structuredslingmodels.BaseResource;
@@ -35,14 +42,15 @@ import org.apache.sling.models.annotations.Model;
  */
 @KestrosModel()
 @Model(adaptables = Resource.class,
-       resourceType = "kestros/commons/components/content/image")
-public class ImageComponent extends BaseComponent {
+    resourceType = "kestros/commons/components/content/image")
+public class ImageComponent extends BaseComponent implements ImageModel, AnchorModel {
 
   /**
    * Image path.
    *
    * @return Image path.
    */
+  @Deprecated
   @KestrosProperty(description = "Image path.")
   public String getImage() {
     try {
@@ -54,14 +62,26 @@ public class ImageComponent extends BaseComponent {
 
   /**
    * Image Resource.
+   *
    * @return Image Resource.
+   *
    * @throws ChildResourceNotFoundException If image resource is not found.
    */
   @ExternalizedResource(mimeType = "",
-                        extension = "",
-                        trimPathToNearest = BaseSite.class)
+      extension = "",
+      trimPathToNearest = BaseSite.class)
   public BaseResource getImageResource() throws ChildResourceNotFoundException {
     return SlingModelUtils.getChildAsBaseResource("image", this);
+  }
+
+  @Override
+  @KestrosProperty(description = "Image path.")
+  public String getSrc() {
+    try {
+      return getImageResource().getPath();
+    } catch (ChildResourceNotFoundException e) {
+      return StringUtils.EMPTY;
+    }
   }
 
   /**
@@ -69,9 +89,44 @@ public class ImageComponent extends BaseComponent {
    *
    * @return Image alt text.
    */
+  @Override
   @KestrosProperty(description = "Image alt text.")
   public String getAltText() {
     return getProperty("altText", StringUtils.EMPTY);
   }
 
+  @Override
+  public CrossOrigin getCrossOrigin() {
+    return null;
+  }
+
+  @Override
+  public ImageLoading getImageLoading() {
+    return null;
+  }
+
+  @Override
+  public ReferrerPolicy getReferrerPolicy() {
+    return null;
+  }
+
+  @Override
+  public Boolean isDownload() {
+    return Boolean.FALSE;
+  }
+
+  @Override
+  public String getHref() {
+    return getProperty("href", StringUtils.EMPTY);
+  }
+
+  @Override
+  public AnchorRelationship getRel() {
+    return null;
+  }
+
+  @Override
+  public AnchorTarget getTarget() {
+    return null;
+  }
 }
