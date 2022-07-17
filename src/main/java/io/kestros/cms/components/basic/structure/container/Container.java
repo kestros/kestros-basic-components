@@ -18,8 +18,11 @@
 
 package io.kestros.cms.components.basic.structure.container;
 
+import io.kestros.cms.modeltypes.annotations.ExternalizedResource;
 import io.kestros.cms.sitebuilding.api.models.BaseComponent;
+import io.kestros.cms.sitebuilding.api.models.BaseSite;
 import io.kestros.cms.sitebuilding.api.models.ContentArea;
+import io.kestros.commons.structuredslingmodels.BaseResource;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
 import io.kestros.commons.structuredslingmodels.exceptions.ChildResourceNotFoundException;
@@ -33,7 +36,7 @@ import org.apache.sling.models.annotations.Model;
  */
 @KestrosModel
 @Model(adaptables = Resource.class,
-       resourceType = "kestros/commons/components/structure/container")
+    resourceType = "kestros/commons/components/structure/container")
 public class Container extends ContentArea {
 
   /**
@@ -42,14 +45,22 @@ public class Container extends ContentArea {
    * @return Background image style attribute value.
    */
   @KestrosProperty(description = "HTML attribute value for background image.",
-                   defaultValue = "",
-                   sampleValue = "background-image: url('/sample-image.png');",
-                   jcrPropertyName = "backgroundImage")
+      defaultValue = "",
+      sampleValue = "background-image: url('/sample-image.png');",
+      jcrPropertyName = "backgroundImage")
   public String getBackgroundImageStyle() {
     if (StringUtils.isNotEmpty(getBackgroundImage())) {
       return String.format("background-image: url('%s');", getBackgroundImage());
     }
     return StringUtils.EMPTY;
+  }
+
+  @ExternalizedResource(mimeType = "",
+      extension = "",
+      trimPathToNearest = BaseSite.class)
+  public BaseResource getBackgroundImageResource() throws ChildResourceNotFoundException {
+    return SlingModelUtils.getChildAsBaseResource("backgroundImage", this);
+
   }
 
   /**
@@ -58,13 +69,14 @@ public class Container extends ContentArea {
    * @return Background image path.
    */
   @KestrosProperty(description = "Background image path.",
-                   configurable = true,
-                   defaultValue = "",
-                   sampleValue = "/sample-image.png",
-                   jcrPropertyName = "backgroundImage")
+      configurable = true,
+      defaultValue = "",
+      sampleValue = "/sample-image.png",
+      jcrPropertyName = "backgroundImage")
+
   public String getBackgroundImage() {
     try {
-      return SlingModelUtils.getChildAsBaseResource("backgroundImage", this).getPath();
+      return getBackgroundImageResource().getPath();
     } catch (ChildResourceNotFoundException e) {
       return StringUtils.EMPTY;
     }
