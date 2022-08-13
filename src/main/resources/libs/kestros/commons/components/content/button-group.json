@@ -1,0 +1,9 @@
+{
+  "jcr:primaryType": "kes:ComponentType",
+  "jcr:title": "Button Group",
+  "jcr:description": "Group of buttons and Call-to-Actions",
+  "componentGroup": "Content Components",
+  "sling:resourceSuperType": "kestros/commons/components/kestros-parent",
+  "fontAwesomeIcon": "far fa-hand-pointer",
+  "unwrap": true
+}
