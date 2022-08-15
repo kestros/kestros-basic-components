@@ -16,4 +16,13 @@
   ~
   */-->
 
-<p>Button group.</p>
+<sly data-sly-use.buttonGroup="${'io.kestros.cms.components.basic.content.buttongroup.ButtonGroup'}"/>
+<sly data-sly-use.context="${'io.kestros.cms.sitebuilding.api.models.ParentComponentEditContext'}"/>
+
+<div>
+    <p data-sly-test="${!buttonGroup.buttons && context.editMode}">No buttons have been
+        configured.</p>
+    <sly data-sly-list.button="${buttonGroup.buttons}">
+        <a href="${button.link}">${button.text}</a>
+    </sly>
+</div>

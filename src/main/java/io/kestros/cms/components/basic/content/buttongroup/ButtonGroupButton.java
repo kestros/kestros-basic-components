@@ -18,31 +18,31 @@
 
 package io.kestros.cms.components.basic.content.buttongroup;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.kestros.cms.components.basic.content.button.ButtonModel;
-import io.kestros.cms.sitebuilding.api.models.BaseComponent;
-import java.util.ArrayList;
-import java.util.List;
-import org.apache.sling.api.resource.Resource;
-import org.apache.sling.models.annotations.Model;
 
-/**
- * Button group component.
- */
-@Model(adaptables = Resource.class,
-    resourceType = "kestros/commons/components/content/button-group")
-public class ButtonGroup extends BaseComponent {
+public class ButtonGroupButton implements ButtonModel {
 
-  public List<ButtonModel> getButtons() {
-    String buttonsJson = getProperty("buttons", "[]");
-    ObjectMapper mapper = new ObjectMapper();
-    try {
-      return mapper.readValue(buttonsJson, new TypeReference<List<ButtonGroupButton>>() {
-      });
-    } catch (Exception e) {
-      return new ArrayList<>();
-    }
+  private String text;
+  private String link;
+
+  public ButtonGroupButton(){}
+
+  public ButtonGroupButton(String text, String link) {
+    this.text = text;
+    this.link = link;
+  }
+
+  @JsonProperty("text")
+  @Override
+  public String getText() {
+    return text;
+  }
+
+  @JsonProperty("link")
+  @Override
+  public String getLink() {
+    return link;
   }
 
 }

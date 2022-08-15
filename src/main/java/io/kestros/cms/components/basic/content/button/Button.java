@@ -31,8 +31,8 @@ import org.apache.sling.models.annotations.Model;
  */
 @KestrosModel(contextModel = ComponentRequestContext.class)
 @Model(adaptables = Resource.class,
-       resourceType = "kestros/commons/components/content/button")
-public class Button extends TextComponent {
+    resourceType = "kestros/commons/components/content/button")
+public class Button extends TextComponent implements ButtonModel {
 
   /**
    * Where the button will link off to.
@@ -40,9 +40,9 @@ public class Button extends TextComponent {
    * @return Where the button will link off to.
    */
   @KestrosProperty(description = "URL the button links to.",
-                   jcrPropertyName = "link",
-                   configurable = true,
-                   sampleValue = "https://kestros.io")
+      jcrPropertyName = "link",
+      configurable = true,
+      sampleValue = "https://kestros.io")
   public String getLink() {
     return getProperty("link", StringUtils.EMPTY);
   }
