@@ -28,11 +28,6 @@ public class ButtonGroupButton implements ButtonModel {
 
   public ButtonGroupButton(){}
 
-  public ButtonGroupButton(String text, String link) {
-    this.text = text;
-    this.link = link;
-  }
-
   @JsonProperty("text")
   @Override
   public String getText() {
