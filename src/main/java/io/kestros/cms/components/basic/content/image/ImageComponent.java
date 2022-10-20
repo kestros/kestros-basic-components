@@ -32,6 +32,7 @@ import io.kestros.commons.structuredslingmodels.BaseResource;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
 import io.kestros.commons.structuredslingmodels.exceptions.ChildResourceNotFoundException;
+import io.kestros.commons.structuredslingmodels.exceptions.ResourceNotFoundException;
 import io.kestros.commons.structuredslingmodels.utils.SlingModelUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
@@ -57,6 +58,8 @@ public class ImageComponent extends BaseComponent implements ImageModel, AnchorM
       return getImageResource().getPath();
     } catch (ChildResourceNotFoundException e) {
       return StringUtils.EMPTY;
+    } catch (ResourceNotFoundException e) {
+      return StringUtils.EMPTY;
     }
   }
 
@@ -70,8 +73,17 @@ public class ImageComponent extends BaseComponent implements ImageModel, AnchorM
   @ExternalizedResource(mimeType = "",
       extension = "",
       trimPathToNearest = BaseSite.class)
-  public BaseResource getImageResource() throws ChildResourceNotFoundException {
-    return SlingModelUtils.getChildAsBaseResource("image", this);
+  public BaseResource getImageResource()
+      throws ChildResourceNotFoundException, ResourceNotFoundException {
+    String imagePath = getProperty("image", StringUtils.EMPTY);
+    if (StringUtils.isEmpty(imagePath)) {
+      throw new ChildResourceNotFoundException("Image resource not found.", "");
+    }
+    BaseResource imageRootAssetResource = SlingModelUtils.getResourceAsBaseResource(imagePath,
+        getResourceResolver());
+    Resource rendition = imageRootAssetResource.getResource().getChild(
+        "jcr:content/renditions/original");
+    return SlingModelUtils.adaptToBaseResource(rendition);
   }
 
   @Override
@@ -80,6 +92,8 @@ public class ImageComponent extends BaseComponent implements ImageModel, AnchorM
     try {
       return getImageResource().getPath();
     } catch (ChildResourceNotFoundException e) {
+      return StringUtils.EMPTY;
+    } catch (ResourceNotFoundException e) {
       return StringUtils.EMPTY;
     }
   }
@@ -117,7 +131,7 @@ public class ImageComponent extends BaseComponent implements ImageModel, AnchorM
 
   @Override
   public String getHref() {
-    return getProperty("href", StringUtils.EMPTY);
+    return getProperty("href", StringUtils.EMPTY) + ".html";
   }
 
   @Override

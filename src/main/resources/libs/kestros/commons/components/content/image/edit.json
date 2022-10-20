@@ -15,15 +15,24 @@
         "container": true,
         "image": {
           "jcr:primaryType": "nt:unstructured",
-          "sling:resourceType": "kestros/cms/fields/file-upload",
+          "sling:resourceType": "kestros/cms/fields/pathfield",
           "label": "Image",
-          "propertyName": "image"
+          "propertyName": "image",
+          "resourceTypes": [
+            "kes:Asset"
+          ],
+          "rootPath": "/content/assets"
         },
         "href": {
           "jcr:primaryType": "nt:unstructured",
           "sling:resourceType": "kestros/cms/fields/pathfield",
-          "label": "Image URL",
-          "propertyName": "href"
+          "label": "Link URL",
+          "propertyName": "href",
+          "resourceTypes": [
+            "kes:Site",
+            "kes:Page"
+          ],
+          "rootPath": "/content/sites"
         },
         "caption": {
           "jcr:primaryType": "nt:unstructured",

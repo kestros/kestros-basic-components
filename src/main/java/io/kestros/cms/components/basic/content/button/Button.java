@@ -44,7 +44,11 @@ public class Button extends TextComponent implements ButtonModel {
       configurable = true,
       sampleValue = "https://kestros.io")
   public String getLink() {
-    return getProperty("link", StringUtils.EMPTY);
+    String linkPropertyValue = getProperty("link", StringUtils.EMPTY);
+    if (linkPropertyValue.startsWith("/content")) {
+      return linkPropertyValue + ".html";
+    }
+    return linkPropertyValue;
   }
 
 }

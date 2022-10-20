@@ -20,11 +20,17 @@
           "propertyName": "text",
           "autofocus": true
         },
+
         "link": {
           "jcr:primaryType": "nt:unstructured",
           "sling:resourceType": "kestros/cms/fields/url-field",
           "label": "Link",
           "propertyName": "link",
+          "rootPath": "/content/sites",
+          "resourceTypes": [
+            "kes:Site",
+            "kes:Page"
+          ],
           "autofocus": false
         }
       }

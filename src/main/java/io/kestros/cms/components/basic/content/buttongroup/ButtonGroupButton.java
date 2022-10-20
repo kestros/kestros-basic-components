@@ -20,13 +20,15 @@ package io.kestros.cms.components.basic.content.buttongroup;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.kestros.cms.components.basic.content.button.ButtonModel;
+import org.apache.commons.lang3.StringUtils;
 
 public class ButtonGroupButton implements ButtonModel {
 
   private String text;
   private String link;
 
-  public ButtonGroupButton(){}
+  public ButtonGroupButton() {
+  }
 
   @JsonProperty("text")
   @Override
@@ -37,6 +39,12 @@ public class ButtonGroupButton implements ButtonModel {
   @JsonProperty("link")
   @Override
   public String getLink() {
+    if (link == null) {
+      return StringUtils.EMPTY;
+    }
+    if (link.startsWith("/")) {
+      return link + ".html";
+    }
     return link;
   }
 
