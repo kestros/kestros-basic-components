@@ -19,12 +19,9 @@
 package io.kestros.cms.components.basic.content.carousel;
 
 import io.kestros.cms.sitebuilding.api.models.BaseComponent;
-import io.kestros.commons.structuredslingmodels.BaseResource;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
-import io.kestros.commons.structuredslingmodels.exceptions.ChildResourceNotFoundException;
 import io.kestros.commons.structuredslingmodels.utils.SlingModelUtils;
-import java.util.Collections;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
@@ -35,19 +32,8 @@ import org.apache.sling.models.annotations.Model;
  */
 @KestrosModel
 @Model(adaptables = Resource.class,
-       resourceType = "kestros/commons/components/content/carousel")
+    resourceType = "kestros/commons/components/content/carousel")
 public class CarouselComponent extends BaseComponent {
-
-  /**
-   * Slides root resource.
-   *
-   * @return Slides root resource.
-   * @throws ChildResourceNotFoundException Resource not found.
-   */
-  @KestrosProperty(description = "slides root resource")
-  public BaseResource getSlidesRootResource() throws ChildResourceNotFoundException {
-    return SlingModelUtils.getChildAsBaseResource("slides", this);
-  }
 
   /**
    * All contained slides.
@@ -56,12 +42,7 @@ public class CarouselComponent extends BaseComponent {
    */
   @KestrosProperty(description = "slides")
   public List<CarouselSlide> getSlides() {
-    try {
-      return SlingModelUtils.getChildrenOfType(getSlidesRootResource(), CarouselSlide.class);
-    } catch (ChildResourceNotFoundException e) {
-      //      e.printStackTrace();
-    }
-    return Collections.emptyList();
+    return SlingModelUtils.getChildrenOfType(this, CarouselSlide.class);
   }
 
   /**

@@ -17,4 +17,15 @@
   */-->
 
 <sly
-    data-sly-use.carousel="${'io.kestros.cms.components.basic.content.carousel.CarouselComponent'}"/>
+        data-sly-use.carousel="${'io.kestros.cms.components.basic.content.carousel.CarouselComponent'}"/>
+<sly data-sly-use.context="${'io.kestros.cms.sitebuilding.api.models.ParentComponentEditContext'}"/>
+<sly data-sly-use.includes="/libs/kestros/commons/components/includes.html"/>
+<sly data-sly-test="${context.editMode}">
+    <sly data-sly-call="${includes.contentArea @ component = carousel}"/>
+</sly>
+
+<sly data-sly-test="${!context.editMode}">
+    <div data-sly-list.slide="${carousel.slides}">
+        <sly data-sly-resource="${slide.path @ resourceType=slide.resourceType}"/>
+    </div>
+</sly>
