@@ -19,9 +19,11 @@
 <sly
     data-sly-use.card="${'io.kestros.cms.components.basic.content.card.CardComponent'}"/>
 
+<sly data-sly-use.includes="/libs/kestros/commons/components/includes.html"/>
+
 <div>
   <p><strong>${card.title}</strong></p>
   <p>${card.description}</p>
-  <sly data-sly-resource="${'content' @ resourceType='kestros/commons/components/content-area'}"/>
+  <sly data-sly-call="${includes.contentArea @ component = card}"/>
   <a href="${card.link}">${card.callToActionText}</a>
 </div>

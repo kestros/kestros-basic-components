@@ -3,6 +3,10 @@
   "jcr:title": "Card",
   "jcr:description": "Card view content container",
   "componentGroup": "Content Components",
-  "sling:resourceSuperType": "kestros/commons/components/kestros-parent",
-  "fontAwesomeIcon": "fa fa-window-maximize"
+  "sling:resourceSuperType": "kestros/commons/components/content-area",
+  "fontAwesomeIcon": "fa fa-window-maximize",
+  "container": true,
+  "kes:allowedComponents": [
+    "*"
+  ]
 }
