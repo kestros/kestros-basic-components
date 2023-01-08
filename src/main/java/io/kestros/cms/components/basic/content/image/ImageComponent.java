@@ -79,11 +79,9 @@ public class ImageComponent extends BaseComponent implements ImageModel, AnchorM
     if (StringUtils.isEmpty(imagePath)) {
       throw new ChildResourceNotFoundException("Image resource not found.", "");
     }
-    BaseResource imageRootAssetResource = SlingModelUtils.getResourceAsBaseResource(imagePath,
+    BaseResource imageAssetResource = SlingModelUtils.getResourceAsBaseResource(imagePath,
         getResourceResolver());
-    Resource rendition = imageRootAssetResource.getResource().getChild(
-        "jcr:content/renditions/original");
-    return SlingModelUtils.adaptToBaseResource(rendition);
+    return imageAssetResource;
   }
 
   @Override

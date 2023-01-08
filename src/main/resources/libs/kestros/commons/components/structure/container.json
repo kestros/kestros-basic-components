@@ -4,9 +4,9 @@
   "jcr:description": "Base level container for all components including the grid",
   "componentGroup": "Layout Components",
   "sling:resourceSuperType": "kestros/commons/components/content-area",
-  "allowedComponentTypes": [
-    "group:Content Components",
-    "group:Layout Components"
+  "container": true,
+  "kes:allowedComponents": [
+    "*"
   ],
   "fontAwesomeIcon": "far fa-square",
   "unwrap": true
