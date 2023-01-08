@@ -45,7 +45,7 @@ public class Button extends TextComponent implements ButtonModel {
       sampleValue = "https://kestros.io")
   public String getLink() {
     String linkPropertyValue = getProperty("link", StringUtils.EMPTY);
-    if (linkPropertyValue.startsWith("/content")) {
+    if (linkPropertyValue.startsWith("/")) {
       return linkPropertyValue + ".html";
     }
     return linkPropertyValue;
