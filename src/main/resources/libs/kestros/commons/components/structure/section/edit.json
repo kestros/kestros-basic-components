@@ -27,9 +27,13 @@
         },
         "background-image": {
           "jcr:primaryType": "nt:unstructured",
-          "sling:resourceType": "kestros/cms/fields/file-upload",
+          "sling:resourceType": "kestros/cms/fields/pathfield",
           "label": "Background Image",
-          "propertyName": "backgroundImage"
+          "propertyName": "backgroundImage",
+          "resourceTypes": [
+            "kes:Asset"
+          ],
+          "rootPath": "/content/assets"
         }
       }
     }

@@ -19,13 +19,13 @@
 package io.kestros.cms.components.basic.structure.container;
 
 import io.kestros.cms.modeltypes.annotations.ExternalizedResource;
-import io.kestros.cms.sitebuilding.api.models.BaseComponent;
 import io.kestros.cms.sitebuilding.api.models.BaseSite;
 import io.kestros.cms.sitebuilding.api.models.ContentArea;
 import io.kestros.commons.structuredslingmodels.BaseResource;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
 import io.kestros.commons.structuredslingmodels.exceptions.ChildResourceNotFoundException;
+import io.kestros.commons.structuredslingmodels.exceptions.ResourceNotFoundException;
 import io.kestros.commons.structuredslingmodels.utils.SlingModelUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
@@ -75,10 +75,17 @@ public class Container extends ContentArea {
       jcrPropertyName = "backgroundImage")
 
   public String getBackgroundImage() {
-    try {
-      return getBackgroundImageResource().getPath();
-    } catch (ChildResourceNotFoundException e) {
+    String imagePath = getProperty("backgroundImage", StringUtils.EMPTY);
+    if (StringUtils.isEmpty(imagePath)) {
       return StringUtils.EMPTY;
     }
+    BaseResource imageAssetResource = null;
+    try {
+      imageAssetResource = SlingModelUtils.getResourceAsBaseResource(imagePath,
+          getResourceResolver());
+    } catch (ResourceNotFoundException e) {
+      return StringUtils.EMPTY;
+    }
+    return imageAssetResource.getPath();
   }
 }
