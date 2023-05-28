@@ -20,25 +20,34 @@ package io.kestros.cms.components.basic.content.buttongroup;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.kestros.cms.components.basic.content.button.ButtonModel;
+import io.kestros.cms.sitebuilding.api.models.BaseComponent;
+import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.models.annotations.Model;
 
-public class ButtonGroupButton implements ButtonModel {
+/**
+ * Individual button Sling Model.
+ */
+@Model(adaptables = Resource.class, resourceType = "kestros/commons/components/content/button")
+public class ButtonComponent extends BaseComponent implements ButtonModel {
 
-  private String text;
-  private String link;
-
-  public ButtonGroupButton() {
-  }
-
+  @KestrosProperty(description = "Display text.",
+          jcrPropertyName = "text",
+          configurable = true)
   @JsonProperty("text")
   @Override
   public String getText() {
-    return text;
+    return getProperty("text", StringUtils.EMPTY);
   }
 
+  @KestrosProperty(description = "Button destination.",
+          jcrPropertyName = "link",
+          configurable = true)
   @JsonProperty("link")
   @Override
   public String getLink() {
+    String link = getProperty("link", StringUtils.EMPTY);
     if (link == null) {
       return StringUtils.EMPTY;
     }

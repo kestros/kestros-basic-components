@@ -18,31 +18,34 @@
 
 package io.kestros.cms.components.basic.content.buttongroup;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.kestros.cms.components.basic.content.button.ButtonModel;
 import io.kestros.cms.sitebuilding.api.models.BaseComponent;
-import java.util.ArrayList;
+import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
 import java.util.List;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.Optional;
+import org.apache.sling.models.annotations.injectorspecific.ChildResource;
 
 /**
  * Button group component.
  */
 @Model(adaptables = Resource.class,
-    resourceType = "kestros/commons/components/content/button-group")
-public class ButtonGroup extends BaseComponent {
+        resourceType = "kestros/commons/components/content/button-group")
+public class ButtonGroupComponent extends BaseComponent {
 
-  public List<ButtonModel> getButtons() {
-    String buttonsJson = getProperty("buttons", "[]");
-    ObjectMapper mapper = new ObjectMapper();
-    try {
-      return mapper.readValue(buttonsJson, new TypeReference<List<ButtonGroupButton>>() {
-      });
-    } catch (Exception e) {
-      return new ArrayList<>();
-    }
+  @ChildResource
+  @Optional
+  private List<ButtonComponent> buttons;
+
+  /**
+   * Buttons contained in the group.
+   *
+   * @return Buttons contained in the group.
+   */
+  @KestrosProperty(description = "Buttons contained in the group.",
+          configurable = false)
+  public List<ButtonComponent> getButtons() {
+    return this.buttons;
   }
 
 }

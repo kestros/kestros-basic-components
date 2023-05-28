@@ -18,6 +18,9 @@
 
 package io.kestros.cms.components.basic.content.button;
 
+/**
+ * Button model.
+ */
 public interface ButtonModel {
 
   /**

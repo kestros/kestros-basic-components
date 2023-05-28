@@ -36,7 +36,7 @@ import org.apache.sling.models.annotations.Model;
  */
 @KestrosModel
 @Model(adaptables = Resource.class,
-    resourceType = "kestros/commons/components/structure/container")
+        resourceType = "kestros/commons/components/structure/container")
 public class Container extends ContentArea {
 
   /**
@@ -45,9 +45,9 @@ public class Container extends ContentArea {
    * @return Background image style attribute value.
    */
   @KestrosProperty(description = "HTML attribute value for background image.",
-      defaultValue = "",
-      sampleValue = "background-image: url('/sample-image.png');",
-      jcrPropertyName = "backgroundImage")
+          defaultValue = "",
+          sampleValue = "background-image: url('/sample-image.png');",
+          jcrPropertyName = "backgroundImage")
   public String getBackgroundImageStyle() {
     if (StringUtils.isNotEmpty(getBackgroundImage())) {
       return String.format("background-image: url('%s');", getBackgroundImage());
@@ -55,9 +55,15 @@ public class Container extends ContentArea {
     return StringUtils.EMPTY;
   }
 
+  /**
+   * Background image resource.
+   *
+   * @return Background image resource.
+   * @throws ChildResourceNotFoundException If the background image resource cannot be found.
+   */
   @ExternalizedResource(mimeType = "",
-      extension = "",
-      trimPathToNearest = BaseSite.class)
+          extension = "",
+          trimPathToNearest = BaseSite.class)
   public BaseResource getBackgroundImageResource() throws ChildResourceNotFoundException {
     return SlingModelUtils.getChildAsBaseResource("backgroundImage", this);
 
@@ -69,10 +75,10 @@ public class Container extends ContentArea {
    * @return Background image path.
    */
   @KestrosProperty(description = "Background image path.",
-      configurable = true,
-      defaultValue = "",
-      sampleValue = "/sample-image.png",
-      jcrPropertyName = "backgroundImage")
+          configurable = true,
+          defaultValue = "",
+          sampleValue = "/sample-image.png",
+          jcrPropertyName = "backgroundImage")
 
   public String getBackgroundImage() {
     String imagePath = getProperty("backgroundImage", StringUtils.EMPTY);
@@ -82,7 +88,7 @@ public class Container extends ContentArea {
     BaseResource imageAssetResource = null;
     try {
       imageAssetResource = SlingModelUtils.getResourceAsBaseResource(imagePath,
-          getResourceResolver());
+              getResourceResolver());
     } catch (ResourceNotFoundException e) {
       return StringUtils.EMPTY;
     }

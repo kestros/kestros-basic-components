@@ -69,6 +69,7 @@ public class ImageComponent extends BaseComponent implements ImageModel, AnchorM
    * @return Image Resource.
    *
    * @throws ChildResourceNotFoundException If image resource is not found.
+   * @throws ResourceNotFoundException If image resource is not found.
    */
   @ExternalizedResource(mimeType = "",
       extension = "",
