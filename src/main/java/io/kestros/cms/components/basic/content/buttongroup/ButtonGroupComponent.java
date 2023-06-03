@@ -18,23 +18,24 @@
 
 package io.kestros.cms.components.basic.content.buttongroup;
 
+import io.kestros.cms.components.basic.content.button.ButtonComponent;
 import io.kestros.cms.sitebuilding.api.models.BaseComponent;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
 import java.util.List;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.ChildResource;
 
 /**
  * Button group component.
  */
 @Model(adaptables = Resource.class,
-        resourceType = "kestros/commons/components/content/button-group")
+        resourceType = "kestros/commons/components/content/button-group",
+        defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL)
 public class ButtonGroupComponent extends BaseComponent {
 
   @ChildResource
-  @Optional
   private List<ButtonComponent> buttons;
 
   /**

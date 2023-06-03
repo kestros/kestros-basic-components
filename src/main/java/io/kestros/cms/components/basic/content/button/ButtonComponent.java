@@ -32,7 +32,7 @@ import org.apache.sling.models.annotations.Model;
 @KestrosModel(contextModel = ComponentRequestContext.class)
 @Model(adaptables = Resource.class,
     resourceType = "kestros/commons/components/content/button")
-public class Button extends TextComponent implements ButtonModel {
+public class ButtonComponent extends TextComponent implements ButtonModel {
 
   /**
    * Where the button will link off to.

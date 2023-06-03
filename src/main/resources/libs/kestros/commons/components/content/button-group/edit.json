@@ -19,6 +19,7 @@
           "propertyName": "buttons",
           "label": "Buttons",
           "dynamicItemLabelPropertyName": "text",
+          "storeType": "jcr-resource",
           "fields": {
             "jcr:primaryType": "nt:unstructured",
             "text": {

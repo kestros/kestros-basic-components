@@ -41,6 +41,7 @@ public class ContainerValidationServiceTest {
 
   @Before
   public void setUp() throws Exception {
+    context.addModelsForPackage("io.kestros.cms");
     containerValidationService = new ContainerValidationService();
   }
 

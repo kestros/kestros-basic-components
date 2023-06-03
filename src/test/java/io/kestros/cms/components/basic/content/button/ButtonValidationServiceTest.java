@@ -35,19 +35,20 @@ public class ButtonValidationServiceTest {
   @Rule
   public SlingContext context = new SlingContext();
 
-  private ButtonValidationService buttonValidationService;
-  private Button button;
+  private ButtonComponentValidationService buttonValidationService;
+  private ButtonComponent button;
   private Resource resource;
   private Map<String, Object> properties = new HashMap<>();
 
   @Before
   public void setUp() throws Exception {
-    buttonValidationService = new ButtonValidationService();
+    context.addModelsForPackage("io.kestros.cms");
+    buttonValidationService = new ButtonComponentValidationService();
   }
 
   @Test
   public void testGetModelType() {
-    assertEquals(Button.class, buttonValidationService.getModelType());
+    assertEquals(ButtonComponent.class, buttonValidationService.getModelType());
   }
 
   @Test
@@ -63,7 +64,7 @@ public class ButtonValidationServiceTest {
   public void testHasLink() {
     properties.put("link", "button-link");
     resource = context.create().resource("/button", properties);
-    button = resource.adaptTo(Button.class);
+    button = resource.adaptTo(ButtonComponent.class);
     ModelValidator validator = buttonValidationService.hasLink();
     validator.setModel(button);
     assertTrue(validator.isValidCheck());

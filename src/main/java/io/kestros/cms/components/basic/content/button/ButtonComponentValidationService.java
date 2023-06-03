@@ -37,11 +37,11 @@ import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 /**
- * Validation Service for the {@link Button} Component.
+ * Validation Service for the {@link ButtonComponent} Component.
  */
 @Component(immediate = true,
            service = ModelValidatorRegistrationService.class)
-public class ButtonValidationService extends TextComponentValidationService {
+public class ButtonComponentValidationService extends TextComponentValidationService {
 
   @Reference(cardinality = ReferenceCardinality.OPTIONAL,
              policyOption = ReferencePolicyOption.GREEDY)
@@ -54,7 +54,7 @@ public class ButtonValidationService extends TextComponentValidationService {
 
   @Override
   public Class<? extends BaseSlingModel> getModelType() {
-    return Button.class;
+    return ButtonComponent.class;
   }
 
   @Override
@@ -67,7 +67,7 @@ public class ButtonValidationService extends TextComponentValidationService {
 
   @SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC_ANON")
   ModelValidator hasLink() {
-    return new ModelValidator<Button>() {
+    return new ModelValidator<ButtonComponent>() {
       @Override
       public Boolean isValidCheck() {
         return StringUtils.isNotBlank(getModel().getLink());
