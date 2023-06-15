@@ -61,9 +61,9 @@ public class Container extends ContentArea {
    * @return Background image resource.
    * @throws ChildResourceNotFoundException If the background image resource cannot be found.
    */
-  @ExternalizedResource(mimeType = "",
-          extension = "",
-          trimPathToNearest = BaseSite.class)
+//  @ExternalizedResource(mimeType = "",
+//          extension = "",
+//          trimPathToNearest = BaseSite.class)
   public BaseResource getBackgroundImageResource() throws ChildResourceNotFoundException {
     return SlingModelUtils.getChildAsBaseResource("backgroundImage", this);
 

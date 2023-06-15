@@ -71,9 +71,9 @@ public class ImageComponent extends BaseComponent implements ImageModel, AnchorM
    * @throws ChildResourceNotFoundException If image resource is not found.
    * @throws ResourceNotFoundException If image resource is not found.
    */
-  @ExternalizedResource(mimeType = "",
-      extension = "",
-      trimPathToNearest = BaseSite.class)
+//  @ExternalizedResource(mimeType = "",
+//      extension = "",
+//      trimPathToNearest = BaseSite.class)
   public BaseResource getImageResource()
       throws ChildResourceNotFoundException, ResourceNotFoundException {
     String imagePath = getProperty("image", StringUtils.EMPTY);
