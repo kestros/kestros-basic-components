@@ -20,11 +20,11 @@ package io.kestros.cms.components.basic.content.text;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.commons.structuredslingmodels.BaseSlingModel;
-import io.kestros.commons.validation.ModelValidationMessageType;
-import io.kestros.commons.validation.models.BaseModelValidationRegistrationService;
-import io.kestros.commons.validation.models.ModelValidator;
-import io.kestros.commons.validation.services.ModelValidatorRegistrationHandlerService;
-import io.kestros.commons.validation.services.ModelValidatorRegistrationService;
+import io.kestros.commons.validation.api.ModelValidationMessageType;
+import io.kestros.commons.validation.api.services.BaseModelValidationRegistrationService;
+import io.kestros.commons.validation.api.models.ModelValidator;
+import io.kestros.commons.validation.api.services.ModelValidatorRegistrationHandlerService;
+import io.kestros.commons.validation.api.services.ModelValidatorRegistrationService;
 import java.util.Collections;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
@@ -63,8 +63,8 @@ public class TextComponentValidationService extends BaseModelValidationRegistrat
   ModelValidator hasText() {
     return new ModelValidator<TextComponent>() {
       @Override
-      public Boolean isValidCheck() {
-        return StringUtils.isNotEmpty(getModel().getText());
+      public Boolean isValidCheck(TextComponent model) {
+        return StringUtils.isNotEmpty(model.getText());
       }
 
       @Override
@@ -73,7 +73,7 @@ public class TextComponentValidationService extends BaseModelValidationRegistrat
       }
 
       @Override
-      public String getDetailedMessage() {
+      public String getDetailedMessage(TextComponent model) {
         return "'text' property must be configured.";
       }
 

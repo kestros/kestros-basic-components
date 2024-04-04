@@ -20,11 +20,11 @@ package io.kestros.cms.components.basic.content.code;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.commons.structuredslingmodels.BaseSlingModel;
-import io.kestros.commons.validation.ModelValidationMessageType;
-import io.kestros.commons.validation.models.BaseModelValidationRegistrationService;
-import io.kestros.commons.validation.models.ModelValidator;
-import io.kestros.commons.validation.services.ModelValidatorRegistrationHandlerService;
-import io.kestros.commons.validation.services.ModelValidatorRegistrationService;
+import io.kestros.commons.validation.api.ModelValidationMessageType;
+import io.kestros.commons.validation.api.models.ModelValidator;
+import io.kestros.commons.validation.api.services.BaseModelValidationRegistrationService;
+import io.kestros.commons.validation.api.services.ModelValidatorRegistrationHandlerService;
+import io.kestros.commons.validation.api.services.ModelValidatorRegistrationService;
 import java.util.Collections;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
@@ -37,10 +37,10 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
  * Validation service for the {@link CodeComponent} component.
  */
 @Component(immediate = true,
-           service = ModelValidatorRegistrationService.class)
+        service = ModelValidatorRegistrationService.class)
 public class CodeComponentValidationService extends BaseModelValidationRegistrationService {
   @Reference(cardinality = ReferenceCardinality.OPTIONAL,
-             policyOption = ReferencePolicyOption.GREEDY)
+          policyOption = ReferencePolicyOption.GREEDY)
   private ModelValidatorRegistrationHandlerService modelValidatorRegistrationHandlerService;
 
   @Override
@@ -61,9 +61,10 @@ public class CodeComponentValidationService extends BaseModelValidationRegistrat
   @SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC_ANON")
   ModelValidator hasCode() {
     return new ModelValidator<CodeComponent>() {
+
       @Override
-      public Boolean isValidCheck() {
-        return StringUtils.isNotEmpty(getModel().getText());
+      public  Boolean isValidCheck(CodeComponent model) {
+        return StringUtils.isNotEmpty(((CodeComponent) model).getText());
       }
 
       @Override
@@ -72,9 +73,10 @@ public class CodeComponentValidationService extends BaseModelValidationRegistrat
       }
 
       @Override
-      public String getDetailedMessage() {
+      public  String getDetailedMessage(CodeComponent model) {
         return "'code' property must be configured on the Component resource.";
       }
+
 
       @Override
       public ModelValidationMessageType getType() {

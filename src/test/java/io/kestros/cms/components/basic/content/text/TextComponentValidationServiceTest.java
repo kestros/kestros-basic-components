@@ -23,8 +23,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.spy;
 
-import io.kestros.commons.validation.ModelValidationMessageType;
-import io.kestros.commons.validation.models.ModelValidator;
+import io.kestros.commons.validation.api.ModelValidationMessageType;
+import io.kestros.commons.validation.api.models.ModelValidator;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.sling.api.resource.Resource;
@@ -68,9 +68,8 @@ public class TextComponentValidationServiceTest {
     textComponent = resource.adaptTo(TextComponent.class);
 
     ModelValidator validator = textComponentValidationService.hasText();
-    validator.setModel(textComponent);
 
-    assertTrue(validator.isValidCheck());
+    assertTrue(validator.isValidCheck(textComponent));
   }
 
   @Test
@@ -80,9 +79,8 @@ public class TextComponentValidationServiceTest {
     textComponent = resource.adaptTo(TextComponent.class);
 
     ModelValidator validator = textComponentValidationService.hasText();
-    validator.setModel(textComponent);
 
-    assertFalse(validator.isValidCheck());
+    assertFalse(validator.isValidCheck(textComponent));
     assertEquals("Text is configured.", validator.getMessage());
     assertEquals(ModelValidationMessageType.ERROR, validator.getType());
   }

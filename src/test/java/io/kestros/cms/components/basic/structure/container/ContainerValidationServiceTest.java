@@ -22,7 +22,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import io.kestros.commons.validation.models.ModelValidator;
+import io.kestros.commons.validation.api.models.ModelValidator;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.testing.mock.sling.junit.SlingContext;
 import org.junit.Before;
@@ -60,8 +60,7 @@ public class ContainerValidationServiceTest {
     context.create().resource("/resource/child");
     container = resource.adaptTo(Container.class);
     ModelValidator validator = containerValidationService.hasChild();
-    validator.setModel(container);
-    assertTrue(validator.isValidCheck());
+    assertTrue(validator.isValidCheck(container));
   }
 
   @Test
@@ -69,7 +68,6 @@ public class ContainerValidationServiceTest {
     resource = context.create().resource("/resource");
     container = resource.adaptTo(Container.class);
     ModelValidator validator = containerValidationService.hasChild();
-    validator.setModel(container);
-    assertFalse(validator.isValidCheck());
+    assertFalse(validator.isValidCheck(container));
   }
 }

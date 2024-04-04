@@ -20,11 +20,11 @@ package io.kestros.cms.components.basic.structure.grid;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.commons.structuredslingmodels.BaseSlingModel;
-import io.kestros.commons.validation.ModelValidationMessageType;
-import io.kestros.commons.validation.models.BaseModelValidationRegistrationService;
-import io.kestros.commons.validation.models.ModelValidator;
-import io.kestros.commons.validation.services.ModelValidatorRegistrationHandlerService;
-import io.kestros.commons.validation.services.ModelValidatorRegistrationService;
+import io.kestros.commons.validation.api.ModelValidationMessageType;
+import io.kestros.commons.validation.api.models.ModelValidator;
+import io.kestros.commons.validation.api.services.BaseModelValidationRegistrationService;
+import io.kestros.commons.validation.api.services.ModelValidatorRegistrationHandlerService;
+import io.kestros.commons.validation.api.services.ModelValidatorRegistrationService;
 import java.util.Collections;
 import java.util.List;
 import org.osgi.service.component.annotations.Component;
@@ -36,11 +36,11 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
  * Validation Service for the {@link Grid} component.
  */
 @Component(immediate = true,
-           service = ModelValidatorRegistrationService.class)
+        service = ModelValidatorRegistrationService.class)
 public class GridValidationService extends BaseModelValidationRegistrationService {
 
   @Reference(cardinality = ReferenceCardinality.OPTIONAL,
-             policyOption = ReferencePolicyOption.GREEDY)
+          policyOption = ReferencePolicyOption.GREEDY)
   private ModelValidatorRegistrationHandlerService modelValidatorRegistrationHandlerService;
 
   @Override
@@ -61,9 +61,11 @@ public class GridValidationService extends BaseModelValidationRegistrationServic
   @SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC_ANON")
   ModelValidator columnsAreContentAreas() {
     return new ModelValidator<Grid>() {
+
       @Override
-      public Boolean isValidCheck() {
-        return getModel().getColumns().size() == getModel().getNumberOfColumns();
+      public Boolean isValidCheck(Grid model) {
+        Grid grid = (Grid) model;
+        return grid.getColumns().size() == grid.getNumberOfColumns();
       }
 
       @Override
@@ -72,9 +74,10 @@ public class GridValidationService extends BaseModelValidationRegistrationServic
       }
 
       @Override
-      public String getDetailedMessage() {
+      public String getDetailedMessage(Grid model) {
         return "";
       }
+
 
       @Override
       public ModelValidationMessageType getType() {

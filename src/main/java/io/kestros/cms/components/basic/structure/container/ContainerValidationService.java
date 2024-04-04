@@ -20,11 +20,11 @@ package io.kestros.cms.components.basic.structure.container;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.commons.structuredslingmodels.BaseSlingModel;
-import io.kestros.commons.validation.ModelValidationMessageType;
-import io.kestros.commons.validation.models.BaseModelValidationRegistrationService;
-import io.kestros.commons.validation.models.ModelValidator;
-import io.kestros.commons.validation.services.ModelValidatorRegistrationHandlerService;
-import io.kestros.commons.validation.services.ModelValidatorRegistrationService;
+import io.kestros.commons.validation.api.ModelValidationMessageType;
+import io.kestros.commons.validation.api.services.BaseModelValidationRegistrationService;
+import io.kestros.commons.validation.api.models.ModelValidator;
+import io.kestros.commons.validation.api.services.ModelValidatorRegistrationHandlerService;
+import io.kestros.commons.validation.api.services.ModelValidatorRegistrationService;
 import java.util.Collections;
 import java.util.List;
 import org.osgi.service.component.annotations.Component;
@@ -61,9 +61,10 @@ public class ContainerValidationService extends BaseModelValidationRegistrationS
   @SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC_ANON")
   ModelValidator hasChild() {
     return new ModelValidator<Container>() {
+
       @Override
-      public Boolean isValidCheck() {
-        return !getModel().getChildren().isEmpty();
+      public  Boolean isValidCheck(Container model) {
+        return !((Container) model).getChildren().isEmpty();
       }
 
       @Override
@@ -72,9 +73,10 @@ public class ContainerValidationService extends BaseModelValidationRegistrationS
       }
 
       @Override
-      public String getDetailedMessage() {
+      public  String getDetailedMessage(Container model) {
         return "";
       }
+
 
       @Override
       public ModelValidationMessageType getType() {

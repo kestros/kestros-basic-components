@@ -21,7 +21,7 @@ package io.kestros.cms.components.basic.content.button;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import io.kestros.commons.validation.models.ModelValidator;
+import io.kestros.commons.validation.api.models.ModelValidator;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.sling.api.resource.Resource;
@@ -65,7 +65,6 @@ public class ButtonValidationServiceTest {
     resource = context.create().resource("/button", properties);
     button = resource.adaptTo(Button.class);
     ModelValidator validator = buttonValidationService.hasLink();
-    validator.setModel(button);
-    assertTrue(validator.isValidCheck());
+    assertTrue(validator.isValidCheck(button));
   }
 }

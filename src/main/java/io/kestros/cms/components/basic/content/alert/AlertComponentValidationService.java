@@ -20,8 +20,8 @@ package io.kestros.cms.components.basic.content.alert;
 
 import io.kestros.cms.components.basic.content.text.TextComponentValidationService;
 import io.kestros.commons.structuredslingmodels.BaseSlingModel;
-import io.kestros.commons.validation.services.ModelValidatorRegistrationHandlerService;
-import io.kestros.commons.validation.services.ModelValidatorRegistrationService;
+import io.kestros.commons.validation.api.services.ModelValidatorRegistrationHandlerService;
+import io.kestros.commons.validation.api.services.ModelValidatorRegistrationService;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
