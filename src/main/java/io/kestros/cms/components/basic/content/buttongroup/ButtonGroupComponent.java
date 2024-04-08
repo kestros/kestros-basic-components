@@ -19,6 +19,7 @@
 package io.kestros.cms.components.basic.content.buttongroup;
 
 import io.kestros.cms.sitebuilding.api.models.BaseComponent;
+import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
 import java.util.List;
 import org.apache.sling.api.resource.Resource;
@@ -29,6 +30,7 @@ import org.apache.sling.models.annotations.injectorspecific.ChildResource;
 /**
  * Button group component.
  */
+@KestrosModel()
 @Model(adaptables = Resource.class,
         resourceType = "kestros/commons/components/content/button-group")
 public class ButtonGroupComponent extends BaseComponent {
