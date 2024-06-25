@@ -49,7 +49,7 @@ public class PageTitleContext extends ComponentRequestContext {
       return getResourceAsType(getRequest().getRequestURI().split(".html")[0],
           getRequest().getResourceResolver(), BaseContentPage.class).getDisplayTitle();
     } catch (ModelAdaptionException e) {
-      LOG.warn("Unable to find text for page title component {}. {}.", getBaseResource().getPath(),
+      LOG.warn("Unable to find text for page title component {}. {}.", getResource().getPath(),
           e.getMessage());
     }
     return StringUtils.EMPTY;
