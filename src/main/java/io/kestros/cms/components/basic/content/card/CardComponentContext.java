@@ -32,6 +32,7 @@ import io.kestros.cms.sitebuilding.api.models.ParentComponent;
 import io.kestros.cms.uiframeworks.api.exceptions.InvalidThemeException;
 import io.kestros.cms.uiframeworks.api.exceptions.InvalidUiFrameworkException;
 import io.kestros.cms.uiframeworks.api.exceptions.ThemeRetrievalException;
+import io.kestros.cms.uiframeworks.api.exceptions.UiFrameworkRetrievalException;
 import io.kestros.commons.structuredslingmodels.exceptions.ModelAdaptionException;
 import io.kestros.commons.structuredslingmodels.exceptions.ResourceNotFoundException;
 import java.util.ArrayList;
@@ -140,9 +141,10 @@ public class CardComponentContext extends ComponentRequestContext {
   }
 
   private ComponentUiFrameworkView getButtonView()
-      throws InvalidThemeException, ThemeRetrievalException, ResourceNotFoundException,
-             InvalidUiFrameworkException, ComponentTypeRetrievalException,
-             InvalidComponentTypeException, InvalidComponentUiFrameworkViewException {
+          throws InvalidThemeException, ThemeRetrievalException, ResourceNotFoundException,
+          InvalidUiFrameworkException, ComponentTypeRetrievalException,
+          InvalidComponentTypeException, InvalidComponentUiFrameworkViewException,
+          UiFrameworkRetrievalException {
     return componentUiFrameworkViewRetrievalService.getComponentUiFrameworkViewWithFallback(
         getButtonComponentType(), getUiFramework(), getResourceResolver());
   }
