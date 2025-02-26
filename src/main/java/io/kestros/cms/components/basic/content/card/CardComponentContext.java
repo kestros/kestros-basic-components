@@ -19,6 +19,7 @@
 package io.kestros.cms.components.basic.content.card;
 
 import io.kestros.cms.componenttypes.api.exceptions.ComponentTypeRetrievalException;
+import io.kestros.cms.componenttypes.api.exceptions.ComponentViewRetrievalException;
 import io.kestros.cms.componenttypes.api.exceptions.InvalidComponentTypeException;
 import io.kestros.cms.componenttypes.api.exceptions.InvalidComponentUiFrameworkViewException;
 import io.kestros.cms.componenttypes.api.models.ComponentType;
@@ -125,7 +126,7 @@ public class CardComponentContext extends ComponentRequestContext {
           }
         }
       }
-    } catch (final ModelAdaptionException exception) {
+    } catch (final ModelAdaptionException | ComponentViewRetrievalException exception) {
       //      LOG.warn("Unable to retrieve variations list for {}. {}", getComponent().getPath(),
       //          exception.getMessage());
     }
@@ -141,11 +142,11 @@ public class CardComponentContext extends ComponentRequestContext {
   }
 
   private ComponentUiFrameworkView getButtonView()
-          throws InvalidThemeException, ThemeRetrievalException, ResourceNotFoundException,
-          InvalidUiFrameworkException, ComponentTypeRetrievalException,
-          InvalidComponentTypeException, InvalidComponentUiFrameworkViewException,
-          UiFrameworkRetrievalException {
-    return componentUiFrameworkViewRetrievalService.getComponentUiFrameworkViewWithFallback(
-        getButtonComponentType(), getUiFramework(), getResourceResolver());
+      throws InvalidThemeException, ThemeRetrievalException, ResourceNotFoundException,
+      InvalidUiFrameworkException, ComponentTypeRetrievalException,
+      InvalidComponentTypeException, InvalidComponentUiFrameworkViewException,
+      UiFrameworkRetrievalException, ComponentViewRetrievalException {
+    return componentUiFrameworkViewRetrievalService.getResolvedComponentUiFrameworkView(
+        getButtonComponentType().getPath(), getUiFramework(), getResourceResolver());
   }
 }
