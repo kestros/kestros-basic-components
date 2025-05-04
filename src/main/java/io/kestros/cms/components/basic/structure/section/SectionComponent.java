@@ -30,21 +30,4 @@ import org.apache.sling.models.annotations.Model;
        resourceType = "kestros/commons/components/structure/section")
 public class SectionComponent extends ContainerComponent {
 
-  /**
-   * Heading text.
-   *
-   * @return Heading text.
-   */
-  public String getHeading() {
-    return getProperty("heading", StringUtils.EMPTY);
-  }
-
-  /**
-   * Description text.
-   *
-   * @return Description text.
-   */
-  public String getDescription() {
-    return getProperty("description", StringUtils.EMPTY);
-  }
 }

@@ -18,14 +18,10 @@
 
 package io.kestros.cms.components.basic.structure.grid;
 
-import static io.kestros.commons.structuredslingmodels.utils.SlingModelUtils.getChildAsType;
-
 import io.kestros.cms.sitebuilding.api.models.BaseComponent;
 import io.kestros.cms.sitebuilding.api.models.ContentArea;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
-import io.kestros.commons.structuredslingmodels.exceptions.ChildResourceNotFoundException;
-import io.kestros.commons.structuredslingmodels.exceptions.InvalidResourceTypeException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.sling.api.resource.Resource;
@@ -38,24 +34,10 @@ import org.slf4j.LoggerFactory;
  */
 @KestrosModel
 @Model(adaptables = Resource.class,
-       resourceType = "kestros/commons/components/structure/grid")
+    resourceType = "kestros/commons/components/structure/grid")
 public class Grid extends BaseComponent {
 
   private static final Logger LOG = LoggerFactory.getLogger(Grid.class);
-
-  /**
-   * Number of columns to display.
-   *
-   * @return Number of columns to display.
-   */
-  @KestrosProperty(description = "Number of columns to display.",
-                   configurable = true,
-                   jcrPropertyName = "columns",
-                   defaultValue = "3",
-                   sampleValue = "3")
-  public int getNumberOfColumns() {
-    return getProperty("columns", 3);
-  }
 
   /**
    * The grid's column resources.
@@ -65,13 +47,14 @@ public class Grid extends BaseComponent {
   @KestrosProperty(description = "The grid's column resources.")
   public List<ContentArea> getColumns() {
     List<ContentArea> columns = new ArrayList<>();
-    for (int i = 1; i < getNumberOfColumns() + 1; i++) {
-      try {
-        columns.add(getChildAsType("column-" + i, this, ContentArea.class));
-      } catch (ChildResourceNotFoundException | InvalidResourceTypeException e) {
-        LOG.error("Unable to render 'column-{}' under Grid '{}'. {}", i, getPath(), e.getMessage());
-      }
-    }
+//    for (int i = 1; i < getNumberOfColumns() + 1; i++) {
+//      try {
+//        columns.add(getChildAsType("column-" + i, this, ContentArea.class));
+//      } catch (ChildResourceNotFoundException | InvalidResourceTypeException e) {
+//        LOG.error("Unable to render 'column-{}' under Grid '{}'. {}", i, getPath(), e
+//        .getMessage());
+//      }
+//    }
     return columns;
   }
 }

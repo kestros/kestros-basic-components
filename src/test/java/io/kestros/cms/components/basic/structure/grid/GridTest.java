@@ -47,22 +47,22 @@ public class GridTest {
     contentAreaProperties.put("sling:resourceType", "kestros/commons/components/content-area");
   }
 
-  @Test
-  public void testGetNumberOfColumns() {
-    properties.put("columns", 2);
-    resource = context.create().resource("/grid", properties);
-    grid = resource.adaptTo(Grid.class);
-
-    assertEquals(2, grid.getNumberOfColumns());
-  }
-
-  @Test
-  public void testGetNumberOfColumnsWhenNumberNotDefined() {
-    resource = context.create().resource("/grid", properties);
-    grid = resource.adaptTo(Grid.class);
-
-    assertEquals(3, grid.getNumberOfColumns());
-  }
+//  @Test
+//  public void testGetNumberOfColumns() {
+//    properties.put("columns", 2);
+//    resource = context.create().resource("/grid", properties);
+//    grid = resource.adaptTo(Grid.class);
+//
+//    assertEquals(2, grid.getNumberOfColumns());
+//  }
+//
+//  @Test
+//  public void testGetNumberOfColumnsWhenNumberNotDefined() {
+//    resource = context.create().resource("/grid", properties);
+//    grid = resource.adaptTo(Grid.class);
+//
+//    assertEquals(3, grid.getNumberOfColumns());
+//  }
 
   @Test
   public void testGetColumns() {
