@@ -16,39 +16,29 @@
  *
  */
 
-package io.kestros.cms.components.basic.content.pagetitle;
+package io.kestros.cms.components.basic.structure.container;
 
-import io.kestros.cms.components.basic.content.heading.HeadingComponent;
-import io.kestros.cms.components.basic.content.heading.HeadingLevels;
-import io.kestros.cms.sitebuilding.api.models.BaseComponent;
+import io.kestros.cms.sitebuilding.api.models.ContentArea;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
-import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.Self;
 
 /**
- * Component for displaying the current page title as a heading.
+ * Basic container component.
  */
-@KestrosModel(contextModel = PageTitleContext.class)
+@KestrosModel
 @Model(adaptables = Resource.class,
-       resourceType = "kestros/commons/components/content/page-title")
-public class PageTitle extends BaseComponent {
+    resourceType = "kestros/commons/components/structure/container")
+public class ContainerComponent extends ContentArea {
 
+  @Self
+  private Resource resource;
 
-  /**
-   * Heading level.
-   *
-   * @return Heading level.
-   */
-  @KestrosProperty(description = "Heading level",
-      defaultValue = "h1",
-      configurable = true,
-      sampleValue = "h1",
-      jcrPropertyName = "level")
-  public String getLevel() {
-    String headingLevel = getResource().getValueMap().get("level", StringUtils.EMPTY);
-    return HeadingLevels.lookup(headingLevel).getValue();
+  public String getElementType() {
+    return ContainerType.lookup(
+        resource.getValueMap().get("elementType", StringUtils.EMPTY)).getName();
   }
 
 }

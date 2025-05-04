@@ -29,13 +29,13 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class ContainerValidationServiceTest {
+public class ContainerComponentValidationServiceTest {
 
   @Rule
   public SlingContext context = new SlingContext();
 
   private ContainerValidationService containerValidationService;
-  private Container container;
+  private ContainerComponent containerComponent;
   private Resource resource;
 
 
@@ -46,7 +46,7 @@ public class ContainerValidationServiceTest {
 
   @Test
   public void testGetModelType() {
-    assertEquals(Container.class, containerValidationService.getModelType());
+    assertEquals(ContainerComponent.class, containerValidationService.getModelType());
   }
 
   @Test
@@ -58,16 +58,16 @@ public class ContainerValidationServiceTest {
   public void testHasChild() {
     resource = context.create().resource("/resource");
     context.create().resource("/resource/child");
-    container = resource.adaptTo(Container.class);
+    containerComponent = resource.adaptTo(ContainerComponent.class);
     ModelValidator validator = containerValidationService.hasChild();
-    assertTrue(validator.isValidCheck(container));
+    assertTrue(validator.isValidCheck(containerComponent));
   }
 
   @Test
   public void testHasChildWhenHasNoChildren() {
     resource = context.create().resource("/resource");
-    container = resource.adaptTo(Container.class);
+    containerComponent = resource.adaptTo(ContainerComponent.class);
     ModelValidator validator = containerValidationService.hasChild();
-    assertFalse(validator.isValidCheck(container));
+    assertFalse(validator.isValidCheck(containerComponent));
   }
 }

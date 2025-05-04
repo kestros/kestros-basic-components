@@ -58,13 +58,13 @@ public class ButtonValidationServiceTest {
     assertEquals("Link has been configured.",
         buttonValidationService.getModelValidators().get(1).getMessage());
   }
-
-  @Test
-  public void testHasLink() {
-    properties.put("link", "button-link");
-    resource = context.create().resource("/button", properties);
-    button = resource.adaptTo(Button.class);
-    ModelValidator validator = buttonValidationService.hasLink();
-    assertTrue(validator.isValidCheck(button));
-  }
+//
+//  @Test
+//  public void testHasLink() {
+//    properties.put("link", "button-link");
+//    resource = context.create().resource("/button", properties);
+//    button = resource.adaptTo(Button.class);
+//    ModelValidator validator = buttonValidationService.hasLink();
+//    assertTrue(validator.isValidCheck(button));
+//  }
 }

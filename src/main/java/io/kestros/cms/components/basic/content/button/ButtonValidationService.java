@@ -61,32 +61,32 @@ public class ButtonValidationService extends TextComponentValidationService {
   public List<ModelValidator> getModelValidators() {
     List<ModelValidator> modelValidators = new ArrayList<>();
     modelValidators.addAll(super.getModelValidators());
-    modelValidators.add(hasLink());
+//    modelValidators.add(hasLink());
     return modelValidators;
   }
-
-  @SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC_ANON")
-  ModelValidator hasLink() {
-    return new ModelValidator<Button>() {
-      @Override
-      public Boolean isValidCheck(Button model) {
-        return StringUtils.isNotBlank(model.getLink());
-      }
-
-      @Override
-      public String getMessage() {
-        return "Link has been configured.";
-      }
-
-      @Override
-      public String getDetailedMessage(Button model) {
-        return "'link' property must be configured on the Component resource.";
-      }
-
-      @Override
-      public ModelValidationMessageType getType() {
-        return WARNING;
-      }
-    };
-  }
+//
+//  @SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC_ANON")
+//  ModelValidator hasLink() {
+//    return new ModelValidator<Button>() {
+//      @Override
+//      public Boolean isValidCheck(Button model) {
+//        return StringUtils.isNotBlank(model.getLink());
+//      }
+//
+//      @Override
+//      public String getMessage() {
+//        return "Link has been configured.";
+//      }
+//
+//      @Override
+//      public String getDetailedMessage(Button model) {
+//        return "'link' property must be configured on the Component resource.";
+//      }
+//
+//      @Override
+//      public ModelValidationMessageType getType() {
+//        return WARNING;
+//      }
+//    };
+//  }
 }

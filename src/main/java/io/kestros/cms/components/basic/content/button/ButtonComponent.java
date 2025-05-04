@@ -18,13 +18,13 @@
 
 package io.kestros.cms.components.basic.content.button;
 
-import io.kestros.cms.components.basic.content.text.TextComponent;
 import io.kestros.cms.sitebuilding.api.models.ComponentRequestContext;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
-import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
+import javax.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.Self;
 
 /**
  * Basic button component.
@@ -32,23 +32,32 @@ import org.apache.sling.models.annotations.Model;
 @KestrosModel(contextModel = ComponentRequestContext.class)
 @Model(adaptables = Resource.class,
     resourceType = "kestros/commons/components/content/button")
-public class Button extends TextComponent {
-//
-//  /**
-//   * Where the button will link off to.
-//   *
-//   * @return Where the button will link off to.
-//   */
-//  @KestrosProperty(description = "URL the button links to.",
-//      jcrPropertyName = "link",
-//      configurable = true,
-//      sampleValue = "https://kestros.io")
-//  public String getLink() {
-//    String linkPropertyValue = getProperty("link", StringUtils.EMPTY);
-//    if (linkPropertyValue.startsWith("/")) {
-//      return linkPropertyValue + ".html";
-//    }
-//    return linkPropertyValue;
-//  }
+public class ButtonComponent {
 
+  @Self
+  private Resource resource;
+
+  @Nonnull
+  public String getLabel() {
+    return resource.getValueMap().get("label", StringUtils.EMPTY);
+  }
+
+  @Nonnull
+  public String getHref() {
+    String linkPropertyValue = resource.getValueMap().get("href", StringUtils.EMPTY);
+    if (linkPropertyValue.startsWith("/")) {
+      return linkPropertyValue + ".html";
+    }
+    return linkPropertyValue;
+  }
+
+  @Nonnull
+  public String getTarget() {
+    return resource.getValueMap().get("target", "_self");
+  }
+
+  @Nonnull
+  public String getAriaLabel() {
+    return resource.getValueMap().get("ariaLabel", StringUtils.EMPTY);
+  }
 }

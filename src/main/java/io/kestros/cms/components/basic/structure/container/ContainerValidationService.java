@@ -33,7 +33,7 @@ import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 /**
- * Validation Service for the {@link Container} component.
+ * Validation Service for the {@link ContainerComponent} component.
  */
 @Component(immediate = true,
            service = ModelValidatorRegistrationService.class)
@@ -50,7 +50,7 @@ public class ContainerValidationService extends BaseModelValidationRegistrationS
 
   @Override
   public Class<? extends BaseSlingModel> getModelType() {
-    return Container.class;
+    return ContainerComponent.class;
   }
 
   @Override
@@ -60,11 +60,11 @@ public class ContainerValidationService extends BaseModelValidationRegistrationS
 
   @SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC_ANON")
   ModelValidator hasChild() {
-    return new ModelValidator<Container>() {
+    return new ModelValidator<ContainerComponent>() {
 
       @Override
-      public  Boolean isValidCheck(Container model) {
-        return !((Container) model).getChildren().isEmpty();
+      public  Boolean isValidCheck(ContainerComponent model) {
+        return !((ContainerComponent) model).getChildren().isEmpty();
       }
 
       @Override
@@ -73,7 +73,7 @@ public class ContainerValidationService extends BaseModelValidationRegistrationS
       }
 
       @Override
-      public  String getDetailedMessage(Container model) {
+      public  String getDetailedMessage(ContainerComponent model) {
         return "";
       }
 

@@ -33,7 +33,7 @@ public class HeadingTest {
   @Rule
   public SlingContext context = new SlingContext();
 
-  private Heading heading;
+  private HeadingComponent heading;
 
   private Resource resource;
 
@@ -49,7 +49,7 @@ public class HeadingTest {
     properties.put("level", "h2");
     resource = context.create().resource("/heading", properties);
 
-    heading = resource.adaptTo(Heading.class);
+    heading = resource.adaptTo(HeadingComponent.class);
     assertEquals("h2", heading.getLevel());
   }
 
@@ -57,7 +57,7 @@ public class HeadingTest {
   public void testGetLevelWhenEmpty() {
     resource = context.create().resource("/heading", properties);
 
-    heading = resource.adaptTo(Heading.class);
+    heading = resource.adaptTo(HeadingComponent.class);
     assertEquals("h1", heading.getLevel());
   }
 }

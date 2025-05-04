@@ -16,11 +16,9 @@
  *
  */
 
-package io.kestros.cms.components.basic.content.pagetitle;
+package io.kestros.cms.components.basic.content.heading;
 
-import io.kestros.cms.components.basic.content.heading.HeadingComponent;
-import io.kestros.cms.components.basic.content.heading.HeadingLevels;
-import io.kestros.cms.sitebuilding.api.models.BaseComponent;
+import io.kestros.cms.components.basic.content.text.TextComponent;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
 import org.apache.commons.lang3.StringUtils;
@@ -28,13 +26,12 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
 /**
- * Component for displaying the current page title as a heading.
+ * Basic Heading component.
  */
-@KestrosModel(contextModel = PageTitleContext.class)
+@KestrosModel()
 @Model(adaptables = Resource.class,
-       resourceType = "kestros/commons/components/content/page-title")
-public class PageTitle extends BaseComponent {
-
+    resourceType = "kestros/commons/components/content/heading")
+public class HeadingComponent extends TextComponent {
 
   /**
    * Heading level.

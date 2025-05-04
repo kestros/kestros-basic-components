@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 /**
- * Validation service for the {@link Heading} component.
+ * Validation service for the {@link HeadingComponent} component.
  */
 @Component(immediate = true,
            service = ModelValidatorRegistrationService.class)
@@ -45,7 +45,7 @@ public class HeadingValidationService extends TextComponentValidationService {
 
   @Override
   public Class<? extends BaseSlingModel> getModelType() {
-    return Heading.class;
+    return HeadingComponent.class;
   }
 
 }

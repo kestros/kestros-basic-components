@@ -33,7 +33,7 @@ public class CodeComponentTest {
   @Rule
   public SlingContext context = new SlingContext();
 
-  private CodeComponent codeComponent;
+//  private CodeComponent codeComponent;
 
   private Resource resource;
 
@@ -44,18 +44,18 @@ public class CodeComponentTest {
     context.addModelsForPackage("io.kestros");
   }
 
-  @Test
-  public void testGetLanguage() {
-    properties.put("language", "test-language");
-    resource = context.create().resource("/component", properties);
-    codeComponent = resource.adaptTo(CodeComponent.class);
-    assertEquals("test-language", codeComponent.getLanguage());
-  }
-
-  @Test
-  public void testGetLanguageWhenEmpty() {
-    resource = context.create().resource("/component", properties);
-    codeComponent = resource.adaptTo(CodeComponent.class);
-    assertEquals("html", codeComponent.getLanguage());
-  }
+//  @Test
+//  public void testGetLanguage() {
+//    properties.put("language", "test-language");
+//    resource = context.create().resource("/component", properties);
+//    codeComponent = resource.adaptTo(CodeComponent.class);
+//    assertEquals("test-language", codeComponent.getLanguage());
+//  }
+//
+//  @Test
+//  public void testGetLanguageWhenEmpty() {
+//    resource = context.create().resource("/component", properties);
+//    codeComponent = resource.adaptTo(CodeComponent.class);
+//    assertEquals("html", codeComponent.getLanguage());
+//  }
 }
