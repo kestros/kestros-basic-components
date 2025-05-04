@@ -18,25 +18,23 @@
 
 package io.kestros.cms.components.basic.content.image;
 
-import io.kestros.cms.modeltypes.annotations.ExternalizedResource;
-import io.kestros.cms.modeltypes.html.AnchorModel;
-import io.kestros.cms.modeltypes.html.AnchorRelationship;
-import io.kestros.cms.modeltypes.html.AnchorTarget;
-import io.kestros.cms.modeltypes.html.CrossOrigin;
-import io.kestros.cms.modeltypes.html.ImageLoading;
-import io.kestros.cms.modeltypes.html.ImageModel;
-import io.kestros.cms.modeltypes.html.ReferrerPolicy;
+import io.kestros.cms.assets.api.exceptions.AssetRetrievalException;
+import io.kestros.cms.assets.api.models.Asset;
+import io.kestros.cms.assets.api.services.AssetRetrievalService;
+import io.kestros.cms.components.basic.content.AnchorTargetOptions;
 import io.kestros.cms.sitebuilding.api.models.BaseComponent;
-import io.kestros.cms.sitebuilding.api.models.BaseSite;
-import io.kestros.commons.structuredslingmodels.BaseResource;
+import io.kestros.commons.commonutils.jcr.JcrPropertyUtils;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
-import io.kestros.commons.structuredslingmodels.exceptions.ChildResourceNotFoundException;
-import io.kestros.commons.structuredslingmodels.exceptions.ResourceNotFoundException;
-import io.kestros.commons.structuredslingmodels.utils.SlingModelUtils;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.Optional;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Image Component.
@@ -44,57 +42,25 @@ import org.apache.sling.models.annotations.Model;
 @KestrosModel()
 @Model(adaptables = Resource.class,
     resourceType = "kestros/commons/components/content/image")
-public class ImageComponent extends BaseComponent implements ImageModel, AnchorModel {
+public class ImageComponent extends BaseComponent {
+  private static final Logger LOG = LoggerFactory.getLogger(ImageComponent.class);
 
-  /**
-   * Image path.
-   *
-   * @return Image path.
-   */
-  @Deprecated
-  @KestrosProperty(description = "Image path.")
-  public String getImage() {
-    try {
-      return getImageResource().getPath();
-    } catch (ChildResourceNotFoundException e) {
-      return StringUtils.EMPTY;
-    } catch (ResourceNotFoundException e) {
-      return StringUtils.EMPTY;
-    }
-  }
+  @OSGiService
+  @Optional
+  private AssetRetrievalService assetRetrievalService;
 
-  /**
-   * Image Resource.
-   *
-   * @return Image Resource.
-   *
-   * @throws ChildResourceNotFoundException If image resource is not found.
-   * @throws ResourceNotFoundException If image resource is not found.
-   */
-//  @ExternalizedResource(mimeType = "",
-//      extension = "",
-//      trimPathToNearest = BaseSite.class)
-  public BaseResource getImageResource()
-      throws ChildResourceNotFoundException, ResourceNotFoundException {
-    String imagePath = getProperty("image", StringUtils.EMPTY);
-    if (StringUtils.isEmpty(imagePath)) {
-      throw new ChildResourceNotFoundException("Image resource not found.", "");
-    }
-    BaseResource imageAssetResource = SlingModelUtils.getResourceAsBaseResource(imagePath,
-        getResourceResolver());
-    return imageAssetResource;
-  }
-
-  @Override
+  @Nullable
   @KestrosProperty(description = "Image path.")
   public String getSrc() {
-    try {
-      return getImageResource().getPath();
-    } catch (ChildResourceNotFoundException e) {
-      return StringUtils.EMPTY;
-    } catch (ResourceNotFoundException e) {
-      return StringUtils.EMPTY;
+    if (isAssetResource()) {
+      try {
+        return getAsset().getPath();
+      } catch (AssetRetrievalException e) {
+        LOG.error(e.getMessage(), e);
+        return null;
+      }
     }
+    return getImagePathPropertyValue();
   }
 
   /**
@@ -102,44 +68,100 @@ public class ImageComponent extends BaseComponent implements ImageModel, AnchorM
    *
    * @return Image alt text.
    */
-  @Override
+  @Nonnull
   @KestrosProperty(description = "Image alt text.")
   public String getAltText() {
     return getProperty("altText", StringUtils.EMPTY);
   }
 
-  @Override
-  public CrossOrigin getCrossOrigin() {
-    return null;
+  @Nonnull
+  public String getCaption() {
+    return JcrPropertyUtils.getStringOrDefaultValue(getResource(),
+        "caption", StringUtils.EMPTY);
   }
 
-  @Override
-  public ImageLoading getImageLoading() {
-    return null;
-  }
 
-  @Override
-  public ReferrerPolicy getReferrerPolicy() {
-    return null;
-  }
-
-  @Override
-  public Boolean isDownload() {
-    return Boolean.FALSE;
-  }
-
-  @Override
+  @Nullable
   public String getHref() {
-    return getProperty("href", StringUtils.EMPTY) + ".html";
-  }
-
-  @Override
-  public AnchorRelationship getRel() {
+    if (isLink()) {
+      if (isLinkExternal()) {
+        return getHrefPropertyValue();
+      } else {
+        return getLinkResource().getPath() + ".html";
+      }
+    }
     return null;
   }
 
-  @Override
-  public AnchorTarget getTarget() {
+  @Nonnull
+  String getAriaLabel() {
+    return JcrPropertyUtils.getStringOrDefaultValue(getResource(),
+        "ariaLabel", StringUtils.EMPTY);
+  }
+
+  @Nonnull
+  public String getAnchorTitle() {
+    return JcrPropertyUtils.getStringOrDefaultValue(getResource(),
+        "anchorTitle", StringUtils.EMPTY);
+  }
+
+  @Nonnull
+  public String getTarget() {
+    return AnchorTargetOptions.lookup(JcrPropertyUtils.getStringOrDefaultValue(getResource(),
+        "target", AnchorTargetOptions.SELF.getValue())).getValue();
+  }
+
+  @Nullable
+  public String getRole() {
+    try {
+      if (getAsset().getMimeType().equals("image/svg+xml")) {
+        return "img";
+      }
+    } catch (AssetRetrievalException e) {
+      LOG.error(e.getMessage(), e);
+    }
     return null;
+  }
+
+  boolean isLink() {
+    return !StringUtils.isEmpty(getHrefPropertyValue());
+  }
+
+  boolean isLinkExternal() {
+    return StringUtils.isNotEmpty(getHrefPropertyValue()) && !getHrefPropertyValue().startsWith("/");
+  }
+
+  String getHrefPropertyValue() {
+    return getProperty("href", StringUtils.EMPTY);
+  }
+
+  Resource getLinkResource() {
+    if (isLink() && !isLinkExternal()) {
+      return getResourceResolver().getResource(getHrefPropertyValue());
+    }
+    return null;
+  }
+
+
+  String getImagePathPropertyValue() {
+    return getProperty("imagePath", StringUtils.EMPTY);
+  }
+
+  Asset getAsset() throws AssetRetrievalException {
+    if (isAssetResource()) {
+      return assetRetrievalService.getAsset(getImagePathPropertyValue(), null,
+          getResourceResolver());
+    }
+    throw new AssetRetrievalException(
+        String.format("%s is not a valid asset path, getAsset should not be called.",
+            getImagePathPropertyValue()));
+  }
+
+
+  boolean isAssetResource() {
+    if (getImagePathPropertyValue().startsWith("/")) {
+      return true;
+    }
+    return false;
   }
 }

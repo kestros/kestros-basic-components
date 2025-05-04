@@ -16,4 +16,18 @@
   ~
   */-->
 
-TODO add breadcrumb view.
+<sly data-sly-use.breadcrumbs="${'io.kestros.cms.components.basic.structure.breadcrumb.BreadcrumbsComponent'}"
+     data-sly-use.context="${'io.kestros.cms.components.basic.structure.breadcrumb.BreadcrumbsComponentContext'}"/>
+
+<div class="${context.inlineVariations}">
+    <ol>
+        <sly data-sly-list.crumb="${context.crumbs}">
+            <sly data-sly-test="${crumb.currentPage}">
+                <li><span aria-current="page">${crumb.text}</span></li>
+            </sly>
+            <sly data-sly-test="${!crumb.currentPage}">
+                <li><a href="${crumb.href}" aria-label="${crumb.ariaLabel}">${crumb.text}</a></li>
+            </sly>
+        </sly>
+    </ol>
+</div>

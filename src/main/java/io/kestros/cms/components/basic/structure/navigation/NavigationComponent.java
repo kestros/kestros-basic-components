@@ -47,26 +47,10 @@ import org.slf4j.LoggerFactory;
 @KestrosModel()
 @Model(adaptables = Resource.class,
        resourceType = {"kestros/commons/components/structure/navigation"})
-public class Navigation extends BaseComponent {
+public class NavigationComponent extends BaseComponent {
 
-  private static final Logger LOG = LoggerFactory.getLogger(Navigation.class);
+  private static final Logger LOG = LoggerFactory.getLogger(NavigationComponent.class);
 
-  /**
-   * List of all pages to be shown in the navigation.
-   *
-   * @return List of all pages to be shown in the navigation.
-   */
-  @KestrosProperty(description = "Children of the root page.")
-  @JsonIgnoreProperties({"components", "childPages"})
-  public List<BaseContentPage> getNavigationPages() {
-    try {
-      return getRootPage().getChildPages();
-    } catch (NoValidAncestorException e) {
-      LOG.error("Failed to build child pages for Navigation component {}. {}", getPath(),
-          e.getMessage());
-    }
-    return Collections.emptyList();
-  }
 
   /**
    * Page which will act as the root of the current Navigation component.  If no path is provided,

@@ -16,27 +16,30 @@
  *
  */
 
-package io.kestros.cms.components.basic.content.button;
+package io.kestros.cms.components.basic.content.image;
 
 
-import io.kestros.cms.components.basic.content.text.TextComponentValidationService;
 import io.kestros.commons.structuredslingmodels.BaseSlingModel;
+import io.kestros.commons.validation.api.ModelValidationMessageType;
 import io.kestros.commons.validation.api.models.ModelValidator;
+import io.kestros.commons.validation.api.services.BaseModelValidationRegistrationService;
 import io.kestros.commons.validation.api.services.ModelValidatorRegistrationHandlerService;
 import io.kestros.commons.validation.api.services.ModelValidatorRegistrationService;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.Nonnull;
+import org.apache.commons.lang3.StringUtils;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 /**
- * Validation Service for the {@link ButtonComponent} Component.
+ * Validation Service for the {@link ImageComponent} Component.
  */
 @Component(immediate = true,
     service = ModelValidatorRegistrationService.class)
-public class ButtonValidationService extends TextComponentValidationService {
+public class ImageComponentValidationService extends BaseModelValidationRegistrationService {
 
   @Reference(cardinality = ReferenceCardinality.OPTIONAL,
       policyOption = ReferencePolicyOption.GREEDY)
@@ -49,15 +52,45 @@ public class ButtonValidationService extends TextComponentValidationService {
 
   @Override
   public Class<? extends BaseSlingModel> getModelType() {
-    return ButtonComponent.class;
+    return ImageComponent.class;
   }
 
   @Override
   public List<ModelValidator> getModelValidators() {
     List<ModelValidator> modelValidators = new ArrayList<>();
-    modelValidators.addAll(super.getModelValidators());
-//    modelValidators.add(hasLink());
+    modelValidators.add(new ImageConfigurationValidatorBundle());
+    modelValidators.add(getAltTextValidator());
+    modelValidators.add(new ImageLinkConfigurationValidatorBundle());
+    modelValidators.add(new ImageLinkAccessibilityValidatorBundle());
     return modelValidators;
+  }
+
+
+  ModelValidator getAltTextValidator() {
+    return new ModelValidator<ImageComponent>() {
+      @Override
+      public Boolean isValidCheck(ImageComponent model) {
+        return StringUtils.isNoneBlank(model.getAltText());
+      }
+
+      @Override
+      public String getMessage() {
+        return "Alt text is configured.";
+      }
+
+      @Nonnull
+      @Override
+      public String getDetailedMessage(@Nonnull ImageComponent model) {
+        return "Alt text is required for accessibility.";
+      }
+
+      @Nonnull
+      @Override
+      public ModelValidationMessageType getType() {
+        return ModelValidationMessageType.WARNING;
+      }
+
+    };
   }
 
 }

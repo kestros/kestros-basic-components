@@ -13,25 +13,37 @@
         "sling:resourceType": "kestros/cms/general/container",
         "jcr:title": "General",
         "container": true,
-        "text": {
+        "label": {
           "jcr:primaryType": "nt:unstructured",
           "sling:resourceType": "kestros/cms/fields/textfield",
-          "label": "Text",
-          "propertyName": "text",
+          "label": "Label",
+          "propertyName": "label",
           "autofocus": true
         },
 
-        "link": {
+        "href": {
           "jcr:primaryType": "nt:unstructured",
           "sling:resourceType": "kestros/cms/fields/url-field",
           "label": "Link",
-          "propertyName": "link",
+          "propertyName": "href",
           "rootPath": "/content/sites",
           "resourceTypes": [
             "kes:Site",
             "kes:Page"
           ],
           "autofocus": false
+        },
+        "ariaLabel": {
+          "jcr:primaryType": "nt:unstructured",
+          "sling:resourceType": "kestros/cms/fields/textfield",
+          "label": "Aria Label",
+          "propertyName": "ariaLabel"
+        },
+        "anchorTitle": {
+          "jcr:primaryType": "nt:unstructured",
+          "sling:resourceType": "kestros/cms/fields/textfield",
+          "label": "Anchor Title",
+          "propertyName": "anchorTitle"
         }
       }
     }

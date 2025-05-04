@@ -26,9 +26,9 @@ import org.apache.sling.models.annotations.Model;
 /**
  * Breadcrumb component.
  */
-@KestrosModel
+@KestrosModel(contextModel = BreadcrumbsComponentContext.class)
 @Model(adaptables = Resource.class,
-       resourceType = "kestros/commons/components/structure/breadcrumb")
-public class BreadcrumbComponent extends BaseComponent {
+    resourceType = "kestros/commons/components/structure/breadcrumbs")
+public class BreadcrumbsComponent extends BaseComponent {
 
 }

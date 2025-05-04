@@ -47,15 +47,5 @@ public class AlertComponent extends TextComponent {
     return getProperty("heading", StringUtils.EMPTY);
   }
 
-  /**
-   * Alert icon.
-   * @return Alert icon.
-   */
-  @KestrosProperty(description = "Displayed icon.",
-                   configurable = true,
-                   jcrPropertyName = "icon")
-  public String getIcon() {
-    return getProperty("icon", StringUtils.EMPTY);
-  }
 
 }

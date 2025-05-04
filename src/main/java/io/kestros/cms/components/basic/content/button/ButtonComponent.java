@@ -18,9 +18,12 @@
 
 package io.kestros.cms.components.basic.content.button;
 
+import io.kestros.cms.sitebuilding.api.models.BaseComponent;
 import io.kestros.cms.sitebuilding.api.models.ComponentRequestContext;
+import io.kestros.commons.commonutils.jcr.JcrPropertyUtils;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
@@ -32,7 +35,7 @@ import org.apache.sling.models.annotations.injectorspecific.Self;
 @KestrosModel(contextModel = ComponentRequestContext.class)
 @Model(adaptables = Resource.class,
     resourceType = "kestros/commons/components/content/button")
-public class ButtonComponent {
+public class ButtonComponent extends BaseComponent {
 
   @Self
   private Resource resource;
@@ -42,13 +45,16 @@ public class ButtonComponent {
     return resource.getValueMap().get("label", StringUtils.EMPTY);
   }
 
-  @Nonnull
+  @Nullable
   public String getHref() {
-    String linkPropertyValue = resource.getValueMap().get("href", StringUtils.EMPTY);
-    if (linkPropertyValue.startsWith("/")) {
-      return linkPropertyValue + ".html";
+    if (isLink()) {
+      if (isLinkExternal()) {
+        return getHrefPropertyValue();
+      } else {
+        return getLinkResource().getPath() + ".html";
+      }
     }
-    return linkPropertyValue;
+    return null;
   }
 
   @Nonnull
@@ -60,4 +66,32 @@ public class ButtonComponent {
   public String getAriaLabel() {
     return resource.getValueMap().get("ariaLabel", StringUtils.EMPTY);
   }
+
+  @Nonnull
+  public String getAnchorTitle() {
+    return JcrPropertyUtils.getStringOrDefaultValue(getResource(),
+        "anchorTitle", StringUtils.EMPTY);
+  }
+
+  boolean isLink() {
+    return !StringUtils.isEmpty(getHrefPropertyValue());
+  }
+
+  boolean isLinkExternal() {
+    return StringUtils.isNotEmpty(getHrefPropertyValue()) && !getHrefPropertyValue().startsWith(
+        "/");
+  }
+
+  String getHrefPropertyValue() {
+    return getProperty("href", StringUtils.EMPTY);
+  }
+
+  Resource getLinkResource() {
+    if (isLink() && !isLinkExternal()) {
+      return getResourceResolver().getResource(getHrefPropertyValue());
+    }
+    return null;
+  }
+
+
 }

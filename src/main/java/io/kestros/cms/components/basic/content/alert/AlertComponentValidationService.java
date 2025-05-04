@@ -20,8 +20,13 @@ package io.kestros.cms.components.basic.content.alert;
 
 import io.kestros.cms.components.basic.content.text.TextComponentValidationService;
 import io.kestros.commons.structuredslingmodels.BaseSlingModel;
+import io.kestros.commons.validation.api.models.ModelValidator;
+import io.kestros.commons.validation.api.services.BaseModelValidationRegistrationService;
 import io.kestros.commons.validation.api.services.ModelValidatorRegistrationHandlerService;
 import io.kestros.commons.validation.api.services.ModelValidatorRegistrationService;
+import java.util.Arrays;
+import java.util.List;
+import javax.annotation.Nonnull;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
@@ -32,7 +37,7 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
  */
 @Component(immediate = true,
            service = ModelValidatorRegistrationService.class)
-public class AlertComponentValidationService extends TextComponentValidationService {
+public class AlertComponentValidationService extends BaseModelValidationRegistrationService {
 
   @Reference(cardinality = ReferenceCardinality.OPTIONAL,
              policyOption = ReferencePolicyOption.GREEDY)
@@ -46,6 +51,12 @@ public class AlertComponentValidationService extends TextComponentValidationServ
   @Override
   public Class<? extends BaseSlingModel> getModelType() {
     return AlertComponent.class;
+  }
+
+  @Nonnull
+  @Override
+  public List<ModelValidator> getModelValidators() {
+    return Arrays.asList(new AlertMessageValidatorBundle());
   }
 
 }

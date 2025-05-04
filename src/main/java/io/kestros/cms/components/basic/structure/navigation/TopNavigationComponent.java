@@ -30,13 +30,13 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
 /**
- * Top Navigation which acts the same as {@link Navigation}, but the Site root is always the
+ * Top Navigation which acts the same as {@link NavigationComponent}, but the Site root is always the
  * RootPage.
  */
 @KestrosModel()
 @Model(adaptables = Resource.class,
        resourceType = {"kestros/commons/components/structure/top-navigation"})
-public class TopNavigation extends Navigation {
+public class TopNavigationComponent extends NavigationComponent {
 
   @JsonIgnore
   @Override
