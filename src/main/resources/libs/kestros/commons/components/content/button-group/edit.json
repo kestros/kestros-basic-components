@@ -12,34 +12,7 @@
         "jcr:primaryType": "nt:unstructured",
         "sling:resourceType": "kestros/cms/general/container",
         "jcr:title": "General",
-        "container": true,
-        "buttons": {
-          "jcr:primaryType": "nt:unstructured",
-          "sling:resourceType": "kestros/cms/fields/multifield",
-          "propertyName": "buttons",
-          "label": "Buttons",
-          "dynamicItemLabelPropertyName": "text",
-          "fields": {
-            "jcr:primaryType": "nt:unstructured",
-            "text": {
-              "jcr:primaryType": "nt:unstructured",
-              "sling:resourceType": "kestros/cms/fields/richtext",
-              "label": "Text",
-              "propertyName": "text"
-            },
-            "link": {
-              "jcr:primaryType": "nt:unstructured",
-              "sling:resourceType": "kestros/cms/fields/url-field",
-              "label": "Link",
-              "propertyName": "link",
-              "rootPath": "/content/sites",
-              "resourceTypes": [
-                "kes:Site",
-                "kes:Page"
-              ]
-            }
-          }
-        }
+        "container": true
       }
     }
   }

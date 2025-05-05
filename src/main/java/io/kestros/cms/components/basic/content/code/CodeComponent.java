@@ -1,51 +1,49 @@
-/*
- *      Copyright (C) 2020  Kestros, Inc.
- *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
- *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
- *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
- *
- */
-
 package io.kestros.cms.components.basic.content.code;
 
-import io.kestros.cms.components.basic.content.text.TextComponent;
-import io.kestros.cms.sitebuilding.api.models.ComponentRequestContext;
-import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
-import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
+import io.kestros.cms.filetypes.HtmlFile;
+import io.kestros.cms.sitebuilding.api.models.BaseComponent;
+import javax.annotation.Nullable;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-/**
- * Component for displaying text as code snippets.
- */
-@KestrosModel(contextModel = ComponentRequestContext.class)
 @Model(adaptables = Resource.class,
-       resourceType = "kestros/commons/components/content/code")
-public class CodeComponent extends TextComponent {
+    resourceType = "kestros/commons/components/content/code")
+public class CodeComponent extends BaseComponent {
 
+  private static final Logger LOG = LoggerFactory.getLogger(CodeComponent.class);
 
-  /**
-   * Language to show the code snippet as.
-   *
-   * @return Language to show the code snippet as.
-   */
-  @KestrosProperty(description = "Language to show the code snippet as.",
-                   configurable = true,
-                   sampleValue = "html",
-                   defaultValue = "html",
-                   jcrPropertyName = "language")
-  public String getLanguage() {
-    return getProperty("language", "html");
+  @Nullable
+  public String getCode() {
+    if (StringUtils.isNotEmpty(getCodePropertyValue())) {
+      return getCodePropertyValue();
+    } else if (StringUtils.isNotEmpty(getCodeResourcePropertyValue())) {
+      LOG.info("Code resource property value: {}", getCodeResourcePropertyValue());
+      if (getCodeResource() != null && getCodeResource().getResourceType().equals("nt:file")) {
+        HtmlFile file = getCodeResource().adaptTo(HtmlFile.class);
+        LOG.info("Found html file: {}", file);
+        try {
+          // escape
+          return file.getFileContent();
+        } catch (Exception e) {
+          LOG.error("Error reading file content", e);
+        }
+      }
+    }
+    return null;
   }
 
+  String getCodePropertyValue() {
+    return getProperty("code", "");
+  }
+
+  String getCodeResourcePropertyValue() {
+    return getResource().getValueMap().get("codeResource", "");
+  }
+
+  Resource getCodeResource() {
+    return getResource().getResourceResolver().getResource(getCodeResourcePropertyValue());
+  }
 }

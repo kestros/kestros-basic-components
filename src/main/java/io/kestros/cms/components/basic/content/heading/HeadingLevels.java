@@ -1,0 +1,40 @@
+package io.kestros.cms.components.basic.content.heading;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+public enum HeadingLevels {
+  H1("Heading 1", "h1"),
+  H2("Heading 2", "h2"),
+  H3("Heading 3", "h3"),
+  H4("Heading 4", "h4"),
+  H5("Heading 5", "h5"),
+  H6("Heading 6", "h6");
+
+  private String displayText;
+  private String value;
+
+  HeadingLevels(String displayText, String value) {
+    this.displayText = displayText;
+    this.value = value;
+  }
+
+  @Nullable
+  public static HeadingLevels lookup(@Nonnull String value) {
+    for (HeadingLevels level : HeadingLevels.values()) {
+      if (level.getValue().equals(value)) {
+        return level;
+      }
+    }
+    return null;
+  }
+
+  public String getDisplayText() {
+    return displayText;
+  }
+
+  public String getValue() {
+    return value;
+  }
+
+}

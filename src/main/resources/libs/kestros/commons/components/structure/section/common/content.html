@@ -15,14 +15,11 @@
   ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
   ~
   */-->
-<sly data-sly-use.component="${'io.kestros.cms.sitebuilding.api.models.BaseComponent'}"
-     data-sly-use.section="${'io.kestros.cms.components.basic.structure.section.SectionComponent'}"
-     data-sly-use.context="${'io.kestros.cms.sitebuilding.api.models.ComponentRequestContext'}"
-     data-sly-use.parentComponentEditContext="${'io.kestros.cms.sitebuilding.api.models.ParentComponentEditContext'}"/>
+<sly data-sly-use.section="${'io.kestros.cms.components.basic.structure.section.SectionComponent'}"
+     data-sly-use.context="${'io.kestros.cms.sitebuilding.api.models.ComponentRequestContext'}"/>
 
-<div class="${context.inlineVariations}">
-  <h3 data-sly-test="${section.heading}">${section.heading}</h3>
-  <p data-sly-test="${section.description}">${section.description}</p>
-  <sly data-sly-use.includes="/libs/kestros/commons/components/includes.html"/>
-  <sly data-sly-call="${includes.contentArea}"/>
+<sly data-sly-use.includes="/libs/kestros/commons/components/includes.html"/>
+
+<div class="${context.inlineVariations}" data-sly-element="${section.elementType}">
+  <sly data-sly-call="${includes.contentArea @ component = section}"/>
 </div>

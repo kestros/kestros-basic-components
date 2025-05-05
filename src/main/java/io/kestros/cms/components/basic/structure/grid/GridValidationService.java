@@ -25,6 +25,7 @@ import io.kestros.commons.validation.api.models.ModelValidator;
 import io.kestros.commons.validation.api.services.BaseModelValidationRegistrationService;
 import io.kestros.commons.validation.api.services.ModelValidatorRegistrationHandlerService;
 import io.kestros.commons.validation.api.services.ModelValidatorRegistrationService;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.osgi.service.component.annotations.Component;
@@ -55,35 +56,35 @@ public class GridValidationService extends BaseModelValidationRegistrationServic
 
   @Override
   public List<ModelValidator> getModelValidators() {
-    return Collections.singletonList(columnsAreContentAreas());
+    return new ArrayList<>();
   }
-
-  @SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC_ANON")
-  ModelValidator columnsAreContentAreas() {
-    return new ModelValidator<Grid>() {
-
-      @Override
-      public Boolean isValidCheck(Grid model) {
-        Grid grid = (Grid) model;
-        return grid.getColumns().size() == grid.getNumberOfColumns();
-      }
-
-      @Override
-      public String getMessage() {
-        return "All Columns are instances of ContentArea";
-      }
-
-      @Override
-      public String getDetailedMessage(Grid model) {
-        return "";
-      }
-
-
-      @Override
-      public ModelValidationMessageType getType() {
-        return ModelValidationMessageType.ERROR;
-      }
-    };
-  }
+//
+//  @SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC_ANON")
+//  ModelValidator columnsAreContentAreas() {
+//    return new ModelValidator<Grid>() {
+//
+//      @Override
+//      public Boolean isValidCheck(Grid model) {
+//        Grid grid = (Grid) model;
+//        return grid.getColumns().size() == grid.getNumberOfColumns();
+//      }
+//
+//      @Override
+//      public String getMessage() {
+//        return "All Columns are instances of ContentArea";
+//      }
+//
+//      @Override
+//      public String getDetailedMessage(Grid model) {
+//        return "";
+//      }
+//
+//
+//      @Override
+//      public ModelValidationMessageType getType() {
+//        return ModelValidationMessageType.ERROR;
+//      }
+//    };
+//  }
 
 }

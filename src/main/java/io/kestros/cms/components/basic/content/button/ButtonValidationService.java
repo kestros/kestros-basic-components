@@ -19,32 +19,27 @@
 package io.kestros.cms.components.basic.content.button;
 
 
-import static io.kestros.commons.validation.api.ModelValidationMessageType.WARNING;
-
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.components.basic.content.text.TextComponentValidationService;
 import io.kestros.commons.structuredslingmodels.BaseSlingModel;
-import io.kestros.commons.validation.api.ModelValidationMessageType;
 import io.kestros.commons.validation.api.models.ModelValidator;
 import io.kestros.commons.validation.api.services.ModelValidatorRegistrationHandlerService;
 import io.kestros.commons.validation.api.services.ModelValidatorRegistrationService;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.lang3.StringUtils;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 /**
- * Validation Service for the {@link Button} Component.
+ * Validation Service for the {@link ButtonComponent} Component.
  */
 @Component(immediate = true,
-        service = ModelValidatorRegistrationService.class)
+    service = ModelValidatorRegistrationService.class)
 public class ButtonValidationService extends TextComponentValidationService {
 
   @Reference(cardinality = ReferenceCardinality.OPTIONAL,
-          policyOption = ReferencePolicyOption.GREEDY)
+      policyOption = ReferencePolicyOption.GREEDY)
   private ModelValidatorRegistrationHandlerService modelValidatorRegistrationHandlerService;
 
   @Override
@@ -54,39 +49,15 @@ public class ButtonValidationService extends TextComponentValidationService {
 
   @Override
   public Class<? extends BaseSlingModel> getModelType() {
-    return Button.class;
+    return ButtonComponent.class;
   }
 
   @Override
   public List<ModelValidator> getModelValidators() {
     List<ModelValidator> modelValidators = new ArrayList<>();
     modelValidators.addAll(super.getModelValidators());
-    modelValidators.add(hasLink());
+//    modelValidators.add(hasLink());
     return modelValidators;
   }
 
-  @SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC_ANON")
-  ModelValidator hasLink() {
-    return new ModelValidator<Button>() {
-      @Override
-      public Boolean isValidCheck(Button model) {
-        return StringUtils.isNotBlank(model.getLink());
-      }
-
-      @Override
-      public String getMessage() {
-        return "Link has been configured.";
-      }
-
-      @Override
-      public String getDetailedMessage(Button model) {
-        return "'link' property must be configured on the Component resource.";
-      }
-
-      @Override
-      public ModelValidationMessageType getType() {
-        return WARNING;
-      }
-    };
-  }
 }

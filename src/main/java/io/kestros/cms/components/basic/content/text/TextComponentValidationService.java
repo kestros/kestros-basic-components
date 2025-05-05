@@ -79,7 +79,7 @@ public class TextComponentValidationService extends BaseModelValidationRegistrat
 
       @Override
       public ModelValidationMessageType getType() {
-        return ModelValidationMessageType.ERROR;
+        return ModelValidationMessageType.WARNING;
       }
     };
   }

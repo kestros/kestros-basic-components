@@ -27,16 +27,20 @@ public enum ContainerType {
       "Defines an independent, self-contained content."),
   ASIDE("aside", "Aside",
       "Defines a section with additional information related to the content around the aside "
-          + "element."), BDI("bdi", "Bi-Directional Isolation",
-      "Isolates a part of text that might"
-          + " be formatted in a different direction from other text outside it."), DETAILS(
+          + "element."),
+  DETAILS(
       "details", "Details",
-      "Specifies additional details that the user can open and close on demand."), DIV("div", "Div",
+      "Specifies additional details that the user can open and close on demand."),
+  DIV("div", "Div",
       "Division or a section in an HTML document."),
-  FOOTER("footer", "Footer", "Document or section footer."), HEADER("header", "Header",
-      "Document or section header."), MAIN("main", "Main",
-      "Main content area of the document or section."), SECTION("section", "Section",
-      "General content section."), SUMMARY("summary", "Summary",
+  FOOTER("footer", "Footer", "Document or section footer."),
+  HEADER("header", "Header",
+      "Document or section header."),
+  MAIN("main", "Main",
+      "Main content area of the document or section."),
+  SECTION("section", "Section",
+      "General content section."),
+  SUMMARY("summary", "Summary",
       "Visible heading for a details element.");
 
 

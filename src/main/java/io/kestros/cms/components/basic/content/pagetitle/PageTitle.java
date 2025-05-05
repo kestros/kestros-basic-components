@@ -18,9 +18,12 @@
 
 package io.kestros.cms.components.basic.content.pagetitle;
 
+import io.kestros.cms.components.basic.content.heading.HeadingComponent;
+import io.kestros.cms.components.basic.content.heading.HeadingLevels;
 import io.kestros.cms.sitebuilding.api.models.BaseComponent;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosModel;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
@@ -32,18 +35,20 @@ import org.apache.sling.models.annotations.Model;
        resourceType = "kestros/commons/components/content/page-title")
 public class PageTitle extends BaseComponent {
 
+
   /**
    * Heading level.
    *
    * @return Heading level.
    */
   @KestrosProperty(description = "Heading level",
-                   defaultValue = "h1",
-                   configurable = true,
-                   sampleValue = "h1",
-                   jcrPropertyName = "level")
+      defaultValue = "h1",
+      configurable = true,
+      sampleValue = "h1",
+      jcrPropertyName = "level")
   public String getLevel() {
-    return getProperty("level", "h1");
+    String headingLevel = getResource().getValueMap().get("level", StringUtils.EMPTY);
+    return HeadingLevels.lookup(headingLevel).getValue();
   }
 
 }

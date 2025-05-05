@@ -1,8 +1,8 @@
 {
   "jcr:primaryType": "kes:ComponentType",
   "jcr:title": "Code",
-  "jcr:description": "Render code snippets.",
+  "jcr:description": "Basic text component.",
   "componentGroup": "Content Components",
   "sling:resourceSuperType": "kestros/commons/components/kestros-parent",
-  "fontAwesomeIcon": "fas fa-code"
+  "fontAwesomeIcon": "fa fa-code"
 }

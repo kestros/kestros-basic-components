@@ -16,8 +16,7 @@
   ~
   */-->
 
-<sly
-    data-sly-use.heading="${'io.kestros.cms.components.basic.content.heading.Heading'}"
-    data-sly-use.titleContext="${'io.kestros.cms.components.basic.content.pagetitle.PageTitleContext'}"/>
+<sly data-sly-use.pageTitle="${'io.kestros.cms.components.basic.content.pagetitle.PageTitle'}"
+     data-sly-use.context="${'io.kestros.cms.sitebuilding.api.models.ComponentRequestContext'}"/>
 
-<h1 data-sly-element="${heading.level}">${titleContext.pageTitle}</h1>
+<h1 data-sly-element="${pageTitle.level}" class="${context.inlineVariations}">${context.currentPage.title}</h1>

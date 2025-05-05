@@ -15,8 +15,11 @@
   ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
   ~
   */-->
+<sly data-sly-use.code="${'io.kestros.cms.components.basic.content.code.CodeComponent'}"
+     data-sly-use.context="${'io.kestros.cms.sitebuilding.api.models.ComponentRequestContext'}"/>
 
-<sly
-    data-sly-use.code="${'io.kestros.cms.components.basic.content.code.CodeComponent'}"/>
-
-<code>${code.text}</code>
+<pre>
+<code>
+    ${code.code}
+</code>
+</pre>

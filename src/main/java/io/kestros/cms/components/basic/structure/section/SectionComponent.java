@@ -18,7 +18,7 @@
 
 package io.kestros.cms.components.basic.structure.section;
 
-import io.kestros.cms.components.basic.structure.container.Container;
+import io.kestros.cms.components.basic.structure.container.ContainerComponent;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
@@ -28,23 +28,6 @@ import org.apache.sling.models.annotations.Model;
  */
 @Model(adaptables = Resource.class,
        resourceType = "kestros/commons/components/structure/section")
-public class SectionComponent extends Container {
+public class SectionComponent extends ContainerComponent {
 
-  /**
-   * Heading text.
-   *
-   * @return Heading text.
-   */
-  public String getHeading() {
-    return getProperty("heading", StringUtils.EMPTY);
-  }
-
-  /**
-   * Description text.
-   *
-   * @return Description text.
-   */
-  public String getDescription() {
-    return getProperty("description", StringUtils.EMPTY);
-  }
 }
