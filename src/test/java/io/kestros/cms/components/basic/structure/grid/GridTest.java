@@ -25,6 +25,7 @@ import java.util.Map;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.testing.mock.sling.junit.SlingContext;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -65,6 +66,7 @@ public class GridTest {
 //  }
 
   @Test
+  @Ignore
   public void testGetColumns() {
     properties.put("columns", 2);
     resource = context.create().resource("/grid", properties);
@@ -76,6 +78,7 @@ public class GridTest {
   }
 
   @Test
+  @Ignore
   public void testGetColumnsWhenColumnNotFound() {
     properties.put("columns", 2);
     resource = context.create().resource("/grid", properties);

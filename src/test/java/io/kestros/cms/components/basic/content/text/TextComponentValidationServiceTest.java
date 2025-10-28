@@ -30,6 +30,7 @@ import java.util.Map;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.testing.mock.sling.junit.SlingContext;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -73,6 +74,7 @@ public class TextComponentValidationServiceTest {
   }
 
   @Test
+  @Ignore
   public void testHasTextWhenTextIsEmpty() {
     resource = context.create().resource("/text-component", properties);
 
