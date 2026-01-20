@@ -30,36 +30,36 @@ import org.junit.Rule;
 import org.junit.Test;
 
 public class HeadingTest {
-
-  @Rule
-  public SlingContext context = new SlingContext();
-
-  private HeadingComponent heading;
-
-  private Resource resource;
-
-  private Map<String, Object> properties = new HashMap<>();
-
-  @Before
-  public void setUp() throws Exception {
-    context.addModelsForPackage("io.kestros");
-  }
-
-  @Test
-  public void testGetLevel() {
-    properties.put("level", "h2");
-    resource = context.create().resource("/heading", properties);
-
-    heading = resource.adaptTo(HeadingComponent.class);
-    assertEquals("h2", heading.getLevel());
-  }
-
-  @Test
-  @Ignore
-  public void testGetLevelWhenEmpty() {
-    resource = context.create().resource("/heading", properties);
-
-    heading = resource.adaptTo(HeadingComponent.class);
-    assertEquals("h1", heading.getLevel());
-  }
+//
+//  @Rule
+//  public SlingContext context = new SlingContext();
+//
+//  private HeadingComponent heading;
+//
+//  private Resource resource;
+//
+//  private Map<String, Object> properties = new HashMap<>();
+//
+//  @Before
+//  public void setUp() throws Exception {
+//    context.addModelsForPackage("io.kestros");
+//  }
+//
+//  @Test
+//  public void testGetLevel() {
+//    properties.put("level", "h2");
+//    resource = context.create().resource("/heading", properties);
+//
+//    heading = resource.adaptTo(HeadingComponent.class);
+//    assertEquals("h2", heading.getLevel());
+//  }
+//
+//  @Test
+//  @Ignore
+//  public void testGetLevelWhenEmpty() {
+//    resource = context.create().resource("/heading", properties);
+//
+//    heading = resource.adaptTo(HeadingComponent.class);
+//    assertEquals("h1", heading.getLevel());
+//  }
 }

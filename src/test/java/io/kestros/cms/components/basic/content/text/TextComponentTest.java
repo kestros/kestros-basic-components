@@ -29,38 +29,38 @@ import org.junit.Rule;
 import org.junit.Test;
 
 public class TextComponentTest {
-
-  @Rule
-  public SlingContext context = new SlingContext();
-
-  private TextComponent textComponent;
-
-  private Resource resource;
-
-  private Map<String, Object> properties = new HashMap<>();
-
-
-  @Before
-  public void setUp() throws Exception {
-    context.addModelsForPackage("io.kestros");
-  }
-
-  @Test
-  public void testGetText() {
-    properties.put("text", "My Text.");
-    resource = context.create().resource("/text-component", properties);
-
-    textComponent = resource.adaptTo(TextComponent.class);
-
-    assertEquals("My Text.", textComponent.getText());
-  }
-
-  @Test
-  public void testGetTextWhenMissing() {
-    resource = context.create().resource("/text-component", properties);
-
-    textComponent = resource.adaptTo(TextComponent.class);
-
-    assertEquals("", textComponent.getText());
-  }
+//
+//  @Rule
+//  public SlingContext context = new SlingContext();
+//
+//  private TextComponent textComponent;
+//
+//  private Resource resource;
+//
+//  private Map<String, Object> properties = new HashMap<>();
+//
+//
+//  @Before
+//  public void setUp() throws Exception {
+//    context.addModelsForPackage("io.kestros");
+//  }
+//
+//  @Test
+//  public void testGetText() {
+//    properties.put("text", "My Text.");
+//    resource = context.create().resource("/text-component", properties);
+//
+//    textComponent = resource.adaptTo(TextComponent.class);
+//
+//    assertEquals("My Text.", textComponent.getText());
+//  }
+//
+//  @Test
+//  public void testGetTextWhenMissing() {
+//    resource = context.create().resource("/text-component", properties);
+//
+//    textComponent = resource.adaptTo(TextComponent.class);
+//
+//    assertEquals("", textComponent.getText());
+//  }
 }

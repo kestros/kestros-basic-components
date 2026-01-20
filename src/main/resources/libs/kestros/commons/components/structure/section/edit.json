@@ -1,13 +1,76 @@
 {
   "jcr:primaryType": "nt:unstructured",
-  "sling:resourceType": "kestros/cms/dialog",
-  "jcr:title": "Edit",
-  "content-area": {
+  "sling:resourceType": "kestros/cms2/dialog",
+  "content": {
     "jcr:primaryType": "nt:unstructured",
-    "tabs": {
+    "element-type": {
       "jcr:primaryType": "nt:unstructured",
-      "sling:resourceType": "kestros/cms/general/tabs",
-      "container": true
+      "sling:resourceType": "kestros/cms2/fields/general/selectfield",
+      "label": "Element Type",
+      "name": "elementType",
+      "options": {
+        "div": {
+          "jcr:primaryType": "nt:unstructured",
+          "text": "<div>",
+          "value": "div",
+          "selected": true
+        },
+        "aside": {
+          "jcr:primaryType": "nt:unstructured",
+          "text": "<aside>",
+          "value": "aside",
+          "selected": false
+        },
+        "figure": {
+          "jcr:primaryType": "nt:unstructured",
+          "text": "<figure>",
+          "value": "figure",
+          "selected": false
+        },
+        "footer": {
+          "jcr:primaryType": "nt:unstructured",
+          "text": "<footer>",
+          "value": "footer",
+          "selected": false
+        },
+        "header": {
+          "jcr:primaryType": "nt:unstructured",
+          "text": "<header>",
+          "value": "header",
+          "selected": false
+        },
+        "main": {
+          "jcr:primaryType": "nt:unstructured",
+          "text": "<main>",
+          "value": "main",
+          "selected": false
+        },
+        "nav": {
+          "jcr:primaryType": "nt:unstructured",
+          "text": "<nav>",
+          "value": "nav",
+          "selected": false
+        },
+        "section": {
+          "jcr:primaryType": "nt:unstructured",
+          "text": "<section>",
+          "value": "section",
+          "selected": false
+        }
+      }
+    },
+    "background-image-path": {
+      "jcr:primaryType": "nt:unstructured",
+      "sling:resourceType": "kestros/cms2/fields/general/pathfield",
+      "label": "Background Image",
+      "name": "backgroundImagePath",
+      "includePaths": [
+        "/content/assets"
+      ],
+      "resourceTypes": [
+        "kes:Asset"
+      ],
+      "autofocus": false
     }
   }
 }

@@ -1,0 +1,8 @@
+<sly data-sly-use.linkList="${'io.kestros.cms.components.basic.content.linklist.LinkListComponent'}"/>
+
+<ul data-sly-list.link="${linkList.links}">
+    <li>
+        <a href="${link.href @ context='uri'}">${link.text}</a>
+    </li>
+
+</ul>

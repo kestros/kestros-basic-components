@@ -20,6 +20,7 @@
 
 <sly data-sly-use.includes="/libs/kestros/commons/components/includes.html"/>
 
-<div class="${context.inlineVariations}" data-sly-element="${section.elementType}">
-  <sly data-sly-call="${includes.contentArea @ component = section}"/>
+<div class="${context.inlineVariations}" data-sly-element="${section.elementType}"
+     style="background-image: url('${section.backgroundImagePath @ context='uri'}');">
+    <sly data-sly-call="${includes.contentArea @ component = section}"/>
 </div>

@@ -1,0 +1,12 @@
+{
+  "jcr:primaryType": "kes:ComponentType",
+  "jcr:title": "Link List",
+  "jcr:description": "A component to display a list of pages based on specified criteria.",
+  "componentGroup": "List Components",
+  "sling:resourceSuperType": "kestros/commons/components/kestros-parent",
+  "kes:allowedComponents": [
+    "!group:.hidden",
+    "!type:container",
+    "*button*"
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "jcr:primaryType": "nt:unstructured",
+  "jcr:title": "Static",
+  "group": "Kestros Core",
+  "classPath": "io.kestros.cms.components.basic.core.content.card.CardStaticDataSource",
+  "container": true,
+  "edit": {
+    "jcr:primaryType": "nt:unstructured",
+    "sling:resourceType": "kestros/cms2/dialog",
+    "content": {
+      "jcr:primaryType": "nt:unstructured",
+      "title": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/textfield",
+        "label": "Title",
+        "name": "title",
+        "autofocus": true
+      },
+      "description": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/textfield",
+        "label": "Description",
+        "name": "description",
+        "autofocus": true
+      },
+      "image": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/pathfield",
+        "label": "Image",
+        "propertyName": "src",
+        "resourceTypes": [
+          "kes:Asset"
+        ],
+        "includePaths": ["/content/assets"]
+      },
+      "label": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/textfield",
+        "label": "Button Label",
+        "name": "text",
+        "autofocus": true
+      },
+      "href": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/pathfield",
+        "label": "Button Link",
+        "name": "href",
+        "includePaths": [
+          "closest:kes:Site"
+        ],
+        "resourceTypes": [
+          "kes:Site",
+          "kes:Page"
+        ],
+        "autofocus": false
+      },
+      "openInNewTab": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/checkbox",
+        "label": "Open Button in New Tab",
+        "name": "openInNewTab"
+      },
+      "ariaLabel": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/textfield",
+        "label": "Button Aria Label",
+        "name": "ariaLabel"
+      },
+      "anchorTitle": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/textfield",
+        "label": "Button Title",
+        "name": "title"
+      }
+    }
+  }
+}

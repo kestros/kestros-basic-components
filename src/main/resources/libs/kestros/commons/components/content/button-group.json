@@ -4,10 +4,12 @@
   "jcr:description": "Group of buttons and Call-to-Actions",
   "componentGroup": "Content Components",
   "sling:resourceSuperType": "kestros/commons/components/content-area",
+  "editable": false,
   "container": true,
+  "unwrap": true,
   "kes:allowedComponents": [
-    "/libs/kestros/commons/components/content/button"
-  ],
-  "fontAwesomeIcon": "far fa-hand-pointer",
-  "unwrap": true
+    "!group:.hidden",
+    "!type:container",
+    "*button*"
+  ]
 }

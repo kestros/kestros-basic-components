@@ -15,26 +15,56 @@
   ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
   ~
   */-->
-<sly data-sly-use.image="${'io.kestros.cms.components.basic.content.image.ImageComponent'}"
-     data-sly-use.context="${'io.kestros.cms.sitebuilding.api.models.ComponentRequestContext'}"/>
+<sly data-sly-use.image="${'io.kestros.cms.components.basic.core.content.image.ImageDataSourceComponent'}"/>
 
-<sly data-sly-test="${!image.caption}">
-    <sly data-sly-test="${!image.href}">
-        <img class="${context.inlineVariations}" style="max-width: 100%;" src="${image.src}" alt="${image.altText}"/>
+<sly data-sly-test="${image.src}">
+    <sly data-sly-test="${image.caption}">
+        <figure>
+            <sly data-sly-test="${image.href}">
+                <a href="${image.href @ context='uri'}"
+                   aria-label="${image.altText == '' ? image.ariaLabel : ''}"
+                   title="${image.anchorTitle}"
+                   target="${image.targetAsString}">
+                    <img
+                            class="${image.inlineVariations}"
+                            style="max-width: 100%;"
+                            src="${image.src @ context='uri'}"
+                            alt="${image.altText}"
+                            title="${image.imageTitle}" />
+                </a>
+            </sly>
+            <sly data-sly-test="${!image.href}">
+                <img
+                        class="${image.inlineVariations}"
+                        style="max-width: 100%;"
+                        src="${image.src @ context='uri'}"
+                        alt="${image.altText}"
+                        title="${image.imageTitle}" />
+            </sly>
+            <figcaption>${image.caption}</figcaption>
+        </figure>
     </sly>
-    <sly data-sly-test="${image.href}">
-        <a href="${image.href}" aria-label="${image.ariaLabel}" title="${image.anchorTitle}" target="${image.target}"><img class="${context.inlineVariations}" style="max-width: 100%;" src="${image.src}" alt="${image.altText}" role="${image.role}"/></a>
-    </sly>
-</sly>
-
-<sly data-sly-test="${image.caption}">
-    <figure>
-        <sly data-sly-test="${!image.href}">
-            <img class="${context.inlineVariations}" style="max-width: 100%;" src="${image.src}" alt="${image.altText}"/>
-        </sly>
+    <sly data-sly-test="${!image.caption}">
         <sly data-sly-test="${image.href}">
-            <a href="${image.href}" aria-label="${image.ariaLabel}" title="${image.anchorTitle}" target="${image.target}"><img class="${context.inlineVariations}" style="max-width: 100%;" src="${image.src}" alt="${image.altText}" role="${image.role}"/></a>
+            <a href="${image.href @ context='uri'}"
+               aria-label="${image.altText == '' ? image.ariaLabel : ''}"
+               title="${image.anchorTitle}"
+               target="${image.targetAsString}">
+                <img
+                        class="${image.inlineVariations}"
+                        style="max-width: 100%;"
+                        src="${image.src @ context='uri'}"
+                        alt="${image.altText}"
+                        title="${image.imageTitle}" />
+            </a>
         </sly>
-        <figcaption>${image.caption}</figcaption>
-    </figure>
+        <sly data-sly-test="${!image.href}">
+            <img
+                    class="${image.inlineVariations}"
+                    style="max-width: 100%;"
+                    src="${image.src @ context='uri'}"
+                    alt="${image.altText}"
+                    title="${image.imageTitle}" />
+        </sly>
+    </sly>
 </sly>

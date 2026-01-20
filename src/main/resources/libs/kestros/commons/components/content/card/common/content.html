@@ -1,0 +1,30 @@
+<!--/*
+  ~      Copyright (C) 2020  Kestros, Inc.
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  ~
+  */-->
+
+<sly data-sly-use.card="${'io.kestros.cms.components.basic.core.content.card.CardDataSourceComponent'}"/>
+
+<div>
+    <h3 data-sly-test="${card.title}">${card.title}</h3>
+    <p data-sly-test="${card.description}">${card.description}</p>
+    <sly data-sly-test="${card.image}">
+        <sly data-sly-resource="${card.image}"/>
+    </sly>
+    <sly data-sly-test="${card.buttonGroup}">
+        <sly data-sly-resource="${card.buttonGroup}"/>
+    </sly>
+</div>
