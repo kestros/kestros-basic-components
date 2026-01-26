@@ -6,7 +6,7 @@ import io.kestros.cms.assets.api.services.AssetRetrievalService;
 import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosImage;
 import io.kestros.cms.components.basic.core.LinkUtils;
-import io.kestros.cms.components.basic.core.content.BaseSlingModelDataSource;
+import io.kestros.cms.components.basic.core.BaseSlingModelDataSource;
 import io.kestros.cms.componenttypes.api.services.ComponentUiFrameworkViewRetrievalService;
 import io.kestros.cms.componenttypes.api.services.ComponentVariationRetrievalService;
 import javax.annotation.Nonnull;
@@ -30,9 +30,10 @@ public class ImageStaticDataSource extends BaseSlingModelDataSource implements K
   @OSGiService
   private ComponentVariationRetrievalService componentVariationRetrievalService;
 
-  private Asset asset;
   @OSGiService
   private ComponentUiFrameworkViewRetrievalService componentUiFrameworkViewRetrievalService;
+
+  private Asset asset;
 
   @Override
   public String getImageTitle() {
@@ -47,7 +48,7 @@ public class ImageStaticDataSource extends BaseSlingModelDataSource implements K
   @Override
   public String getImagePath() {
     return StringUtils.trimToNull(
-            getResource().getValueMap().get("src", String.class));
+            getResource().getValueMap().get("imagePath", String.class));
   }
 
   @Nullable
@@ -113,15 +114,4 @@ public class ImageStaticDataSource extends BaseSlingModelDataSource implements K
     return null;
   }
 
-  @Nonnull
-  @Override
-  public ComponentVariationRetrievalService getComponentVariationRetrievalService() {
-    return componentVariationRetrievalService;
-  }
-
-  @Nonnull
-  @Override
-  public ComponentUiFrameworkViewRetrievalService getComponentUiFrameworkViewRetrievalService() {
-    return componentUiFrameworkViewRetrievalService;
-  }
 }

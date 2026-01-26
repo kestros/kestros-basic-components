@@ -127,12 +127,14 @@ public interface KestrosBasicComponentElement {
     return true;
   }
 
+  @JsonIgnore
   default Map<String, String> getRequestAttributes() {
     Map<String, String> attributes = new HashMap<>();
     attributes.put("resourceType", getComponentResourceType());
     return attributes;
   }
 
+  @JsonIgnore
   Resource toSyntheticResource(@Nonnull final ResourceResolver resourceResolver,
           @Nonnull final String parentPath);
 

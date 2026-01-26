@@ -1,51 +1,16 @@
 package io.kestros.cms.components.basic.core;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import io.kestros.cms.components.basic.BaseComponentTest;
 import io.kestros.cms.componenttypes.api.exceptions.ComponentTypeRetrievalException;
-import io.kestros.cms.componenttypes.api.models.ComponentType;
-import io.kestros.cms.componenttypes.api.services.ComponentTypeRetrievalService;
-import io.kestros.cms.componenttypes.api.services.ComponentUiFrameworkViewRetrievalService;
-import io.kestros.cms.componenttypes.api.services.ComponentVariationRetrievalService;
-import io.kestros.cms.sitebuilding.api.services.KestrosClassLoader;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.sling.api.resource.Resource;
-import org.apache.sling.testing.mock.sling.junit.SlingContext;
 import org.junit.Before;
-import org.junit.Rule;
 
-public abstract class BaseDataSourceComponentTest {
-  @Rule
-  public SlingContext context = new SlingContext();
-  private ComponentVariationRetrievalService componentVariationRetrievalService;
-  private ComponentUiFrameworkViewRetrievalService componentUiFrameworkViewRetrievalService;
-  private ComponentTypeRetrievalService componentTypeRetrievalService;
-  private KestrosClassLoader kestrosClassLoader;
+public abstract class BaseDataSourceComponentTest extends BaseComponentTest {
 
-
-  @Before
-  public void setUp() throws Exception {
-    context.addModelsForPackage("io.kestros");
-    componentUiFrameworkViewRetrievalService = mock(ComponentUiFrameworkViewRetrievalService.class);
-    componentVariationRetrievalService = mock(ComponentVariationRetrievalService.class);
-    kestrosClassLoader = mock(KestrosClassLoader.class);
-    componentTypeRetrievalService = mock(ComponentTypeRetrievalService.class);
-
-    context.registerService(ComponentUiFrameworkViewRetrievalService.class,
-            componentUiFrameworkViewRetrievalService);
-    context.registerService(ComponentVariationRetrievalService.class,
-            componentVariationRetrievalService);
-    context.registerService(ComponentTypeRetrievalService.class, componentTypeRetrievalService);
-    context.registerService(KestrosClassLoader.class, kestrosClassLoader);
-    this.doComponentTypeSetup();
-    this.setupClassLoader();
-    this.doComponentSetup();
-  }
-
+  @Override
   public void setupClassLoader() {
     for (Map.Entry<String, String> entry : getDataSourceMap().entrySet()) {
       try {
@@ -57,6 +22,7 @@ public abstract class BaseDataSourceComponentTest {
     }
   }
 
+  @Override
   public void doComponentTypeSetup() throws ComponentTypeRetrievalException {
     Map<String, Object> properties = new HashMap<>();
     properties.put("jcr:primaryType", "kes:ComponentType");
@@ -68,13 +34,6 @@ public abstract class BaseDataSourceComponentTest {
       dsProperties.put("classPath", entry.getValue());
       context.create().resource(getResourceType() + "/datasources/" + entry.getKey(), dsProperties);
     }
-    Resource componentTypeResource = context.resourceResolver()
-            .getResource(getResourceType());
-    ComponentType componentType = componentTypeResource.adaptTo(
-            io.kestros.cms.componenttypes.core.models.ComponentTypeResource.class);
-    when(componentTypeRetrievalService.getComponentType(eq(getResourceType()), any()))
-            .thenReturn(componentType);
-
   }
 
   public abstract Map<String, String> getDataSourceMap();

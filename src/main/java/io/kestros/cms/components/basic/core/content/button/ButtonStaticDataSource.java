@@ -3,7 +3,7 @@ package io.kestros.cms.components.basic.core.content.button;
 import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosButton;
 import io.kestros.cms.components.basic.core.LinkUtils;
-import io.kestros.cms.components.basic.core.content.BaseSlingModelDataSource;
+import io.kestros.cms.components.basic.core.BaseSlingModelDataSource;
 import javax.annotation.Nullable;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;

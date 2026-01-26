@@ -1,7 +1,7 @@
 package io.kestros.cms.components.basic.core.content.code;
 
 import io.kestros.cms.components.basic.api.content.KestrosCode;
-import io.kestros.cms.components.basic.core.content.BaseSlingModelDataSource;
+import io.kestros.cms.components.basic.core.BaseSlingModelDataSource;
 import io.kestros.cms.componenttypes.api.services.ComponentUiFrameworkViewRetrievalService;
 import io.kestros.cms.componenttypes.api.services.ComponentVariationRetrievalService;
 import javax.annotation.Nonnull;

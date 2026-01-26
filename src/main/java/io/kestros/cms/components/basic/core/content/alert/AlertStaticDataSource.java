@@ -1,7 +1,7 @@
 package io.kestros.cms.components.basic.core.content.alert;
 
 import io.kestros.cms.components.basic.api.content.KestrosAlert;
-import io.kestros.cms.components.basic.core.content.BaseSlingModelDataSource;
+import io.kestros.cms.components.basic.core.BaseSlingModelDataSource;
 import javax.annotation.Nullable;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;

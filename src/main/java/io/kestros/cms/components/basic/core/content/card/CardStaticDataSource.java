@@ -7,11 +7,8 @@ import io.kestros.cms.components.basic.api.content.KestrosCard;
 import io.kestros.cms.components.basic.api.content.KestrosImage;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.components.basic.core.BaseContainerSlingModelDataSource;
-import io.kestros.cms.components.basic.core.content.BaseSlingModelDataSource;
 import io.kestros.cms.components.basic.core.content.buttongroup.KestrosButtonGroupImpl;
 import io.kestros.cms.components.basic.core.content.image.KestrosImageImpl;
-import java.util.List;
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -37,7 +34,7 @@ public class CardStaticDataSource extends BaseContainerSlingModelDataSource impl
   public KestrosImage getImageElement() {
     try {
       Resource imageResource = getResource().getChild("imageElement");
-      if( imageResource == null ) {
+      if (imageResource == null) {
         imageResource = getResource();
       }
       return new KestrosImageImpl(imageResource, getResourceResolver(), getUiFramework(), getPath(),
@@ -48,9 +45,9 @@ public class CardStaticDataSource extends BaseContainerSlingModelDataSource impl
                       getComponentVariationRetrievalService(),
                       getComponentUiFrameworkViewRetrievalService()),
               KestrosBasicComponentElement.getLayout("imageLayout",
-                      imageResource),"imageElement");
+                      imageResource), "imageElement");
     } catch (ComponentConfigurationException e) {
-      throw new RuntimeException(e);
+      return null;
     }
   }
 
@@ -58,26 +55,25 @@ public class CardStaticDataSource extends BaseContainerSlingModelDataSource impl
   @Nullable
   @Override
   public KestrosButtonGroup getButtonGroupElement() {
-//    try {
-//      return new KestrosButtonGroupImpl(getResource(),
-//              KestrosBasicComponentElement.getAppliedVariations("buttonVariations",
-//                      getResource(), KestrosButton.RESOURCE_TYPE, getUiFramework(),
-//                      getComponentVariationRetrievalService(),
-//                      getComponentUiFrameworkViewRetrievalService()),
-//              getResourceResolver(), getUiFramework(),
-//              getPath(),
-//              KestrosBasicComponentElement.getAppliedVariations("buttonGroupVariations",
-//                      getResource(),
-//                      KestrosButtonGroup.RESOURCE_TYPE,
-//                      getUiFramework(),
-//                      getComponentVariationRetrievalService(),
-//                      getComponentUiFrameworkViewRetrievalService()),
-//              KestrosBasicComponentElement.getLayout("buttonGroupLayout",
-//                      getResource()), null, "buttonGroup");
-//    } catch (ComponentConfigurationException e) {
-//      throw new RuntimeException(e);
-//    }
-    return null;
+    try {
+      return new KestrosButtonGroupImpl(getResource(),
+              KestrosBasicComponentElement.getAppliedVariations("buttonVariations",
+                      getResource(), KestrosButton.RESOURCE_TYPE, getUiFramework(),
+                      getComponentVariationRetrievalService(),
+                      getComponentUiFrameworkViewRetrievalService()),
+              getResourceResolver(), getUiFramework(),
+              getPath(),
+              KestrosBasicComponentElement.getAppliedVariations("buttonGroupVariations",
+                      getResource(),
+                      KestrosButtonGroup.RESOURCE_TYPE,
+                      getUiFramework(),
+                      getComponentVariationRetrievalService(),
+                      getComponentUiFrameworkViewRetrievalService()),
+              KestrosBasicComponentElement.getLayout("buttonGroupLayout",
+                      getResource()), null, "buttonGroup");
+    } catch (ComponentConfigurationException e) {
+      return null;
+    }
   }
 
 

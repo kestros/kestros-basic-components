@@ -1,6 +1,7 @@
 package io.kestros.cms.components.basic.core.content.alert;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import io.kestros.cms.components.basic.api.content.KestrosAlert;
 import io.kestros.cms.components.basic.core.BaseDataSourceComponentTest;
@@ -37,6 +38,11 @@ public class AlertDataSourceComponentTest extends BaseDataSourceComponentTest {
 
     context.request().setResource(resource);
     alert = context.request().adaptTo(AlertDataSourceComponent.class);
+  }
+
+  @Override
+  public void testToSyntheticResource() {
+    assertNotNull(alert.toSyntheticResource(context.resourceResolver(), "/test/path"));
   }
 
   @Test

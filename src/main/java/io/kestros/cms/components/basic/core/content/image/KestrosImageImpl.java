@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosImage;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
-import io.kestros.cms.components.basic.core.content.BaseSyntheticResource;
+import io.kestros.cms.components.basic.core.BaseSyntheticResource;
 import io.kestros.cms.componenttypes.api.models.ComponentVariation;
 import io.kestros.cms.componenttypes.api.services.ComponentUiFrameworkViewRetrievalService;
 import io.kestros.cms.componenttypes.api.services.ComponentVariationRetrievalService;
@@ -63,7 +63,7 @@ public class KestrosImageImpl extends BaseSyntheticResource implements KestrosIm
           ComponentConfigurationException {
     super(resourceResolver, uiFramework, parentPath, componentVariations, layout,
             resource.getValueMap().get("id", String.class), forcedResourceName);
-    this.imagePath = resource.getValueMap().get("assetPath", String.class);
+    this.imagePath = resource.getValueMap().get("imagePath", String.class);
     this.altText = resource.getValueMap().get("altText", String.class);
     this.caption = resource.getValueMap().get("caption", String.class);
     this.imageTitle = resource.getValueMap().get("imageTitle", String.class);

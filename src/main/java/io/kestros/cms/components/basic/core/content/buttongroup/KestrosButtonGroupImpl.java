@@ -49,6 +49,9 @@ public class KestrosButtonGroupImpl extends BaseContainerSyntheticResource imple
             KestrosBasicComponentElement.getLayout("buttonLayout", buttonResource), null,
             forcedResourceName));
     this.buttons = buttons;
+    if(this.buttons.isEmpty()) {
+      throw new ComponentConfigurationException("Button Group must have at least one button.");
+    }
   }
 
   @Nonnull

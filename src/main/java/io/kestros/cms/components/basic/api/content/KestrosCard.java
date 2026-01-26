@@ -13,6 +13,7 @@ import org.apache.sling.api.resource.Resource;
  * Kestros Card component API.
  */
 public interface KestrosCard extends KestrosContainerElement {
+
   String RESOURCE_TYPE = "/libs/kestros/commons/components/content/card";
 
   @Override
@@ -44,7 +45,7 @@ public interface KestrosCard extends KestrosContainerElement {
   @JsonIgnore
   @Nullable
   default Resource getImage() {
-    if(getResource().getChild("imageElement") != null) {
+    if (getResource().getChild("imageElement") != null) {
       return getResource().getChild("imageElement");
     }
     KestrosImage imageElement = getImageElement();
@@ -65,7 +66,7 @@ public interface KestrosCard extends KestrosContainerElement {
   @JsonIgnore
   @Nullable
   default Resource getButtonGroup() {
-    if(getResource().getChild("buttonGroup") != null) {
+    if (getResource().getChild("buttonGroup") != null) {
       return getResource().getChild("buttonGroup");
     }
     KestrosButtonGroup buttonGroupElement = getButtonGroupElement();

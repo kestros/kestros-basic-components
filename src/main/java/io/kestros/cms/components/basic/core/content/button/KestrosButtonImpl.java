@@ -3,12 +3,13 @@ package io.kestros.cms.components.basic.core.content.button;
 import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosButton;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
-import io.kestros.cms.components.basic.core.content.BaseSyntheticResource;
+import io.kestros.cms.components.basic.core.BaseSyntheticResource;
 import io.kestros.cms.componenttypes.api.models.ComponentVariation;
 import io.kestros.cms.uiframeworks.api.models.UiFramework;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 
@@ -66,6 +67,9 @@ public class KestrosButtonImpl extends BaseSyntheticResource implements KestrosB
     this.ariaDescribedBy = resource.getValueMap().get("ariaDescribedBy", String.class);
     this.lang = resource.getValueMap().get("lang", String.class);
     this.disabled = resource.getValueMap().get("disabled", false);
+    if(StringUtils.isEmpty(href)) {
+      throw new ComponentConfigurationException("Missing required property");
+    }
   }
 
   @Nullable

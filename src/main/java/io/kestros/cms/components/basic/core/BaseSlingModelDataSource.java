@@ -1,9 +1,6 @@
-package io.kestros.cms.components.basic.core.content;
+package io.kestros.cms.components.basic.core;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
-import io.kestros.cms.components.basic.api.KestrosContainerElement;
-import io.kestros.cms.components.basic.core.SyntheticResourceWrapper;
 import io.kestros.cms.componenttypes.api.exceptions.ComponentVariationRetrievalException;
 import io.kestros.cms.componenttypes.api.models.ComponentVariation;
 import io.kestros.cms.componenttypes.api.services.ComponentUiFrameworkViewRetrievalService;
@@ -12,26 +9,21 @@ import io.kestros.cms.sitebuilding.api.models.BaseComponent;
 import io.kestros.cms.sitebuilding.api.models.ComponentRequestContext;
 import io.kestros.cms.uiframeworks.api.models.UiFramework;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceMetadata;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.resource.SyntheticResource;
-import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.api.wrappers.ValueMapDecorator;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
-public class BaseSlingModelDataSource implements KestrosBasicComponentElement {
+public abstract class BaseSlingModelDataSource extends BaseComponentElement implements
+        KestrosBasicComponentElement {
 
   @Self
   @Optional
@@ -74,8 +66,9 @@ public class BaseSlingModelDataSource implements KestrosBasicComponentElement {
   }
 
   public List<ComponentVariation> getVariations() {
-    List<Map<String, Object>> variationsMapList = Arrays.asList(
-            getResource().getValueMap().get("variations", new HashMap[]{}));
+    // TODO verify this.
+    List<Map<String, Object>> variationsMapList = getResource().getValueMap()
+            .get("variations", new ArrayList<>());
     if (!variationsMapList.isEmpty()) {
       List<ComponentVariation> variations = new ArrayList<>();
       for (Map<String, Object> variationMap : variationsMapList) {
@@ -103,12 +96,6 @@ public class BaseSlingModelDataSource implements KestrosBasicComponentElement {
     return getResource().getValueMap().get("layout", "default");
   }
 
-  @Nonnull
-  @Override
-  public String getComponentResourceType() {
-    throw new UnsupportedOperationException(
-            "getComponentResourceType() not implemented in BaseSlingModelDataSource.");
-  }
 
   @Nullable
   @Override
@@ -140,49 +127,4 @@ public class BaseSlingModelDataSource implements KestrosBasicComponentElement {
     return componentUiFrameworkViewRetrievalService;
   }
 
-  @Override
-  public Resource toSyntheticResource(@Nonnull ResourceResolver resourceResolver,
-          @Nonnull String parentPath) {
-    if (syntheticResource == null) {
-      ResourceMetadata resourceMetadata = new ResourceMetadata();
-      String name = "child-" + java.util.UUID.randomUUID();
-      if (getForcedResourceName() != null && !getForcedResourceName().isEmpty()) {
-        name = getForcedResourceName();
-      }
-      String path = parentPath + "/" + name;
-      if (!path.startsWith("/synthetics")) {
-        path = "/synthetics" + path;
-      }
-      resourceMetadata.setResolutionPath(path);
-      resourceMetadata.setModificationTime(System.currentTimeMillis());
-      Map<String, String> parameters = new HashMap<>();
-      resourceMetadata.setParameterMap(parameters);
-      ObjectMapper objectMapper = new ObjectMapper();
-      Map<String, Object> props = objectMapper.convertValue(this, Map.class);
-      props.put("sling:resourceType", getComponentResourceType());
-      props.put("jcr:primaryType", "nt:unstructured");
-      syntheticResource = new SyntheticResource(resourceResolver, resourceMetadata,
-              getComponentResourceType()) {
-        private final ValueMap valueMap = new ValueMapDecorator(props);
-
-        @Override
-        public ValueMap getValueMap() {
-          return valueMap;
-        }
-      };
-      if (this instanceof KestrosContainerElement) {
-        KestrosContainerElement container = (KestrosContainerElement) this;
-        Map<String, Resource> childResources = new HashMap<>();
-        for (KestrosBasicComponentElement child : container.getChildElements()) {
-          Resource childSyntheticResource = child.toSyntheticResource(resourceResolver,
-                  syntheticResource.getPath());
-          childResources.put(childSyntheticResource.getName(), childSyntheticResource);
-        }
-        syntheticResource = new SyntheticResourceWrapper(syntheticResource, childResources);
-
-      }
-    }
-
-    return syntheticResource;
-  }
 }

@@ -2,7 +2,7 @@ package io.kestros.cms.components.basic.core.content.text;
 
 import io.kestros.cms.components.basic.api.content.TextElementType;
 import io.kestros.cms.components.basic.api.content.KestrosText;
-import io.kestros.cms.components.basic.core.content.BaseSlingModelDataSource;
+import io.kestros.cms.components.basic.core.BaseSlingModelDataSource;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.sling.api.SlingHttpServletRequest;

@@ -10,7 +10,6 @@ import io.kestros.cms.components.basic.api.content.KestrosCard;
 import io.kestros.cms.components.basic.api.content.KestrosImage;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.components.basic.core.BaseContainerSlingModelDataSource;
-import io.kestros.cms.components.basic.core.content.BaseSlingModelDataSource;
 import io.kestros.cms.components.basic.core.content.image.KestrosImageImpl;
 import io.kestros.cms.componenttypes.api.models.ComponentVariation;
 import java.util.List;
@@ -90,7 +89,7 @@ public class CardAssetDataSource extends BaseContainerSlingModelDataSource imple
   @Nullable
   Asset getAsset() {
     if (asset == null) {
-      String assetPath = getResource().getValueMap().get("assetPath", String.class);
+      String assetPath = getResource().getValueMap().get("imagePath", String.class);
       if (assetPath != null) {
         try {
           asset = assetRetrievalService.getAsset(assetPath, null, getResourceResolver());

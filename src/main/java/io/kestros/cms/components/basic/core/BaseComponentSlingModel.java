@@ -1,4 +1,4 @@
-package io.kestros.cms.components.basic.core.content;
+package io.kestros.cms.components.basic.core;
 
 import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
 import io.kestros.cms.sitebuilding.api.models.BaseComponent;

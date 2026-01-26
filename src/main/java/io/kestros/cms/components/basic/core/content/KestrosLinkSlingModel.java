@@ -2,6 +2,7 @@ package io.kestros.cms.components.basic.core.content;
 
 import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosLink;
+import io.kestros.cms.components.basic.core.BaseSlingModelDataSource;
 import io.kestros.cms.components.basic.core.LinkUtils;
 import javax.annotation.Nullable;
 import org.apache.sling.api.SlingHttpServletRequest;

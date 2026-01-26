@@ -3,6 +3,7 @@ package io.kestros.cms.components.basic.core.content;
 import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosLink;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
+import io.kestros.cms.components.basic.core.BaseSyntheticResource;
 import io.kestros.cms.componenttypes.api.models.ComponentVariation;
 import io.kestros.cms.uiframeworks.api.models.UiFramework;
 import java.util.List;

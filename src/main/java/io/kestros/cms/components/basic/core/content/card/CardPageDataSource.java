@@ -9,7 +9,6 @@ import io.kestros.cms.components.basic.api.content.KestrosImage;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.components.basic.core.BaseContainerSlingModelDataSource;
 import io.kestros.cms.components.basic.core.LinkUtils;
-import io.kestros.cms.components.basic.core.content.BaseSlingModelDataSource;
 import io.kestros.cms.components.basic.core.content.button.KestrosButtonImpl;
 import io.kestros.cms.components.basic.core.content.buttongroup.KestrosButtonGroupImpl;
 import io.kestros.cms.components.basic.core.content.image.KestrosImageImpl;
@@ -18,6 +17,7 @@ import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nullable;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
@@ -49,7 +49,7 @@ public class CardPageDataSource extends BaseContainerSlingModelDataSource implem
   @Override
   public KestrosImage getImageElement() {
     if (getPage() != null) {
-      if (getPage().getImagePath() != null) {
+      if (StringUtils.isNotEmpty(getPage().getImagePath())) {
         String imagePath = getPage().getImagePath();
         String altText = null;
         String caption = null;
@@ -71,7 +71,7 @@ public class CardPageDataSource extends BaseContainerSlingModelDataSource implem
                   imageTitle, href, ariaLabel,
                   anchorTitle, target, getResourceResolver(),
                   getUiFramework(), getPath(), componentVariations,
-                  layout, id,"imageElement");
+                  layout, id, "imageElement");
         } catch (ComponentConfigurationException e) {
           throw new RuntimeException(e);
         }
@@ -84,7 +84,7 @@ public class CardPageDataSource extends BaseContainerSlingModelDataSource implem
   @Nullable
   @Override
   public KestrosButtonGroup getButtonGroupElement() {
-    if(getPage() != null) {
+    if (getPage() != null) {
       try {
         List<KestrosButton> buttons = new ArrayList<>();
         String text = getResource().getValueMap().get("buttonLabel", String.class);
@@ -134,7 +134,7 @@ public class CardPageDataSource extends BaseContainerSlingModelDataSource implem
                 getResourceResolver(), getUiFramework(),
                 getPath(),
                 componentVariations,
-                buttonGroupLayout, id,"buttonGroup");
+                buttonGroupLayout, id, "buttonGroup");
       } catch (ComponentConfigurationException e) {
         throw new RuntimeException(e);
       }

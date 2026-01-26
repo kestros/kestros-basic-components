@@ -1,7 +1,10 @@
 package io.kestros.cms.components.basic.core.lists.cardlist;
 
 import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
+import io.kestros.cms.components.basic.api.content.KestrosButton;
+import io.kestros.cms.components.basic.api.content.KestrosButtonGroup;
 import io.kestros.cms.components.basic.api.content.KestrosCard;
+import io.kestros.cms.components.basic.api.content.KestrosImage;
 import io.kestros.cms.components.basic.api.lists.KestrosCardList;
 import io.kestros.cms.components.basic.core.BaseContainerSlingModelDataSource;
 import io.kestros.cms.components.basic.core.content.card.KestrosCardImpl;
@@ -20,7 +23,7 @@ public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSou
         KestrosCardList {
   private BaseContentPage rootPage;
 
-  BaseContentPage getPage() {
+  BaseContentPage getRootPage() {
     if (rootPage == null) {
       String pagesPath = getResource().getValueMap().get("pagesPath", String.class);
       if (pagesPath != null) {
@@ -47,19 +50,43 @@ public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSou
   @Override
   public List<KestrosCard> getCards() {
     List<KestrosCard> cards = new ArrayList<>();
-    for (BaseContentPage page : getPage().getChildPages()) {
+    for (BaseContentPage page : getRootPage().getChildPages()) {
       try {
         cards.add(
-                new KestrosCardImpl(page.getDisplayTitle(), page.getDisplayDescription(), null,
-                        null,
-                        getResourceResolver(), getUiFramework(), getPath(),
+                new KestrosCardImpl(page,
+                        "Read More",
+                        getResourceResolver(),
+                        getUiFramework(),
+                        getPath(),
                         KestrosBasicComponentElement.getAppliedVariations("cardVariations",
                                 getResource(),
-                                "/libs/kestros/commons/components/content/card",
+                                KestrosCard.RESOURCE_TYPE,
                                 getUiFramework(),
                                 getComponentVariationRetrievalService(),
                                 getComponentUiFrameworkViewRetrievalService()),
                         KestrosBasicComponentElement.getLayout("cardLayout", getResource()),
+                        KestrosBasicComponentElement.getAppliedVariations("imageVariations",
+                                getResource(),
+                                KestrosImage.RESOURCE_TYPE,
+                                getUiFramework(),
+                                getComponentVariationRetrievalService(),
+                                getComponentUiFrameworkViewRetrievalService()),
+                        KestrosBasicComponentElement.getLayout("imageLayout", getResource()),
+                        KestrosBasicComponentElement.getAppliedVariations("buttonGroupVariations",
+                                getResource(),
+                                KestrosButtonGroup.RESOURCE_TYPE,
+                                getUiFramework(),
+                                getComponentVariationRetrievalService(),
+                                getComponentUiFrameworkViewRetrievalService()),
+                        KestrosBasicComponentElement.getLayout("buttonGroupLayout", getResource()),
+                        KestrosBasicComponentElement.getAppliedVariations("buttonVariations",
+                                getResource(),
+                                KestrosButton.RESOURCE_TYPE,
+                                getUiFramework(),
+                                getComponentVariationRetrievalService(),
+                                getComponentUiFrameworkViewRetrievalService()),
+                        KestrosBasicComponentElement.getLayout("buttonLayout", getResource()),
+
                         null, null));
       } catch (Exception e) {
         throw new RuntimeException(e);

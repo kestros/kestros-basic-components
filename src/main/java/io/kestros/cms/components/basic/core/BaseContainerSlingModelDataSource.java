@@ -2,7 +2,6 @@ package io.kestros.cms.components.basic.core;
 
 import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
 import io.kestros.cms.components.basic.api.KestrosContainerElement;
-import io.kestros.cms.components.basic.core.content.BaseSlingModelDataSource;
 import java.util.List;
 import javax.annotation.Nonnull;
 import org.apache.sling.api.resource.Resource;
