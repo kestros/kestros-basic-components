@@ -43,7 +43,7 @@ public class HeadingPageTitleDataSource extends HeadingStaticDataSource implemen
 
   @Nullable
   @Override
-  public String getText() {
+  public String getHeadingText() {
     return getPage().getDisplayTitle();
   }
 

@@ -1,13 +1,16 @@
 package io.kestros.cms.components.basic.core;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
 import io.kestros.cms.componenttypes.api.exceptions.ComponentVariationRetrievalException;
 import io.kestros.cms.componenttypes.api.models.ComponentVariation;
 import io.kestros.cms.componenttypes.api.services.ComponentUiFrameworkViewRetrievalService;
 import io.kestros.cms.componenttypes.api.services.ComponentVariationRetrievalService;
 import io.kestros.cms.sitebuilding.api.models.BaseComponent;
+import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
 import io.kestros.cms.sitebuilding.api.models.ComponentRequestContext;
 import io.kestros.cms.uiframeworks.api.models.UiFramework;
+import io.kestros.commons.structuredslingmodels.exceptions.NoValidAncestorException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -22,8 +25,8 @@ import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
-public abstract class BaseSlingModelDataSource extends BaseComponentElement implements
-        KestrosBasicComponentElement {
+public abstract class BaseSlingModelDataSource
+    extends BaseComponentElement implements KestrosBasicComponentElement {
 
   @Self
   @Optional
@@ -57,6 +60,30 @@ public abstract class BaseSlingModelDataSource extends BaseComponentElement impl
     return resource;
   }
 
+  @JsonIgnore
+  public BaseContentPage getCurrentOrContainingPage() {
+    BaseContentPage currentPage = null;
+    if (slingHttpServletRequest != null) {
+      ComponentRequestContext componentRequestContext =
+          slingHttpServletRequest.adaptTo(ComponentRequestContext.class);
+      if (componentRequestContext != null) {
+        currentPage = componentRequestContext.getCurrentPage();
+      }
+    }
+    if (currentPage == null) {
+      try {
+        BaseComponent component = getResource().adaptTo(BaseComponent.class);
+        if (component != null) {
+          currentPage = component.getContainingPage();
+        }
+      } catch (NoValidAncestorException e) {
+        throw new RuntimeException(e);
+      }
+    }
+    return currentPage;
+  }
+
+
   public ResourceResolver getResourceResolver() {
     return getResource().getResourceResolver();
   }
@@ -68,7 +95,7 @@ public abstract class BaseSlingModelDataSource extends BaseComponentElement impl
   public List<ComponentVariation> getVariations() {
     // TODO verify this.
     List<Map<String, Object>> variationsMapList = getResource().getValueMap()
-            .get("variations", new ArrayList<>());
+        .get("variations", new ArrayList<>());
     if (!variationsMapList.isEmpty()) {
       List<ComponentVariation> variations = new ArrayList<>();
       for (Map<String, Object> variationMap : variationsMapList) {
@@ -79,8 +106,8 @@ public abstract class BaseSlingModelDataSource extends BaseComponentElement impl
         }
         try {
           ComponentVariation variation
-                  = getComponentVariationRetrievalService().getComponentVariation(path,
-                  getResourceResolver());
+              = getComponentVariationRetrievalService().getComponentVariation(path,
+              getResourceResolver());
           variations.add(variation);
         } catch (ComponentVariationRetrievalException e) {
           continue;
@@ -107,10 +134,10 @@ public abstract class BaseSlingModelDataSource extends BaseComponentElement impl
     try {
       if (slingHttpServletRequest != null) {
         return slingHttpServletRequest.adaptTo(ComponentRequestContext.class).getCurrentPage()
-                .getTheme().getUiFramework();
+            .getTheme().getUiFramework();
       } else {
         return getResource().adaptTo(BaseComponent.class).getContainingPage().getTheme()
-                .getUiFramework();
+            .getUiFramework();
       }
     } catch (Exception e) {
       throw new RuntimeException(e);

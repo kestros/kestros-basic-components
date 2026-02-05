@@ -1,12 +1,23 @@
 {
   "jcr:primaryType": "kes:ComponentType",
   "jcr:title": "Link List",
-  "jcr:description": "A component to display a list of pages based on specified criteria.",
+  "jcr:description": "",
   "componentGroup": "List Components",
-  "sling:resourceSuperType": "kestros/commons/components/kestros-parent",
+  "sling:resourceSuperType": "kestros/commons/components/content-area",
+  "editable": true,
+  "container": true,
+  "unwrap": true,
   "kes:allowedComponents": [
-    "!group:.hidden",
     "!type:container",
-    "*button*"
-  ]
+    "*link*"
+  ],
+  "nested": {
+    "jcr:primaryType": "nt:unstructured",
+    "link": {
+      "jcr:primaryType": "nt:unstructured",
+      "title": "Link",
+      "resourceType": "/libs/kestros/commons/components/content/link",
+      "name": "link"
+    }
+  }
 }

@@ -1,6 +1,5 @@
 package io.kestros.cms.components.basic.core;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
 import io.kestros.cms.components.basic.api.KestrosContainerElement;
@@ -23,9 +22,8 @@ import org.apache.sling.api.wrappers.ValueMapDecorator;
 import org.apache.sling.models.annotations.Model;
 
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
-public abstract class BaseDataSourceComponent<T extends KestrosBasicComponentElement> extends
-        DataSourceComponent<T> implements
-        KestrosBasicComponentElement {
+public abstract class BaseDataSourceComponent<T extends KestrosBasicComponentElement>
+    extends DataSourceComponent<T> implements KestrosBasicComponentElement {
 
   private Resource syntheticResource;
 
@@ -39,6 +37,16 @@ public abstract class BaseDataSourceComponent<T extends KestrosBasicComponentEle
   @Override
   public ComponentVariationRetrievalService getComponentVariationRetrievalService() {
     return getComponentData().getComponentVariationRetrievalService();
+  }
+
+  @Override
+  public String getLayout(String propertyName) {
+    return getComponentData().getLayout(propertyName);
+  }
+
+  @Override
+  public List<ComponentVariation> getElementVariations(String propertyName, String componentType) {
+    return getComponentData().getElementVariations(propertyName, componentType);
   }
 
   @Nullable
@@ -65,7 +73,7 @@ public abstract class BaseDataSourceComponent<T extends KestrosBasicComponentEle
 
   @Override
   public Resource toSyntheticResource(@Nonnull ResourceResolver resourceResolver,
-          @Nonnull String parentPath) {
+      @Nonnull String parentPath) {
     // TODO remove duplicate
     if (syntheticResource == null) {
       ResourceMetadata resourceMetadata = new ResourceMetadata();
@@ -86,7 +94,7 @@ public abstract class BaseDataSourceComponent<T extends KestrosBasicComponentEle
       props.put("sling:resourceType", getComponentResourceType());
       props.put("jcr:primaryType", "nt:unstructured");
       syntheticResource = new SyntheticResource(resourceResolver, resourceMetadata,
-              getComponentResourceType()) {
+          getComponentResourceType()) {
         private final ValueMap valueMap = new ValueMapDecorator(props);
 
         @Override
@@ -99,7 +107,7 @@ public abstract class BaseDataSourceComponent<T extends KestrosBasicComponentEle
         Map<String, Resource> childResources = new HashMap<>();
         for (KestrosBasicComponentElement child : container.getChildElements()) {
           Resource childSyntheticResource = child.toSyntheticResource(resourceResolver,
-                  syntheticResource.getPath());
+              syntheticResource.getPath());
           childResources.put(childSyntheticResource.getName(), childSyntheticResource);
         }
         syntheticResource = new SyntheticResourceWrapper(syntheticResource, childResources);

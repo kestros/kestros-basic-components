@@ -11,7 +11,7 @@ import org.apache.sling.models.annotations.Model;
 
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class ImageDataSourceComponent extends BaseDataSourceComponent<KestrosImage> implements
-        KestrosImage {
+                                                                                    KestrosImage {
 
   @Override
   public String getImageTitle() {
@@ -42,13 +42,32 @@ public class ImageDataSourceComponent extends BaseDataSourceComponent<KestrosIma
     return getComponentData().getAnchorTitle();
   }
 
+  @Nullable
+  @Override
+  public String getRel() {
+    return getComponentData().getRel();
+  }
+
+  @Nullable
+  @Override
+  public String getAriaDescribedBy() {
+    return getComponentData().getAriaDescribedBy();
+  }
+
+  @Nullable
+  @Override
+  public String getLang() {
+    return getComponentData().getLang();
+  }
+
+
   @Nonnull
   @Override
   public AnchorTarget getTarget() {
     return getComponentData().getTarget();
   }
 
-  @Nullable
+  @Nonnull
   @Override
   public String getAltText() {
     return getComponentData().getAltText();

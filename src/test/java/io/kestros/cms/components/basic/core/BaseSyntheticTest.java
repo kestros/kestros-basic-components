@@ -88,9 +88,9 @@ public abstract class BaseSyntheticTest {
   }
 
   @Test
-  public void testToSynthetic() {
+  public void testToSynthetic() throws ComponentConfigurationException {
     testToSyntheticResource();
   }
 
-  public abstract void testToSyntheticResource();
+  public abstract void testToSyntheticResource() throws ComponentConfigurationException;
 }

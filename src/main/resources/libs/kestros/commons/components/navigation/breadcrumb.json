@@ -1,0 +1,8 @@
+{
+  "jcr:primaryType": "kes:ComponentType",
+  "jcr:title": "Breadcrumb",
+  "jcr:description": "Breadcrumb component for displaying page location within site hierarchy.",
+  "sling:resourceSuperType": "kestros/commons/components/kestros-parent",
+  "componentGroup": ".hidden"
+}
+

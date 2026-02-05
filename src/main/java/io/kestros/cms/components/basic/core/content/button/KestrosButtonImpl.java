@@ -3,15 +3,14 @@ package io.kestros.cms.components.basic.core.content.button;
 import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosButton;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
+import io.kestros.cms.components.basic.core.BaseSlingModelDataSource;
 import io.kestros.cms.components.basic.core.BaseSyntheticResource;
 import io.kestros.cms.componenttypes.api.models.ComponentVariation;
-import io.kestros.cms.uiframeworks.api.models.UiFramework;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
 
 public class KestrosButtonImpl extends BaseSyntheticResource implements KestrosButton {
 
@@ -27,17 +26,15 @@ public class KestrosButtonImpl extends BaseSyntheticResource implements KestrosB
   private String resourceName;
 
   public KestrosButtonImpl(String text, String href,
-          String title,
-          AnchorTarget target, String rel,
-          String ariaLabel, String ariaDescribedBy,
-          String lang, boolean disabled,
-          ResourceResolver resourceResolver, UiFramework uiFramework,
-          String parentPath,
-          List<ComponentVariation> componentVariations, String layout, String id,
-          @Nullable String forcedResourceName) throws
-          ComponentConfigurationException {
-    super(resourceResolver, uiFramework, parentPath, componentVariations, layout, id,
-            forcedResourceName);
+      String title,
+      AnchorTarget target, String rel,
+      String ariaLabel, String ariaDescribedBy,
+      String lang, boolean disabled,
+      @Nonnull BaseSlingModelDataSource dataSource,
+      String resourcePrefix,
+      @Nullable String forcedResourceName) throws
+      ComponentConfigurationException {
+    super(dataSource, resourcePrefix, forcedResourceName);
     this.text = text;
     this.href = href;
     this.title = title;
@@ -50,14 +47,13 @@ public class KestrosButtonImpl extends BaseSyntheticResource implements KestrosB
     this.resourceName = forcedResourceName;
   }
 
-  public KestrosButtonImpl(@Nonnull Resource resource, ResourceResolver resourceResolver,
-          UiFramework uiFramework,
-          String parentPath,
-          List<ComponentVariation> componentVariations, String layout, String id,
-          @Nullable String forcedResourceName) throws
-          ComponentConfigurationException {
-    super(resourceResolver, uiFramework, parentPath, componentVariations, layout, id,
-            forcedResourceName);
+  public KestrosButtonImpl(@Nonnull Resource resource,
+      @Nonnull BaseSlingModelDataSource dataSource,
+      String resourcePrefix,
+      @Nullable String forcedResourceName) throws
+      ComponentConfigurationException {
+    super(dataSource, resourcePrefix,
+        forcedResourceName);
     this.text = resource.getValueMap().get("text", String.class);
     this.href = resource.getValueMap().get("href", String.class);
     this.title = resource.getValueMap().get("title", String.class);
@@ -67,7 +63,7 @@ public class KestrosButtonImpl extends BaseSyntheticResource implements KestrosB
     this.ariaDescribedBy = resource.getValueMap().get("ariaDescribedBy", String.class);
     this.lang = resource.getValueMap().get("lang", String.class);
     this.disabled = resource.getValueMap().get("disabled", false);
-    if(StringUtils.isEmpty(href)) {
+    if (StringUtils.isEmpty(href)) {
       throw new ComponentConfigurationException("Missing required property");
     }
   }

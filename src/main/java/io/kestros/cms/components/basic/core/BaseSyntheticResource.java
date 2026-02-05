@@ -1,6 +1,5 @@
 package io.kestros.cms.components.basic.core;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.componenttypes.api.models.ComponentVariation;
@@ -14,8 +13,8 @@ import javax.annotation.Nullable;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 
-public abstract class BaseSyntheticResource extends BaseComponentElement implements
-        KestrosBasicComponentElement {
+public abstract class BaseSyntheticResource extends BaseComponentElement
+    implements KestrosBasicComponentElement {
   private final ResourceResolver resourceResolver;
   private final String parentPath;
   private final UiFramework uiFramework;
@@ -25,25 +24,30 @@ public abstract class BaseSyntheticResource extends BaseComponentElement impleme
   private Resource syntheticResource;
   private Resource resource;
   private String resourceName;
+  private ComponentVariationRetrievalService componentVariationRetrievalService;
+  private ComponentUiFrameworkViewRetrievalService componentUiFrameworkViewRetrievalService;
 
-  public BaseSyntheticResource(@Nonnull ResourceResolver resourceResolver,
-          @Nonnull UiFramework uiFramework,
-          @Nonnull String parentPath, @Nonnull List<ComponentVariation> componentVariations,
-          @Nonnull String layout, @Nullable String id, @Nullable String forcedResourceName) throws
-          ComponentConfigurationException {
-    this.resourceResolver = resourceResolver;
-    this.parentPath = parentPath;
-    this.componentVariations = componentVariations;
-    this.layout = layout;
-    this.uiFramework = uiFramework;
-    this.id = id;
+  public BaseSyntheticResource(
+      @Nonnull BaseSlingModelDataSource dataSource,
+      @Nonnull String resourcePrefix, @Nullable String forcedResourceName) throws
+      ComponentConfigurationException {
+    this.resourceResolver = dataSource.getResourceResolver();
+    this.parentPath = dataSource.getResource().getPath();
+    this.uiFramework = dataSource.getUiFramework();
+    this.componentVariations = dataSource.getElementVariations(resourcePrefix + "Variations",
+        getComponentResourceType());
+    this.layout = dataSource.getLayout(resourcePrefix);
+    this.id = null;
     this.resourceName = forcedResourceName;
     if (resourceResolver == null || this.parentPath == null || this.componentVariations == null
-            || this.layout == null || this.uiFramework == null) {
+        || this.layout == null || this.uiFramework == null) {
       // this is not needed, but is included so that the extending classes are required to throw
       // the exception.
       throw new ComponentConfigurationException("Missing required property");
     }
+    this.componentVariationRetrievalService = dataSource.getComponentVariationRetrievalService();
+    this.componentUiFrameworkViewRetrievalService =
+        dataSource.getComponentUiFrameworkViewRetrievalService();
   }
 
 
@@ -94,12 +98,12 @@ public abstract class BaseSyntheticResource extends BaseComponentElement impleme
   @Nonnull
   @Override
   public ComponentVariationRetrievalService getComponentVariationRetrievalService() {
-    return null;
+    return componentVariationRetrievalService;
   }
 
   @Nonnull
   @Override
   public ComponentUiFrameworkViewRetrievalService getComponentUiFrameworkViewRetrievalService() {
-    return null;
+    return componentUiFrameworkViewRetrievalService;
   }
 }

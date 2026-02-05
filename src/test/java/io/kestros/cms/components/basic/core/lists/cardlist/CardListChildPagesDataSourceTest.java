@@ -1,7 +1,10 @@
 package io.kestros.cms.components.basic.core.lists.cardlist;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import io.kestros.cms.assets.api.exceptions.AssetCollectionRetrievalException;
 import io.kestros.cms.components.basic.api.content.KestrosButton;
@@ -12,8 +15,10 @@ import io.kestros.cms.components.basic.api.lists.KestrosCardList;
 import io.kestros.cms.components.basic.core.BaseDataSourceTest;
 import io.kestros.cms.components.basic.core.content.image.ImageStaticDataSource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ValueMap;
 import org.junit.Test;
 
 public class CardListChildPagesDataSourceTest extends BaseDataSourceTest {
@@ -46,7 +51,42 @@ public class CardListChildPagesDataSourceTest extends BaseDataSourceTest {
   @Override
   public void testToSyntheticResource() {
     assertNotNull(
-            cardListChildPagesDataSource.toSyntheticResource(context.resourceResolver(), "/test"));
+        cardListChildPagesDataSource.toSyntheticResource(context.resourceResolver(), "/test"));
+    assertNotNull(
+        cardListChildPagesDataSource.toSyntheticResource(context.resourceResolver(), "/test"));
+    assertEquals(11, cardListChildPagesDataSource.toSyntheticResource(context.resourceResolver(),
+        "/test").getValueMap().size());
+    ValueMap valueMap = cardListChildPagesDataSource.toSyntheticResource(
+        context.resourceResolver(), "/test").getValueMap();
+    assertNotNull(valueMap);
+    assertEquals("/libs/kestros/commons/components/lists/card-list",
+        valueMap.get("componentResourceType"));
+    assertFalse(valueMap.get("synthetic", true));
+    assertNull(valueMap.get("id"));
+    assertEquals(0, valueMap.get("variations", List.class).size());
+    assertEquals("", valueMap.get("inlineVariations"));
+    assertTrue(valueMap.get("dataSourceComponent", false));
+    assertEquals("component", valueMap.get("forcedResourceName"));
+    assertEquals(3, valueMap.get("cards", List.class).size());
+
+    Map<String, Object> card = (Map) valueMap.get("cards", List.class).get(0);
+    assertEquals(12, card.size());
+    assertEquals("default", card.get("layout"));
+    assertNull(card.get("id"));
+    assertEquals("Description", card.get("description"));
+    assertNotNull(card.get("titleElement"));
+
+    assertNotNull((Map) card.get("imageElement"));
+    assertNotNull((Map) card.get("buttonGroupElement"));
+    assertEquals("/libs/kestros/commons/components/content/card",
+        card.get("componentResourceType"));
+    assertTrue((Boolean) card.get("synthetic"));
+    assertEquals(0, ((List) card.get("variations")).size());
+    assertEquals("", card.get("inlineVariations"));
+    assertTrue((Boolean) card.get("dataSourceComponent"));
+    assertNull(card.get("forceResourceName"));
+
+
   }
 
   @Test
@@ -56,34 +96,37 @@ public class CardListChildPagesDataSourceTest extends BaseDataSourceTest {
 
   @Test
   public void testGetCards() {
-    properties.put("cardVariations", new String[]{"/variations/variation1", "/variations/variation2", "/variations/variation3"});
-    properties.put("imageVariations", new String[]{"/variations/variation1", "/variations/variation2", "/variations/variation3"});
-    properties.put("buttonGroupVariations", new String[]{"/variations/variation1", "/variations/variation2", "/variations/variation3"});
+    properties.put("cardVariations",
+        new String[]{"/variations/variation1", "/variations/variation2", "/variations/variation3"});
+    properties.put("imageVariations",
+        new String[]{"/variations/variation1", "/variations/variation2", "/variations/variation3"});
+    properties.put("buttonGroupVariations",
+        new String[]{"/variations/variation1", "/variations/variation2", "/variations/variation3"});
     resource = context.create().resource("/content/page/jcr:content/component2", properties);
     context.request().setResource(resource);
     cardListChildPagesDataSource = context.request().adaptTo(CardListChildPagesDataSource.class);
     assertEquals(3, cardListChildPagesDataSource.getCards().size());
     assertEquals(3, cardListChildPagesDataSource.getCards().get(0).getVariations().size());
     assertEquals(3, cardListChildPagesDataSource.getCards().get(0).getImageElement().getVariations()
-            .size());
+        .size());
 
     assertEquals(3,
-            cardListChildPagesDataSource.getCards().get(0).getButtonGroupElement().getVariations()
-                    .size());
+        cardListChildPagesDataSource.getCards().get(0).getButtonGroupElement().getVariations()
+            .size());
     assertEquals(3, cardListChildPagesDataSource.getCards().get(1).getVariations().size());
     assertEquals(3, cardListChildPagesDataSource.getCards().get(1).getImageElement().getVariations()
-            .size());
+        .size());
     assertEquals(3,
-            cardListChildPagesDataSource.getCards().get(1).getButtonGroupElement().getVariations()
-                    .size());
+        cardListChildPagesDataSource.getCards().get(1).getButtonGroupElement().getVariations()
+            .size());
     assertEquals(3, cardListChildPagesDataSource.getCards().get(2).getVariations().size());
     assertEquals(3, cardListChildPagesDataSource.getCards().get(2).getImageElement().getVariations()
-            .size());
+        .size());
     assertEquals(3,
-            cardListChildPagesDataSource.getCards().get(2).getButtonGroupElement().getVariations()
-                    .size());
+        cardListChildPagesDataSource.getCards().get(2).getButtonGroupElement().getVariations()
+            .size());
     context.request().setResource(
-            cardListChildPagesDataSource.getCards().get(0).getImageElement().getResource());
+        cardListChildPagesDataSource.getCards().get(0).getImageElement().getResource());
     assertEquals(3, context.request().adaptTo(ImageStaticDataSource.class).getVariations().size());
   }
 

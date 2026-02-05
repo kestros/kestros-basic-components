@@ -14,9 +14,6 @@ public interface KestrosText extends KestrosBasicComponentElement {
     return RESOURCE_TYPE;
   }
 
-  @Nonnull
-  TextElementType getType();
-
   @Nullable
   String getText();
 }

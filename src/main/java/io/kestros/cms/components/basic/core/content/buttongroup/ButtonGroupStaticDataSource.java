@@ -1,12 +1,10 @@
 package io.kestros.cms.components.basic.core.content.buttongroup;
 
-import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
 import io.kestros.cms.components.basic.api.content.KestrosButton;
 import io.kestros.cms.components.basic.api.content.KestrosButtonGroup;
 import io.kestros.cms.components.basic.core.BaseContainerSlingModelDataSource;
 import io.kestros.cms.components.basic.core.content.button.ButtonStaticDataSource;
 import io.kestros.cms.componenttypes.api.models.ComponentVariation;
-import io.kestros.cms.componenttypes.api.models.ComponentViewLayout;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
@@ -15,8 +13,8 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
-public class ButtonGroupStaticDataSource extends BaseContainerSlingModelDataSource implements
-        KestrosButtonGroup {
+public class ButtonGroupStaticDataSource extends BaseContainerSlingModelDataSource
+    implements KestrosButtonGroup {
 
   @Nonnull
   @Override
@@ -34,11 +32,7 @@ public class ButtonGroupStaticDataSource extends BaseContainerSlingModelDataSour
 
   public List<ComponentVariation> getButtonVariations() {
     try {
-      return KestrosBasicComponentElement.getAppliedVariations("buttonVariations",
-              getResource(), KestrosButton.RESOURCE_TYPE,
-              getUiFramework(),
-              getComponentVariationRetrievalService(),
-              getComponentUiFrameworkViewRetrievalService());
+      return getElementVariations("buttonVariations", KestrosButton.RESOURCE_TYPE);
     } catch (Exception e) {
       return new ArrayList<>();
     }

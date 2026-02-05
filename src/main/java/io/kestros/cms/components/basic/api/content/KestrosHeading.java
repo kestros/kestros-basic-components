@@ -14,7 +14,7 @@ public interface KestrosHeading extends KestrosBasicComponentElement {
   }
 
   @Nullable
-  String getText();
+  String getHeadingText();
 
   @Nonnull
   String getHeadingType();

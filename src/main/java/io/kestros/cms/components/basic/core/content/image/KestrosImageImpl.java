@@ -4,17 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosImage;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
+import io.kestros.cms.components.basic.core.BaseSlingModelDataSource;
 import io.kestros.cms.components.basic.core.BaseSyntheticResource;
-import io.kestros.cms.componenttypes.api.models.ComponentVariation;
 import io.kestros.cms.componenttypes.api.services.ComponentUiFrameworkViewRetrievalService;
 import io.kestros.cms.componenttypes.api.services.ComponentVariationRetrievalService;
-import io.kestros.cms.uiframeworks.api.models.UiFramework;
-import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 
 public class KestrosImageImpl extends BaseSyntheticResource implements KestrosImage {
@@ -33,16 +30,16 @@ public class KestrosImageImpl extends BaseSyntheticResource implements KestrosIm
   private AnchorTarget target;
 
   public KestrosImageImpl(String imagePath,
-          String altText, String caption,
-          String imageTitle,
-          String href, String ariaLabel,
-          String anchorTitle, AnchorTarget target,
-          ResourceResolver resourceResolver, UiFramework uiFramework, String parentPath,
-          List<ComponentVariation> componentVariations, String layout, String id,
-          String forcedResourceName) throws
-          ComponentConfigurationException {
-    super(resourceResolver, uiFramework, parentPath, componentVariations, layout, id,
-            forcedResourceName);
+      String altText, String caption,
+      String imageTitle,
+      String href, String ariaLabel,
+      String anchorTitle, AnchorTarget target,
+      @Nonnull BaseSlingModelDataSource dataSource,
+      String resourcePrefix,
+      String forcedResourceName) throws
+      ComponentConfigurationException {
+    super(dataSource, resourcePrefix,
+        forcedResourceName);
     this.imagePath = imagePath;
     this.altText = altText;
     this.caption = caption;
@@ -56,13 +53,12 @@ public class KestrosImageImpl extends BaseSyntheticResource implements KestrosIm
     }
   }
 
-  public KestrosImageImpl(Resource resource, ResourceResolver resourceResolver,
-          UiFramework uiFramework, String parentPath,
-          List<ComponentVariation> componentVariations, String layout,
-          String forcedResourceName) throws
-          ComponentConfigurationException {
-    super(resourceResolver, uiFramework, parentPath, componentVariations, layout,
-            resource.getValueMap().get("id", String.class), forcedResourceName);
+  public KestrosImageImpl(Resource resource,
+      @Nonnull BaseSlingModelDataSource dataSource,
+      String resourcePrefix,
+      String forcedResourceName) throws
+      ComponentConfigurationException {
+    super(dataSource, resourcePrefix, forcedResourceName);
     this.imagePath = resource.getValueMap().get("imagePath", String.class);
     this.altText = resource.getValueMap().get("altText", String.class);
     this.caption = resource.getValueMap().get("caption", String.class);
@@ -105,22 +101,41 @@ public class KestrosImageImpl extends BaseSyntheticResource implements KestrosIm
     return anchorTitle;
   }
 
+  @Nullable
+  @Override
+  public String getRel() {
+    return "";
+  }
+
+  @Nullable
+  @Override
+  public String getAriaDescribedBy() {
+    return "";
+  }
+
+  @Nullable
+  @Override
+  public String getLang() {
+    return "";
+  }
+
   @Nonnull
   @Override
   public AnchorTarget getTarget() {
     return target;
   }
 
-  @Nullable
-  @Override
-  public String getAltText() {
-    return altText;
-  }
 
   @Nullable
   @Override
   public String getCaption() {
     return caption;
+  }
+
+  @Nonnull
+  @Override
+  public String getAltText() {
+    return altText;
   }
 
   @JsonIgnore

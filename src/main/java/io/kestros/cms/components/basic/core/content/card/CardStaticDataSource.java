@@ -1,13 +1,14 @@
 package io.kestros.cms.components.basic.core.content.card;
 
-import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
 import io.kestros.cms.components.basic.api.content.KestrosButton;
 import io.kestros.cms.components.basic.api.content.KestrosButtonGroup;
 import io.kestros.cms.components.basic.api.content.KestrosCard;
+import io.kestros.cms.components.basic.api.content.KestrosHeading;
 import io.kestros.cms.components.basic.api.content.KestrosImage;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.components.basic.core.BaseContainerSlingModelDataSource;
 import io.kestros.cms.components.basic.core.content.buttongroup.KestrosButtonGroupImpl;
+import io.kestros.cms.components.basic.core.content.heading.KestrosHeadingImpl;
 import io.kestros.cms.components.basic.core.content.image.KestrosImageImpl;
 import javax.annotation.Nullable;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -19,14 +20,22 @@ public class CardStaticDataSource extends BaseContainerSlingModelDataSource impl
 
   @Nullable
   @Override
-  public String getTitle() {
-    return getResource().getValueMap().get("title", String.class);
+  public String getDescription() {
+    return getResource().getValueMap().get("description", String.class);
   }
 
   @Nullable
   @Override
-  public String getDescription() {
-    return getResource().getValueMap().get("description", String.class);
+  public KestrosHeading getTitleElement() {
+    Resource titleResource = getResource().getChild("titleElement");
+    if (titleResource == null) {
+      titleResource = getResource();
+    }
+    try {
+      return new KestrosHeadingImpl(titleResource, this, "title", "titleElement");
+    } catch (ComponentConfigurationException e) {
+      return null;
+    }
   }
 
   @Nullable
@@ -37,15 +46,9 @@ public class CardStaticDataSource extends BaseContainerSlingModelDataSource impl
       if (imageResource == null) {
         imageResource = getResource();
       }
-      return new KestrosImageImpl(imageResource, getResourceResolver(), getUiFramework(), getPath(),
-              KestrosBasicComponentElement.getAppliedVariations("imageVariations",
-                      getResource(),
-                      KestrosImage.RESOURCE_TYPE,
-                      getUiFramework(),
-                      getComponentVariationRetrievalService(),
-                      getComponentUiFrameworkViewRetrievalService()),
-              KestrosBasicComponentElement.getLayout("imageLayout",
-                      imageResource), "imageElement");
+      return new KestrosImageImpl(imageResource, this,
+          "image",
+          "imageElement");
     } catch (ComponentConfigurationException e) {
       return null;
     }
@@ -55,22 +58,13 @@ public class CardStaticDataSource extends BaseContainerSlingModelDataSource impl
   @Nullable
   @Override
   public KestrosButtonGroup getButtonGroupElement() {
+    Resource buttonGroupResource = getResource().getChild("buttonGroupElement");
+    if (buttonGroupResource == null) {
+      buttonGroupResource = getResource();
+    }
     try {
-      return new KestrosButtonGroupImpl(getResource(),
-              KestrosBasicComponentElement.getAppliedVariations("buttonVariations",
-                      getResource(), KestrosButton.RESOURCE_TYPE, getUiFramework(),
-                      getComponentVariationRetrievalService(),
-                      getComponentUiFrameworkViewRetrievalService()),
-              getResourceResolver(), getUiFramework(),
-              getPath(),
-              KestrosBasicComponentElement.getAppliedVariations("buttonGroupVariations",
-                      getResource(),
-                      KestrosButtonGroup.RESOURCE_TYPE,
-                      getUiFramework(),
-                      getComponentVariationRetrievalService(),
-                      getComponentUiFrameworkViewRetrievalService()),
-              KestrosBasicComponentElement.getLayout("buttonGroupLayout",
-                      getResource()), null, "buttonGroup");
+      return new KestrosButtonGroupImpl(buttonGroupResource,
+          this, "buttonGroup", "buttonGroupElement");
     } catch (ComponentConfigurationException e) {
       return null;
     }

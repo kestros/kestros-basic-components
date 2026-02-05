@@ -16,14 +16,6 @@ public class AlertDataSourceComponentTest extends BaseDataSourceComponentTest {
   private Map<String, Object> properties = new HashMap<>();
 
   @Override
-  public Map<String, String> getDataSourceMap() {
-    Map<String, String> dataSourceMap = new HashMap<>();
-    dataSourceMap.put("default",
-            "io.kestros.cms.components.basic.core.content.alert.AlertStaticDataSource");
-    return dataSourceMap;
-  }
-
-  @Override
   public String getResourceType() {
     return KestrosAlert.RESOURCE_TYPE;
   }

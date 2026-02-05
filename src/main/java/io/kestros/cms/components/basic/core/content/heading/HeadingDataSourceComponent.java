@@ -9,8 +9,8 @@ import org.apache.sling.models.annotations.Model;
 public class HeadingDataSourceComponent extends BaseDataSourceComponent<KestrosHeading> implements
         KestrosHeading {
   @Override
-  public String getText() {
-    return getComponentData().getText();
+  public String getHeadingText() {
+    return getComponentData().getHeadingText();
   }
 
   @Override

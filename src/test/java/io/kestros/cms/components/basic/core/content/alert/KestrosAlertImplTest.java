@@ -5,6 +5,8 @@ import static org.junit.Assert.assertNotNull;
 
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.components.basic.core.BaseSyntheticTest;
+import io.kestros.cms.components.basic.core.lists.cardlist.CardListAssetsDataSource;
+import io.kestros.cms.components.basic.core.lists.cardlist.CardListStaticDataSource;
 import java.util.ArrayList;
 import org.apache.sling.api.resource.Resource;
 import org.junit.Test;
@@ -14,9 +16,12 @@ public class KestrosAlertImplTest extends BaseSyntheticTest {
 
   @Override
   public void setupElement() throws ComponentConfigurationException {
-    alert = new KestrosAlertImpl("Heading", "Text", getResourceResolver(), getUiFramework(),
-            "/parent", new ArrayList<>(),
-            "default", "id", "forcedResourceName");
+    Resource resource = context.create().resource("/content/parent");
+    context.currentResource(resource);
+    CardListStaticDataSource dataSource = context.request().adaptTo(
+        CardListStaticDataSource.class);
+
+    alert = new KestrosAlertImpl("Heading", "Text", dataSource, "alert", "forcedResourceName");
   }
 
   @Override

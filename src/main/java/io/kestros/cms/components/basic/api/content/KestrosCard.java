@@ -21,13 +21,26 @@ public interface KestrosCard extends KestrosContainerElement {
     return RESOURCE_TYPE;
   }
 
+  @JsonIgnore
+  @Nullable
+  default Resource getTitle() {
+    if (getResource().getChild("titleElement") != null) {
+      return getResource().getChild("titleElement");
+    }
+    KestrosHeading titleElement = getTitleElement();
+    if (titleElement == null) {
+      return null;
+    }
+    return titleElement.toSyntheticResource(getResourceResolver(), getPath());
+  }
+
   /**
    * Card title.
    *
    * @return Title or null.
    */
   @Nullable
-  String getTitle();
+  KestrosHeading getTitleElement();
 
   /**
    * Card description.
@@ -66,8 +79,8 @@ public interface KestrosCard extends KestrosContainerElement {
   @JsonIgnore
   @Nullable
   default Resource getButtonGroup() {
-    if (getResource().getChild("buttonGroup") != null) {
-      return getResource().getChild("buttonGroup");
+    if (getResource().getChild("buttonGroupElement") != null) {
+      return getResource().getChild("buttonGroupElement");
     }
     KestrosButtonGroup buttonGroupElement = getButtonGroupElement();
     if (buttonGroupElement == null) {
@@ -83,6 +96,10 @@ public interface KestrosCard extends KestrosContainerElement {
   @Override
   default List<KestrosBasicComponentElement> getChildElements() {
     List<KestrosBasicComponentElement> childElements = new ArrayList<>();
+    KestrosHeading headingElement = getTitleElement();
+    if (headingElement != null) {
+      childElements.add(headingElement);
+    }
     KestrosImage imageElement = getImageElement();
     if (imageElement != null) {
       childElements.add(imageElement);

@@ -9,6 +9,14 @@ import javax.annotation.Nullable;
  */
 public interface KestrosAccordionPanel extends KestrosBasicComponentElement {
 
+  String RESOURCE_TYPE = "/libs/kestros/commons/components/structure/accordion-panel";
+
+  @Nonnull
+  @Override
+  default String getComponentResourceType() {
+    return RESOURCE_TYPE;
+  }
+
   /**
    * Gets the title of the accordion panel.
    *

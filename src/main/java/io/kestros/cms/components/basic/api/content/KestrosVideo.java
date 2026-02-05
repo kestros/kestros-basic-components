@@ -1,6 +1,7 @@
 package io.kestros.cms.components.basic.api.content;
 
 import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public interface KestrosVideo extends KestrosBasicComponentElement {
@@ -14,4 +15,7 @@ public interface KestrosVideo extends KestrosBasicComponentElement {
 
   @Nullable
   String getVideoSource();
+
+  @Nonnull
+  String getFallbackText();
 }

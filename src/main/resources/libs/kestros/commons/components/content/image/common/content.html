@@ -17,7 +17,7 @@
   */-->
 <sly data-sly-use.image="${'io.kestros.cms.components.basic.core.content.image.ImageDataSourceComponent'}"/>
 
-<sly data-sly-test="${image.src}">
+<sly data-sly-test="${image.imagePath}">
     <sly data-sly-test="${image.caption}">
         <figure>
             <sly data-sly-test="${image.href}">
@@ -28,7 +28,7 @@
                     <img
                             class="${image.inlineVariations}"
                             style="max-width: 100%;"
-                            src="${image.src @ context='uri'}"
+                            src="${image.imagePath @ context='uri'}"
                             alt="${image.altText}"
                             title="${image.imageTitle}" />
                 </a>
@@ -37,7 +37,7 @@
                 <img
                         class="${image.inlineVariations}"
                         style="max-width: 100%;"
-                        src="${image.src @ context='uri'}"
+                        src="${image.imagePath @ context='uri'}"
                         alt="${image.altText}"
                         title="${image.imageTitle}" />
             </sly>
@@ -53,7 +53,7 @@
                 <img
                         class="${image.inlineVariations}"
                         style="max-width: 100%;"
-                        src="${image.src @ context='uri'}"
+                        src="${image.imagePath @ context='uri'}"
                         alt="${image.altText}"
                         title="${image.imageTitle}" />
             </a>
@@ -62,7 +62,7 @@
             <img
                     class="${image.inlineVariations}"
                     style="max-width: 100%;"
-                    src="${image.src @ context='uri'}"
+                    src="${image.imagePath @ context='uri'}"
                     alt="${image.altText}"
                     title="${image.imageTitle}" />
         </sly>

@@ -11,12 +11,6 @@ import org.apache.sling.models.annotations.Model;
 @Model(adaptables = SlingHttpServletRequest.class)
 public class TextStaticDataSource extends BaseSlingModelDataSource implements KestrosText {
 
-  @Nonnull
-  @Override
-  public TextElementType getType() {
-    return null;
-  }
-
   @Nullable
   @Override
   public String getText() {

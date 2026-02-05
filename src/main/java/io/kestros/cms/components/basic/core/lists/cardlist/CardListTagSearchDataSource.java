@@ -38,7 +38,7 @@ public class CardListTagSearchDataSource {
 //                new KestrosCardImpl(page.getDisplayTitle(), page.getDisplayDescription(), null,
 //                        null,
 //                        getResourceResolver(), getUiFramework(), getPath(),
-//                        KestrosBasicComponentElement.getAppliedVariations("cardVariations",
+//                        getElementVariations("cardVariations",
 //                                getResource(),
 //                                "/libs/kestros/commons/components/content/card",
 //                                getUiFramework(),

@@ -69,6 +69,24 @@ public class ImageStaticDataSource extends BaseSlingModelDataSource implements K
     return getResource().getValueMap().get("anchorTitle", String.class);
   }
 
+  @Nullable
+  @Override
+  public String getRel() {
+    return "";
+  }
+
+  @Nullable
+  @Override
+  public String getAriaDescribedBy() {
+    return "";
+  }
+
+  @Nullable
+  @Override
+  public String getLang() {
+    return "";
+  }
+
   @Nonnull
   @Override
   public AnchorTarget getTarget() {

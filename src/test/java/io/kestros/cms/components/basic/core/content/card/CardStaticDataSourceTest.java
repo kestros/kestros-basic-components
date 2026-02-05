@@ -45,7 +45,13 @@ public class CardStaticDataSourceTest extends BaseDataSourceTest {
 
   @Test
   public void testGetTitle() {
-    assertEquals("Test Title", cardStaticDataSource.getTitle());
+    properties.put("text", "Test Title");
+    properties.put("headingLevel", "h3");
+    resource = context.create().resource("/content/card/static/card2", properties);
+    context.request().setResource(resource);
+    cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
+
+    assertEquals("Test Title", cardStaticDataSource.getTitle().getValueMap().get("text", String.class));
   }
 
   @Test

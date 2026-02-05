@@ -7,9 +7,11 @@ import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
 import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosButtonGroup;
 import io.kestros.cms.components.basic.api.content.KestrosCard;
+import io.kestros.cms.components.basic.api.content.KestrosHeading;
 import io.kestros.cms.components.basic.api.content.KestrosImage;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.components.basic.core.BaseContainerSlingModelDataSource;
+import io.kestros.cms.components.basic.core.content.heading.KestrosHeadingImpl;
 import io.kestros.cms.components.basic.core.content.image.KestrosImageImpl;
 import io.kestros.cms.componenttypes.api.models.ComponentVariation;
 import java.util.List;
@@ -28,18 +30,28 @@ public class CardAssetDataSource extends BaseContainerSlingModelDataSource imple
 
   @Nullable
   @Override
-  public String getTitle() {
+  public String getDescription() {
     if (getAsset() != null) {
-      return getAsset().getTitle();
+      return getAsset().getDescription();
     }
     return null;
   }
 
   @Nullable
   @Override
-  public String getDescription() {
+  public KestrosHeading getTitleElement() {
     if (getAsset() != null) {
-      return getAsset().getDescription();
+      String title = getAsset().getTitle();
+      String headingLevel = getResource().getValueMap().get("headingLevel", "h1");
+      try {
+        return new KestrosHeadingImpl(title, headingLevel,
+            this,
+            "title",
+            "titleElement");
+      } catch (ComponentConfigurationException e) {
+        // do nothing.
+      }
+      return null;
     }
     return null;
   }
@@ -59,18 +71,12 @@ public class CardAssetDataSource extends BaseContainerSlingModelDataSource imple
         AnchorTarget target = AnchorTarget.SAME_WINDOW;
         String id = null;
         List<ComponentVariation> componentVariations
-                = KestrosBasicComponentElement.getAppliedVariations("imageVariations",
-                getResource(), KestrosImage.RESOURCE_TYPE,
-                getUiFramework(), getComponentVariationRetrievalService(),
-                getComponentUiFrameworkViewRetrievalService());
-        String layout = KestrosBasicComponentElement.getLayout("imageLayout",
-                getResource());
+            = getElementVariations("imageVariations", KestrosImage.RESOURCE_TYPE);
+        String layout = getLayout("image");
         try {
           return new KestrosImageImpl(imagePath, altText, caption,
-                  imageTitle, href, ariaLabel,
-                  anchorTitle, target, getResourceResolver(),
-                  getUiFramework(), getPath(), componentVariations,
-                  layout, id, "imageElement");
+              imageTitle, href, ariaLabel,
+              anchorTitle, target, this, "image", "imageElement");
         } catch (ComponentConfigurationException e) {
           throw new RuntimeException(e);
         }

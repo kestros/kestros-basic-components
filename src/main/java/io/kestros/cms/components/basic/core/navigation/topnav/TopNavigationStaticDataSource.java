@@ -1,0 +1,28 @@
+package io.kestros.cms.components.basic.core.navigation.topnav;
+
+import io.kestros.cms.components.basic.api.content.KestrosImage;
+import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
+import io.kestros.cms.components.basic.api.navigation.KestrosTopNavigation;
+import io.kestros.cms.components.basic.core.content.image.KestrosImageImpl;
+import io.kestros.cms.components.basic.core.navigation.nav.NavigationStaticDataSource;
+import javax.annotation.Nullable;
+import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.models.annotations.Model;
+
+@Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
+public class TopNavigationStaticDataSource extends NavigationStaticDataSource implements KestrosTopNavigation {
+  @Nullable
+  @Override
+  public KestrosImage getLogo() {
+    Resource imageResource = getResource().getChild("imageElement");
+    if (imageResource == null) {
+      imageResource = getResource();
+    }
+    try {
+      return new KestrosImageImpl(imageResource, this, "image", "imageElement");
+    } catch (ComponentConfigurationException e) {
+      return null;
+    }
+  }
+}

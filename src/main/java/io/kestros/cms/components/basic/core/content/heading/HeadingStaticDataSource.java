@@ -8,8 +8,8 @@ import org.apache.sling.models.annotations.Model;
 @Model(adaptables = SlingHttpServletRequest.class)
 public class HeadingStaticDataSource extends BaseSlingModelDataSource implements KestrosHeading {
   @Override
-  public String getText() {
-    return getResource().getValueMap().get("text", String.class);
+  public String getHeadingText() {
+    return getResource().getValueMap().get("headingText", String.class);
   }
 
   @Override

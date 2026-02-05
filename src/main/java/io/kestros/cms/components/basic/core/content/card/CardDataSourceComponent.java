@@ -3,6 +3,7 @@ package io.kestros.cms.components.basic.core.content.card;
 import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
 import io.kestros.cms.components.basic.api.content.KestrosButtonGroup;
 import io.kestros.cms.components.basic.api.content.KestrosCard;
+import io.kestros.cms.components.basic.api.content.KestrosHeading;
 import io.kestros.cms.components.basic.api.content.KestrosImage;
 import io.kestros.cms.components.basic.core.BaseContainerDataSourceComponent;
 import java.util.List;
@@ -16,16 +17,17 @@ import org.apache.sling.models.annotations.Model;
 public class CardDataSourceComponent extends
         BaseContainerDataSourceComponent<KestrosCard> implements KestrosCard {
 
-  private String title;
   private String description;
+  private KestrosHeading title;
   private KestrosImage image;
   private KestrosButtonGroup buttonGroup;
 
+
   @Nullable
   @Override
-  public String getTitle() {
+  public KestrosHeading getTitleElement() {
     if (title == null) {
-      title = getComponentData().getTitle();
+      title = getComponentData().getTitleElement();
     }
     return title;
   }

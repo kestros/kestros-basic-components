@@ -7,6 +7,12 @@
   "container": false,
   "nested": {
     "jcr:primaryType": "nt:unstructured",
+    "title": {
+      "jcr:primaryType": "nt:unstructured",
+      "title": "Title",
+      "resourceType": "/libs/kestros/commons/components/content/heading",
+      "name": "title"
+    },
     "image": {
       "jcr:primaryType": "nt:unstructured",
       "title": "Image",

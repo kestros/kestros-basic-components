@@ -5,12 +5,14 @@ import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosButton;
 import io.kestros.cms.components.basic.api.content.KestrosButtonGroup;
 import io.kestros.cms.components.basic.api.content.KestrosCard;
+import io.kestros.cms.components.basic.api.content.KestrosHeading;
 import io.kestros.cms.components.basic.api.content.KestrosImage;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.components.basic.core.BaseContainerSlingModelDataSource;
 import io.kestros.cms.components.basic.core.LinkUtils;
 import io.kestros.cms.components.basic.core.content.button.KestrosButtonImpl;
 import io.kestros.cms.components.basic.core.content.buttongroup.KestrosButtonGroupImpl;
+import io.kestros.cms.components.basic.core.content.heading.KestrosHeadingImpl;
 import io.kestros.cms.components.basic.core.content.image.KestrosImageImpl;
 import io.kestros.cms.componenttypes.api.models.ComponentVariation;
 import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
@@ -27,11 +29,21 @@ public class CardPageDataSource extends BaseContainerSlingModelDataSource implem
 
   private BaseContentPage page;
 
+
   @Nullable
   @Override
-  public String getTitle() {
+  public KestrosHeading getTitleElement() {
     if (getPage() != null) {
-      return getPage().getDisplayTitle();
+      String title = getPage().getDisplayTitle();
+      String headingLevel = getResource().getValueMap().get("headingLevel", "h1");
+      try {
+        return new KestrosHeadingImpl(title, headingLevel,
+            this,
+            "title",
+            "titleElement");
+      } catch (ComponentConfigurationException e) {
+        // do nothing.
+      }
     }
     return null;
   }
@@ -60,18 +72,14 @@ public class CardPageDataSource extends BaseContainerSlingModelDataSource implem
         AnchorTarget target = AnchorTarget.SAME_WINDOW;
         String id = null;
         List<ComponentVariation> componentVariations
-                = KestrosBasicComponentElement.getAppliedVariations("imageVariations",
-                getResource(), KestrosImage.RESOURCE_TYPE,
-                getUiFramework(), getComponentVariationRetrievalService(),
-                getComponentUiFrameworkViewRetrievalService());
-        String layout = KestrosBasicComponentElement.getLayout("imageLayout",
-                getResource());
+            = getElementVariations("imageVariations",
+            KestrosImage.RESOURCE_TYPE);
+        String layout = getLayout("image");
         try {
           return new KestrosImageImpl(imagePath, altText, caption,
-                  imageTitle, href, ariaLabel,
-                  anchorTitle, target, getResourceResolver(),
-                  getUiFramework(), getPath(), componentVariations,
-                  layout, id, "imageElement");
+              imageTitle, href, ariaLabel,
+              anchorTitle, target,
+              this, "image", "imageElement");
         } catch (ComponentConfigurationException e) {
           throw new RuntimeException(e);
         }
@@ -96,45 +104,16 @@ public class CardPageDataSource extends BaseContainerSlingModelDataSource implem
         String ariaDescribedBy = null;
         String lang = null;
         boolean disabled = false;
-        String buttonLayout = KestrosBasicComponentElement.getLayout("buttonLayout",
-                getResource());
+        String buttonLayout = getLayout("button");
         String buttonId = null;
         buttons.add(new KestrosButtonImpl(text, href, title,
-                target, rel, ariaLabel,
-                ariaDescribedBy, lang, disabled,
-                getResourceResolver(), getUiFramework(),
-                getPath(),
-                KestrosBasicComponentElement.getAppliedVariations("buttonVariations",
-                        getResource(),
-                        KestrosButton.RESOURCE_TYPE,
-                        getUiFramework(),
-                        getComponentVariationRetrievalService(),
-                        getComponentUiFrameworkViewRetrievalService()),
-                buttonLayout, buttonId, "buttonGroup"));
-        List<ComponentVariation> buttonVariations
-                = KestrosBasicComponentElement.getAppliedVariations(
-                "buttonVariations",
-                getResource(),
-                KestrosButton.RESOURCE_TYPE,
-                getUiFramework(),
-                getComponentVariationRetrievalService(),
-                getComponentUiFrameworkViewRetrievalService());
-        List<ComponentVariation> componentVariations
-                = KestrosBasicComponentElement.getAppliedVariations("buttonGroupVariations",
-                getResource(),
-                KestrosButtonGroup.RESOURCE_TYPE,
-                getUiFramework(),
-                getComponentVariationRetrievalService(),
-                getComponentUiFrameworkViewRetrievalService());
-        String buttonGroupLayout = KestrosBasicComponentElement.getLayout("buttonGroupLayout",
-                getResource());
-        String id = null;
+            target, rel, ariaLabel,
+            ariaDescribedBy, lang, disabled,
+            this,
+            "button", "buttonElement"));
         return new KestrosButtonGroupImpl(buttons,
-                buttonVariations,
-                getResourceResolver(), getUiFramework(),
-                getPath(),
-                componentVariations,
-                buttonGroupLayout, id, "buttonGroup");
+            this,
+            "buttonGroup", "buttonGroupElement");
       } catch (ComponentConfigurationException e) {
         throw new RuntimeException(e);
       }

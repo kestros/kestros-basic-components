@@ -45,7 +45,7 @@ public class CardAssetDataSourceTest extends BaseDataSourceTest {
 
   @Test
   public void testGetTitle() {
-    assertEquals("Asset 1 Title", cardAssetDataSource.getTitle());
+    assertEquals("Asset 1 Title", cardAssetDataSource.getTitle().getValueMap().get("headingText", String.class));
   }
 
   @Test

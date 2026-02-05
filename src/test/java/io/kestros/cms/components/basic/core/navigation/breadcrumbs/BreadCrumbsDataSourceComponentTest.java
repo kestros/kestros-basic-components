@@ -1,0 +1,99 @@
+package io.kestros.cms.components.basic.core.navigation.breadcrumbs;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import io.kestros.cms.assets.api.exceptions.AssetCollectionRetrievalException;
+import io.kestros.cms.components.basic.api.content.KestrosAlert;
+import io.kestros.cms.components.basic.api.navigation.KestrosBreadCrumb;
+import io.kestros.cms.components.basic.api.navigation.KestrosBreadCrumbs;
+import io.kestros.cms.components.basic.core.BaseDataSourceComponentTest;
+import java.util.HashMap;
+import java.util.Map;
+import org.apache.sling.api.resource.Resource;
+import org.junit.Test;
+
+public class BreadCrumbsDataSourceComponentTest extends BaseDataSourceComponentTest {
+  private BreadCrumbsDataSourceComponent breadCrumbs;
+  private Resource resource;
+  private Map<String, Object> properties = new HashMap<>();
+
+  @Override
+  public String getResourceType() {
+    return KestrosBreadCrumbs.RESOURCE_TYPE;
+  }
+
+  @Override
+  public void doComponentSetup() throws AssetCollectionRetrievalException {
+    setupSamplePage("/content/sites/page", null);
+    properties.put("sling:resourceType", KestrosBreadCrumbs.RESOURCE_TYPE);
+    properties.put("kes:datasource", "default");
+
+    resource = context.create().resource("/content/sites/page/child-3/jcr:content/breadcrumbs",
+        properties);
+    context.request().setResource(resource);
+
+    breadCrumbs = context.request().adaptTo(BreadCrumbsDataSourceComponent.class);
+  }
+
+  @Override
+  public void testToSyntheticResource() {
+    assertNotNull(breadCrumbs.toSyntheticResource(context.resourceResolver(), "/synthetics/content/sites/page/child-3/jcr:content"));
+
+  }
+
+  @Test
+  public void testGetLinks() {
+    context.request().setPathInfo("/content/sites/page/child-3.html");
+    assertEquals(2, breadCrumbs.getLinks().size());
+    assertEquals("/synthetics/content/sites/page/child-3/jcr:content/breadcrumbs/page", breadCrumbs.getLinks().get(0).getPath());
+    assertEquals("_self", breadCrumbs.getLinks().get(0).getTargetAsString());
+    assertEquals("/content/sites/page.html", breadCrumbs.getLinks().get(0).getHref());
+    assertEquals(null, breadCrumbs.getLinks().get(0).getLang());
+    assertEquals(null, breadCrumbs.getLinks().get(0).getRel());
+    assertEquals(null, breadCrumbs.getLinks().get(0).getTitle());
+    assertEquals("Title", breadCrumbs.getLinks().get(0).getText());
+    assertEquals(null, breadCrumbs.getLinks().get(0).getAriaLabel());
+    assertEquals(null, breadCrumbs.getLinks().get(0).getAriaDescribedBy());
+    
+    Resource link0Resource = breadCrumbs.getLinks().get(0).toSyntheticResource(
+        context.resourceResolver(), "/synthetics/content/sites/page/child-3/jcr:content/breadcrumbs/page");
+    assertNotNull(link0Resource);
+    Resource link1Resource = breadCrumbs.getLinks().get(1).toSyntheticResource(
+        context.resourceResolver(), "/synthetics/content/sites/page/child-3/jcr:content/breadcrumbs/page");
+    assertNotNull(link1Resource);
+
+    context.request().setResource(link0Resource);
+    KestrosBreadCrumb crumb0 = link0Resource.adaptTo(BreadCrumbDataSourceComponent.class);
+
+    assertEquals("/synthetics/content/sites/page/child-3/jcr:content/breadcrumbs/page/page", crumb0.getPath());
+    assertTrue(crumb0.isFirstItem());
+    assertFalse(crumb0.isLastItem());
+    assertEquals("_self", crumb0.getTargetAsString());
+    assertEquals("/content/sites/page.html", crumb0.getHref());
+    assertEquals(null, crumb0.getLang());
+    assertEquals(null, crumb0.getRel());
+    assertEquals(null, crumb0.getTitle());
+    assertEquals("Title", crumb0.getText());
+    assertEquals(null, crumb0.getAriaLabel());
+    assertEquals(null, crumb0.getAriaDescribedBy());
+
+    context.request().setResource(link1Resource);
+    KestrosBreadCrumb crumb1 = link1Resource.adaptTo(BreadCrumbDataSourceComponent.class);
+
+    assertEquals("/synthetics/content/sites/page/child-3/jcr:content/breadcrumbs/page/child-3", crumb1.getPath());
+    assertFalse(crumb1.isFirstItem());
+    assertTrue(crumb1.isLastItem());
+    assertEquals("_self", crumb1.getTargetAsString());
+    assertEquals("/content/sites/page/child-3.html", crumb1.getHref());
+    assertEquals(null, crumb1.getLang());
+    assertEquals(null, crumb1.getRel());
+    assertEquals(null, crumb1.getTitle());
+    assertEquals("Title", crumb1.getText());
+    assertEquals(null, crumb1.getAriaLabel());
+    assertEquals(null, crumb1.getAriaDescribedBy());
+
+  }
+}
