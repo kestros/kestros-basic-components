@@ -60,6 +60,11 @@ public abstract class BaseSlingModelDataSource
     return resource;
   }
 
+  @Nullable
+  public SlingHttpServletRequest getRequest() {
+    return slingHttpServletRequest;
+  }
+
   @JsonIgnore
   public BaseContentPage getCurrentOrContainingPage() {
     BaseContentPage currentPage = null;

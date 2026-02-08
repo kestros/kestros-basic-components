@@ -155,12 +155,24 @@ public abstract class BaseComponentTest {
     dataSourceMap.put("/libs/kestros/commons/components/navigation/navigation",
             navigationDataSources);
 
+    Map<String, String> navigationItemDataSources = new HashMap<>();
+    navigationItemDataSources.put("default",
+        "io.kestros.cms.components.basic.core.navigation.nav.NavigationItemStaticDataSource");
+    dataSourceMap.put("/libs/kestros/commons/components/navigation/navigation-item",
+        navigationItemDataSources);
+
 //    top-navigation
     Map<String, String> topNavigationDataSources = new HashMap<>();
-    navigationDataSources.put("default",
+    topNavigationDataSources.put("default",
             "io.kestros.cms.components.basic.core.navigation.topnav.TopNavigationStaticDataSource");
     dataSourceMap.put("/libs/kestros/commons/components/navigation/top-navigation",
             topNavigationDataSources);
+
+    Map<String, String> topNavigationItemDataSources = new HashMap<>();
+    topNavigationItemDataSources.put("default",
+        "io.kestros.cms.components.basic.core.navigation.topnav.TopNavigationItemStaticDataSource");
+    dataSourceMap.put("/libs/kestros/commons/components/navigation/top-navigation-item",
+        topNavigationItemDataSources);
 //
     // accordion
     Map<String, String> accordionPanelDataSources = new HashMap<>();

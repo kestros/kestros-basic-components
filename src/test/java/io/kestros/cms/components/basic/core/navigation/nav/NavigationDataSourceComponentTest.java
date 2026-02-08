@@ -6,6 +6,8 @@ import static org.junit.Assert.assertNotNull;
 import io.kestros.cms.assets.api.exceptions.AssetCollectionRetrievalException;
 import io.kestros.cms.components.basic.api.content.KestrosLink;
 import io.kestros.cms.components.basic.api.navigation.KestrosNavigation;
+import io.kestros.cms.components.basic.api.navigation.KestrosNavigationItem;
+import io.kestros.cms.components.basic.api.navigation.KestrosTopNavigationItem;
 import io.kestros.cms.components.basic.core.BaseDataSourceComponentTest;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +36,7 @@ public class NavigationDataSourceComponentTest extends BaseDataSourceComponentTe
         properties);
     context.request().setResource(resource);
 
-    linkProperties.put("sling:resourceType", KestrosLink.RESOURCE_TYPE);
+    linkProperties.put("sling:resourceType", KestrosNavigationItem.RESOURCE_TYPE);
     context.create().resource("/content/sites/page/child-3/jcr:content/nav/link-1",
         linkProperties);
     context.create().resource("/content/sites/page/child-3/jcr:content/nav/link-2",

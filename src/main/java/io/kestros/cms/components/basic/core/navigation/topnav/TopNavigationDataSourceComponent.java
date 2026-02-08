@@ -1,8 +1,8 @@
 package io.kestros.cms.components.basic.core.navigation.topnav;
 
 import io.kestros.cms.components.basic.api.content.KestrosImage;
-import io.kestros.cms.components.basic.api.content.KestrosLink;
 import io.kestros.cms.components.basic.api.navigation.KestrosTopNavigation;
+import io.kestros.cms.components.basic.api.navigation.KestrosTopNavigationItem;
 import io.kestros.cms.components.basic.core.BaseContainerDataSourceComponent;
 import java.util.List;
 import javax.annotation.Nonnull;
@@ -15,16 +15,24 @@ import org.apache.sling.models.annotations.Model;
 public class TopNavigationDataSourceComponent
     extends BaseContainerDataSourceComponent<KestrosTopNavigation> implements KestrosTopNavigation {
 
+  private List<KestrosTopNavigationItem> navigationLinks;
+  private KestrosImage logo;
 
   @Nonnull
   @Override
-  public List<KestrosLink> getNavigationLinks() {
-    return getComponentData().getNavigationLinks();
+  public List<KestrosTopNavigationItem> getNavigationLinks() {
+    if (navigationLinks == null) {
+      navigationLinks = getComponentData().getNavigationLinks();
+    }
+    return navigationLinks;
   }
 
   @Nullable
   @Override
   public KestrosImage getLogo() {
-    return getComponentData().getLogo();
+    if (logo == null) {
+      logo = getComponentData().getLogo();
+    }
+    return logo;
   }
 }

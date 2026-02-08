@@ -1,9 +1,10 @@
 package io.kestros.cms.components.basic.core.navigation.nav;
 
-import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
 import io.kestros.cms.components.basic.api.content.KestrosLink;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.components.basic.api.navigation.KestrosNavigation;
+import io.kestros.cms.components.basic.api.navigation.KestrosNavigationItem;
+import io.kestros.cms.components.basic.api.navigation.KestrosTopNavigationItem;
 import io.kestros.cms.components.basic.core.BaseContainerSyntheticResource;
 import io.kestros.cms.components.basic.core.BaseSlingModelDataSource;
 import java.util.ArrayList;
@@ -13,10 +14,10 @@ import javax.annotation.Nonnull;
 public class KestrosNavigationImpl extends BaseContainerSyntheticResource
     implements KestrosNavigation {
 
-  private List<KestrosLink> navigationLinks;
+  private List<KestrosNavigationItem> navigationLinks;
 
   public KestrosNavigationImpl(
-      @Nonnull List<KestrosLink> navigationLinks,
+      @Nonnull List<KestrosNavigationItem> navigationLinks,
       @Nonnull BaseSlingModelDataSource dataSource,
       @Nonnull String resourcePrefix, String forcedResourceName)
       throws ComponentConfigurationException {
@@ -26,7 +27,7 @@ public class KestrosNavigationImpl extends BaseContainerSyntheticResource
 
   @Nonnull
   @Override
-  public List<KestrosLink> getNavigationLinks() {
+  public List<KestrosNavigationItem> getNavigationLinks() {
     return new ArrayList<>(navigationLinks);
   }
 }

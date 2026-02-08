@@ -6,10 +6,11 @@ import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationExce
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 
-public abstract class BaseContainerSyntheticResource extends BaseSyntheticResource implements
-                                                                                   KestrosContainerElement {
+public abstract class BaseContainerSyntheticResource extends BaseSyntheticResource implements KestrosContainerElement {
 
   public BaseContainerSyntheticResource(
       @Nonnull BaseSlingModelDataSource dataSource,
@@ -27,4 +28,5 @@ public abstract class BaseContainerSyntheticResource extends BaseSyntheticResour
     }
     return children;
   }
+
 }

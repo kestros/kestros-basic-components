@@ -1,13 +1,14 @@
 {
   "jcr:primaryType": "kes:ComponentType",
-  "jcr:title": "Top Navigation",
+  "jcr:title": "Top Navigation Item",
   "jcr:description": "",
-  "componentGroup": "Navigation Components",
+  "componentGroup": ".hidden",
   "sling:resourceSuperType": "kestros/commons/components/content-area",
   "editable": true,
-  "container": true,
+  "container": false,
   "unwrap": true,
   "kes:allowedComponents": [
+    "!type:container",
     "*top-navigation-item*"
   ],
   "nested": {

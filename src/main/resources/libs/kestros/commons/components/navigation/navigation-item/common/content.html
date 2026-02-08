@@ -15,9 +15,10 @@
   ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
   ~
   */-->
-<sly data-sly-use.topNav="${'io.kestros.cms.components.basic.core.navigation.topnav.TopNavigationDataSourceComponent'}"/>
 
-<ul class="${topNav.inlineVariations}"
-    data-sly-list.navItem="${topNav.children}">
+<sly data-sly-use.navigation="${'io.kestros.cms.components.basic.core.navigation.nav.NavigationDataSourceComponent'}"/>
+
+<ul class="${navigation.inlineVariations}"
+    data-sly-list.navItem="${navigation.children}">
     <sly data-sly-resource="${navItem}"/>
 </ul>

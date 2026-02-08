@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 
@@ -26,11 +27,13 @@ public abstract class BaseSyntheticResource extends BaseComponentElement
   private String resourceName;
   private ComponentVariationRetrievalService componentVariationRetrievalService;
   private ComponentUiFrameworkViewRetrievalService componentUiFrameworkViewRetrievalService;
+  private BaseSlingModelDataSource dataSource;
 
   public BaseSyntheticResource(
       @Nonnull BaseSlingModelDataSource dataSource,
       @Nonnull String resourcePrefix, @Nullable String forcedResourceName) throws
       ComponentConfigurationException {
+    this.dataSource = dataSource;
     this.resourceResolver = dataSource.getResourceResolver();
     this.parentPath = dataSource.getResource().getPath();
     this.uiFramework = dataSource.getUiFramework();
@@ -49,7 +52,6 @@ public abstract class BaseSyntheticResource extends BaseComponentElement
     this.componentUiFrameworkViewRetrievalService =
         dataSource.getComponentUiFrameworkViewRetrievalService();
   }
-
 
   @Nonnull
   @Override
@@ -73,6 +75,12 @@ public abstract class BaseSyntheticResource extends BaseComponentElement
       syntheticResource = toSyntheticResource(resourceResolver, parentPath);
     }
     return syntheticResource;
+  }
+
+  @Nullable
+  @Override
+  public SlingHttpServletRequest getRequest() {
+    return dataSource.getRequest();
   }
 
   @Nullable

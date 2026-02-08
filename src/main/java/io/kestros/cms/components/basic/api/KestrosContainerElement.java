@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 
@@ -16,6 +17,8 @@ public interface KestrosContainerElement extends KestrosBasicComponentElement {
   @JsonIgnore
   @Nonnull
   Resource getResource();
+
+
 
   @JsonIgnore
   @Nonnull

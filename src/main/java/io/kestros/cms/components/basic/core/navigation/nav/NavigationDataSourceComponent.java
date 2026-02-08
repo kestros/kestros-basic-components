@@ -2,6 +2,7 @@ package io.kestros.cms.components.basic.core.navigation.nav;
 
 import io.kestros.cms.components.basic.api.content.KestrosLink;
 import io.kestros.cms.components.basic.api.navigation.KestrosNavigation;
+import io.kestros.cms.components.basic.api.navigation.KestrosNavigationItem;
 import io.kestros.cms.components.basic.core.BaseContainerDataSourceComponent;
 import java.util.List;
 import javax.annotation.Nonnull;
@@ -16,7 +17,7 @@ public class NavigationDataSourceComponent
 
   @Nonnull
   @Override
-  public List<KestrosLink> getNavigationLinks() {
+  public List<KestrosNavigationItem> getNavigationLinks() {
     return getComponentData().getNavigationLinks();
   }
 }

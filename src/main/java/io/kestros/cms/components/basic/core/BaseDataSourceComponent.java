@@ -111,7 +111,6 @@ public abstract class BaseDataSourceComponent<T extends KestrosBasicComponentEle
           childResources.put(childSyntheticResource.getName(), childSyntheticResource);
         }
         syntheticResource = new SyntheticResourceWrapper(syntheticResource, childResources);
-
       }
     }
 

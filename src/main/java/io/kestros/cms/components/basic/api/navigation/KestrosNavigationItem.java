@@ -2,15 +2,13 @@ package io.kestros.cms.components.basic.api.navigation;
 
 import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
 import io.kestros.cms.components.basic.api.KestrosContainerElement;
-import io.kestros.cms.components.basic.api.content.KestrosImage;
+import io.kestros.cms.components.basic.api.content.KestrosLink;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
-public interface KestrosTopNavigation extends KestrosContainerElement {
-
-  String RESOURCE_TYPE = "/libs/kestros/commons/components/navigation/top-navigation";
+public interface KestrosNavigationItem extends KestrosLink, KestrosContainerElement {
+  String RESOURCE_TYPE = "/libs/kestros/commons/components/navigation/navigation-item";
 
   @Nonnull
   @Override
@@ -19,15 +17,10 @@ public interface KestrosTopNavigation extends KestrosContainerElement {
   }
 
   @Nonnull
-  List<KestrosTopNavigationItem> getNavigationLinks();
-
-  @Nullable
-  KestrosImage getLogo();
+  List<KestrosNavigationItem> getNavigationItems();
 
   @Nonnull
-  @Override
   default List<KestrosBasicComponentElement> getChildElements() {
-    return new ArrayList<>(getNavigationLinks());
+    return new ArrayList<>(getNavigationItems());
   }
-
 }

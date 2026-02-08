@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.StringJoiner;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 
@@ -97,6 +98,10 @@ public interface KestrosBasicComponentElement {
 
   @JsonIgnore
   Resource getResource();
+
+  @JsonIgnore
+  @Nullable
+  SlingHttpServletRequest getRequest();
 
   @JsonIgnore
   ResourceResolver getResourceResolver();

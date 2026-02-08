@@ -8,6 +8,7 @@ import io.kestros.cms.assets.api.exceptions.AssetCollectionRetrievalException;
 import io.kestros.cms.components.basic.api.content.KestrosLink;
 import io.kestros.cms.components.basic.api.navigation.KestrosNavigation;
 import io.kestros.cms.components.basic.api.navigation.KestrosTopNavigation;
+import io.kestros.cms.components.basic.api.navigation.KestrosTopNavigationItem;
 import io.kestros.cms.components.basic.core.BaseDataSourceComponentTest;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +31,7 @@ public class TopNavigationDataSourceComponentTest extends BaseDataSourceComponen
   public void doComponentSetup() throws AssetCollectionRetrievalException {
     setupSamplePage("/content/sites/page", null);
 
-    properties.put("sling:resourceType", KestrosNavigation.RESOURCE_TYPE);
+    properties.put("sling:resourceType", KestrosTopNavigation.RESOURCE_TYPE);
     properties.put("kes:datasource", "default");
 
     resource = context.create().resource("/content/sites/page/child-3/jcr:content/top-nav",
@@ -38,7 +39,7 @@ public class TopNavigationDataSourceComponentTest extends BaseDataSourceComponen
     context.request().setResource(resource);
     topNavigation = context.request().adaptTo(TopNavigationDataSourceComponent.class);
 
-    linkProperties.put("sling:resourceType", KestrosLink.RESOURCE_TYPE);
+    linkProperties.put("sling:resourceType", KestrosTopNavigationItem.RESOURCE_TYPE);
     context.create().resource("/content/sites/page/child-3/jcr:content/top-nav/link-1",
         linkProperties);
     context.create().resource("/content/sites/page/child-3/jcr:content/top-nav/link-2",
