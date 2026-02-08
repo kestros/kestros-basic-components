@@ -23,7 +23,11 @@ public class VideoStaticDataSource extends BaseSlingModelDataSource implements K
   @Nullable
   @Override
   public String getVideoSource() {
-    return getVideoPath();
+    try {
+      return getVideoAsset().getPath();
+    } catch (AssetRetrievalException e) {
+      return null;
+    }
   }
 
   @Nonnull

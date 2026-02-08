@@ -1,6 +1,6 @@
 package io.kestros.cms.components.basic.core.content.card;
 
-import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
+import io.kestros.cms.assets.api.services.AssetRetrievalService;
 import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosButton;
 import io.kestros.cms.components.basic.api.content.KestrosButtonGroup;
@@ -23,12 +23,17 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.Optional;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class CardPageDataSource extends BaseContainerSlingModelDataSource implements KestrosCard {
 
   private BaseContentPage page;
 
+  @OSGiService
+  @Optional
+  private AssetRetrievalService assetRetrievalService;
 
   @Nullable
   @Override
@@ -38,9 +43,9 @@ public class CardPageDataSource extends BaseContainerSlingModelDataSource implem
       String headingLevel = getResource().getValueMap().get("headingLevel", "h1");
       try {
         return new KestrosHeadingImpl(title, headingLevel,
-            this,
-            "title",
-            "titleElement");
+                this,
+                "title",
+                "titleElement");
       } catch (ComponentConfigurationException e) {
         // do nothing.
       }
@@ -72,14 +77,14 @@ public class CardPageDataSource extends BaseContainerSlingModelDataSource implem
         AnchorTarget target = AnchorTarget.SAME_WINDOW;
         String id = null;
         List<ComponentVariation> componentVariations
-            = getElementVariations("imageVariations",
-            KestrosImage.RESOURCE_TYPE);
+                = getElementVariations("imageVariations",
+                KestrosImage.RESOURCE_TYPE);
         String layout = getLayout("image");
         try {
           return new KestrosImageImpl(imagePath, altText, caption,
-              imageTitle, href, ariaLabel,
-              anchorTitle, target,
-              this, "image", "imageElement");
+                  imageTitle, href, ariaLabel,
+                  anchorTitle, target,
+                  this, "image", "imageElement", assetRetrievalService);
         } catch (ComponentConfigurationException e) {
           throw new RuntimeException(e);
         }
@@ -107,13 +112,13 @@ public class CardPageDataSource extends BaseContainerSlingModelDataSource implem
         String buttonLayout = getLayout("button");
         String buttonId = null;
         buttons.add(new KestrosButtonImpl(text, href, title,
-            target, rel, ariaLabel,
-            ariaDescribedBy, lang, disabled,
-            this,
-            "button", "buttonElement"));
+                target, rel, ariaLabel,
+                ariaDescribedBy, lang, disabled,
+                this,
+                "button", "buttonElement"));
         return new KestrosButtonGroupImpl(buttons,
-            this,
-            "buttonGroup", "buttonGroupElement");
+                this,
+                "buttonGroup", "buttonGroupElement");
       } catch (ComponentConfigurationException e) {
         throw new RuntimeException(e);
       }

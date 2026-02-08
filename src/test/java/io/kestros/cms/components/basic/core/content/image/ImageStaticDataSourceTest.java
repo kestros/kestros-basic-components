@@ -23,57 +23,75 @@ public class ImageStaticDataSourceTest extends BaseDataSourceTest {
     properties.put("imagePath", "/content/assets/collection/asset-1");
     resource = context.create().resource("/content/image/static/image", properties);
     context.request().setResource(resource);
-    imageStaticDataSource = context.request().adaptTo(ImageStaticDataSource.class);
+
   }
 
   @Override
   public void testToSyntheticResource() {
-
+    imageStaticDataSource = context.request().adaptTo(ImageStaticDataSource.class);
   }
 
   @Test
   public void testGetImageTitle() {
+    registerAssetRetrievalService();
+    imageStaticDataSource = context.request().adaptTo(ImageStaticDataSource.class);
     assertEquals("Asset 1 Title", imageStaticDataSource.getImageTitle());
   }
 
   @Test
   public void testGetImagePath() {
+    registerAssetRetrievalService();
+    imageStaticDataSource = context.request().adaptTo(ImageStaticDataSource.class);
     assertEquals("/content/assets/collection/asset-1",
             imageStaticDataSource.getImagePath());
   }
 
   @Test
   public void testGetHref() {
+    registerAssetRetrievalService();
+    imageStaticDataSource = context.request().adaptTo(ImageStaticDataSource.class);
     assertNull(imageStaticDataSource.getHref());
   }
 
   @Test
   public void testGetAriaLabel() {
+    registerAssetRetrievalService();
+    imageStaticDataSource = context.request().adaptTo(ImageStaticDataSource.class);
     assertNull(imageStaticDataSource.getAriaLabel());
   }
 
   @Test
   public void testGetAnchorTitle() {
+    registerAssetRetrievalService();
+    imageStaticDataSource = context.request().adaptTo(ImageStaticDataSource.class);
     assertNull(imageStaticDataSource.getAnchorTitle());
   }
 
   @Test
   public void testGetTarget() {
+    registerAssetRetrievalService();
+    imageStaticDataSource = context.request().adaptTo(ImageStaticDataSource.class);
     assertEquals(AnchorTarget.SAME_WINDOW, imageStaticDataSource.getTarget());
   }
 
   @Test
   public void testGetAltText() {
+    registerAssetRetrievalService();
+    imageStaticDataSource = context.request().adaptTo(ImageStaticDataSource.class);
     assertEquals("", imageStaticDataSource.getAltText());
   }
 
   @Test
   public void testGetCaption() {
+    registerAssetRetrievalService();
+    imageStaticDataSource = context.request().adaptTo(ImageStaticDataSource.class);
     assertNull(imageStaticDataSource.getCaption());
   }
 
   @Test
   public void testGetAsset() {
+    registerAssetRetrievalService();
+    imageStaticDataSource = context.request().adaptTo(ImageStaticDataSource.class);
     assertNotNull(imageStaticDataSource.getAsset());
   }
 

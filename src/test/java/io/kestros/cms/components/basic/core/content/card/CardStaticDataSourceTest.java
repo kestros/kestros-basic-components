@@ -35,33 +35,40 @@ public class CardStaticDataSourceTest extends BaseDataSourceTest {
 
     resource = context.create().resource("/content/card/static/card", properties);
     context.request().setResource(resource);
-    cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
+
   }
 
   @Override
   public void testToSyntheticResource() {
+    cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
     assertNotNull(cardStaticDataSource.toSyntheticResource(context.resourceResolver(), "/test"));
   }
 
   @Test
   public void testGetTitle() {
-    properties.put("text", "Test Title");
-    properties.put("headingLevel", "h3");
+    cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
+    properties.put("headingText", "Test Title");
+    properties.put("headingType", "h3");
     resource = context.create().resource("/content/card/static/card2", properties);
     context.request().setResource(resource);
     cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
 
-    assertEquals("Test Title", cardStaticDataSource.getTitle().getValueMap().get("text", String.class));
+    assertEquals("Test Title",
+            cardStaticDataSource.getTitle().getValueMap().get("headingText", String.class));
   }
 
   @Test
   public void testGetDescription() {
+    cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
     assertEquals("Test Description", cardStaticDataSource.getDescription());
   }
 
   @Test
-  public void testGetImageElement() {
-    properties.put("imagePath", "/content/dam/image.jpg");
+  public void testGetImageElement() throws AssetCollectionRetrievalException {
+    registerAssetRetrievalService();
+    cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
+    setUpSampleCollection("/content/assets/collection");
+    properties.put("imagePath", "/content/assets/collection/asset-1");
     properties.put("imageVariations", new String[]{"variation1", "variation2", "variation3"});
     resource = context.create().resource("/content/card/static/card2", properties);
     context.request().setResource(resource);
@@ -72,12 +79,26 @@ public class CardStaticDataSourceTest extends BaseDataSourceTest {
   }
 
   @Test
+  public void testGetImageElementWhenDoesNotExist() throws AssetCollectionRetrievalException {
+    cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
+    properties.put("imagePath", "/content/assets/collection/asset-1");
+    properties.put("imageVariations", new String[]{"variation1", "variation2", "variation3"});
+    resource = context.create().resource("/content/card/static/card2", properties);
+    context.request().setResource(resource);
+    cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
+    assertNull(cardStaticDataSource.getImageElement());
+    assertNull(cardStaticDataSource.getImage());
+  }
+
+  @Test
   public void testGetImageElementWhenNoImage() {
+    cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
     assertNull(cardStaticDataSource.getImageElement());
   }
 
   @Test
   public void testGetButtonGroupElement() {
+    cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
     properties.put("href", "/content/dam/image.jpg");
     resource = context.create().resource("/content/card/static/card2", properties);
     context.request().setResource(resource);
@@ -88,13 +109,17 @@ public class CardStaticDataSourceTest extends BaseDataSourceTest {
 
   @Test
   public void testGetButtonGroupElementWhenNoButtons() {
+    cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
     assertNull(cardStaticDataSource.getButtonGroupElement());
   }
 
   @Test
-  public void testGetChildren() {
+  public void testGetChildren() throws AssetCollectionRetrievalException {
+    registerAssetRetrievalService();
+    cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
+    setUpSampleCollection("/content/assets/collection");
     properties.put("href", "/content/dam/image.jpg");
-    properties.put("imagePath", "/content/dam/image.jpg");
+    properties.put("imagePath", "/content/assets/collection/asset-1");
     resource = context.create().resource("/content/card/static/card2", properties);
     context.request().setResource(resource);
     cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
@@ -103,84 +128,100 @@ public class CardStaticDataSourceTest extends BaseDataSourceTest {
 
   @Test
   public void testGetChildrenWhenNoChildren() {
+    cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
     assertEquals(0, cardStaticDataSource.getChildren().size());
   }
 
   @Test
   public void testGetId() {
+    cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
     assertEquals("id", cardStaticDataSource.getId());
   }
 
   @Test
   public void testIsSynthetic() {
+    cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
     assertFalse(cardStaticDataSource.isSynthetic());
   }
 
   @Test
   public void testGetResource() {
+    cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
     assertNotNull(cardStaticDataSource.getResource());
     assertEquals("/content/card/static/card", cardStaticDataSource.getResource().getPath());
   }
 
   @Test
   public void testGetResourceResolver() {
+    cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
     assertNotNull(cardStaticDataSource.getResourceResolver());
   }
 
   @Test
   public void testGetParentPath() {
+    cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
     assertEquals("/content/card/static", cardStaticDataSource.getParentPath());
   }
 
   @Test
   public void testGetVariations() {
+    cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
     assertEquals(3, cardStaticDataSource.getVariations().size());
   }
 
   @Test
   public void testGetLayout() {
+    cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
     assertNotNull(cardStaticDataSource.getLayout());
     assertEquals("default", cardStaticDataSource.getLayout());
   }
 
   @Test
   public void testGetForcedResourceName() {
+    cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
     assertEquals("card", cardStaticDataSource.getForcedResourceName());
   }
 
   @Test
   public void testGetUiFramework() {
+    cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
     assertNotNull(cardStaticDataSource.getUiFramework());
   }
 
   @Test
   public void testTestGetLayout() {
+    cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
     assertNotNull(cardStaticDataSource.getLayout());
   }
 
   @Test
   public void testGetAppliedVariations() {
+    cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
     assertEquals(3, cardStaticDataSource.getVariations().size());
   }
 
   @Test
   public void testGetInlineVariations() {
+    cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
     assertEquals("", cardStaticDataSource.getInlineVariations());
   }
 
   @Test
   public void testGetPath() {
+    cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
     assertEquals("/content/card/static/card", cardStaticDataSource.getPath());
   }
 
 
   @Test
   public void testIsDataSourceComponent() {
+    cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
     assertTrue(cardStaticDataSource.isDataSourceComponent());
   }
 
   @Test
   public void testGetRequestAttributes() {
+    cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
     assertNotNull(cardStaticDataSource.getRequestAttributes());
   }
 }

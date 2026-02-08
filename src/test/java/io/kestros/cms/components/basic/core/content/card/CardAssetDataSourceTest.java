@@ -27,7 +27,7 @@ public class CardAssetDataSourceTest extends BaseDataSourceTest {
     properties.put("sling:resourceType", KestrosCard.RESOURCE_TYPE);
     resource = context.create().resource("/content/page/card/assets", properties);
     context.request().setResource(resource);
-    cardAssetDataSource = context.request().adaptTo(CardAssetDataSource.class);
+
   }
 
 
@@ -40,31 +40,41 @@ public class CardAssetDataSourceTest extends BaseDataSourceTest {
 
   @Override
   public void testToSyntheticResource() {
+    cardAssetDataSource = context.request().adaptTo(CardAssetDataSource.class);
     assertNotNull(cardAssetDataSource.toSyntheticResource(context.resourceResolver(), "/test"));
   }
 
   @Test
   public void testGetTitle() {
+    registerAssetRetrievalService();
+    cardAssetDataSource = context.request().adaptTo(CardAssetDataSource.class);
     assertEquals("Asset 1 Title", cardAssetDataSource.getTitle().getValueMap().get("headingText", String.class));
   }
 
   @Test
   public void testGetDescription() {
+    registerAssetRetrievalService();
+    cardAssetDataSource = context.request().adaptTo(CardAssetDataSource.class);
     assertEquals("Asset 1 Description", cardAssetDataSource.getDescription());
   }
 
   @Test
   public void testGetImageElement() {
+    registerAssetRetrievalService();
+    cardAssetDataSource = context.request().adaptTo(CardAssetDataSource.class);
     assertNotNull(cardAssetDataSource.getImageElement());
   }
 
   @Test
   public void testGetButtonGroupElement() {
+    cardAssetDataSource = context.request().adaptTo(CardAssetDataSource.class);
     assertNull(cardAssetDataSource.getButtonGroupElement());
   }
 
   @Test
   public void testGetAsset() {
+    registerAssetRetrievalService();
+    cardAssetDataSource = context.request().adaptTo(CardAssetDataSource.class);
     assertNotNull(cardAssetDataSource.getAsset());
   }
 

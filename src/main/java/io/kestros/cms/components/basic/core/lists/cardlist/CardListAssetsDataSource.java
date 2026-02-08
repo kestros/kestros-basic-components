@@ -32,7 +32,7 @@ public class CardListAssetsDataSource extends BaseContainerSlingModelDataSource 
   private AssetCollection collection;
 
   String getHeadingLevel() {
-    return getResource().getValueMap().get("headingLevel", "h2");
+    return getResource().getValueMap().get("headingType", "h2");
   }
 
   AssetCollection getCollection() {
@@ -82,7 +82,7 @@ public class CardListAssetsDataSource extends BaseContainerSlingModelDataSource 
       try {
         image = new KestrosImageImpl(imagePath, altText, caption, imageTitle,
             href, ariaLabel, anchorTitle, target,
-            this, "image", "imageElement");
+            this, "image", "imageElement",assetRetrievalService);
       } catch (ComponentConfigurationException e) {
         return null;
       }

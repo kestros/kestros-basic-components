@@ -39,6 +39,7 @@ public class CardDataSourceComponentTest extends BaseDataSourceComponentTest {
 
   @Override
   public void testToSyntheticResource() {
+    registerAssetRetrievalService();
     properties.put("imagePath", "/content/assets/collection/asset-1");
     properties.put("href", "/some/path");
     resource = context.create().resource("/content/page/jcr:content/static/card-2", properties);
@@ -85,7 +86,7 @@ public class CardDataSourceComponentTest extends BaseDataSourceComponentTest {
     cardDataSourceComponent = context.request().adaptTo(CardDataSourceComponent.class);
 
     assertEquals("Test Title", cardDataSourceComponent.getTitle().getValueMap().get("headingText", String.class));
-    assertEquals("Test Title", cardDataSourceComponent.getTitle().getValueMap().get("headingLevel", String.class));
+    assertEquals("h3", cardDataSourceComponent.getTitle().getValueMap().get("headingType", String.class));
   }
 
   @Test
@@ -95,6 +96,7 @@ public class CardDataSourceComponentTest extends BaseDataSourceComponentTest {
 
   @Test
   public void testGetImageElement() {
+    registerAssetRetrievalService();
     properties.put("imagePath", "/content/assets/collection/asset-1");
     resource = context.create().resource("/content/page/jcr:content/static/card-2", properties);
     context.request().setResource(resource);
@@ -110,7 +112,19 @@ public class CardDataSourceComponentTest extends BaseDataSourceComponentTest {
   }
 
   @Test
-  public void testGetImage() {
+  public void testGetImage() throws AssetCollectionRetrievalException {
+    registerAssetRetrievalService();
+    properties.put("imagePath", "/content/assets/collection/asset-1");
+    resource = context.create().resource("/content/page/jcr:content/static/card-2", properties);
+    context.request().setResource(resource);
+    cardDataSourceComponent = context.request().adaptTo(CardDataSourceComponent.class);
+
+    assertNotNull(cardDataSourceComponent.getImage());
+  }
+
+  @Test
+  public void testGetImageWhenDoesNotExist() {
+    registerAssetRetrievalService();
     properties.put("imagePath", "/content/assets/collection/asset-1");
     resource = context.create().resource("/content/page/jcr:content/static/card-2", properties);
     context.request().setResource(resource);

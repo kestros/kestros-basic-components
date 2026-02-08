@@ -26,12 +26,12 @@ public class KestrosTabImpl extends BaseSyntheticResource implements KestrosTab 
 
 
   @Override
-  public KestrosTabHeader getTabHeader() {
+  public KestrosTabHeader getTabHeaderElement() {
     return tabHeader;
   }
 
   @Override
-  public KestrosTabContent getTabContent() {
+  public KestrosTabContent getTabContentElement() {
     return tabContent;
   }
 }

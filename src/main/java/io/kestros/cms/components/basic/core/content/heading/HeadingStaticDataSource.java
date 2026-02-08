@@ -14,6 +14,6 @@ public class HeadingStaticDataSource extends BaseSlingModelDataSource implements
 
   @Override
   public String getHeadingType() {
-    return getResource().getValueMap().get("headingLevel", String.class);
+    return getResource().getValueMap().get("headingType", String.class);
   }
 }

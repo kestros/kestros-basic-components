@@ -5,9 +5,10 @@ import io.kestros.cms.components.basic.api.KestrosContainerElement;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
+import org.apache.sling.api.resource.Resource;
 
 public interface KestrosTabs extends KestrosContainerElement {
-  String RESOURCE_TYPE = "/libs/kestros/commons/components/structure/tabs";
+  String RESOURCE_TYPE = "/hold/tabs";
 
   @Nonnull
   @Override
@@ -30,8 +31,8 @@ public interface KestrosTabs extends KestrosContainerElement {
 
 
   @Nonnull
-  default List<KestrosTabHeader> getTabHeaders() {
-    List<KestrosTabHeader> headers = new ArrayList<>();
+  default List<Resource> getTabHeaders() {
+    List<Resource> headers = new ArrayList<>();
     for (KestrosTab tab : getTabs()) {
       headers.add(tab.getTabHeader());
     }
@@ -39,8 +40,8 @@ public interface KestrosTabs extends KestrosContainerElement {
   }
 
   @Nonnull
-  default List<KestrosTabContent> getTabContents() {
-    List<KestrosTabContent> contents = new ArrayList<>();
+  default List<Resource> getTabContents() {
+    List<Resource> contents = new ArrayList<>();
     for (KestrosTab tab : getTabs()) {
       contents.add(tab.getTabContent());
     }

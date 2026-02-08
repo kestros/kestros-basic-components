@@ -29,7 +29,7 @@ public class KestrosHeadingImpl extends BaseSyntheticResource implements Kestros
       ComponentConfigurationException {
     super(dataSource, resourcePrefix, forcedResourceName);
     this.text = resource.getValueMap().get("headingText", String.class);
-    this.headingType = resource.getValueMap().get("headingLevel", String.class);
+    this.headingType = resource.getValueMap().get("headingType", String.class);
     if (this.text == null || this.headingType == null) {
       throw new ComponentConfigurationException("Missing required property");
     }

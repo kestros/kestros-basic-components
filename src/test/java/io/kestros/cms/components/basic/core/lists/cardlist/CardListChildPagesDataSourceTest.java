@@ -32,6 +32,7 @@ public class CardListChildPagesDataSourceTest extends BaseDataSourceTest {
     setupSamplePage("/content/page", "/content/collection/asset-1");
 
     properties.put("pagesPath", "/content/page");
+    properties.put("readMoreText","Button Text");
     resource = context.create().resource("/content/page/jcr:content/component", properties);
     context.request().setResource(resource);
     cardListChildPagesDataSource = context.request().adaptTo(CardListChildPagesDataSource.class);
@@ -54,7 +55,7 @@ public class CardListChildPagesDataSourceTest extends BaseDataSourceTest {
         cardListChildPagesDataSource.toSyntheticResource(context.resourceResolver(), "/test"));
     assertNotNull(
         cardListChildPagesDataSource.toSyntheticResource(context.resourceResolver(), "/test"));
-    assertEquals(11, cardListChildPagesDataSource.toSyntheticResource(context.resourceResolver(),
+    assertEquals(12, cardListChildPagesDataSource.toSyntheticResource(context.resourceResolver(),
         "/test").getValueMap().size());
     ValueMap valueMap = cardListChildPagesDataSource.toSyntheticResource(
         context.resourceResolver(), "/test").getValueMap();

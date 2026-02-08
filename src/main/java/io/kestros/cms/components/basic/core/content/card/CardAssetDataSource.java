@@ -3,7 +3,6 @@ package io.kestros.cms.components.basic.core.content.card;
 import io.kestros.cms.assets.api.exceptions.AssetRetrievalException;
 import io.kestros.cms.assets.api.models.Asset;
 import io.kestros.cms.assets.api.services.AssetRetrievalService;
-import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
 import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosButtonGroup;
 import io.kestros.cms.components.basic.api.content.KestrosCard;
@@ -19,13 +18,16 @@ import javax.annotation.Nullable;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class CardAssetDataSource extends BaseContainerSlingModelDataSource implements KestrosCard {
 
   private Asset asset;
+
   @OSGiService
+  @Optional
   private AssetRetrievalService assetRetrievalService;
 
   @Nullable
@@ -42,12 +44,12 @@ public class CardAssetDataSource extends BaseContainerSlingModelDataSource imple
   public KestrosHeading getTitleElement() {
     if (getAsset() != null) {
       String title = getAsset().getTitle();
-      String headingLevel = getResource().getValueMap().get("headingLevel", "h1");
+      String headingLevel = getResource().getValueMap().get("headingType", "h1");
       try {
         return new KestrosHeadingImpl(title, headingLevel,
-            this,
-            "title",
-            "titleElement");
+                this,
+                "title",
+                "titleElement");
       } catch (ComponentConfigurationException e) {
         // do nothing.
       }
@@ -71,12 +73,12 @@ public class CardAssetDataSource extends BaseContainerSlingModelDataSource imple
         AnchorTarget target = AnchorTarget.SAME_WINDOW;
         String id = null;
         List<ComponentVariation> componentVariations
-            = getElementVariations("imageVariations", KestrosImage.RESOURCE_TYPE);
+                = getElementVariations("imageVariations", KestrosImage.RESOURCE_TYPE);
         String layout = getLayout("image");
         try {
           return new KestrosImageImpl(imagePath, altText, caption,
-              imageTitle, href, ariaLabel,
-              anchorTitle, target, this, "image", "imageElement");
+                  imageTitle, href, ariaLabel,
+                  anchorTitle, target, this, "image", "imageElement", assetRetrievalService);
         } catch (ComponentConfigurationException e) {
           throw new RuntimeException(e);
         }
@@ -94,6 +96,9 @@ public class CardAssetDataSource extends BaseContainerSlingModelDataSource imple
 
   @Nullable
   Asset getAsset() {
+    if(assetRetrievalService == null) {
+      return null;
+    }
     if (asset == null) {
       String assetPath = getResource().getValueMap().get("imagePath", String.class);
       if (assetPath != null) {

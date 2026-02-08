@@ -43,6 +43,7 @@ public class CardListDataSourceComponentTest extends BaseDataSourceComponentTest
     setupSamplePage("/content/page", "/content/collection/asset-1");
 
     childPagesProperties.put("pagesPath", "/content/page");
+    childPagesProperties.put("readMoreText", "/content/page");
     childPagesProperties.put("sling:resourceType",
         "/libs/kestros/commons/components/lists/card-list");
     childPagesProperties.put("kes:datasource", "child-pages");

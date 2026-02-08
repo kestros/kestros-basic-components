@@ -1,0 +1,15 @@
+{
+  "jcr:primaryType": "kes:ComponentType",
+  "jcr:title": "Accordion Panel",
+  "jcr:description": "",
+  "componentGroup": "Accordion Content",
+  "sling:resourceSuperType": "kestros/commons/components/content-area",
+  "container": true,
+  "kes:allowedComponents": [
+    "!group:.hidden",
+    "!*accordion-panel*",
+    "*"
+  ],
+  "fontAwesomeIcon": "far fa-square",
+  "unwrap": true
+}

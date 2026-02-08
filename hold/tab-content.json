@@ -1,0 +1,10 @@
+{
+  "jcr:primaryType": "kes:ComponentType",
+  "jcr:title": "Tab Content",
+  "jcr:description": "",
+  "componentGroup": ".hidden",
+  "sling:resourceSuperType": "kestros/commons/components/kestros-parent",
+  "editable": true,
+  "container": true,
+  "unwrap": true
+}

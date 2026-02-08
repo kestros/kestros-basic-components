@@ -4,7 +4,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
+import io.kestros.cms.assets.api.services.AssetRetrievalService;
+import io.kestros.cms.assets.core.services.AssetRetrievalServiceImpl;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.componenttypes.api.services.ComponentTypeRetrievalService;
 import io.kestros.cms.componenttypes.api.services.ComponentUiFrameworkViewRetrievalService;
@@ -26,15 +27,16 @@ import org.junit.Test;
 public abstract class BaseSyntheticTest {
   @Rule
   public SlingContext context = new SlingContext();
-  private ComponentVariationRetrievalService componentVariationRetrievalService;
-  private ComponentUiFrameworkViewRetrievalService componentUiFrameworkViewRetrievalService;
-  private ComponentTypeRetrievalService componentTypeRetrievalService;
-  private UiFrameworkRetrievalService uiFrameworkRetrievalService;
-  private ThemeRetrievalService themeRetrievalService;
-  private ThemeProviderService themeProviderService;
-  private KestrosClassLoader kestrosClassLoader;
-  private Theme theme;
-  private UiFramework uiFramework;
+  public AssetRetrievalService assetRetrievalService;
+  public ComponentVariationRetrievalService componentVariationRetrievalService;
+  public ComponentUiFrameworkViewRetrievalService componentUiFrameworkViewRetrievalService;
+  public ComponentTypeRetrievalService componentTypeRetrievalService;
+  public UiFrameworkRetrievalService uiFrameworkRetrievalService;
+  public ThemeRetrievalService themeRetrievalService;
+  public ThemeProviderService themeProviderService;
+  public KestrosClassLoader kestrosClassLoader;
+  public Theme theme;
+  public UiFramework uiFramework;
 
   @Before
   public void setUp() throws Exception {
@@ -46,6 +48,7 @@ public abstract class BaseSyntheticTest {
     uiFrameworkRetrievalService = mock(UiFrameworkRetrievalService.class);
     themeRetrievalService = mock(ThemeRetrievalService.class);
     themeProviderService = mock(ThemeProviderService.class);
+    assetRetrievalService = new AssetRetrievalServiceImpl();
 
     context.registerService(ComponentUiFrameworkViewRetrievalService.class,
             componentUiFrameworkViewRetrievalService);
@@ -56,6 +59,7 @@ public abstract class BaseSyntheticTest {
     context.registerService(UiFrameworkRetrievalService.class, uiFrameworkRetrievalService);
     context.registerService(ThemeRetrievalService.class, themeRetrievalService);
     context.registerService(ThemeProviderService.class, themeProviderService);
+    context.registerInjectActivateService(assetRetrievalService);
 
     // set up request URI
     context.request().setPathInfo("/content/sites/test.html");

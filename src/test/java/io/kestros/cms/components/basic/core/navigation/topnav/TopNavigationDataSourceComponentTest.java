@@ -2,6 +2,7 @@ package io.kestros.cms.components.basic.core.navigation.topnav;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import io.kestros.cms.assets.api.exceptions.AssetCollectionRetrievalException;
 import io.kestros.cms.components.basic.api.content.KestrosLink;
@@ -45,11 +46,6 @@ public class TopNavigationDataSourceComponentTest extends BaseDataSourceComponen
     context.create().resource("/content/sites/page/child-3/jcr:content/top-nav/link-3",
         linkProperties);
 
-
-    imageProperties.put("imagePath","path");
-    context.create().resource("/content/sites/page/child-3/jcr:content/top-nav/imageElement",
-        imageProperties);
-
   }
 
   @Override
@@ -62,14 +58,50 @@ public class TopNavigationDataSourceComponentTest extends BaseDataSourceComponen
 
   @Test
   public void testGetNavigationLinks() {
-
     assertEquals(3, topNavigation.getNavigationLinks().size());
   }
 
+  @Test
+  public void testGetLogo() throws AssetCollectionRetrievalException {
+    registerAssetRetrievalService();
+    imageProperties.put("imagePath","/content/assets/collection/asset-1");
+    context.create().resource("/content/sites/page/child-3/jcr:content/top-nav/imageElement",
+            imageProperties);
+
+    setUpSampleCollection("/content/assets/collection");
+    assertNotNull(topNavigation.getLogo());
+  }
 
   @Test
-  public void testGetLogo() {
+  public void testGetLogoWhenNoImageElementResource() throws AssetCollectionRetrievalException {
+    registerAssetRetrievalService();
+    properties.put("imagePath","/content/assets/collection/asset-1");
+
+    resource = context.create().resource("/content/sites/page/child-3/jcr:content/top-nav2",
+            properties);
+    context.request().setResource(resource);
+    topNavigation = context.request().adaptTo(TopNavigationDataSourceComponent.class);
+
+    setUpSampleCollection("/content/assets/collection");
     assertNotNull(topNavigation.getLogo());
+  }
+
+  @Test
+  public void testGetLogoWhenDoesNotExist() {
+    imageProperties.put("imagePath","/content/assets/collection/asset-1");
+    context.create().resource("/content/sites/page/child-3/jcr:content/top-nav/imageElement",
+            imageProperties);
+
+    resource = context.create().resource("/content/sites/page/child-3/jcr:content/top-nav2",
+            properties);
+    context.request().setResource(resource);
+    topNavigation = context.request().adaptTo(TopNavigationDataSourceComponent.class);
+
+    imageProperties.put("imagePath","path");
+    context.create().resource("/content/sites/page/child-3/jcr:content/top-nav2/imageElement",
+            imageProperties);
+
+    assertNull(topNavigation.getLogo());
   }
 
 }

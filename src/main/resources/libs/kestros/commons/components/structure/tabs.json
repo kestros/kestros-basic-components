@@ -1,7 +1,0 @@
-{
-  "jcr:primaryType": "kes:ComponentType",
-  "jcr:title": "Tabs",
-  "jcr:description": "Include image assets.",
-  "componentGroup": "Layout Components",
-  "sling:resourceSuperType": "kestros/commons/components/kestros-parent"
-}

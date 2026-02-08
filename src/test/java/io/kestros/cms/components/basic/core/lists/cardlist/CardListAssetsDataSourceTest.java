@@ -24,7 +24,6 @@ public class CardListAssetsDataSourceTest extends BaseDataSourceTest {
     properties.put("collectionPath", "/content/assets/collection");
     resource = context.create().resource("/content/page/cardlist/assets", properties);
     context.request().setResource(resource);
-    cardListAssetsDataSource = context.request().adaptTo(CardListAssetsDataSource.class);
   }
 
   @Override
@@ -34,17 +33,23 @@ public class CardListAssetsDataSourceTest extends BaseDataSourceTest {
 
   @Override
   public void testToSyntheticResource() {
+    registerAssetRetrievalService();
+    cardListAssetsDataSource = context.request().adaptTo(CardListAssetsDataSource.class);
     assertNotNull(
             cardListAssetsDataSource.toSyntheticResource(context.resourceResolver(), "/test"));
   }
 
   @Test
   public void testGetCollection() {
+    registerAssetRetrievalService();
+    cardListAssetsDataSource = context.request().adaptTo(CardListAssetsDataSource.class);
     assertNotNull(cardListAssetsDataSource.getCollection());
   }
 
   @Test
   public void testGetCards() {
+    registerAssetRetrievalService();
+    cardListAssetsDataSource = context.request().adaptTo(CardListAssetsDataSource.class);
     assertEquals(3, cardListAssetsDataSource.getCards().size());
   }
 }

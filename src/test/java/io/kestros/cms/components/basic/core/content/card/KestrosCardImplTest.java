@@ -31,41 +31,42 @@ public class KestrosCardImplTest extends BaseSyntheticTest {
     Resource resource = context.create().resource("/content/parent");
     context.currentResource(resource);
     CardListStaticDataSource dataSource = context.request().adaptTo(
-        CardListStaticDataSource.class);
+            CardListStaticDataSource.class);
 
     List<ComponentVariation> variations = new ArrayList<>();
     title = new KestrosHeadingImpl(
-        "Title",
-        "h2",
-        dataSource,
-        "title",
-        "titleElement"
+            "Title",
+            "h2",
+            dataSource,
+            "title",
+            "titleElement"
     );
     image = new KestrosImageImpl(
-        "/imagePath.jpg",
-        "Title Text",
-        "http://example.com/image.jpg",
-        null,
-        null,
-        null, null,
-        AnchorTarget.SAME_WINDOW,
-        dataSource,
-        "image",
-        "imageElement"
+            "/imagePath.jpg",
+            "Title Text",
+            "http://example.com/image.jpg",
+            null,
+            null,
+            null, null,
+            AnchorTarget.SAME_WINDOW,
+            dataSource,
+            "image",
+            "imageElement",
+            assetRetrievalService
     );
     buttonGroup = new KestrosButtonGroupImpl(new ArrayList<>(),
-        dataSource,
-        "buttonGroup",
-        "buttonGroupElement"
+            dataSource,
+            "buttonGroup",
+            "buttonGroupElement"
     );
     card = new KestrosCardImpl(
-        "Description",
-        title,
-        image,
-        buttonGroup,
-        dataSource,
-        "card",
-        "forcedResourceName"
+            "Description",
+            title,
+            image,
+            buttonGroup,
+            dataSource,
+            "card",
+            "forcedResourceName"
     );
   }
 
@@ -78,17 +79,18 @@ public class KestrosCardImplTest extends BaseSyntheticTest {
 
     context.request().setResource(syntheticResource);
     CardStaticDataSource cardStaticDataSource = context.request().adaptTo(
-        CardStaticDataSource.class);
+            CardStaticDataSource.class);
     assertNotNull(cardStaticDataSource);
     assertEquals("Description", cardStaticDataSource.getDescription());
     assertEquals("/imagePath.jpg",
-        cardStaticDataSource.getImage().getValueMap().get("imagePath", String.class));
-    assertEquals("Title", cardStaticDataSource.getTitle().getValueMap().get("text", String.class));
+            cardStaticDataSource.getImage().getValueMap().get("imagePath", String.class));
+    assertEquals("Title",
+            cardStaticDataSource.getTitle().getValueMap().get("headingText", String.class));
   }
 
   @Test
   public void testGetTitle() {
-    assertEquals("Title", card.getTitle().getValueMap().get("text", String.class));
+    assertEquals("Title", card.getTitle().getValueMap().get("headingText", String.class));
   }
 
   @Test

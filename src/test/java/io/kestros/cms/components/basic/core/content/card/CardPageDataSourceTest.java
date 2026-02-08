@@ -39,7 +39,7 @@ public class CardPageDataSourceTest extends BaseDataSourceTest {
 
   @Test
   public void testGetTitle() {
-    assertEquals("Title", cardPageDataSource.getTitle().getValueMap().get("text", String.class));
+    assertEquals("Title", cardPageDataSource.getTitle().getValueMap().get("headingText", String.class));
   }
 
   @Test

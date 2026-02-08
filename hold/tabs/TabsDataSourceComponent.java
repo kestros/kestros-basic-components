@@ -5,14 +5,17 @@ import io.kestros.cms.components.basic.api.structure.KestrosTabs;
 import io.kestros.cms.components.basic.core.BaseDataSourceComponent;
 import java.util.List;
 import javax.annotation.Nonnull;
+import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.models.annotations.Model;
 
 
+@Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class TabsDataSourceComponent extends BaseDataSourceComponent<KestrosTabs>
     implements KestrosTabs {
   @Override
   public List<KestrosTab> getTabs() {
-    return null;
+    return getComponentData().getTabs();
   }
 
   @Nonnull

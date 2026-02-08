@@ -58,24 +58,24 @@ public abstract class BaseComponentTest {
 
     Map<String, String> alertDataSources = new HashMap<>();
     alertDataSources.put("default",
-        "io.kestros.cms.components.basic.core.content.alert.AlertStaticDataSource");
+            "io.kestros.cms.components.basic.core.content.alert.AlertStaticDataSource");
     dataSourceMap.put("/libs/kestros/commons/components/content/alert", alertDataSources);
 
     Map<String, String> buttonDataSources = new HashMap<>();
     buttonDataSources.put("default",
-        "io.kestros.cms.components.basic.core.content.button.ButtonStaticDataSource");
+            "io.kestros.cms.components.basic.core.content.button.ButtonStaticDataSource");
     dataSourceMap.put("/libs/kestros/commons/components/content/button", buttonDataSources);
 
     // button group
     Map<String, String> buttonGroupDataSources = new HashMap<>();
     buttonGroupDataSources.put("default",
-        "io.kestros.cms.components.basic.core.content.buttongroup.ButtonGroupStaticDataSource");
+            "io.kestros.cms.components.basic.core.content.buttongroup.ButtonGroupStaticDataSource");
     dataSourceMap.put("/libs/kestros/commons/components/content/button-group",
-        buttonGroupDataSources);
+            buttonGroupDataSources);
 
     Map<String, String> cardDataSources = new HashMap<>();
     cardDataSources.put("default",
-        "io.kestros.cms.components.basic.core.content.card.CardStaticDataSource");
+            "io.kestros.cms.components.basic.core.content.card.CardStaticDataSource");
     dataSourceMap.put("/libs/kestros/commons/components/content/card", cardDataSources);
 //
 //    // code
@@ -87,13 +87,15 @@ public abstract class BaseComponentTest {
     // heading
     Map<String, String> headingDataSources = new HashMap<>();
     headingDataSources.put("default",
-        "io.kestros.cms.components.basic.core.content.heading.HeadingStaticDataSource");
+            "io.kestros.cms.components.basic.core.content.heading.HeadingStaticDataSource");
+    headingDataSources.put("page-title",
+            "io.kestros.cms.components.basic.core.content.heading.HeadingPageTitleDataSource");
     dataSourceMap.put("/libs/kestros/commons/components/content/heading", headingDataSources);
 //
 //     image
     Map<String, String> imageDataSources = new HashMap<>();
     imageDataSources.put("default",
-        "io.kestros.cms.components.basic.core.content.image.ImageStaticDataSource");
+            "io.kestros.cms.components.basic.core.content.image.ImageStaticDataSource");
     dataSourceMap.put("/libs/kestros/commons/components/content/image", imageDataSources);
 //
 //    // richtext
@@ -102,17 +104,24 @@ public abstract class BaseComponentTest {
 //        "io.kestros.cms.components.basic.core.content.richtext.RichTextStaticDataSource");
 //    dataSourceMap.put("/libs/kestros/commons/components/content/rich-text", richTextDataSources);
 //
-//    // video
-//    Map<String, String> videoDataSources = new HashMap<>();
-//    videoDataSources.put("default",
-//        "io.kestros.cms.components.basic.core.content.video.VideoStaticDataSource");
-//    dataSourceMap.put("/libs/kestros/commons/components/content/video", videoDataSources);
+    // video
+    Map<String, String> videoDataSources = new HashMap<>();
+    videoDataSources.put("default",
+            "io.kestros.cms.components.basic.core.content.video.VideoStaticDataSource");
+    dataSourceMap.put("/libs/kestros/commons/components/content/video", videoDataSources);
+
+    // video embed
+    Map<String, String> videoEmbedDataSources = new HashMap<>();
+    videoEmbedDataSources.put("default",
+            "io.kestros.cms.components.basic.core.content.videoembed.VideoEmbedYouTubeDataSource");
+    dataSourceMap.put("/libs/kestros/commons/components/content/video-embed",
+            videoEmbedDataSources);
 
     Map<String, String> cardListDataSources = new HashMap<>();
     cardListDataSources.put("default",
-        "io.kestros.cms.components.basic.core.lists.cardlist.CardListStaticDataSource");
+            "io.kestros.cms.components.basic.core.lists.cardlist.CardListStaticDataSource");
     cardListDataSources.put("child-pages",
-        "io.kestros.cms.components.basic.core.lists.cardlist.CardListChildPagesDataSource");
+            "io.kestros.cms.components.basic.core.lists.cardlist.CardListChildPagesDataSource");
     dataSourceMap.put("/libs/kestros/commons/components/lists/card-list", cardListDataSources);
 //
 //    // link list
@@ -127,44 +136,45 @@ public abstract class BaseComponentTest {
 
     Map<String, String> breadcrumbDataSources = new HashMap<>();
     breadcrumbDataSources.put("default",
-        "io.kestros.cms.components.basic.core.navigation.breadcrumbs"
-        + ".BreadCrumbStaticDataSource");
+            "io.kestros.cms.components.basic.core.navigation.breadcrumbs"
+                    + ".BreadCrumbStaticDataSource");
     dataSourceMap.put("/libs/kestros/commons/components/navigation/breadcrumb",
-        breadcrumbDataSources);
+            breadcrumbDataSources);
 
     Map<String, String> breadcrumbsDataSources = new HashMap<>();
     breadcrumbsDataSources.put("default",
-        "io.kestros.cms.components.basic.core.navigation.breadcrumbs"
-        + ".BreadCrumbsPagePathDataSource");
+            "io.kestros.cms.components.basic.core.navigation.breadcrumbs"
+                    + ".BreadCrumbsPagePathDataSource");
     dataSourceMap.put("/libs/kestros/commons/components/navigation/breadcrumbs",
-        breadcrumbsDataSources);
+            breadcrumbsDataSources);
 
 //    // navigation
     Map<String, String> navigationDataSources = new HashMap<>();
     navigationDataSources.put("default",
-        "io.kestros.cms.components.basic.core.navigation.nav.NavigationStaticDataSource");
+            "io.kestros.cms.components.basic.core.navigation.nav.NavigationStaticDataSource");
     dataSourceMap.put("/libs/kestros/commons/components/navigation/navigation",
-        navigationDataSources);
+            navigationDataSources);
 
 //    top-navigation
     Map<String, String> topNavigationDataSources = new HashMap<>();
     navigationDataSources.put("default",
-        "io.kestros.cms.components.basic.core.navigation.topnav.TopNavigationStaticDataSource");
+            "io.kestros.cms.components.basic.core.navigation.topnav.TopNavigationStaticDataSource");
     dataSourceMap.put("/libs/kestros/commons/components/navigation/top-navigation",
-        topNavigationDataSources);
+            topNavigationDataSources);
 //
     // accordion
     Map<String, String> accordionPanelDataSources = new HashMap<>();
     accordionPanelDataSources.put("default",
-        "io.kestros.cms.components.basic.core.structure.accordion.AccordionPanelStaticDataSource");
+            "io.kestros.cms.components.basic.core.structure.accordion"
+                    + ".AccordionPanelStaticDataSource");
     dataSourceMap.put("/libs/kestros/commons/components/structure/accordion-panel",
-        accordionPanelDataSources);
+            accordionPanelDataSources);
 
     Map<String, String> accordionDataSources = new HashMap<>();
     accordionDataSources.put("default",
-        "io.kestros.cms.components.basic.core.structure.accordion.AccordionStaticDataSource");
+            "io.kestros.cms.components.basic.core.structure.accordion.AccordionStaticDataSource");
     dataSourceMap.put("/libs/kestros/commons/components/structure/accordion",
-        accordionDataSources);
+            accordionDataSources);
 //
 //    // container
 //    Map<String, String> containerDataSources = new HashMap<>();
@@ -208,14 +218,13 @@ public abstract class BaseComponentTest {
     assetRetrievalService = new AssetRetrievalServiceImpl();
 
     context.registerService(ComponentUiFrameworkViewRetrievalService.class,
-        componentUiFrameworkViewRetrievalService);
+            componentUiFrameworkViewRetrievalService);
     context.registerInjectActivateService(componentVariationRetrievalService);
     context.registerInjectActivateService(componentTypeRetrievalService);
     context.registerService(KestrosClassLoader.class, kestrosClassLoader);
     context.registerService(UiFrameworkRetrievalService.class, uiFrameworkRetrievalService);
     context.registerService(ThemeRetrievalService.class, themeRetrievalService);
     context.registerService(ThemeProviderService.class, themeProviderService);
-    context.registerInjectActivateService(assetRetrievalService);
 
     // set up request URI
     context.request().setPathInfo("/content/sites/test.html");
@@ -241,6 +250,10 @@ public abstract class BaseComponentTest {
     doComponentSetup();
   }
 
+  public void registerAssetRetrievalService() {
+    context.registerInjectActivateService(assetRetrievalService);
+  }
+
   public abstract void doComponentSetup() throws AssetCollectionRetrievalException;
 
   public void setupSamplePage(String path, String assetPath) {
@@ -252,6 +265,7 @@ public abstract class BaseComponentTest {
     pageJcrContentProperties.put("jcr:description", "Description");
     if (assetPath != null) {
       pageJcrContentProperties.put("cardImage", assetPath);
+      pageJcrContentProperties.put("image", assetPath);
     }
     context.create().resource(path, pageProperties);
     context.create().resource(path + "/jcr:content", pageJcrContentProperties);
@@ -259,17 +273,17 @@ public abstract class BaseComponentTest {
     context.create().resource(path + "/child-1", pageProperties);
     context.create().resource(path + "/child-1/jcr:content", pageJcrContentProperties);
     assertEquals("kes:Page", context.resourceResolver().getResource(path + "/child-1").getValueMap()
-        .get("jcr:primaryType", String.class));
+            .get("jcr:primaryType", String.class));
 
     context.create().resource(path + "/child-2", pageProperties);
     context.create().resource(path + "/child-2/jcr:content", pageJcrContentProperties);
     assertEquals("kes:Page", context.resourceResolver().getResource(path + "/child-2").getValueMap()
-        .get("jcr:primaryType", String.class));
+            .get("jcr:primaryType", String.class));
 
     context.create().resource(path + "/child-3", pageProperties);
     context.create().resource(path + "/child-3/jcr:content", pageJcrContentProperties);
     assertEquals("kes:Page", context.resourceResolver().getResource(path + "/child-3").getValueMap()
-        .get("jcr:primaryType", String.class));
+            .get("jcr:primaryType", String.class));
   }
 
   public void setUpSampleCollection(String path) throws AssetCollectionRetrievalException {
@@ -294,7 +308,7 @@ public abstract class BaseComponentTest {
   }
 
   @Test
-  public abstract void testToSyntheticResource();
+  public abstract void testToSyntheticResource() throws AssetCollectionRetrievalException;
 
 
   public void setupClassLoaderForAllComponentTypes() {
@@ -319,7 +333,7 @@ public abstract class BaseComponentTest {
           dsProperties.put("jcr:primaryType", "nt:unstructured");
           dsProperties.put("classPath", dataSourceEntry.getValue());
           context.create().resource(path + "/datasources/" + dataSourceEntry.getKey(),
-              dsProperties);
+                  dsProperties);
         } catch (Exception e) {
           // nothing.
         }
@@ -329,11 +343,11 @@ public abstract class BaseComponentTest {
   }
 
   public void setupViewsAndVariations() throws InvalidComponentUiFrameworkViewException,
-      UiFrameworkRetrievalException, ResourceNotFoundException,
-      ComponentViewRetrievalException, ComponentVariationRetrievalException {
+          UiFrameworkRetrievalException, ResourceNotFoundException,
+          ComponentViewRetrievalException, ComponentVariationRetrievalException {
     ComponentUiFrameworkView view = mock(ComponentUiFrameworkView.class);
     when(componentUiFrameworkViewRetrievalService.getResolvedComponentUiFrameworkView(any(), any(),
-        any())).thenReturn(view);
+            any())).thenReturn(view);
 
     Map<String, Object> variationProperties = new HashMap<>();
     variationProperties.put("jcr:primaryType", "kes:ComponentVariation");
@@ -343,16 +357,16 @@ public abstract class BaseComponentTest {
 
 
     ComponentVariation variation1
-        = componentVariationRetrievalService.getComponentVariation(
-        "/variations/variation1", context.resourceResolver());
+            = componentVariationRetrievalService.getComponentVariation(
+            "/variations/variation1", context.resourceResolver());
     ComponentVariation variation2
-        = componentVariationRetrievalService.getComponentVariation(
-        "/variations/variation2", context.resourceResolver());
+            = componentVariationRetrievalService.getComponentVariation(
+            "/variations/variation2", context.resourceResolver());
     ComponentVariation variation3
-        = componentVariationRetrievalService.getComponentVariation(
-        "/variations/variation3", context.resourceResolver());
+            = componentVariationRetrievalService.getComponentVariation(
+            "/variations/variation3", context.resourceResolver());
     doReturn(Arrays.asList(variation1, variation2, variation3)).when(
-        componentVariationRetrievalService).getComponentVariations(any());
+            componentVariationRetrievalService).getComponentVariations(any());
 
   }
 

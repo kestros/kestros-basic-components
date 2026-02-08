@@ -1,6 +1,6 @@
 package io.kestros.cms.components.basic.core.content.card;
 
-import io.kestros.cms.components.basic.api.content.KestrosButton;
+import io.kestros.cms.assets.api.services.AssetRetrievalService;
 import io.kestros.cms.components.basic.api.content.KestrosButtonGroup;
 import io.kestros.cms.components.basic.api.content.KestrosCard;
 import io.kestros.cms.components.basic.api.content.KestrosHeading;
@@ -14,9 +14,15 @@ import javax.annotation.Nullable;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.Optional;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class CardStaticDataSource extends BaseContainerSlingModelDataSource implements KestrosCard {
+
+  @OSGiService
+  @Optional
+  private AssetRetrievalService assetRetrievalService;
 
   @Nullable
   @Override
@@ -47,13 +53,12 @@ public class CardStaticDataSource extends BaseContainerSlingModelDataSource impl
         imageResource = getResource();
       }
       return new KestrosImageImpl(imageResource, this,
-          "image",
-          "imageElement");
+              "image",
+              "imageElement", assetRetrievalService);
     } catch (ComponentConfigurationException e) {
       return null;
     }
   }
-
 
   @Nullable
   @Override
@@ -64,7 +69,7 @@ public class CardStaticDataSource extends BaseContainerSlingModelDataSource impl
     }
     try {
       return new KestrosButtonGroupImpl(buttonGroupResource,
-          this, "buttonGroup", "buttonGroupElement");
+              this, "buttonGroup", "buttonGroupElement");
     } catch (ComponentConfigurationException e) {
       return null;
     }

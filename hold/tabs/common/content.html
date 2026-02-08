@@ -1,0 +1,34 @@
+<!--/*
+  ~      Copyright (C) 2020  Kestros, Inc.
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  ~
+  */-->
+<sly data-sly-use.tabs="${'io.kestros.cms.components.basic.core.structure.tabs.TabsDataSourceComponent'}"/>
+
+<div class="tabs ${tabs.inlineVariations}">
+    <div class="tab-headers">
+        <sly data-sly-list.tabHeader="${tabs.tabHeaders}">
+            <p>header</p>
+            <p>${tabHeader.path}</p>
+            <p>${tabHeader.valueMap}</p>
+            <sly data-sly-resource="${tabHeader}"/>
+        </sly>
+    </div>
+    <div class="tab-contents">
+        <sly data-sly-list.tabContent="${tabs.tabContents}">
+            <sly data-sly-resource="${tabContent}"/>
+        </sly>
+    </div>
+</div>
