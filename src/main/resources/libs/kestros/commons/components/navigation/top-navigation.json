@@ -8,10 +8,17 @@
   "container": true,
   "unwrap": true,
   "kes:allowedComponents": [
+    "*image*",
     "*top-navigation-item*"
   ],
   "nested": {
     "jcr:primaryType": "nt:unstructured",
+    "logo": {
+      "jcr:primaryType": "nt:unstructured",
+      "title": "Image",
+      "resourceType": "/libs/kestros/commons/components/content/image",
+      "name": "image"
+    },
     "topNavigationItem": {
       "jcr:primaryType": "nt:unstructured",
       "title": "Navigation Item",

@@ -1,7 +1,6 @@
 package io.kestros.cms.components.basic.core.navigation.nav;
 
 import io.kestros.cms.components.basic.api.content.AnchorTarget;
-import io.kestros.cms.components.basic.api.navigation.KestrosNavigation;
 import io.kestros.cms.components.basic.api.navigation.KestrosNavigationItem;
 import io.kestros.cms.components.basic.core.BaseContainerDataSourceComponent;
 import java.util.List;
@@ -13,8 +12,13 @@ import org.apache.sling.models.annotations.Model;
 
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class NavigationItemDataSourceComponent
-    extends BaseContainerDataSourceComponent<KestrosNavigation>
-    implements KestrosNavigationItem {
+        extends BaseContainerDataSourceComponent<KestrosNavigationItem>
+        implements KestrosNavigationItem {
+
+  @Override
+  public Boolean isActive() {
+    return null;
+  }
 
   @Nonnull
   @Override
@@ -25,48 +29,48 @@ public class NavigationItemDataSourceComponent
   @Nullable
   @Override
   public String getText() {
-    return "";
+    return getComponentData().getText();
   }
 
   @Nullable
   @Override
   public String getHref() {
-    return "";
+    return getComponentData().getHref();
   }
 
   @Nonnull
   @Override
   public AnchorTarget getTarget() {
-    return null;
+    return getComponentData().getTarget();
   }
 
   @Nullable
   @Override
   public String getAriaLabel() {
-    return "";
+    return getComponentData().getAriaLabel();
   }
 
   @Nullable
   @Override
   public String getTitle() {
-    return "";
+    return getComponentData().getTitle();
   }
 
   @Nullable
   @Override
   public String getRel() {
-    return "";
+    return getComponentData().getRel();
   }
 
   @Nullable
   @Override
   public String getAriaDescribedBy() {
-    return "";
+    return getComponentData().getAriaDescribedBy();
   }
 
   @Nullable
   @Override
   public String getLang() {
-    return "";
+    return getComponentData().getLang();
   }
 }

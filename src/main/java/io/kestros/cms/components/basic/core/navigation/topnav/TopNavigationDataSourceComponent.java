@@ -20,18 +20,24 @@ public class TopNavigationDataSourceComponent
 
   @Nonnull
   @Override
-  public List<KestrosTopNavigationItem> getNavigationLinks() {
+  public List<KestrosTopNavigationItem> getNavigationLinkElements() {
     if (navigationLinks == null) {
-      navigationLinks = getComponentData().getNavigationLinks();
+      navigationLinks = getComponentData().getNavigationLinkElements();
     }
     return navigationLinks;
   }
 
   @Nullable
   @Override
-  public KestrosImage getLogo() {
-    if (logo == null) {
-      logo = getComponentData().getLogo();
+  public String getBrandName() {
+    return getComponentData().getBrandName();
+  }
+
+  @Nullable
+  @Override
+  public KestrosImage getImageElement() {
+      if (logo == null) {
+      logo = getComponentData().getImageElement();
     }
     return logo;
   }

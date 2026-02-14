@@ -4,10 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import io.kestros.cms.assets.api.exceptions.AssetCollectionRetrievalException;
-import io.kestros.cms.components.basic.api.content.KestrosLink;
 import io.kestros.cms.components.basic.api.navigation.KestrosNavigation;
 import io.kestros.cms.components.basic.api.navigation.KestrosNavigationItem;
-import io.kestros.cms.components.basic.api.navigation.KestrosTopNavigationItem;
 import io.kestros.cms.components.basic.core.BaseDataSourceComponentTest;
 import java.util.HashMap;
 import java.util.Map;
@@ -55,8 +53,8 @@ public class NavigationDataSourceComponentTest extends BaseDataSourceComponentTe
   }
 
   @Test
-  public void testGetNavigationLinks() {
-    assertEquals(3, navigation.getNavigationLinks().size());
+  public void testGetNavigationLinkElements() {
+    assertEquals(3, navigation.getNavigationLinkElements().size());
   }
 
 }

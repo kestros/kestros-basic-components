@@ -9,7 +9,8 @@
   "unwrap": true,
   "kes:allowedComponents": [
     "!type:container",
-    "*link*"
+    "*navigation-item*",
+    "*!top-navigation-item*"
   ],
   "nested": {
     "jcr:primaryType": "nt:unstructured",

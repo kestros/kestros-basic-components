@@ -12,31 +12,40 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class KestrosTopNavigationImpl extends BaseContainerSyntheticResource
-    implements KestrosTopNavigation {
+        implements KestrosTopNavigation {
 
   private List<KestrosTopNavigationItem> navigationLinks;
   private KestrosImage logo;
+  private String brandName;
 
   public KestrosTopNavigationImpl(
-      @Nullable KestrosImage logo,
-      @Nonnull List<KestrosTopNavigationItem> navigationLinks,
-      @Nonnull BaseSlingModelDataSource dataSource,
-      @Nonnull String resourcePrefix, String forcedResourceName)
-      throws ComponentConfigurationException {
+          @Nullable String brandName,
+          @Nullable KestrosImage logo,
+          @Nonnull List<KestrosTopNavigationItem> navigationLinks,
+          @Nonnull BaseSlingModelDataSource dataSource,
+          @Nonnull String resourcePrefix, String forcedResourceName)
+          throws ComponentConfigurationException {
     super(dataSource, resourcePrefix, forcedResourceName);
     this.logo = logo;
+    this.brandName = brandName;
     this.navigationLinks = navigationLinks;
   }
 
   @Nonnull
   @Override
-  public List<KestrosTopNavigationItem> getNavigationLinks() {
+  public List<KestrosTopNavigationItem> getNavigationLinkElements() {
     return new ArrayList<>(navigationLinks);
   }
 
   @Nullable
   @Override
-  public KestrosImage getLogo() {
+  public String getBrandName() {
+    return brandName;
+  }
+
+  @Nullable
+  @Override
+  public KestrosImage getImageElement() {
     return logo;
   }
 }

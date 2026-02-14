@@ -3,6 +3,7 @@
   "jcr:title": "Static Links",
   "group": "Kestros Core",
   "classPath": "io.kestros.cms.components.basic.core.navigation.topnav.TopNavigationStaticDataSource",
+  "container": false,
   "create": {
     "jcr:primaryType": "nt:unstructured",
     "sling:resourceType": "kestros/cms2/dialog",
@@ -27,6 +28,20 @@
     },
     "footer": {
       "jcr:primaryType": "nt:unstructured"
+    }
+  },
+  "edit": {
+    "jcr:primaryType": "nt:unstructured",
+    "sling:resourceType": "kestros/cms2/dialog",
+    "content": {
+      "jcr:primaryType": "nt:unstructured",
+      "brandName": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/textfield",
+        "label": "Brand Name",
+        "name": "brandName",
+        "autofocus": true
+      }
     }
   }
 }

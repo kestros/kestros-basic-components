@@ -5,6 +5,7 @@ import io.kestros.cms.components.basic.api.KestrosContainerElement;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
+import org.apache.sling.api.resource.Resource;
 
 public interface KestrosNavigation extends KestrosContainerElement {
 
@@ -17,10 +18,20 @@ public interface KestrosNavigation extends KestrosContainerElement {
   }
 
   @Nonnull
-  List<KestrosNavigationItem> getNavigationLinks();
+  default List<Resource> getNavigationLinks() {
+    List<Resource> resources = new ArrayList<>();
+    for (KestrosNavigationItem item : getNavigationLinkElements()) {
+      resources.add(item.getResource());
+    }
+    return resources;
+  }
+
+
+  @Nonnull
+  List<KestrosNavigationItem> getNavigationLinkElements();
 
   @Nonnull
   default List<KestrosBasicComponentElement> getChildElements() {
-    return new ArrayList<>(getNavigationLinks());
+    return new ArrayList<>(getNavigationLinkElements());
   }
 }

@@ -9,6 +9,7 @@ import io.kestros.cms.components.basic.api.content.KestrosImage;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.components.basic.core.BaseSlingModelDataSource;
 import io.kestros.cms.components.basic.core.BaseSyntheticResource;
+import io.kestros.cms.components.basic.core.LinkUtils;
 import io.kestros.cms.componenttypes.api.services.ComponentUiFrameworkViewRetrievalService;
 import io.kestros.cms.componenttypes.api.services.ComponentVariationRetrievalService;
 import javax.annotation.Nonnull;
@@ -67,12 +68,16 @@ public class KestrosImageImpl extends BaseSyntheticResource implements KestrosIm
     super(dataSource, resourcePrefix, forcedResourceName);
     this.assetRetrievalService = assetRetrievalService;
     String assetPath = resource.getValueMap().get("imagePath", String.class);
-    try {
-      Asset asset = getAsset(assetPath, resource.getResourceResolver());
-      this.imagePath = asset.getPath();
-    } catch (AssetRetrievalException e) {
-      throw new ComponentConfigurationException("Could not retrieve asset for path: " + assetPath,
-              e);
+    if(LinkUtils.isLinkExternal(assetPath)) {
+      try {
+        Asset asset = getAsset(assetPath, resource.getResourceResolver());
+        this.imagePath = asset.getPath();
+      } catch (AssetRetrievalException e) {
+        throw new ComponentConfigurationException("Could not retrieve asset for path: " + assetPath,
+                e);
+      }
+    } else {
+      this.imagePath = assetPath;
     }
 
     this.altText = resource.getValueMap().get("altText", String.class);

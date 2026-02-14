@@ -1,6 +1,6 @@
 {
   "jcr:primaryType": "kes:ComponentType",
-  "jcr:title": "Navigation",
+  "jcr:title": "Navigation Item",
   "jcr:description": "",
   "componentGroup": "Navigation Components",
   "sling:resourceSuperType": "kestros/commons/components/content-area",

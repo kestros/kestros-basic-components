@@ -17,7 +17,11 @@
   */-->
 <sly data-sly-use.topNav="${'io.kestros.cms.components.basic.core.navigation.topnav.TopNavigationDataSourceComponent'}"/>
 
-<ul class="${topNav.inlineVariations}"
-    data-sly-list.navItem="${topNav.children}">
-    <sly data-sly-resource="${navItem}"/>
-</ul>
+<div class="${topNav.inlineVariations}">
+    <sly data-sly-test="${topNav.image}">
+        <sly data-sly-resource="${topNav.image}"/>
+    </sly>
+    <ul data-sly-test="${topNav.navigationLinks}" data-sly-list.navItem="${topNav.navigationLinks}">
+        <sly data-sly-resource="${navItem}"/>
+    </ul>
+</div>

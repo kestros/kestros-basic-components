@@ -6,6 +6,7 @@ import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationExce
 import io.kestros.cms.components.basic.api.navigation.KestrosTopNavigation;
 import io.kestros.cms.components.basic.api.navigation.KestrosTopNavigationItem;
 import io.kestros.cms.components.basic.core.BaseContainerSlingModelDataSource;
+import io.kestros.cms.components.basic.core.content.image.ImageStaticDataSource;
 import io.kestros.cms.components.basic.core.content.image.KestrosImageImpl;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,8 @@ import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class TopNavigationStaticDataSource extends BaseContainerSlingModelDataSource
-    implements KestrosTopNavigation {
+        implements KestrosTopNavigation {
+
 
   @OSGiService
   @Optional
@@ -27,22 +29,30 @@ public class TopNavigationStaticDataSource extends BaseContainerSlingModelDataSo
 
   @Nonnull
   @Override
-  public List<KestrosTopNavigationItem> getNavigationLinks() {
-    return new ArrayList<>(getChildrenAsType(TopNavigationItemStaticDataSource.class));
+  public List<KestrosTopNavigationItem> getNavigationLinkElements() {
+    return new ArrayList<>(getChildrenAsType(KestrosTopNavigationItem.RESOURCE_TYPE,
+            TopNavigationItemStaticDataSource.class));
   }
 
   @Nullable
   @Override
-  public KestrosImage getLogo() {
+  public String getBrandName() {
+    return getResource().getValueMap().get("brandName", String.class);
+  }
+
+  @Nullable
+  @Override
+  public KestrosImage getImageElement() {
     Resource imageResource = getResource().getChild("imageElement");
-    if (imageResource == null) {
-      imageResource = getResource();
+    if (imageResource != null) {
+      try {
+        return new KestrosImageImpl(imageResource, this, "image", "imageElement",
+                assetRetrievalService);
+      } catch (ComponentConfigurationException e) {
+        // Ignore.
+      }
     }
-    try {
-      return new KestrosImageImpl(imageResource, this, "image", "imageElement",
-              assetRetrievalService);
-    } catch (ComponentConfigurationException e) {
-      return null;
-    }
+    imageResource = getResource().getChild("image");
+    return imageResource.adaptTo(ImageStaticDataSource.class);
   }
 }

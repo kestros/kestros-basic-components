@@ -27,7 +27,7 @@ public class KestrosNavigationImpl extends BaseContainerSyntheticResource
 
   @Nonnull
   @Override
-  public List<KestrosNavigationItem> getNavigationLinks() {
+  public List<KestrosNavigationItem> getNavigationLinkElements() {
     return new ArrayList<>(navigationLinks);
   }
 }
