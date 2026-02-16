@@ -1,12 +1,13 @@
 package io.kestros.cms.components.basic.api.table;
 
 import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
+import io.kestros.cms.components.basic.api.KestrosContainerElement;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
 import org.apache.sling.api.resource.Resource;
 
-public interface KestrosTable extends KestrosBasicComponentElement {
+public interface KestrosTable extends KestrosContainerElement {
   String RESOURCE_TYPE = "/libs/kestros/commons/components/content/table";
 
   @Nonnull
@@ -22,7 +23,11 @@ public interface KestrosTable extends KestrosBasicComponentElement {
   default List<Resource> getHeaders() {
     List<Resource> headers = new ArrayList<>();
     for (KestrosTableHeader header : getHeaderElements()) {
-      headers.add(header.getResource());
+      if (header.isSynthetic()) {
+        headers.add(header.toSyntheticResource(getResourceResolver(), getPath()));
+      } else {
+        headers.add(header.getResource());
+      }
     }
     return headers;
   }
@@ -32,10 +37,19 @@ public interface KestrosTable extends KestrosBasicComponentElement {
 
   @Nonnull
   default List<Resource> getRows() {
-    List<Resource> rows = new java.util.ArrayList<>();
+    List<Resource> rows = new ArrayList<>();
     for (KestrosTableRow row : getRowElements()) {
-      rows.add(row.getResource());
+      if (row.isSynthetic()) {
+        rows.add(row.toSyntheticResource(getResourceResolver(), getPath()));
+      } else {
+        rows.add(row.getResource());
+      }
     }
     return rows;
+  }
+
+  @Nonnull
+  default List<KestrosBasicComponentElement> getChildElements() {
+    return new ArrayList<>(getRowElements());
   }
 }
