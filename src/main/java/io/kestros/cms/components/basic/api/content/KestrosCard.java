@@ -92,6 +92,20 @@ public interface KestrosCard extends KestrosContainerElement {
   @Nullable
   KestrosButtonGroup getButtonGroupElement();
 
+  /**
+   * Returns the first button in the button group, used for clickable card layouts.
+   *
+   * @return Primary button or null.
+   */
+  @Nullable
+  default KestrosButton getPrimaryButton() {
+    KestrosButtonGroup group = getButtonGroupElement();
+    if (group != null && !group.getButtonsElements().isEmpty()) {
+      return group.getButtonsElements().get(0);
+    }
+    return null;
+  }
+
   @Nonnull
   @Override
   default List<KestrosBasicComponentElement> getChildElements() {
