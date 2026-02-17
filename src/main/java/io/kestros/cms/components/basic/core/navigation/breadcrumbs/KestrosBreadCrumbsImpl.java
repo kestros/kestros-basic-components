@@ -27,7 +27,7 @@ public class KestrosBreadCrumbsImpl extends BaseContainerSyntheticResource
 
   @Nonnull
   @Override
-  public List<KestrosBreadCrumb> getLinks() {
+  public List<KestrosBreadCrumb> getLinkElements() {
     return new ArrayList<>(breadCrumbs);
   }
 

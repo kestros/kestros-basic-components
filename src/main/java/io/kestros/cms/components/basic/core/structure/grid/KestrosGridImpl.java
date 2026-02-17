@@ -23,7 +23,7 @@ public class KestrosGridImpl extends BaseContainerSyntheticResource implements K
   }
 
   @Override
-  public List<KestrosContainer> getColumns() {
+  public List<KestrosContainer> getColumnElements() {
     return new ArrayList<>(columns);
   }
 }

@@ -17,7 +17,7 @@ public class CardListStaticDataSource extends BaseContainerSlingModelDataSource 
 
   @Nonnull
   @Override
-  public List<KestrosCard> getCards() {
+  public List<KestrosCard> getCardElements() {
     List<KestrosCard> cards = new ArrayList<>();
     for (Resource childResource : getResource().getChildren()) {
       KestrosCard card = childResource.adaptTo(CardStaticDataSource.class);

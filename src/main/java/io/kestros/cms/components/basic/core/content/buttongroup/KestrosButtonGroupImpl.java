@@ -59,7 +59,7 @@ public class KestrosButtonGroupImpl extends BaseContainerSyntheticResource imple
 
   @Nonnull
   @Override
-  public List<KestrosButton> getButtons() {
+  public List<KestrosButton> getButtonsElements() {
     return new ArrayList<>(buttons);
   }
 

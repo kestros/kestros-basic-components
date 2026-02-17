@@ -49,7 +49,7 @@ public class CardListAssetsDataSource extends BaseContainerSlingModelDataSource 
 
   @Nonnull
   @Override
-  public List<KestrosCard> getCards() {
+  public List<KestrosCard> getCardElements() {
     List<KestrosCard> cards = new ArrayList<>();
     String parentPath = getPath();
 

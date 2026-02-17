@@ -50,6 +50,6 @@ public class CardListAssetsDataSourceTest extends BaseDataSourceTest {
   public void testGetCards() {
     registerAssetRetrievalService();
     cardListAssetsDataSource = context.request().adaptTo(CardListAssetsDataSource.class);
-    assertEquals(3, cardListAssetsDataSource.getCards().size());
+    assertEquals(3, cardListAssetsDataSource.getCardElements().size());
   }
 }

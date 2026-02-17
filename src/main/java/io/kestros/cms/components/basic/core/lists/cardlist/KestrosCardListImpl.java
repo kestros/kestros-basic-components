@@ -25,7 +25,7 @@ public class KestrosCardListImpl extends BaseContainerSyntheticResource implemen
 
   @Nonnull
   @Override
-  public List<KestrosCard> getCards() {
+  public List<KestrosCard> getCardElements() {
     return new ArrayList<>(cards);
   }
 }

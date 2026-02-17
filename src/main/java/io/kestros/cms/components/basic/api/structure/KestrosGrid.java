@@ -19,11 +19,9 @@ public interface KestrosGrid extends KestrosContainerElement {
     return RESOURCE_TYPE;
   }
 
-  List<KestrosContainer> getColumns();
-
   @Nonnull
   @Override
   default List<KestrosBasicComponentElement> getChildElements() {
-    return new ArrayList<>(getColumns());
+    return new ArrayList<>();
   }
 }

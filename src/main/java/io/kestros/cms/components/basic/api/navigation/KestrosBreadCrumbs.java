@@ -5,6 +5,7 @@ import io.kestros.cms.components.basic.api.KestrosContainerElement;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
+import org.apache.sling.api.resource.Resource;
 
 public interface KestrosBreadCrumbs extends KestrosContainerElement {
 
@@ -17,11 +18,20 @@ public interface KestrosBreadCrumbs extends KestrosContainerElement {
   }
 
   @Nonnull
-  List<KestrosBreadCrumb> getLinks();
+  default List<Resource> getLinks() {
+    List<Resource> links = new ArrayList<>();
+    for (KestrosBreadCrumb link : getLinkElements()) {
+      links.add(link.getResource());
+    }
+    return links;
+  }
+
+  @Nonnull
+  List<KestrosBreadCrumb> getLinkElements();
 
   @Nonnull
   @Override
   default List<KestrosBasicComponentElement> getChildElements() {
-    return new ArrayList<>(getLinks());
+    return new ArrayList<>(getLinkElements());
   }
 }

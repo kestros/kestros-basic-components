@@ -25,7 +25,7 @@ public class KestrosLinkListImpl extends BaseContainerSyntheticResource implemen
 
   @Nonnull
   @Override
-  public List<KestrosLink> getLinks() {
+  public List<KestrosLink> getLinkElements() {
     return new ArrayList<>(links);
   }
 }

@@ -6,6 +6,7 @@ import io.kestros.cms.components.basic.api.content.KestrosLink;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
+import org.apache.sling.api.resource.Resource;
 
 public interface KestrosLinkList extends KestrosContainerElement {
 
@@ -17,11 +18,20 @@ public interface KestrosLinkList extends KestrosContainerElement {
   }
 
   @Nonnull
-  List<KestrosLink> getLinks();
+  default List<Resource> getLinks() {
+    List<Resource> links = new ArrayList<>();
+    for (KestrosLink link : getLinkElements()) {
+      links.add(link.getResource());
+    }
+    return links;
+  }
+
+  @Nonnull
+  List<KestrosLink> getLinkElements();
 
   @Nonnull
   @Override
   default List<KestrosBasicComponentElement> getChildElements() {
-    return new ArrayList<>(getLinks());
+    return new ArrayList<>(getLinkElements());
   }
 }

@@ -18,7 +18,7 @@ public class ButtonGroupStaticDataSource extends BaseContainerSlingModelDataSour
 
   @Nonnull
   @Override
-  public List<KestrosButton> getButtons() {
+  public List<KestrosButton> getButtonsElements() {
     List<KestrosButton> buttons = new ArrayList<>();
     for (Resource childResource : getResource().getChildren()) {
       KestrosButton button = childResource.adaptTo(ButtonStaticDataSource.class);

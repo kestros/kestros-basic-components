@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import io.kestros.cms.assets.api.exceptions.AssetCollectionRetrievalException;
-import io.kestros.cms.components.basic.api.content.KestrosAlert;
 import io.kestros.cms.components.basic.api.navigation.KestrosBreadCrumb;
 import io.kestros.cms.components.basic.api.navigation.KestrosBreadCrumbs;
 import io.kestros.cms.components.basic.core.BaseDataSourceComponentTest;
@@ -45,23 +44,23 @@ public class BreadCrumbsDataSourceComponentTest extends BaseDataSourceComponentT
   }
 
   @Test
-  public void testGetLinks() {
+  public void testGetLinkElements() {
     context.request().setPathInfo("/content/sites/page/child-3.html");
-    assertEquals(2, breadCrumbs.getLinks().size());
-    assertEquals("/synthetics/content/sites/page/child-3/jcr:content/breadcrumbs/page", breadCrumbs.getLinks().get(0).getPath());
-    assertEquals("_self", breadCrumbs.getLinks().get(0).getTargetAsString());
-    assertEquals("/content/sites/page.html", breadCrumbs.getLinks().get(0).getHref());
-    assertEquals(null, breadCrumbs.getLinks().get(0).getLang());
-    assertEquals(null, breadCrumbs.getLinks().get(0).getRel());
-    assertEquals(null, breadCrumbs.getLinks().get(0).getTitle());
-    assertEquals("Title", breadCrumbs.getLinks().get(0).getText());
-    assertEquals(null, breadCrumbs.getLinks().get(0).getAriaLabel());
-    assertEquals(null, breadCrumbs.getLinks().get(0).getAriaDescribedBy());
+    assertEquals(2, breadCrumbs.getLinkElements().size());
+    assertEquals("/synthetics/content/sites/page/child-3/jcr:content/breadcrumbs/page", breadCrumbs.getLinkElements().get(0).getPath());
+    assertEquals("_self", breadCrumbs.getLinkElements().get(0).getTargetAsString());
+    assertEquals("/content/sites/page.html", breadCrumbs.getLinkElements().get(0).getHref());
+    assertEquals(null, breadCrumbs.getLinkElements().get(0).getLang());
+    assertEquals(null, breadCrumbs.getLinkElements().get(0).getRel());
+    assertEquals(null, breadCrumbs.getLinkElements().get(0).getTitle());
+    assertEquals("Title", breadCrumbs.getLinkElements().get(0).getText());
+    assertEquals(null, breadCrumbs.getLinkElements().get(0).getAriaLabel());
+    assertEquals(null, breadCrumbs.getLinkElements().get(0).getAriaDescribedBy());
     
-    Resource link0Resource = breadCrumbs.getLinks().get(0).toSyntheticResource(
+    Resource link0Resource = breadCrumbs.getLinkElements().get(0).toSyntheticResource(
         context.resourceResolver(), "/synthetics/content/sites/page/child-3/jcr:content/breadcrumbs/page");
     assertNotNull(link0Resource);
-    Resource link1Resource = breadCrumbs.getLinks().get(1).toSyntheticResource(
+    Resource link1Resource = breadCrumbs.getLinkElements().get(1).toSyntheticResource(
         context.resourceResolver(), "/synthetics/content/sites/page/child-3/jcr:content/breadcrumbs/page");
     assertNotNull(link1Resource);
 

@@ -15,7 +15,7 @@ public class LinkListDataSourceComponent extends BaseContainerDataSourceComponen
 
   @Nonnull
   @Override
-  public List<KestrosLink> getLinks() {
-    return getComponentData().getLinks();
+  public List<KestrosLink> getLinkElements() {
+    return getComponentData().getLinkElements();
   }
 }

@@ -16,7 +16,7 @@ public class LinkListStaticDataSource extends BaseContainerSlingModelDataSource
     implements KestrosLinkList {
   @Nonnull
   @Override
-  public List<KestrosLink> getLinks() {
+  public List<KestrosLink> getLinkElements() {
     List<KestrosLink> links = new ArrayList<>();
     for (Resource childResource : getResource().getChildren()) {
       KestrosLink link = childResource.adaptTo(LinkStaticDataSource.class);

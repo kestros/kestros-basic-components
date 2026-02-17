@@ -49,9 +49,9 @@ public class LinkListChildPageDataSourceTest extends BaseDataSourceTest {
   }
 
   @Test
-  public void testGetLinks() {
+  public void testGetLinkElements() {
     assertEquals(3,
-        linkListChildPageDataSource.getLinks().size());
+        linkListChildPageDataSource.getLinkElements().size());
   }
 
   @Test

@@ -1,6 +1,5 @@
 package io.kestros.cms.components.basic.core.navigation.breadcrumbs;
 
-import io.kestros.cms.components.basic.api.content.KestrosLink;
 import io.kestros.cms.components.basic.api.navigation.KestrosBreadCrumb;
 import io.kestros.cms.components.basic.api.navigation.KestrosBreadCrumbs;
 import io.kestros.cms.components.basic.core.BaseContainerDataSourceComponent;
@@ -16,7 +15,7 @@ public class BreadCrumbsDataSourceComponent
 
   @Nonnull
   @Override
-  public List<KestrosBreadCrumb> getLinks() {
-    return getComponentData().getLinks();
+  public List<KestrosBreadCrumb> getLinkElements() {
+    return getComponentData().getLinkElements();
   }
 }

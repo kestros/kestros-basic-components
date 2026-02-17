@@ -149,10 +149,10 @@ public class CardListDataSourceComponentTest extends BaseDataSourceComponentTest
     assertEquals("/synthetics/content/page/jcr:content/component2/child-1/buttonGroupElement",
         buttonGroupComponent.getPath());
     assertEquals(3, buttonGroupComponent.getVariations().size());
-    assertEquals(1, buttonGroupComponent.getButtons().size());
+    assertEquals(1, buttonGroupComponent.getButtonsElements().size());
 
     // button
-    Resource buttonResource = buttonGroupComponent.getButtons().get(0).getResource();
+    Resource buttonResource = buttonGroupComponent.getButtonsElements().get(0).getResource();
     context.request().setResource(buttonResource);
     ButtonDataSourceComponent buttonComponent = context.request().adaptTo(
         ButtonDataSourceComponent.class);
@@ -164,7 +164,7 @@ public class CardListDataSourceComponentTest extends BaseDataSourceComponentTest
   }
 
   @Test
-  public void testGetCards() {
+  public void testGetCardElements() {
     childPagesProperties.put("cardVariations",
         new String[]{"/variations/variation1", "/variations/variation2", "/variations/variation3"});
     childPagesProperties.put("imageVariations",
@@ -177,28 +177,28 @@ public class CardListDataSourceComponentTest extends BaseDataSourceComponentTest
         childPagesProperties);
     context.request().setResource(childPagesResource);
     cardListChildPages = context.request().adaptTo(CardListDataSourceComponent.class);
-    assertEquals(3, cardListChildPages.getCards().size());
-    assertEquals(3, cardListChildPages.getCards().get(0).getVariations().size());
-    assertEquals(3, cardListChildPages.getCards().get(0).getImageElement().getVariations()
+    assertEquals(3, cardListChildPages.getCardElements().size());
+    assertEquals(3, cardListChildPages.getCardElements().get(0).getVariations().size());
+    assertEquals(3, cardListChildPages.getCardElements().get(0).getImageElement().getVariations()
         .size());
 
     assertEquals(3,
-        cardListChildPages.getCards().get(0).getButtonGroupElement().getVariations()
+        cardListChildPages.getCardElements().get(0).getButtonGroupElement().getVariations()
             .size());
-    assertEquals(3, cardListChildPages.getCards().get(1).getVariations().size());
-    assertEquals(3, cardListChildPages.getCards().get(1).getImageElement().getVariations()
+    assertEquals(3, cardListChildPages.getCardElements().get(1).getVariations().size());
+    assertEquals(3, cardListChildPages.getCardElements().get(1).getImageElement().getVariations()
         .size());
     assertEquals(3,
-        cardListChildPages.getCards().get(1).getButtonGroupElement().getVariations()
+        cardListChildPages.getCardElements().get(1).getButtonGroupElement().getVariations()
             .size());
-    assertEquals(3, cardListChildPages.getCards().get(2).getVariations().size());
-    assertEquals(3, cardListChildPages.getCards().get(2).getImageElement().getVariations()
+    assertEquals(3, cardListChildPages.getCardElements().get(2).getVariations().size());
+    assertEquals(3, cardListChildPages.getCardElements().get(2).getImageElement().getVariations()
         .size());
     assertEquals(3,
-        cardListChildPages.getCards().get(2).getButtonGroupElement().getVariations()
+        cardListChildPages.getCardElements().get(2).getButtonGroupElement().getVariations()
             .size());
     context.request().setResource(
-        cardListChildPages.getCards().get(0).getImageElement().getResource());
+        cardListChildPages.getCardElements().get(0).getImageElement().getResource());
     assertEquals(3, context.request().adaptTo(ImageStaticDataSource.class).getVariations().size());
   }
 

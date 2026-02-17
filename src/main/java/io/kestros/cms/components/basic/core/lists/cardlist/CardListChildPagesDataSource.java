@@ -53,7 +53,7 @@ public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSou
 
   @Nonnull
   @Override
-  public List<KestrosCard> getCards() {
+  public List<KestrosCard> getCardElements() {
     List<KestrosCard> cards = new ArrayList<>();
     for (BaseContentPage page : getRootPage().getChildPages()) {
       try {

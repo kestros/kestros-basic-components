@@ -106,28 +106,28 @@ public class CardListChildPagesDataSourceTest extends BaseDataSourceTest {
     resource = context.create().resource("/content/page/jcr:content/component2", properties);
     context.request().setResource(resource);
     cardListChildPagesDataSource = context.request().adaptTo(CardListChildPagesDataSource.class);
-    assertEquals(3, cardListChildPagesDataSource.getCards().size());
-    assertEquals(3, cardListChildPagesDataSource.getCards().get(0).getVariations().size());
-    assertEquals(3, cardListChildPagesDataSource.getCards().get(0).getImageElement().getVariations()
+    assertEquals(3, cardListChildPagesDataSource.getCardElements().size());
+    assertEquals(3, cardListChildPagesDataSource.getCardElements().get(0).getVariations().size());
+    assertEquals(3, cardListChildPagesDataSource.getCardElements().get(0).getImageElement().getVariations()
         .size());
 
     assertEquals(3,
-        cardListChildPagesDataSource.getCards().get(0).getButtonGroupElement().getVariations()
+        cardListChildPagesDataSource.getCardElements().get(0).getButtonGroupElement().getVariations()
             .size());
-    assertEquals(3, cardListChildPagesDataSource.getCards().get(1).getVariations().size());
-    assertEquals(3, cardListChildPagesDataSource.getCards().get(1).getImageElement().getVariations()
+    assertEquals(3, cardListChildPagesDataSource.getCardElements().get(1).getVariations().size());
+    assertEquals(3, cardListChildPagesDataSource.getCardElements().get(1).getImageElement().getVariations()
         .size());
     assertEquals(3,
-        cardListChildPagesDataSource.getCards().get(1).getButtonGroupElement().getVariations()
+        cardListChildPagesDataSource.getCardElements().get(1).getButtonGroupElement().getVariations()
             .size());
-    assertEquals(3, cardListChildPagesDataSource.getCards().get(2).getVariations().size());
-    assertEquals(3, cardListChildPagesDataSource.getCards().get(2).getImageElement().getVariations()
+    assertEquals(3, cardListChildPagesDataSource.getCardElements().get(2).getVariations().size());
+    assertEquals(3, cardListChildPagesDataSource.getCardElements().get(2).getImageElement().getVariations()
         .size());
     assertEquals(3,
-        cardListChildPagesDataSource.getCards().get(2).getButtonGroupElement().getVariations()
+        cardListChildPagesDataSource.getCardElements().get(2).getButtonGroupElement().getVariations()
             .size());
     context.request().setResource(
-        cardListChildPagesDataSource.getCards().get(0).getImageElement().getResource());
+        cardListChildPagesDataSource.getCardElements().get(0).getImageElement().getResource());
     assertEquals(3, context.request().adaptTo(ImageStaticDataSource.class).getVariations().size());
   }
 

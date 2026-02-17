@@ -29,7 +29,7 @@ public class BreadCrumbsPagePathDataSource extends BaseSlingModelDataSource
 
   @Nonnull
   @Override
-  public List<KestrosBreadCrumb> getLinks() {
+  public List<KestrosBreadCrumb> getLinkElements() {
     List<KestrosBreadCrumb> crumbs = new ArrayList<>();
     Boolean first = true;
     Boolean last = false;

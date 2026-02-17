@@ -17,7 +17,7 @@ public class CardListDataSourceComponent extends
 
   @Nonnull
   @Override
-  public List<KestrosCard> getCards() {
-    return getComponentData().getCards();
+  public List<KestrosCard> getCardElements() {
+    return getComponentData().getCardElements();
   }
 }

@@ -34,7 +34,7 @@ public class LinkListChildPageDataSource extends BaseContainerSlingModelDataSour
   }
 
   @Override
-  public List<KestrosLink> getLinks() {
+  public List<KestrosLink> getLinkElements() {
     List<KestrosLink> links = new ArrayList<>();
     for (Resource childResource : getResourceResolver()
         .getResource(getRootPath()).getChildren()) {

@@ -4,7 +4,6 @@ import io.kestros.cms.components.basic.api.content.KestrosButton;
 import io.kestros.cms.components.basic.api.content.KestrosButtonGroup;
 import io.kestros.cms.components.basic.core.BaseContainerDataSourceComponent;
 import io.kestros.cms.componenttypes.api.models.ComponentVariation;
-import io.kestros.cms.componenttypes.api.models.ComponentViewLayout;
 import java.util.List;
 import javax.annotation.Nonnull;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -20,9 +19,9 @@ public class ButtonGroupDataSourceComponent extends
 
   @Nonnull
   @Override
-  public List<KestrosButton> getButtons() {
+  public List<KestrosButton> getButtonsElements() {
     if (buttons == null) {
-      buttons = getComponentData().getButtons();
+      buttons = getComponentData().getButtonsElements();
     }
     return buttons;
   }

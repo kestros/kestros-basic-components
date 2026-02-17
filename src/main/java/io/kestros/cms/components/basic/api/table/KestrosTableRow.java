@@ -17,8 +17,6 @@ public interface KestrosTableRow extends KestrosContainerElement {
   }
 
 
-
-
   @Nonnull
   List<KestrosTableCell> getCellElements();
 

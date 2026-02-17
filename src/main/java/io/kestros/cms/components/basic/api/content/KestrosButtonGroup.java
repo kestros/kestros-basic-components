@@ -3,10 +3,10 @@ package io.kestros.cms.components.basic.api.content;
 import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
 import io.kestros.cms.components.basic.api.KestrosContainerElement;
 import io.kestros.cms.componenttypes.api.models.ComponentVariation;
-import io.kestros.cms.componenttypes.api.models.ComponentViewLayout;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
+import org.apache.sling.api.resource.Resource;
 
 public interface KestrosButtonGroup extends KestrosContainerElement {
 
@@ -19,13 +19,22 @@ public interface KestrosButtonGroup extends KestrosContainerElement {
   }
 
   @Nonnull
-  List<KestrosButton> getButtons();
+  default List<Resource> getButtons() {
+    List<Resource> buttons = new ArrayList<>();
+    for (KestrosButton button : getButtonsElements()) {
+      buttons.add(button.getResource());
+    }
+    return buttons;
+  }
+
+  @Nonnull
+  List<KestrosButton> getButtonsElements();
 
   @Nonnull
   List<ComponentVariation> getButtonVariations();
 
   @Nonnull
   default List<KestrosBasicComponentElement> getChildElements() {
-    return new ArrayList<>(getButtons());
+    return new ArrayList<>(getButtonsElements());
   }
 }
