@@ -17,4 +17,12 @@
   */-->
 <sly data-sly-use.topNavItem="${'io.kestros.cms.components.basic.core.navigation.topnav.TopNavigationItemDataSourceComponent'}"/>
 
-<li><a href="${topNavItem.href}">${topNavItem.text}</a></li>
+<li class="${topNavItem.inlineVariations}">
+    <a href="${topNavItem.href @ context='uri'}"
+       target="${topNavItem.targetAsString}"
+       aria-label="${topNavItem.ariaLabel}">${topNavItem.text}</a>
+    <ul data-sly-test="${topNavItem.navigationItemLinks}"
+        data-sly-list.subItem="${topNavItem.navigationItemLinks}">
+        <sly data-sly-resource="${subItem}"/>
+    </ul>
+</li>

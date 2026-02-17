@@ -16,9 +16,14 @@
   ~
   */-->
 
-<sly data-sly-use.navigation="${'io.kestros.cms.components.basic.core.navigation.nav.NavigationDataSourceComponent'}"/>
+<sly data-sly-use.navItem="${'io.kestros.cms.components.basic.core.navigation.nav.NavigationItemDataSourceComponent'}"/>
 
-<ul class="${navigation.inlineVariations}"
-    data-sly-list.navItem="${navigation.navigationLinks}">
-    <sly data-sly-resource="${navItem}"/>
-</ul>
+<li class="${navItem.inlineVariations}">
+    <a href="${navItem.href @ context='uri'}"
+       target="${navItem.targetAsString}"
+       aria-label="${navItem.ariaLabel}">${navItem.text}</a>
+    <ul data-sly-test="${navItem.navigationItemLinks}"
+        data-sly-list.subItem="${navItem.navigationItemLinks}">
+        <sly data-sly-resource="${subItem}"/>
+    </ul>
+</li>

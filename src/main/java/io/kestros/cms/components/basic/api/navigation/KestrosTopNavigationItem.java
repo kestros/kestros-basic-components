@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.apache.sling.api.resource.Resource;
 
 public interface KestrosTopNavigationItem extends KestrosContainerElement {
 
@@ -21,6 +22,15 @@ public interface KestrosTopNavigationItem extends KestrosContainerElement {
 
   @Nonnull
   List<KestrosTopNavigationItem> getNavigationItems();
+
+  @Nonnull
+  default List<Resource> getNavigationItemLinks() {
+    List<Resource> resources = new ArrayList<>();
+    for (KestrosTopNavigationItem item : getNavigationItems()) {
+      resources.add(item.getResource());
+    }
+    return resources;
+  }
 
   @Nonnull
   @Override
