@@ -19,6 +19,6 @@
 <sly data-sly-use.navigation="${'io.kestros.cms.components.basic.core.navigation.nav.NavigationDataSourceComponent'}"/>
 
 <ul class="${navigation.inlineVariations}"
-    data-sly-list.navItem="${navigation.children}">
+    data-sly-list.navItem="${navigation.navigationLinks}">
     <sly data-sly-resource="${navItem}"/>
 </ul>
