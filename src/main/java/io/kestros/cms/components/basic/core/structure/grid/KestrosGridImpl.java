@@ -5,7 +5,6 @@ import io.kestros.cms.components.basic.api.structure.KestrosContainer;
 import io.kestros.cms.components.basic.api.structure.KestrosGrid;
 import io.kestros.cms.components.basic.core.BaseContainerSyntheticResource;
 import io.kestros.cms.components.basic.core.BaseSlingModelDataSource;
-import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
 
@@ -22,8 +21,4 @@ public class KestrosGridImpl extends BaseContainerSyntheticResource implements K
     this.columns = columns;
   }
 
-  @Override
-  public List<KestrosContainer> getColumnElements() {
-    return new ArrayList<>(columns);
-  }
 }
