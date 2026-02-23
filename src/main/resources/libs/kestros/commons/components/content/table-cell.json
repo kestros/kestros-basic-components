@@ -8,6 +8,6 @@
   "container": true,
   "unwrap": true,
   "kes:allowedComponents": [
-    "group:content"
+    "group:Content Components"
   ]
 }
