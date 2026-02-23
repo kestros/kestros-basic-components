@@ -5,6 +5,7 @@
   "componentGroup": "Content Components",
   "sling:resourceSuperType": "kestros/commons/components/kestros-parent",
   "container": false,
+  "unwrap": true,
   "nested": {
     "jcr:primaryType": "nt:unstructured",
     "title": {

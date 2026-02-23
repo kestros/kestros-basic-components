@@ -6,5 +6,6 @@
   "sling:resourceSuperType": "kestros/commons/components/kestros-parent",
   "editable": true,
   "container": false,
-  "unwrap": true
+  "unwrap": true,
+  "tableElement": true
 }
