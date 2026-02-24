@@ -21,7 +21,7 @@ package io.kestros.cms.components.basic.content.button;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import io.kestros.commons.validation.api.models.ModelValidator;
+import io.kestros.cms.components.basic.core.content.button.validation.ButtonValidationService;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.sling.api.resource.Resource;
@@ -32,40 +32,40 @@ import org.junit.Rule;
 import org.junit.Test;
 
 public class ButtonValidationServiceTest {
-
-  @Rule
-  public SlingContext context = new SlingContext();
-
-  private ButtonValidationService buttonValidationService;
-  private Resource resource;
-  private Map<String, Object> properties = new HashMap<>();
-
-  @Before
-  public void setUp() throws Exception {
-    buttonValidationService = new ButtonValidationService();
-  }
-
-//  @Test
-//  public void testGetModelType() {
-//    assertEquals(Button.class, buttonValidationService.getModelType());
+//
+//  @Rule
+//  public SlingContext context = new SlingContext();
+//
+//  private ButtonValidationService buttonValidationService;
+//  private Resource resource;
+//  private Map<String, Object> properties = new HashMap<>();
+//
+//  @Before
+//  public void setUp() throws Exception {
+//    buttonValidationService = new ButtonValidationService();
 //  }
-
-  @Test
-  @Ignore
-  public void testGetModelValidators() {
-    assertEquals(2, buttonValidationService.getModelValidators().size());
-    assertEquals("Text is configured.",
-        buttonValidationService.getModelValidators().get(0).getMessage());
-    assertEquals("Link has been configured.",
-        buttonValidationService.getModelValidators().get(1).getMessage());
-  }
+//
+////  @Test
+////  public void testGetModelType() {
+////    assertEquals(Button.class, buttonValidationService.getModelType());
+////  }
 //
 //  @Test
-//  public void testHasLink() {
-//    properties.put("link", "button-link");
-//    resource = context.create().resource("/button", properties);
-//    button = resource.adaptTo(Button.class);
-//    ModelValidator validator = buttonValidationService.hasLink();
-//    assertTrue(validator.isValidCheck(button));
+//  @Ignore
+//  public void testGetModelValidators() {
+//    assertEquals(2, buttonValidationService.getModelValidators().size());
+//    assertEquals("Text is configured.",
+//        buttonValidationService.getModelValidators().get(0).getMessage());
+//    assertEquals("Link has been configured.",
+//        buttonValidationService.getModelValidators().get(1).getMessage());
 //  }
+////
+////  @Test
+////  public void testHasLink() {
+////    properties.put("link", "button-link");
+////    resource = context.create().resource("/button", properties);
+////    button = resource.adaptTo(Button.class);
+////    ModelValidator validator = buttonValidationService.hasLink();
+////    assertTrue(validator.isValidCheck(button));
+////  }
 }

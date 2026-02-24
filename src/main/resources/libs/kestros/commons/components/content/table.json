@@ -1,0 +1,29 @@
+{
+  "jcr:primaryType": "kes:ComponentType",
+  "jcr:title": "Table",
+  "jcr:description": "Basic data table with configurable headers and rows.",
+  "componentGroup": "Content Components",
+  "sling:resourceSuperType": "kestros/commons/components/content-area",
+  "editable": true,
+  "container": true,
+  "unwrap": true,
+  "kes:allowedComponents": [
+    "*table-row*",
+    "*table-header*"
+  ],
+  "nested": {
+    "jcr:primaryType": "nt:unstructured",
+    "tableHeader": {
+      "jcr:primaryType": "nt:unstructured",
+      "title": "Table Header",
+      "resourceType": "/libs/kestros/commons/components/content/table-header",
+      "name": "tableHeader"
+    },
+    "tableRow": {
+      "jcr:primaryType": "nt:unstructured",
+      "title": "Table Row",
+      "resourceType": "/libs/kestros/commons/components/content/table-row",
+      "name": "tableRow"
+    }
+  }
+}

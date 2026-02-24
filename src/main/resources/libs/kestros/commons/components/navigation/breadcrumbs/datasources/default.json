@@ -1,0 +1,6 @@
+{
+  "jcr:primaryType": "nt:unstructured",
+  "jcr:title": "Static Cards",
+  "group": "Kestros Core",
+  "classPath": "io.kestros.cms.components.basic.core.navigation.breadcrumbs.BreadCrumbsPagePathDataSource"
+}

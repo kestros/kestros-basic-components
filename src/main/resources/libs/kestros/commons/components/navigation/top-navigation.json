@@ -1,0 +1,29 @@
+{
+  "jcr:primaryType": "kes:ComponentType",
+  "jcr:title": "Top Navigation",
+  "jcr:description": "",
+  "componentGroup": "Navigation Components",
+  "sling:resourceSuperType": "kestros/commons/components/content-area",
+  "editable": true,
+  "container": true,
+  "unwrap": true,
+  "kes:allowedComponents": [
+    "*image*",
+    "*top-navigation-item*"
+  ],
+  "nested": {
+    "jcr:primaryType": "nt:unstructured",
+    "logo": {
+      "jcr:primaryType": "nt:unstructured",
+      "title": "Image",
+      "resourceType": "/libs/kestros/commons/components/content/image",
+      "name": "image"
+    },
+    "topNavigationItem": {
+      "jcr:primaryType": "nt:unstructured",
+      "title": "Navigation Item",
+      "resourceType": "/libs/kestros/commons/components/navigation/top-navigation-item",
+      "name": "topNavigationItem"
+    }
+  }
+}

@@ -15,11 +15,10 @@
   ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
   ~
   */-->
-<sly data-sly-use.section="${'io.kestros.cms.components.basic.structure.section.SectionComponent'}"
-     data-sly-use.context="${'io.kestros.cms.sitebuilding.api.models.ComponentRequestContext'}"/>
-
+<sly data-sly-use.section="${'io.kestros.cms.components.basic.core.structure.section.SectionDataSourceComponent'}"/>
 <sly data-sly-use.includes="/libs/kestros/commons/components/includes.html"/>
 
-<div class="${context.inlineVariations}" data-sly-element="${section.elementType}">
-  <sly data-sly-call="${includes.contentArea @ component = section}"/>
-</div>
+<section class="${section.inlineVariations}"
+         style="background-image: url('${section.backgroundImage @ context='uri'}');">
+    <sly data-sly-call="${includes.contentArea}"/>
+</section>

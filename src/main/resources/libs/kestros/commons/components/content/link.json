@@ -1,0 +1,9 @@
+{
+  "jcr:primaryType": "kes:ComponentType",
+  "jcr:title": "Link",
+  "jcr:description": "Renders a link to an internal or external page.",
+  "componentGroup": ".hidden",
+  "sling:resourceSuperType": "kestros/commons/components/kestros-parent",
+  "fontAwesomeIcon": "far fa-hand-pointer",
+  "unwrap": true
+}

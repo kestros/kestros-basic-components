@@ -1,0 +1,14 @@
+{
+  "jcr:primaryType": "kes:ComponentType",
+  "jcr:title": "Tabs",
+  "jcr:description": "",
+  "componentGroup": "Layout Components",
+  "sling:resourceSuperType": "kestros/commons/components/content-area",
+  "editable": true,
+  "container": true,
+  "unwrap": true,
+  "kes:allowedComponents": [
+    "!group:.hidden",
+    "*tab*"
+  ]
+}

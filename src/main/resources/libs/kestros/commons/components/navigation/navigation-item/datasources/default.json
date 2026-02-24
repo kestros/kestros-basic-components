@@ -1,0 +1,52 @@
+{
+  "jcr:primaryType": "nt:unstructured",
+  "jcr:title": "Static",
+  "group": "Kestros Core",
+  "classPath": "io.kestros.cms.components.basic.core.navigation.nav.NavigationItemStaticDataSource",
+  "edit": {
+    "jcr:primaryType": "nt:unstructured",
+    "sling:resourceType": "kestros/cms2/dialog",
+    "content": {
+      "jcr:primaryType": "nt:unstructured",
+      "label": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/textfield",
+        "label": "Label",
+        "name": "text",
+        "autofocus": true
+      },
+      "href": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/pathfield",
+        "label": "Link",
+        "name": "href",
+        "includePaths": [
+          "closest:kes:Site"
+        ],
+        "resourceTypes": [
+          "kes:Site",
+          "kes:Page"
+        ],
+        "autofocus": false
+      },
+      "openInNewTab": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/checkbox",
+        "label": "Open in New Tab",
+        "name": "openInNewTab"
+      },
+      "ariaLabel": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/textfield",
+        "label": "Aria Label",
+        "name": "ariaLabel"
+      },
+      "title": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/textfield",
+        "label": "Title",
+        "name": "title"
+      }
+    }
+  }
+}

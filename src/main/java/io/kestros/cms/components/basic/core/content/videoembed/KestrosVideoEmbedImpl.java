@@ -1,0 +1,28 @@
+package io.kestros.cms.components.basic.core.content.videoembed;
+
+import io.kestros.cms.components.basic.api.content.KestrosVideoEmbed;
+import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
+import io.kestros.cms.components.basic.core.BaseSlingModelDataSource;
+import io.kestros.cms.components.basic.core.BaseSyntheticResource;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+public class KestrosVideoEmbedImpl extends BaseSyntheticResource implements KestrosVideoEmbed {
+
+  private String videoEmbedCode;
+
+  public KestrosVideoEmbedImpl(
+      @Nonnull String videoEmbedCode,
+      @Nonnull BaseSlingModelDataSource dataSource,
+      @Nonnull String resourcePrefix, @Nullable String forcedResourceName)
+      throws ComponentConfigurationException {
+    super(dataSource, resourcePrefix, forcedResourceName);
+
+  }
+
+  @Nullable
+  @Override
+  public String getVideoEmbedCode() {
+    return videoEmbedCode;
+  }
+}

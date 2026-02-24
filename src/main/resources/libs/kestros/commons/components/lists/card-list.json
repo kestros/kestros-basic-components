@@ -1,0 +1,48 @@
+{
+  "jcr:primaryType": "kes:ComponentType",
+  "jcr:title": "Card List",
+  "jcr:description": "",
+  "componentGroup": "List Components",
+  "sling:resourceSuperType": "kestros/commons/components/content-area",
+  "editable": true,
+  "container": true,
+  "unwrap": true,
+  "kes:allowedComponents": [
+    "!group:.hidden",
+    "!type:container",
+    "*card*"
+  ],
+  "nested": {
+    "jcr:primaryType": "nt:unstructured",
+    "card": {
+      "jcr:primaryType": "nt:unstructured",
+      "title": "Card",
+      "resourceType": "/libs/kestros/commons/components/content/card",
+      "name": "card"
+    },
+    "title": {
+      "jcr:primaryType": "nt:unstructured",
+      "title": "Title",
+      "resourceType": "/libs/kestros/commons/components/content/heading",
+      "name": "title"
+    },
+    "image": {
+      "jcr:primaryType": "nt:unstructured",
+      "title": "Image",
+      "resourceType": "/libs/kestros/commons/components/content/image",
+      "name": "image"
+    },
+    "buttonGroup": {
+      "jcr:primaryType": "nt:unstructured",
+      "title": "Button Group",
+      "resourceType": "/libs/kestros/commons/components/content/button-group",
+      "name": "buttonGroup"
+    },
+    "button": {
+      "jcr:primaryType": "nt:unstructured",
+      "title": "Button",
+      "resourceType": "/libs/kestros/commons/components/content/button",
+      "name": "button"
+    }
+  }
+}

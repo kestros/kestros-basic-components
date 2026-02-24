@@ -1,0 +1,22 @@
+{
+  "jcr:primaryType": "kes:ComponentType",
+  "jcr:title": "Accordion",
+  "jcr:description": "",
+  "componentGroup": "Layout Components",
+  "sling:resourceSuperType": "kestros/commons/components/content-area",
+  "editable": true,
+  "container": true,
+  "unwrap": true,
+  "kes:allowedComponents": [
+    "*accordion-panel*"
+  ],
+  "nested": {
+    "jcr:primaryType": "nt:unstructured",
+    "accordion-panel": {
+      "jcr:primaryType": "nt:unstructured",
+      "title": "Accordion Panel",
+      "resourceType": "/libs/kestros/commons/components/structure/accordion-panel",
+      "name": "accordionPanel"
+    }
+  }
+}

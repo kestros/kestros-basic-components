@@ -1,0 +1,24 @@
+{
+  "jcr:primaryType": "kes:ComponentType",
+  "jcr:title": "Navigation",
+  "jcr:description": "",
+  "componentGroup": "Navigation Components",
+  "sling:resourceSuperType": "kestros/commons/components/content-area",
+  "editable": true,
+  "container": true,
+  "unwrap": true,
+  "kes:allowedComponents": [
+    "!type:container",
+    "*navigation-item*",
+    "*!top-navigation-item*"
+  ],
+  "nested": {
+    "jcr:primaryType": "nt:unstructured",
+    "link": {
+      "jcr:primaryType": "nt:unstructured",
+      "title": "Link",
+      "resourceType": "/libs/kestros/commons/components/content/link",
+      "name": "link"
+    }
+  }
+}

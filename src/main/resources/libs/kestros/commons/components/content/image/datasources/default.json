@@ -1,0 +1,80 @@
+{
+  "jcr:primaryType": "nt:unstructured",
+  "jcr:title": "Image Asset Include",
+  "group": "Kestros Core",
+  "classPath": "io.kestros.cms.components.basic.core.content.image.ImageStaticDataSource",
+  "edit": {
+    "jcr:primaryType": "nt:unstructured",
+    "sling:resourceType": "kestros/cms2/dialog",
+    "content": {
+      "jcr:primaryType": "nt:unstructured",
+      "image": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/pathfield",
+        "label": "Image",
+        "propertyName": "imagePath",
+        "resourceTypes": [
+          "kes:Asset"
+        ],
+        "includePaths": [
+          "/content/assets"
+        ],
+        "required": false
+      },
+      "altText": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/textfield",
+        "label": "Alt Text",
+        "propertyName": "altText",
+        "description": "Accessible description of the image. Leave empty for decorative images."
+      },
+      "imageTitle": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/textfield",
+        "label": "Image Title",
+        "propertyName": "imageTitle",
+        "description": "Optional title attribute for the image."
+      },
+      "caption": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/textfield",
+        "label": "Caption",
+        "propertyName": "caption"
+      },
+      "href": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/pathfield",
+        "label": "Link URL",
+        "propertyName": "href",
+        "resourceTypes": [
+          "kes:Site",
+          "kes:Page"
+        ],
+        "includePaths": [
+          "closest:kes:Site"
+        ],
+        "required": false
+      },
+      "target": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/checkbox",
+        "label": "Open in New Tab",
+        "propertyName": "openInNewTab"
+      },
+      "anchorTitle": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/textfield",
+        "label": "Anchor Title",
+        "propertyName": "anchorTitle",
+        "description": "Optional title attribute for the link."
+      },
+      "ariaLabel": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/textfield",
+        "label": "Aria Label",
+        "propertyName": "ariaLabel",
+        "description": "Accessible label for the link when no alt text is present."
+      }
+    }
+  }
+}

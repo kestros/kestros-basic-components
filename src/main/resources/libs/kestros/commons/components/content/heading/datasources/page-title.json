@@ -1,0 +1,63 @@
+{
+  "jcr:primaryType": "nt:unstructured",
+  "jcr:title": "Page Title",
+  "group": "Kestros Core",
+  "classPath": "io.kestros.cms.components.basic.core.content.heading.HeadingPageTitleDataSource",
+  "edit": {
+    "jcr:primaryType": "nt:unstructured",
+    "sling:resourceType": "kestros/cms2/dialog",
+    "content": {
+      "jcr:primaryType": "nt:unstructured",
+      "override-inherited-title": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/checkbox",
+        "label": "Override Inherited Title",
+        "name": "overrideInheritedTitle"
+      },
+      "heading": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/selectfield",
+        "label": "Heading Level",
+        "name": "level",
+        "options": {
+          "h1": {
+            "jcr:primaryType": "nt:unstructured",
+            "text": "h1",
+            "value": "h1",
+            "selected": true
+          },
+          "h2": {
+            "jcr:primaryType": "nt:unstructured",
+            "text": "h2",
+            "value": "h2",
+            "selected": false
+          },
+          "h3": {
+            "jcr:primaryType": "nt:unstructured",
+            "text": "h3",
+            "value": "h3",
+            "selected": false
+          },
+          "h4": {
+            "jcr:primaryType": "nt:unstructured",
+            "text": "h4",
+            "value": "h4",
+            "selected": false
+          },
+          "h5": {
+            "jcr:primaryType": "nt:unstructured",
+            "text": "h5",
+            "value": "h5",
+            "selected": false
+          },
+          "h6": {
+            "jcr:primaryType": "nt:unstructured",
+            "text": "h6",
+            "value": "h6",
+            "selected": false
+          }
+        }
+      }
+    }
+  }
+}

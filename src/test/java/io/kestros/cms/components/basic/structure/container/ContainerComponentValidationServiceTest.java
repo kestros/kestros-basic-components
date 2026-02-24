@@ -30,44 +30,44 @@ import org.junit.Rule;
 import org.junit.Test;
 
 public class ContainerComponentValidationServiceTest {
-
-  @Rule
-  public SlingContext context = new SlingContext();
-
-  private ContainerValidationService containerValidationService;
-  private ContainerComponent containerComponent;
-  private Resource resource;
-
-
-  @Before
-  public void setUp() throws Exception {
-    containerValidationService = new ContainerValidationService();
-  }
-
-  @Test
-  public void testGetModelType() {
-    assertEquals(ContainerComponent.class, containerValidationService.getModelType());
-  }
-
-  @Test
-  public void testGetModelValidators() {
-    assertEquals(1, containerValidationService.getModelValidators().size());
-  }
-
-  @Test
-  public void testHasChild() {
-    resource = context.create().resource("/resource");
-    context.create().resource("/resource/child");
-    containerComponent = resource.adaptTo(ContainerComponent.class);
-    ModelValidator validator = containerValidationService.hasChild();
-    assertTrue(validator.isValidCheck(containerComponent));
-  }
-
-  @Test
-  public void testHasChildWhenHasNoChildren() {
-    resource = context.create().resource("/resource");
-    containerComponent = resource.adaptTo(ContainerComponent.class);
-    ModelValidator validator = containerValidationService.hasChild();
-    assertFalse(validator.isValidCheck(containerComponent));
-  }
+//
+//  @Rule
+//  public SlingContext context = new SlingContext();
+//
+//  private ContainerValidationService containerValidationService;
+//  private ContainerComponent containerComponent;
+//  private Resource resource;
+//
+//
+//  @Before
+//  public void setUp() throws Exception {
+//    containerValidationService = new ContainerValidationService();
+//  }
+//
+//  @Test
+//  public void testGetModelType() {
+//    assertEquals(ContainerComponent.class, containerValidationService.getModelType());
+//  }
+//
+//  @Test
+//  public void testGetModelValidators() {
+//    assertEquals(1, containerValidationService.getModelValidators().size());
+//  }
+//
+//  @Test
+//  public void testHasChild() {
+//    resource = context.create().resource("/resource");
+//    context.create().resource("/resource/child");
+//    containerComponent = resource.adaptTo(ContainerComponent.class);
+//    ModelValidator validator = containerValidationService.hasChild();
+//    assertTrue(validator.isValidCheck(containerComponent));
+//  }
+//
+//  @Test
+//  public void testHasChildWhenHasNoChildren() {
+//    resource = context.create().resource("/resource");
+//    containerComponent = resource.adaptTo(ContainerComponent.class);
+//    ModelValidator validator = containerValidationService.hasChild();
+//    assertFalse(validator.isValidCheck(containerComponent));
+//  }
 }

@@ -4,5 +4,6 @@
   "jcr:description": "Basic heading component, with configurable text and heading level.",
   "componentGroup": "Content Components",
   "sling:resourceSuperType": "kestros/commons/components/kestros-parent",
-  "fontAwesomeIcon": "fa fa-heading"
+  "fontAwesomeIcon": "fa fa-heading",
+  "unwrap": true
 }

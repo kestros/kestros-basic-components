@@ -1,0 +1,27 @@
+{
+  "jcr:primaryType": "nt:unstructured",
+  "jcr:title": "Asset List",
+  "group": "Kestros Core",
+  "classPath": "io.kestros.cms.components.basic.core.lists.cardlist.CardListAssetsDataSource",
+  "container": true,
+  "edit": {
+    "jcr:primaryType": "nt:unstructured",
+    "sling:resourceType": "kestros/cms2/dialog",
+    "content": {
+      "jcr:primaryType": "nt:unstructured",
+      "pages-path": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/pathfield",
+        "label": "Asset Collection",
+        "name": "collectionPath",
+        "includePaths": [
+          "/content/assets"
+        ],
+        "resourceTypes": [
+          "kes:AssetCollection"
+        ],
+        "autofocus": false
+      }
+    }
+  }
+}

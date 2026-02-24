@@ -1,0 +1,24 @@
+{
+  "jcr:primaryType": "nt:unstructured",
+  "jcr:title": "Asset Card",
+  "group": "Kestros Core",
+  "classPath": "io.kestros.cms.components.basic.core.content.card.CardAssetDataSource",
+  "container": true,
+  "edit": {
+    "jcr:primaryType": "nt:unstructured",
+    "sling:resourceType": "kestros/cms2/dialog",
+    "content": {
+      "jcr:primaryType": "nt:unstructured",
+      "image": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/pathfield",
+        "label": "Image",
+        "propertyName": "imagePath",
+        "resourceTypes": [
+          "kes:Asset"
+        ],
+        "includePaths": ["/content/assets"]
+      }
+    }
+  }
+}

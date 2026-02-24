@@ -1,10 +1,12 @@
 {
   "jcr:primaryType": "kes:ComponentType",
   "jcr:title": "Section",
+  "jcr:description": "",
   "componentGroup": "Layout Components",
   "sling:resourceSuperType": "kestros/commons/components/content-area",
   "container": true,
   "kes:allowedComponents": [
+    "!group:.hidden",
     "*"
   ],
   "fontAwesomeIcon": "far fa-square",

@@ -1,7 +1,0 @@
-{
-  "jcr:primaryType": "kes:ComponentType",
-  "sling:resourceSuperType": "kestros/commons/components/kestros-parent",
-  "jcr:title": "Navigation",
-  "jcr:description": "Navigation list of child pages from a specified root page.",
-  "componentGroup": "Navigation Components"
-}

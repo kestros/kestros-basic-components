@@ -1,0 +1,32 @@
+{
+  "jcr:primaryType": "nt:unstructured",
+  "jcr:title": "YouTube",
+  "group": "Kestros Core",
+  "classPath": "io.kestros.cms.components.basic.core.content.videoembed.VideoEmbedYouTubeDataSource",
+  "edit": {
+    "jcr:primaryType": "nt:unstructured",
+    "sling:resourceType": "kestros/cms2/dialog",
+    "content": {
+      "jcr:primaryType": "nt:unstructured",
+      "videoUrl": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/textfield",
+        "label": "Video URL",
+        "propertyName": "youtubeVideo"
+      },
+      "mute": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/checkbox",
+        "label": "Mute",
+        "propertyName": "mute"
+      },
+      "allowFullScreen": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/checkbox",
+        "label": "Allow Full Screen",
+        "propertyName": "allowFullScreen",
+        "checked": true
+      }
+    }
+  }
+}
