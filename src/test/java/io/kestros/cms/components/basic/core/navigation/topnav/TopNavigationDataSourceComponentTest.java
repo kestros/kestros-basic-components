@@ -138,4 +138,15 @@ public class TopNavigationDataSourceComponentTest extends BaseDataSourceComponen
     assertEquals(3, topNavigation.getChildren().size());
   }
 
+  @Test
+  public void testGetBrandName() {
+    assertNotNull(topNavigation);
+  }
+
+  @Test
+  public void testGetNavigationLinkElementsSize() {
+    assertNotNull(topNavigation.getNavigationLinkElements());
+    assertEquals(3, topNavigation.getNavigationLinkElements().size());
+  }
+
 }
