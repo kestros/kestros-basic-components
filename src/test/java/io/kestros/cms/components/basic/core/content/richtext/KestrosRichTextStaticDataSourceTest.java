@@ -84,4 +84,125 @@ public class KestrosRichTextStaticDataSourceTest extends BaseDataSourceTest {
 
     assertEquals("", richTextStaticDataSource.getText());
   }
+
+  @Test
+  public void testGetTextWithLinks() {
+    properties.put("text", "<p><a href='/path/to/page'>Link Text</a></p>");
+    resource = context.create().resource("/content/richtext/static/richtext-links", properties);
+    context.request().setResource(resource);
+    richTextStaticDataSource = context.request().adaptTo(KestrosRichTextStaticDataSource.class);
+
+    assertEquals("<p><a href='/path/to/page'>Link Text</a></p>", richTextStaticDataSource.getText());
+  }
+
+  @Test
+  public void testGetTextWithLists() {
+    properties.put("text", "<ul><li>Item 1</li><li>Item 2</li></ul>");
+    resource = context.create().resource("/content/richtext/static/richtext-lists", properties);
+    context.request().setResource(resource);
+    richTextStaticDataSource = context.request().adaptTo(KestrosRichTextStaticDataSource.class);
+
+    assertEquals("<ul><li>Item 1</li><li>Item 2</li></ul>", richTextStaticDataSource.getText());
+  }
+
+  @Test
+  public void testGetTextWithTables() {
+    properties.put("text", "<table><tr><td>Cell 1</td><td>Cell 2</td></tr></table>");
+    resource = context.create().resource("/content/richtext/static/richtext-tables", properties);
+    context.request().setResource(resource);
+    richTextStaticDataSource = context.request().adaptTo(KestrosRichTextStaticDataSource.class);
+
+    assertEquals("<table><tr><td>Cell 1</td><td>Cell 2</td></tr></table>", richTextStaticDataSource.getText());
+  }
+
+  @Test
+  public void testGetTextWithBlockquotes() {
+    properties.put("text", "<blockquote><p>Quoted text</p></blockquote>");
+    resource = context.create().resource("/content/richtext/static/richtext-blockquote", properties);
+    context.request().setResource(resource);
+    richTextStaticDataSource = context.request().adaptTo(KestrosRichTextStaticDataSource.class);
+
+    assertEquals("<blockquote><p>Quoted text</p></blockquote>", richTextStaticDataSource.getText());
+  }
+
+  @Test
+  public void testGetTextWithCodeBlocks() {
+    properties.put("text", "<pre><code>function example() { return true; }</code></pre>");
+    resource = context.create().resource("/content/richtext/static/richtext-code", properties);
+    context.request().setResource(resource);
+    richTextStaticDataSource = context.request().adaptTo(KestrosRichTextStaticDataSource.class);
+
+    assertEquals("<pre><code>function example() { return true; }</code></pre>", richTextStaticDataSource.getText());
+  }
+
+  @Test
+  public void testGetTextWithHorizontalRule() {
+    properties.put("text", "<p>Before</p><hr/><p>After</p>");
+    resource = context.create().resource("/content/richtext/static/richtext-hr", properties);
+    context.request().setResource(resource);
+    richTextStaticDataSource = context.request().adaptTo(KestrosRichTextStaticDataSource.class);
+
+    assertEquals("<p>Before</p><hr/><p>After</p>", richTextStaticDataSource.getText());
+  }
+
+  @Test
+  public void testGetTextWithLineBreaks() {
+    properties.put("text", "<p>Line 1<br/>Line 2<br/>Line 3</p>");
+    resource = context.create().resource("/content/richtext/static/richtext-br", properties);
+    context.request().setResource(resource);
+    richTextStaticDataSource = context.request().adaptTo(KestrosRichTextStaticDataSource.class);
+
+    assertEquals("<p>Line 1<br/>Line 2<br/>Line 3</p>", richTextStaticDataSource.getText());
+  }
+
+  @Test
+  public void testGetTextWithSpecialCharactersInHtml() {
+    properties.put("text", "<p>&lt;escaped&gt; &amp; symbols</p>");
+    resource = context.create().resource("/content/richtext/static/richtext-special", properties);
+    context.request().setResource(resource);
+    richTextStaticDataSource = context.request().adaptTo(KestrosRichTextStaticDataSource.class);
+
+    assertEquals("<p>&lt;escaped&gt; &amp; symbols</p>", richTextStaticDataSource.getText());
+  }
+
+  @Test
+  public void testGetTextWithNestedFormatting() {
+    properties.put("text", "<p><strong><em>Bold and Italic</em></strong></p>");
+    resource = context.create().resource("/content/richtext/static/richtext-nested", properties);
+    context.request().setResource(resource);
+    richTextStaticDataSource = context.request().adaptTo(KestrosRichTextStaticDataSource.class);
+
+    assertEquals("<p><strong><em>Bold and Italic</em></strong></p>", richTextStaticDataSource.getText());
+  }
+
+  @Test
+  public void testGetTextWithDataAttributes() {
+    properties.put("text", "<p data-id='123' class='highlight'>Text with attributes</p>");
+    resource = context.create().resource("/content/richtext/static/richtext-attrs", properties);
+    context.request().setResource(resource);
+    richTextStaticDataSource = context.request().adaptTo(KestrosRichTextStaticDataSource.class);
+
+    assertEquals("<p data-id='123' class='highlight'>Text with attributes</p>", richTextStaticDataSource.getText());
+  }
+
+  @Test
+  public void testGetComponentResourceType() {
+    richTextStaticDataSource = context.request().adaptTo(KestrosRichTextStaticDataSource.class);
+    assertNotNull(richTextStaticDataSource.getComponentResourceType());
+  }
+
+  @Test
+  public void testAdaptation() {
+    richTextStaticDataSource = context.request().adaptTo(KestrosRichTextStaticDataSource.class);
+    assertNotNull(richTextStaticDataSource);
+  }
+
+  @Test
+  public void testGetTextMultipleTimes() {
+    richTextStaticDataSource = context.request().adaptTo(KestrosRichTextStaticDataSource.class);
+    String text1 = richTextStaticDataSource.getText();
+    String text2 = richTextStaticDataSource.getText();
+    assertEquals(text1, text2);
+    assertEquals("<p>Sample Rich Text</p>", text1);
+  }
 }
