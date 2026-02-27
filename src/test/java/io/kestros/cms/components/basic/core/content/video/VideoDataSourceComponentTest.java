@@ -56,4 +56,25 @@ public class VideoDataSourceComponentTest extends BaseDataSourceComponentTest {
     assertEquals("Fallback Text", video.getFallbackText());
   }
 
+  @Test
+  public void testGetComponentResourceType() {
+    assertEquals(KestrosVideo.RESOURCE_TYPE, video.getComponentResourceType());
+  }
+
+  @Test
+  public void testGetResource() {
+    assertNotNull(video.getResource());
+  }
+
+  @Test
+  public void testGetPath() {
+    assertNotNull(video.getPath());
+  }
+
+  @Test
+  public void testGetVideoSourceNotNull() {
+    registerAssetRetrievalService();
+    assertNotNull(video.getVideoSource());
+  }
+
 }

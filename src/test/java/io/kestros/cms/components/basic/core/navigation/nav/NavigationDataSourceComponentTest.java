@@ -60,4 +60,34 @@ public class NavigationDataSourceComponentTest extends BaseDataSourceComponentTe
     assertEquals(3, navigation.getNavigationLinkElements().size());
   }
 
+  @Test
+  public void testGetNavigationLinkElementsNotNull() {
+    assertNotNull(navigation.getNavigationLinkElements());
+  }
+
+  @Test
+  public void testGetComponentResourceType() {
+    assertEquals(KestrosNavigation.RESOURCE_TYPE, navigation.getComponentResourceType());
+  }
+
+  @Test
+  public void testGetResource() {
+    assertNotNull(navigation.getResource());
+  }
+
+  @Test
+  public void testGetPath() {
+    assertNotNull(navigation.getPath());
+  }
+
+  @Test
+  public void testGetChildElements() {
+    assertNotNull(navigation.getChildElements());
+  }
+
+  @Test
+  public void testGetChildren() {
+    assertEquals(3, navigation.getChildren().size());
+  }
+
 }

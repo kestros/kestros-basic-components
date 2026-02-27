@@ -1,6 +1,7 @@
 package io.kestros.cms.components.basic.core.content.heading;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import io.kestros.cms.assets.api.exceptions.AssetCollectionRetrievalException;
 import io.kestros.cms.components.basic.api.content.KestrosHeading;
@@ -78,6 +79,36 @@ public class HeadingDataSourceComponentTest extends BaseDataSourceComponentTest 
     context.request().setResource(resource);
     heading = context.request().adaptTo(HeadingDataSourceComponent.class);
     assertEquals("h1", heading.getHeadingType());
+  }
+
+  @Test
+  public void testGetComponentResourceType() {
+    properties.put("kes:datasource", "default");
+    properties.put("sling:resourceType", KestrosHeading.RESOURCE_TYPE);
+    resource = context.create().resource("/content/heading-2", properties);
+    context.request().setResource(resource);
+    heading = context.request().adaptTo(HeadingDataSourceComponent.class);
+    assertEquals(KestrosHeading.RESOURCE_TYPE, heading.getComponentResourceType());
+  }
+
+  @Test
+  public void testGetResource() {
+    properties.put("kes:datasource", "default");
+    properties.put("sling:resourceType", KestrosHeading.RESOURCE_TYPE);
+    resource = context.create().resource("/content/heading-3", properties);
+    context.request().setResource(resource);
+    heading = context.request().adaptTo(HeadingDataSourceComponent.class);
+    assertNotNull(heading.getResource());
+  }
+
+  @Test
+  public void testGetPath() {
+    properties.put("kes:datasource", "default");
+    properties.put("sling:resourceType", KestrosHeading.RESOURCE_TYPE);
+    resource = context.create().resource("/content/heading-4", properties);
+    context.request().setResource(resource);
+    heading = context.request().adaptTo(HeadingDataSourceComponent.class);
+    assertNotNull(heading.getPath());
   }
 
 }

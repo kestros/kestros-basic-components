@@ -108,4 +108,34 @@ public class TopNavigationDataSourceComponentTest extends BaseDataSourceComponen
     assertNull(topNavigation.getImageElement());
   }
 
+  @Test
+  public void testGetNavigationLinkElementsNotNull() {
+    assertNotNull(topNavigation.getNavigationLinkElements());
+  }
+
+  @Test
+  public void testGetComponentResourceType() {
+    assertEquals(KestrosTopNavigation.RESOURCE_TYPE, topNavigation.getComponentResourceType());
+  }
+
+  @Test
+  public void testGetResource() {
+    assertNotNull(topNavigation.getResource());
+  }
+
+  @Test
+  public void testGetPath() {
+    assertNotNull(topNavigation.getPath());
+  }
+
+  @Test
+  public void testGetChildElements() {
+    assertNotNull(topNavigation.getChildElements());
+  }
+
+  @Test
+  public void testGetChildren() {
+    assertEquals(3, topNavigation.getChildren().size());
+  }
+
 }

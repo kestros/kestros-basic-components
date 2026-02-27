@@ -97,13 +97,13 @@ public abstract class BaseComponentTest {
     imageDataSources.put("default",
             "io.kestros.cms.components.basic.core.content.image.ImageStaticDataSource");
     dataSourceMap.put("/libs/kestros/commons/components/content/image", imageDataSources);
-//
-//    // richtext
-//    Map<String, String> richTextDataSources = new HashMap<>();
-//    richTextDataSources.put("default",
-//        "io.kestros.cms.components.basic.core.content.richtext.RichTextStaticDataSource");
-//    dataSourceMap.put("/libs/kestros/commons/components/content/rich-text", richTextDataSources);
-//
+
+    // richtext
+    Map<String, String> richTextDataSources = new HashMap<>();
+    richTextDataSources.put("default",
+        "io.kestros.cms.components.basic.core.content.richtext.KestrosRichTextStaticDataSource");
+    dataSourceMap.put("/libs/kestros/commons/components/content/rich-text", richTextDataSources);
+
     // video
     Map<String, String> videoDataSources = new HashMap<>();
     videoDataSources.put("default",
@@ -123,15 +123,15 @@ public abstract class BaseComponentTest {
     cardListDataSources.put("child-pages",
             "io.kestros.cms.components.basic.core.lists.cardlist.CardListChildPagesDataSource");
     dataSourceMap.put("/libs/kestros/commons/components/lists/card-list", cardListDataSources);
-//
-//    // link list
-//    Map<String, String> linkListDataSources = new HashMap<>();
-//    linkListDataSources.put("default",
-//        "io.kestros.cms.components.basic.core.lists.linklist.LinkListStaticDataSource");
-//    linkListDataSources.put("child-pages",
-//        "io.kestros.cms.components.basic.core.lists.linklist.LinkListChildPagesDataSource");
-//    dataSourceMap.put("/libs/kestros/commons/components/lists/link-list", linkListDataSources);
-//
+
+    // link list
+    Map<String, String> linkListDataSources = new HashMap<>();
+    linkListDataSources.put("default",
+        "io.kestros.cms.components.basic.core.lists.linklist.LinkListStaticDataSource");
+    linkListDataSources.put("child-pages",
+        "io.kestros.cms.components.basic.core.lists.linklist.LinkListChildPagesDataSource");
+    dataSourceMap.put("/libs/kestros/commons/components/lists/link-list", linkListDataSources);
+
     // breadcrumbs
 
     Map<String, String> breadcrumbDataSources = new HashMap<>();
@@ -187,26 +187,26 @@ public abstract class BaseComponentTest {
             "io.kestros.cms.components.basic.core.structure.accordion.AccordionStaticDataSource");
     dataSourceMap.put("/libs/kestros/commons/components/structure/accordion",
             accordionDataSources);
-//
-//    // container
-//    Map<String, String> containerDataSources = new HashMap<>();
-//    containerDataSources.put("default",
-//        "io.kestros.cms.components.basic.core.structure.ContainerStaticDataSource");
-//    dataSourceMap.put("/libs/kestros/commons/components/structure/container",
-//    containerDataSources);
-//
+
+    // container
+    Map<String, String> containerDataSources = new HashMap<>();
+    containerDataSources.put("default",
+        "io.kestros.cms.components.basic.core.structure.container.ContainerStaticDataSource");
+    dataSourceMap.put("/libs/kestros/commons/components/structure/container",
+        containerDataSources);
+
 //    // grid
 //    Map<String, String> gridDataSources = new HashMap<>();
 //    gridDataSources.put("default",
 //        "io.kestros.cms.components.basic.core.structure.grid.GridStaticDataSource");
 //    dataSourceMap.put("/libs/kestros/commons/components/structure/grid", gridDataSources);
-//
-//    // section
-//    Map<String, String> sectionDataSources = new HashMap<>();
-//    sectionDataSources.put("default",
-//        "io.kestros.cms.components.basic.core.structure.section.SectionStaticDataSource");
-//    dataSourceMap.put("/libs/kestros/commons/components/structure/section", sectionDataSources);
-//
+
+    // section
+    Map<String, String> sectionDataSources = new HashMap<>();
+    sectionDataSources.put("default",
+        "io.kestros.cms.components.basic.core.structure.section.SectionStaticDataSource");
+    dataSourceMap.put("/libs/kestros/commons/components/structure/section", sectionDataSources);
+
 //    // tabs
 //    Map<String, String> tabsDataSources = new HashMap<>();
 //    tabsDataSources.put("default",

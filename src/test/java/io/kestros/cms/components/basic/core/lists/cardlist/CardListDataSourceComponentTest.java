@@ -234,4 +234,24 @@ public class CardListDataSourceComponentTest extends BaseDataSourceComponentTest
 
   }
 
+  @Test
+  public void testGetCardElementsNotNull() {
+    assertNotNull(cardListChildPages.getCardElements());
+  }
+
+  @Test
+  public void testGetComponentResourceType() {
+    assertEquals("/libs/kestros/commons/components/lists/card-list", cardListChildPages.getComponentResourceType());
+  }
+
+  @Test
+  public void testGetResource() {
+    assertNotNull(cardListChildPages.getResource());
+  }
+
+  @Test
+  public void testGetPath() {
+    assertNotNull(cardListChildPages.getPath());
+  }
+
 }

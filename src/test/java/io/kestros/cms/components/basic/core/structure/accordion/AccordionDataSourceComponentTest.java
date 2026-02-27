@@ -51,4 +51,39 @@ public class AccordionDataSourceComponentTest extends BaseDataSourceComponentTes
     assertEquals(3, accordion.getPanelElements().size());
   }
 
+  @Test
+  public void testGetPanelElementsNotNull() {
+    assertNotNull(accordion.getPanelElements());
+  }
+
+  @Test
+  public void testGetComponentResourceType() {
+    assertEquals(KestrosAccordion.RESOURCE_TYPE, accordion.getComponentResourceType());
+  }
+
+  @Test
+  public void testGetChildren() {
+    assertEquals(3, accordion.getChildren().size());
+  }
+
+  @Test
+  public void testGetChildElements() {
+    assertEquals(3, accordion.getChildElements().size());
+  }
+
+  @Test
+  public void testGetChildElementsNotNull() {
+    assertNotNull(accordion.getChildElements());
+  }
+
+  @Test
+  public void testGetPathNotNull() {
+    assertNotNull(accordion.getPath());
+  }
+
+  @Test
+  public void testGetResource() {
+    assertNotNull(accordion.getResource());
+  }
+
 }

@@ -95,4 +95,31 @@ public class BreadCrumbsDataSourceComponentTest extends BaseDataSourceComponentT
     assertEquals(null, crumb1.getAriaDescribedBy());
 
   }
+
+  @Test
+  public void testGetComponentResourceType() {
+    assertEquals(KestrosBreadCrumbs.RESOURCE_TYPE, breadCrumbs.getComponentResourceType());
+  }
+
+  @Test
+  public void testGetResource() {
+    assertNotNull(breadCrumbs.getResource());
+  }
+
+  @Test
+  public void testGetPath() {
+    assertNotNull(breadCrumbs.getPath());
+  }
+
+  @Test
+  public void testGetChildElements() {
+    context.request().setPathInfo("/content/sites/page/child-3.html");
+    assertNotNull(breadCrumbs.getChildElements());
+  }
+
+  @Test
+  public void testGetLinkElementsNotNull() {
+    context.request().setPathInfo("/content/sites/page/child-3.html");
+    assertNotNull(breadCrumbs.getLinkElements());
+  }
 }

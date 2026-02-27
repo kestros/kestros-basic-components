@@ -120,5 +120,28 @@ public class VideoEmbedDataSourceComponentTest extends BaseDataSourceComponentTe
     assertNull(videoEmbed.getVideoEmbedCode());
   }
 
+  @Test
+  public void testGetComponentResourceType() {
+    resource = context.create().resource("/content/video-embed-2", properties);
+    context.request().setResource(resource);
+    videoEmbed = context.request().adaptTo(VideoEmbedDataSourceComponent.class);
+    assertEquals(KestrosVideoEmbed.RESOURCE_TYPE, videoEmbed.getComponentResourceType());
+  }
+
+  @Test
+  public void testGetResource() {
+    resource = context.create().resource("/content/video-embed-3", properties);
+    context.request().setResource(resource);
+    videoEmbed = context.request().adaptTo(VideoEmbedDataSourceComponent.class);
+    assertNotNull(videoEmbed.getResource());
+  }
+
+  @Test
+  public void testGetPath() {
+    resource = context.create().resource("/content/video-embed-4", properties);
+    context.request().setResource(resource);
+    videoEmbed = context.request().adaptTo(VideoEmbedDataSourceComponent.class);
+    assertNotNull(videoEmbed.getPath());
+  }
 
 }
