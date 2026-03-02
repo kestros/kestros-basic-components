@@ -106,4 +106,10 @@ public class NavigationDataSourceComponentTest extends BaseDataSourceComponentTe
     assertNotNull(navigation.getChildElements());
   }
 
+  @Test
+  public void testGetNavigationLinks() {
+    assertNotNull(navigation.getNavigationLinks());
+    assertEquals(3, navigation.getNavigationLinks().size());
+  }
+
 }

@@ -149,4 +149,10 @@ public class TopNavigationDataSourceComponentTest extends BaseDataSourceComponen
     assertEquals(3, topNavigation.getNavigationLinkElements().size());
   }
 
+  @Test
+  public void testGetNavigationLinks() {
+    assertNotNull(topNavigation.getNavigationLinks());
+    assertEquals(3, topNavigation.getNavigationLinks().size());
+  }
+
 }
