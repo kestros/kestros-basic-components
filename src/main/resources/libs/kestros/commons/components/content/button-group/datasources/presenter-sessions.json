@@ -1,19 +1,19 @@
 {
   "jcr:primaryType": "nt:unstructured",
-  "jcr:title": "Tag Search",
+  "jcr:title": "Presenter Sessions",
   "group": "Dynamic",
-  "classPath": "io.kestros.cms.components.basic.core.lists.cardlist.CardListTagSearchDataSource",
+  "classPath": "io.kestros.cms.components.basic.core.content.buttongroup.ButtonGroupPresenterSessionsDataSource",
   "container": true,
   "edit": {
     "jcr:primaryType": "nt:unstructured",
     "sling:resourceType": "kestros/cms2/dialog",
     "content": {
       "jcr:primaryType": "nt:unstructured",
-      "pages-path": {
+      "sessions-path": {
         "jcr:primaryType": "nt:unstructured",
         "sling:resourceType": "kestros/cms2/fields/general/pathfield",
-        "label": "Root Path",
-        "name": "pagesPath",
+        "label": "Sessions Root Path",
+        "name": "sessionsPath",
         "includePaths": [
           "closest:kes:Site"
         ],
