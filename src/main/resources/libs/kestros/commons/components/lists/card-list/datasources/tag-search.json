@@ -2,6 +2,7 @@
   "jcr:primaryType": "nt:unstructured",
   "jcr:title": "Tag Search",
   "group": "Dynamic",
+  "classPath": "io.kestros.cms.components.basic.core.lists.cardlist.CardListTagSearchDataSource",
   "container": true,
   "edit": {
     "jcr:primaryType": "nt:unstructured",
@@ -20,6 +21,13 @@
           "kes:Site",
           "kes:Page"
         ],
+        "autofocus": false
+      },
+      "readMoreText": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/textfield",
+        "label": "Read More Text",
+        "name": "readMoreText",
         "autofocus": false
       }
     }
