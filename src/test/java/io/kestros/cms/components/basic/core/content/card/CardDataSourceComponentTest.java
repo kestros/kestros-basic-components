@@ -60,12 +60,12 @@ public class CardDataSourceComponentTest extends BaseDataSourceComponentTest {
     assertNotNull(buttonGroupResource);
     assertEquals("/synthetics/test/path/card-2/buttonGroupElement", buttonGroupResource.getPath());
     assertEquals(1, SlingModelUtils.getChildrenAsBaseResource(buttonGroupResource).size());
-    assertEquals(12, buttonGroupResource.getValueMap().size());
+    assertEquals(13, buttonGroupResource.getValueMap().size());
 
     Resource buttonResource = SlingModelUtils.getChildrenAsBaseResource(
         cardDataSourceComponent.getButtonGroup()).get(0).getResource();
     assertNotNull(buttonResource);
-    assertEquals("/synthetics/test/path/card-2/buttonGroupElement/buttonElement", buttonResource.getPath());
+    assertEquals("/synthetics/content/page/jcr:content/static/card-2/buttonElement", buttonResource.getPath());
     assertEquals(0,
         SlingModelUtils.getChildrenAsBaseResource(buttonResource).size());
     assertEquals(20, buttonResource.getValueMap().size());

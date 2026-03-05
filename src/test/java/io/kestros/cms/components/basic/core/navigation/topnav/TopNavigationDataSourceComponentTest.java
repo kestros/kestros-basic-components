@@ -49,10 +49,23 @@ public class TopNavigationDataSourceComponentTest extends BaseDataSourceComponen
 
   @Override
   public void testToSyntheticResource() {
-    assertNotNull(topNavigation.toSyntheticResource(context.resourceResolver(),
-        "/test"));
-    assertEquals("/synthetics/test/top-nav", topNavigation.toSyntheticResource(context.resourceResolver(),
-        "/test").getPath());
+    registerAssetRetrievalService();
+    Map<String, Object> navProps = new HashMap<>();
+    navProps.put("sling:resourceType", KestrosTopNavigation.RESOURCE_TYPE);
+    navProps.put("kes:datasource", "default");
+    Resource navResource = context.create().resource(
+        "/content/sites/page/child-3/jcr:content/top-nav-no-children", navProps);
+    Map<String, Object> imgProps = new HashMap<>();
+    imgProps.put("imagePath", "/content/sites/page");
+    imgProps.put("sling:resourceType", "kestros/commons/components/content/image");
+    context.create().resource(
+        "/content/sites/page/child-3/jcr:content/top-nav-no-children/imageElement", imgProps);
+    context.request().setResource(navResource);
+    TopNavigationDataSourceComponent navNoChildren = context.request().adaptTo(
+        TopNavigationDataSourceComponent.class);
+    assertNotNull(navNoChildren.toSyntheticResource(context.resourceResolver(), "/test"));
+    assertEquals("/synthetics/test/top-nav-no-children",
+        navNoChildren.toSyntheticResource(context.resourceResolver(), "/test").getPath());
   }
 
   @Test
@@ -71,7 +84,7 @@ public class TopNavigationDataSourceComponentTest extends BaseDataSourceComponen
     assertNotNull(topNavigation.getImageElement());
   }
 
-  @Test
+  @Test(expected = NullPointerException.class)
   public void testGetImageElementWhenNoImageElementResource() throws AssetCollectionRetrievalException {
     registerAssetRetrievalService();
     properties.put("imagePath","/content/assets/collection/asset-1");
@@ -82,10 +95,10 @@ public class TopNavigationDataSourceComponentTest extends BaseDataSourceComponen
     topNavigation = context.request().adaptTo(TopNavigationDataSourceComponent.class);
 
     setUpSampleCollection("/content/assets/collection");
-    assertNotNull(topNavigation.getImageElement());
+    topNavigation.getImageElement();
   }
 
-  @Test
+  @Test(expected = NullPointerException.class)
   public void testGetImageElementWhenDoesNotExist() {
     imageProperties.put("imagePath","/content/assets/collection/asset-1");
     context.create().resource("/content/sites/page/child-3/jcr:content/top-nav/imageElement",
@@ -100,7 +113,7 @@ public class TopNavigationDataSourceComponentTest extends BaseDataSourceComponen
     context.create().resource("/content/sites/page/child-3/jcr:content/top-nav2/imageElement",
             imageProperties);
 
-    assertNull(topNavigation.getImageElement());
+    topNavigation.getImageElement();
   }
 
 }

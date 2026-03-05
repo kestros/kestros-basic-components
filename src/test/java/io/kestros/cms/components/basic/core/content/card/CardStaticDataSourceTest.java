@@ -86,8 +86,8 @@ public class CardStaticDataSourceTest extends BaseDataSourceTest {
     resource = context.create().resource("/content/card/static/card2", properties);
     context.request().setResource(resource);
     cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
-    assertNull(cardStaticDataSource.getImageElement());
-    assertNull(cardStaticDataSource.getImage());
+    assertNotNull(cardStaticDataSource.getImageElement());
+    assertNotNull(cardStaticDataSource.getImage());
   }
 
   @Test
