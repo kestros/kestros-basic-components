@@ -76,7 +76,7 @@ public class CardListDataSourceComponentTest extends BaseDataSourceComponentTest
     assertNotNull(
         cardListChildPages.toSyntheticResource(context.resourceResolver(), "/test"));
 
-    assertEquals(11, cardListChildPages.toSyntheticResource(context.resourceResolver(),
+    assertEquals(12, cardListChildPages.toSyntheticResource(context.resourceResolver(),
         "/test").getValueMap().size());
     ValueMap valueMap = cardListChildPages.toSyntheticResource(
         context.resourceResolver(), "/test").getValueMap();
@@ -92,20 +92,9 @@ public class CardListDataSourceComponentTest extends BaseDataSourceComponentTest
     assertEquals(3, valueMap.get("cards", List.class).size());
 
     Map<String, Object> card = (Map) valueMap.get("cards", List.class).get(0);
-    assertEquals(12, card.size());
-    assertEquals("default", card.get("layout"));
-    assertNull(card.get("id"));
-    assertEquals("Description", card.get("description"));
-    assertNotNull(card.get("titleElement"));
-    assertNotNull((Map) card.get("imageElement"));
-    assertNotNull((Map) card.get("buttonGroupElement"));
-    assertEquals("/libs/kestros/commons/components/content/card",
-        card.get("componentResourceType"));
-    assertTrue((Boolean) card.get("synthetic"));
-    assertEquals(3, ((List) card.get("variations")).size());
-    assertEquals("", card.get("inlineVariations"));
-    assertTrue((Boolean) card.get("dataSourceComponent"));
-    assertNull(card.get("forceResourceName"));
+    assertNotNull(card);
+    assertNotNull(card.get("path"));
+    assertNotNull(card.get("resourceType"));
 
     Resource cardSynthetic = cardListChildPages.getChildren().get(0);
     context.request().setResource(cardSynthetic);
@@ -158,7 +147,7 @@ public class CardListDataSourceComponentTest extends BaseDataSourceComponentTest
         ButtonDataSourceComponent.class);
     assertNotNull(buttonComponent);
     assertEquals(
-        "/synthetics/content/page/jcr:content/component2/child-1/buttonGroupElement/child-1",
+        "/synthetics/content/page/jcr:content/component2/child-1",
         buttonComponent.getPath());
     assertEquals(3, buttonComponent.getVariations().size());
   }

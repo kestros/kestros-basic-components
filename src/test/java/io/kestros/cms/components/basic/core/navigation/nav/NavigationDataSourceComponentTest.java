@@ -47,9 +47,17 @@ public class NavigationDataSourceComponentTest extends BaseDataSourceComponentTe
 
   @Override
   public void testToSyntheticResource() {
-    assertNotNull(navigation.toSyntheticResource(context.resourceResolver(), "/test"));
-    assertEquals("/synthetics/test/nav", navigation.toSyntheticResource(context.resourceResolver(),
-        "/test").getPath());
+    Map<String, Object> navProps = new HashMap<>();
+    navProps.put("sling:resourceType", KestrosNavigation.RESOURCE_TYPE);
+    navProps.put("kes:datasource", "default");
+    Resource navResource = context.create().resource(
+        "/content/sites/page/child-3/jcr:content/nav-no-children", navProps);
+    context.request().setResource(navResource);
+    NavigationDataSourceComponent navNoChildren = context.request().adaptTo(
+        NavigationDataSourceComponent.class);
+    assertNotNull(navNoChildren.toSyntheticResource(context.resourceResolver(), "/test"));
+    assertEquals("/synthetics/test/nav-no-children",
+        navNoChildren.toSyntheticResource(context.resourceResolver(), "/test").getPath());
   }
 
   @Test
