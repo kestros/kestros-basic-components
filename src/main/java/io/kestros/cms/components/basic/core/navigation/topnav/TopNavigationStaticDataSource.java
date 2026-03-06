@@ -53,6 +53,9 @@ public class TopNavigationStaticDataSource extends BaseContainerSlingModelDataSo
       }
     }
     imageResource = getResource().getChild("image");
-    return imageResource.adaptTo(ImageStaticDataSource.class);
+    if (imageResource != null) {
+      return imageResource.adaptTo(ImageStaticDataSource.class);
+    }
+    return null;
   }
 }
