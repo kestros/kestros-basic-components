@@ -1,7 +1,7 @@
 {
   "jcr:primaryType": "nt:unstructured",
   "jcr:title": "Tag Search",
-  "group": "Dynamic",
+  "group": "Kestros Core",
   "classPath": "io.kestros.cms.components.basic.core.lists.cardlist.CardListTagSearchDataSource",
   "container": true,
   "edit": {
@@ -9,18 +9,12 @@
     "sling:resourceType": "kestros/cms2/dialog",
     "content": {
       "jcr:primaryType": "nt:unstructured",
-      "pages-path": {
+      "tags": {
         "jcr:primaryType": "nt:unstructured",
-        "sling:resourceType": "kestros/cms2/fields/general/pathfield",
-        "label": "Root Path",
-        "name": "pagesPath",
-        "includePaths": [
-          "closest:kes:Site"
-        ],
-        "resourceTypes": [
-          "kes:Site",
-          "kes:Page"
-        ],
+        "sling:resourceType": "kestros/cms2/fields/general/tagfield",
+        "label": "Tags",
+        "name": "tags",
+        "multiple": true,
         "autofocus": false
       },
       "readMoreText": {

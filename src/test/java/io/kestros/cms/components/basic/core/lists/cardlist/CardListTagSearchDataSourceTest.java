@@ -64,8 +64,8 @@ public class CardListTagSearchDataSourceTest extends BaseDataSourceTest {
           }
         });
 
-    // The component resource lives on child-1, with pagesPath pointing to the sessions root
-    properties.put("pagesPath", "/content/sessions");
+    // The component resource lives on child-1, with tags configured for filtering
+    properties.put("tags", new String[]{"/etc/tags/topic/java"});
     properties.put("readMoreText", "View Session");
     resource = context.create().resource("/content/sessions/child-1/jcr:content/component",
         properties);
@@ -127,5 +127,24 @@ public class CardListTagSearchDataSourceTest extends BaseDataSourceTest {
     assertNotNull(cardListTagSearchDataSource.getRootPage());
     assertEquals("/content/sessions",
         cardListTagSearchDataSource.getRootPage().getPath());
+  }
+
+  @Test
+  public void testGetConfiguredTags() {
+    String[] tags = cardListTagSearchDataSource.getConfiguredTags();
+    assertEquals(1, tags.length);
+    assertEquals("/etc/tags/topic/java", tags[0]);
+  }
+
+  @Test
+  public void testGetConfiguredTagsWhenEmpty() {
+    Map<String, Object> emptyProps = new HashMap<>();
+    emptyProps.put("readMoreText", "View");
+    Resource emptyResource = context.create().resource(
+        "/content/sessions/child-1/jcr:content/empty-component", emptyProps);
+    context.request().setResource(emptyResource);
+    CardListTagSearchDataSource emptyDs =
+        context.request().adaptTo(CardListTagSearchDataSource.class);
+    assertEquals(0, emptyDs.getConfiguredTags().length);
   }
 }

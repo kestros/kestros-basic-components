@@ -49,15 +49,25 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
     return containingPage;
   }
 
+  @Nonnull
+  String[] getConfiguredTags() {
+    String[] tags = getResource().getValueMap().get("tags", String[].class);
+    if (tags == null) {
+      return new String[0];
+    }
+    return tags;
+  }
+
   BaseContentPage getRootPage() {
-    String pagesPath = getResource().getValueMap().get("pagesPath", String.class);
-    if (pagesPath != null) {
-      Resource pageResource = getResourceResolver().getResource(pagesPath);
-      if (pageResource != null) {
-        return pageResource.adaptTo(BaseContentPage.class);
+    BaseContentPage currentPage = getContainingPage();
+    if (currentPage != null) {
+      try {
+        return currentPage.getParent();
+      } catch (Exception e) {
+        return currentPage;
       }
     }
-    return getContainingPage();
+    return null;
   }
 
   List<BaseContentPage> getTaggedPages() {
@@ -66,36 +76,31 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
       return taggedPages;
     }
 
+    String[] configuredTags = getConfiguredTags();
+    if (configuredTags.length == 0) {
+      return taggedPages;
+    }
+
+    Set<String> filterTagPaths = new HashSet<>();
+    for (String tagPath : configuredTags) {
+      filterTagPaths.add(tagPath);
+    }
+
     BaseContentPage currentPage = getContainingPage();
-    if (currentPage == null) {
-      return taggedPages;
-    }
-
-    List<KestrosTag> currentPageTags = tagRetrievalService.getTagsOnResource(
-        currentPage.getResource());
-    if (currentPageTags.isEmpty()) {
-      return taggedPages;
-    }
-
-    Set<String> currentTagPaths = new HashSet<>();
-    for (KestrosTag tag : currentPageTags) {
-      currentTagPaths.add(tag.getPath());
-    }
-
     BaseContentPage rootPage = getRootPage();
     if (rootPage == null) {
       return taggedPages;
     }
 
     for (BaseContentPage childPage : rootPage.getChildPages()) {
-      if (childPage.getPath().equals(currentPage.getPath())) {
+      if (currentPage != null && childPage.getPath().equals(currentPage.getPath())) {
         continue;
       }
 
       List<KestrosTag> childTags = tagRetrievalService.getTagsOnResource(
           childPage.getResource());
       for (KestrosTag childTag : childTags) {
-        if (currentTagPaths.contains(childTag.getPath())) {
+        if (filterTagPaths.contains(childTag.getPath())) {
           taggedPages.add(childPage);
           break;
         }
