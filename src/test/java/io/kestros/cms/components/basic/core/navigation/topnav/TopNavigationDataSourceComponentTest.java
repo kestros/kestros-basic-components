@@ -84,7 +84,7 @@ public class TopNavigationDataSourceComponentTest extends BaseDataSourceComponen
     assertNotNull(topNavigation.getImageElement());
   }
 
-  @Test(expected = NullPointerException.class)
+  @Test
   public void testGetImageElementWhenNoImageElementResource() throws AssetCollectionRetrievalException {
     registerAssetRetrievalService();
     properties.put("imagePath","/content/assets/collection/asset-1");
@@ -95,10 +95,10 @@ public class TopNavigationDataSourceComponentTest extends BaseDataSourceComponen
     topNavigation = context.request().adaptTo(TopNavigationDataSourceComponent.class);
 
     setUpSampleCollection("/content/assets/collection");
-    topNavigation.getImageElement();
+    assertNull(topNavigation.getImageElement());
   }
 
-  @Test(expected = NullPointerException.class)
+  @Test
   public void testGetImageElementWhenDoesNotExist() {
     imageProperties.put("imagePath","/content/assets/collection/asset-1");
     context.create().resource("/content/sites/page/child-3/jcr:content/top-nav/imageElement",
@@ -113,7 +113,7 @@ public class TopNavigationDataSourceComponentTest extends BaseDataSourceComponen
     context.create().resource("/content/sites/page/child-3/jcr:content/top-nav2/imageElement",
             imageProperties);
 
-    topNavigation.getImageElement();
+    assertNull(topNavigation.getImageElement());
   }
 
 }
