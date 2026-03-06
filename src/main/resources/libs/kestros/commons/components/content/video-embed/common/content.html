@@ -15,6 +15,19 @@
   ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
   ~
   */-->
+<!--/*
+  ~ Security note: context='unsafe' is required because iframe tags cannot be
+  ~ rendered with context='html' (Sling HTL would escape them). The
+  ~ videoEmbedCode value is system-generated, not raw user input:
+  ~
+  ~ 1. VideoEmbedYouTubeDataSource validates input (rejects HTML, accepts only
+  ~    YouTube video IDs/URLs) and constructs the iframe server-side.
+  ~ 2. VideoEmbedDataSourceComponent wraps output through EmbedSanitizer
+  ~    (defense-in-depth), which allows only iframe tags from allowlisted
+  ~    domains (YouTube, Vimeo) with safe attributes.
+  ~ 3. Any future datasource variant goes through the same sanitization in
+  ~    VideoEmbedDataSourceComponent.getVideoEmbedCode().
+  */-->
 <sly data-sly-use.videoEmbed="${'io.kestros.cms.components.basic.core.content.videoembed.VideoEmbedDataSourceComponent'}"/>
 
 <div style="width: 100%; height:100%;">

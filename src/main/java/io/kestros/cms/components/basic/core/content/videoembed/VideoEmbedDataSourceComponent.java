@@ -14,6 +14,13 @@ public class VideoEmbedDataSourceComponent extends BaseDataSourceComponent<Kestr
   @Nullable
   @Override
   public String getVideoEmbedCode() {
-    return getComponentData().getVideoEmbedCode();
+    String embedCode = getComponentData().getVideoEmbedCode();
+    if (embedCode == null) {
+      return null;
+    }
+    // Defense-in-depth: sanitize embed code before returning to HTL.
+    // Even though datasources should return safe HTML, this guard protects
+    // against future datasource variants that may not validate as rigorously.
+    return EmbedSanitizer.sanitize(embedCode);
   }
 }
