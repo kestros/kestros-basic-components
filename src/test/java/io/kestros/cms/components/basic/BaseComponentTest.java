@@ -77,6 +77,13 @@ public abstract class BaseComponentTest {
     cardDataSources.put("default",
             "io.kestros.cms.components.basic.core.content.card.CardStaticDataSource");
     dataSourceMap.put("/libs/kestros/commons/components/content/card", cardDataSources);
+
+    // dialog field test
+    Map<String, String> dialogFieldTestDataSources = new HashMap<>();
+    dialogFieldTestDataSources.put("default",
+            "io.kestros.cms.components.basic.core.content.dialogfieldtest.DialogFieldTestStaticDataSource");
+    dataSourceMap.put("/libs/kestros/commons/components/content/dialog-field-test",
+            dialogFieldTestDataSources);
 //
 //    // code
 //    Map<String, String> codeDataSources = new HashMap<>();

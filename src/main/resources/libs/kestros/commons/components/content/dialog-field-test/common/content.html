@@ -1,0 +1,87 @@
+<!--/*
+  ~ Dialog Field Test Component
+  ~ Renders all dialog field values in a debug/diagnostic table format.
+  */-->
+<sly data-sly-use.component="${'io.kestros.cms.components.basic.core.content.dialogfieldtest.DialogFieldTestDataSourceComponent'}"/>
+
+<table class="dialog-field-test" style="width:100%;border-collapse:collapse;font-family:monospace;font-size:14px;">
+  <thead>
+    <tr style="background:#333;color:#fff;">
+      <th style="padding:8px;text-align:left;border:1px solid #555;">Field Label</th>
+      <th style="padding:8px;text-align:left;border:1px solid #555;">Field Type</th>
+      <th style="padding:8px;text-align:left;border:1px solid #555;">Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="border:1px solid #ddd;">
+      <td style="padding:6px;border:1px solid #ddd;">Sample Text</td>
+      <td style="padding:6px;border:1px solid #ddd;">textfield</td>
+      <td style="padding:6px;border:1px solid #ddd;">${component.sampleText}</td>
+    </tr>
+    <tr style="border:1px solid #ddd;background:#f9f9f9;">
+      <td style="padding:6px;border:1px solid #ddd;">Sample Textarea</td>
+      <td style="padding:6px;border:1px solid #ddd;">textarea</td>
+      <td style="padding:6px;border:1px solid #ddd;">${component.sampleTextarea}</td>
+    </tr>
+    <tr style="border:1px solid #ddd;">
+      <td style="padding:6px;border:1px solid #ddd;">Sample Rich Text</td>
+      <td style="padding:6px;border:1px solid #ddd;">richtext</td>
+      <td style="padding:6px;border:1px solid #ddd;">${component.sampleRichtext @ context='html'}</td>
+    </tr>
+    <tr style="border:1px solid #ddd;background:#f9f9f9;">
+      <td style="padding:6px;border:1px solid #ddd;">Sample Checkbox</td>
+      <td style="padding:6px;border:1px solid #ddd;">checkbox</td>
+      <td style="padding:6px;border:1px solid #ddd;">${component.sampleCheckbox}</td>
+    </tr>
+    <tr style="border:1px solid #ddd;">
+      <td style="padding:6px;border:1px solid #ddd;">Sample Path</td>
+      <td style="padding:6px;border:1px solid #ddd;">pathfield</td>
+      <td style="padding:6px;border:1px solid #ddd;">${component.samplePath}</td>
+    </tr>
+    <tr style="border:1px solid #ddd;background:#f9f9f9;">
+      <td style="padding:6px;border:1px solid #ddd;">Sample Select</td>
+      <td style="padding:6px;border:1px solid #ddd;">selectfield</td>
+      <td style="padding:6px;border:1px solid #ddd;">${component.sampleSelect}</td>
+    </tr>
+    <tr style="border:1px solid #ddd;">
+      <td style="padding:6px;border:1px solid #ddd;">Sample Tag</td>
+      <td style="padding:6px;border:1px solid #ddd;">tagfield</td>
+      <td style="padding:6px;border:1px solid #ddd;">${component.sampleTag}</td>
+    </tr>
+    <tr style="border:1px solid #ddd;background:#f9f9f9;">
+      <td style="padding:6px;border:1px solid #ddd;">Sample Number</td>
+      <td style="padding:6px;border:1px solid #ddd;">numberfield</td>
+      <td style="padding:6px;border:1px solid #ddd;">${component.sampleNumber}</td>
+    </tr>
+    <tr style="border:1px solid #ddd;">
+      <td style="padding:6px;border:1px solid #ddd;">Sample Date</td>
+      <td style="padding:6px;border:1px solid #ddd;">datefield</td>
+      <td style="padding:6px;border:1px solid #ddd;">${component.sampleDate}</td>
+    </tr>
+    <tr style="border:1px solid #ddd;background:#f9f9f9;">
+      <td style="padding:6px;border:1px solid #ddd;">Sample DateTime</td>
+      <td style="padding:6px;border:1px solid #ddd;">datetimefield</td>
+      <td style="padding:6px;border:1px solid #ddd;">${component.sampleDatetime}</td>
+    </tr>
+    <tr style="border:1px solid #ddd;">
+      <td style="padding:6px;border:1px solid #ddd;">Sample Toggle</td>
+      <td style="padding:6px;border:1px solid #ddd;">togglefield</td>
+      <td style="padding:6px;border:1px solid #ddd;">${component.sampleToggle}</td>
+    </tr>
+    <tr style="border:1px solid #ddd;background:#f9f9f9;">
+      <td style="padding:6px;border:1px solid #ddd;">Sample Radio Group</td>
+      <td style="padding:6px;border:1px solid #ddd;">radiogroup</td>
+      <td style="padding:6px;border:1px solid #ddd;">${component.sampleRadio}</td>
+    </tr>
+    <tr style="border:1px solid #ddd;">
+      <td style="padding:6px;border:1px solid #ddd;">Sample Hidden</td>
+      <td style="padding:6px;border:1px solid #ddd;">hiddenfield</td>
+      <td style="padding:6px;border:1px solid #ddd;">${component.sampleHidden}</td>
+    </tr>
+    <tr style="border:1px solid #ddd;background:#f9f9f9;">
+      <td style="padding:6px;border:1px solid #ddd;">Sample Image/Asset</td>
+      <td style="padding:6px;border:1px solid #ddd;">imageassetpicker</td>
+      <td style="padding:6px;border:1px solid #ddd;">${component.sampleImage}</td>
+    </tr>
+  </tbody>
+</table>

@@ -1,0 +1,154 @@
+{
+  "jcr:primaryType": "nt:unstructured",
+  "jcr:title": "Static/Default",
+  "group": "Kestros Core",
+  "classPath": "io.kestros.cms.components.basic.core.content.dialogfieldtest.DialogFieldTestStaticDataSource",
+  "edit": {
+    "jcr:primaryType": "nt:unstructured",
+    "sling:resourceType": "kestros/cms2/dialog",
+    "content": {
+      "jcr:primaryType": "nt:unstructured",
+      "text": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/textfield",
+        "label": "Sample Text",
+        "name": "sampleText",
+        "autofocus": true
+      },
+      "textarea": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/textarea",
+        "label": "Sample Textarea",
+        "name": "sampleTextarea"
+      },
+      "richtext": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/richtext",
+        "label": "Sample Rich Text",
+        "name": "sampleRichtext"
+      },
+      "checkbox": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/checkbox",
+        "label": "Sample Checkbox",
+        "name": "sampleCheckbox"
+      },
+      "path": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/pathfield",
+        "label": "Sample Path",
+        "name": "samplePath"
+      },
+      "select": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/selectfield",
+        "label": "Sample Select",
+        "name": "sampleSelect",
+        "options": {
+          "option-1": {
+            "jcr:primaryType": "nt:unstructured",
+            "text": "Option A",
+            "value": "option-a",
+            "selected": true
+          },
+          "option-2": {
+            "jcr:primaryType": "nt:unstructured",
+            "text": "Option B",
+            "value": "option-b",
+            "selected": false
+          },
+          "option-3": {
+            "jcr:primaryType": "nt:unstructured",
+            "text": "Option C",
+            "value": "option-c",
+            "selected": false
+          }
+        }
+      },
+      "multifield": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/multifield",
+        "label": "Sample Multifield",
+        "name": "sampleMultifield",
+        "content": {
+          "jcr:primaryType": "nt:unstructured",
+          "item": {
+            "jcr:primaryType": "nt:unstructured",
+            "sling:resourceType": "kestros/cms2/fields/general/textfield",
+            "label": "Multifield Item",
+            "name": "multifieldItem"
+          }
+        }
+      },
+      "tag": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/tagfield",
+        "label": "Sample Tag",
+        "name": "sampleTag"
+      },
+      "number": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/numberfield",
+        "label": "Sample Number",
+        "name": "sampleNumber"
+      },
+      "date": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/datefield",
+        "label": "Sample Date",
+        "name": "sampleDate"
+      },
+      "datetime": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/datetimefield",
+        "label": "Sample DateTime",
+        "name": "sampleDatetime"
+      },
+      "toggle": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/togglefield",
+        "label": "Sample Toggle",
+        "name": "sampleToggle"
+      },
+      "radio": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/radiogroup",
+        "label": "Sample Radio Group",
+        "name": "sampleRadio",
+        "options": {
+          "radio-1": {
+            "jcr:primaryType": "nt:unstructured",
+            "text": "Radio A",
+            "value": "radio-a",
+            "selected": true
+          },
+          "radio-2": {
+            "jcr:primaryType": "nt:unstructured",
+            "text": "Radio B",
+            "value": "radio-b",
+            "selected": false
+          },
+          "radio-3": {
+            "jcr:primaryType": "nt:unstructured",
+            "text": "Radio C",
+            "value": "radio-c",
+            "selected": false
+          }
+        }
+      },
+      "hidden": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/hiddenfield",
+        "label": "Sample Hidden",
+        "name": "sampleHidden",
+        "value": "hidden-default-value"
+      },
+      "image": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/imageassetpicker",
+        "label": "Sample Image/Asset Picker",
+        "name": "sampleImage"
+      }
+    }
+  }
+}
