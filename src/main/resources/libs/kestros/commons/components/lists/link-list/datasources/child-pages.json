@@ -28,6 +28,7 @@
         "label": "Sort By",
         "name": "sortBy",
         "options": [
+          { "value": "", "text": "None (natural order)", "selected": true },
           { "value": "title", "text": "Title" },
           { "value": "name", "text": "Name" }
         ]
