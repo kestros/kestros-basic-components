@@ -28,8 +28,7 @@
         "name": "sortBy",
         "options": [
           { "value": "title", "text": "Title" },
-          { "value": "name", "text": "Name" },
-          { "value": "date", "text": "Date Modified" }
+          { "value": "name", "text": "Name" }
         ]
       },
       "reverse": {

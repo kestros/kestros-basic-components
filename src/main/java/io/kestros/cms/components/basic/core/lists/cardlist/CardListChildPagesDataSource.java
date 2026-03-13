@@ -58,7 +58,7 @@ public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSou
   public List<KestrosCard> getCardElements() {
     List<BaseContentPage> pages = new ArrayList<>(getRootPage().getChildPages());
 
-    String sortBy = getResource().getValueMap().get("sortBy", "title");
+    String sortBy = getResource().getValueMap().get("sortBy", "");
     boolean reverse = getResource().getValueMap().get("reverse", false);
     int limit = 0;
     try {
@@ -67,21 +67,16 @@ public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSou
       limit = 0;
     }
 
-    pages.sort(Comparator.comparing(p -> {
-      switch (sortBy) {
-        case "name":
-          return p.getName() != null ? p.getName() : "";
-        case "date":
-          Resource jcrContent = p.getResource().getChild("jcr:content");
-          if (jcrContent != null) {
-            Object modified = jcrContent.getValueMap().get("jcr:lastModified");
-            return modified != null ? modified.toString() : "";
-          }
-          return "";
-        default:
-          return p.getDisplayTitle() != null ? p.getDisplayTitle() : p.getName();
-      }
-    }));
+    if (!sortBy.isEmpty()) {
+      pages.sort(Comparator.comparing(p -> {
+        switch (sortBy) {
+          case "name":
+            return p.getName() != null ? p.getName() : "";
+          default:
+            return p.getDisplayTitle() != null ? p.getDisplayTitle() : p.getName();
+        }
+      }));
+    }
 
     if (reverse) {
       Collections.reverse(pages);

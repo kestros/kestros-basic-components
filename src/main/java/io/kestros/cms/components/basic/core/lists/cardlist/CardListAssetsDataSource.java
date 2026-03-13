@@ -54,7 +54,7 @@ public class CardListAssetsDataSource extends BaseContainerSlingModelDataSource 
   public List<KestrosCard> getCardElements() {
     List<Asset> assets = new ArrayList<>(getCollection().getChildAssets());
 
-    String sortBy = getResource().getValueMap().get("sortBy", "title");
+    String sortBy = getResource().getValueMap().get("sortBy", "");
     boolean reverse = getResource().getValueMap().get("reverse", false);
     int limit = 0;
     try {
@@ -63,14 +63,16 @@ public class CardListAssetsDataSource extends BaseContainerSlingModelDataSource 
       limit = 0;
     }
 
-    assets.sort(Comparator.comparing(a -> {
-      switch (sortBy) {
-        case "name":
-          return a.getName() != null ? a.getName() : "";
-        default:
-          return a.getTitle() != null ? a.getTitle() : a.getName();
-      }
-    }));
+    if (!sortBy.isEmpty()) {
+      assets.sort(Comparator.comparing(a -> {
+        switch (sortBy) {
+          case "name":
+            return a.getName() != null ? a.getName() : "";
+          default:
+            return a.getTitle() != null ? a.getTitle() : a.getName();
+        }
+      }));
+    }
 
     if (reverse) {
       Collections.reverse(assets);
