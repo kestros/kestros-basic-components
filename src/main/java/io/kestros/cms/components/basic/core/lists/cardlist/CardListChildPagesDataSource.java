@@ -11,6 +11,8 @@ import io.kestros.cms.sitebuilding.api.models.BaseComponent;
 import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
 import io.kestros.commons.structuredslingmodels.exceptions.NoValidAncestorException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -54,8 +56,42 @@ public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSou
   @Nonnull
   @Override
   public List<KestrosCard> getCardElements() {
+    List<BaseContentPage> pages = new ArrayList<>(getRootPage().getChildPages());
+
+    String sortBy = getResource().getValueMap().get("sortBy", "title");
+    boolean reverse = getResource().getValueMap().get("reverse", false);
+    int limit = 0;
+    try {
+      limit = Integer.parseInt(getResource().getValueMap().get("limit", "0"));
+    } catch (NumberFormatException e) {
+      limit = 0;
+    }
+
+    pages.sort(Comparator.comparing(p -> {
+      switch (sortBy) {
+        case "name":
+          return p.getName() != null ? p.getName() : "";
+        case "date":
+          Resource jcrContent = p.getResource().getChild("jcr:content");
+          if (jcrContent != null) {
+            Object modified = jcrContent.getValueMap().get("jcr:lastModified");
+            return modified != null ? modified.toString() : "";
+          }
+          return "";
+        default:
+          return p.getDisplayTitle() != null ? p.getDisplayTitle() : p.getName();
+      }
+    }));
+
+    if (reverse) {
+      Collections.reverse(pages);
+    }
+    if (limit > 0 && pages.size() > limit) {
+      pages = pages.subList(0, limit);
+    }
+
     List<KestrosCard> cards = new ArrayList<>();
-    for (BaseContentPage page : getRootPage().getChildPages()) {
+    for (BaseContentPage page : pages) {
       try {
         cards.add(
             new KestrosCardImpl(page,

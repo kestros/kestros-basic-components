@@ -29,6 +29,29 @@
         "label": "Text",
         "name": "readMoreText",
         "autofocus": false
+      },
+      "sortBy": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/selectfield",
+        "label": "Sort By",
+        "name": "sortBy",
+        "options": [
+          { "value": "title", "text": "Title" },
+          { "value": "name", "text": "Name" },
+          { "value": "date", "text": "Date Modified" }
+        ]
+      },
+      "reverse": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/checkbox",
+        "label": "Reverse Order",
+        "name": "reverse"
+      },
+      "limit": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/textfield",
+        "label": "Limit (0 = no limit)",
+        "name": "limit"
       }
     }
   }

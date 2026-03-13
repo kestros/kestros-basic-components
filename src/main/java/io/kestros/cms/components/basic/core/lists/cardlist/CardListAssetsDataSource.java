@@ -17,6 +17,8 @@ import io.kestros.cms.components.basic.core.content.heading.KestrosHeadingImpl;
 import io.kestros.cms.components.basic.core.content.image.KestrosImageImpl;
 import io.kestros.cms.componenttypes.api.models.ComponentVariation;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import javax.annotation.Nonnull;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -50,10 +52,37 @@ public class CardListAssetsDataSource extends BaseContainerSlingModelDataSource 
   @Nonnull
   @Override
   public List<KestrosCard> getCardElements() {
+    List<Asset> assets = new ArrayList<>(getCollection().getChildAssets());
+
+    String sortBy = getResource().getValueMap().get("sortBy", "title");
+    boolean reverse = getResource().getValueMap().get("reverse", false);
+    int limit = 0;
+    try {
+      limit = Integer.parseInt(getResource().getValueMap().get("limit", "0"));
+    } catch (NumberFormatException e) {
+      limit = 0;
+    }
+
+    assets.sort(Comparator.comparing(a -> {
+      switch (sortBy) {
+        case "name":
+          return a.getName() != null ? a.getName() : "";
+        default:
+          return a.getTitle() != null ? a.getTitle() : a.getName();
+      }
+    }));
+
+    if (reverse) {
+      Collections.reverse(assets);
+    }
+    if (limit > 0 && assets.size() > limit) {
+      assets = assets.subList(0, limit);
+    }
+
     List<KestrosCard> cards = new ArrayList<>();
     String parentPath = getPath();
 
-    for (Asset asset : getCollection().getChildAssets()) {
+    for (Asset asset : assets) {
       String imagePath = asset.getPath();
       String altText = null;
       String caption = null;
