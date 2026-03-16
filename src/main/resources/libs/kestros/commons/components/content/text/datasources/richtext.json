@@ -1,9 +1,9 @@
 {
   "jcr:primaryType": "nt:unstructured",
-  "jcr:title": "Static",
+  "jcr:title": "Rich Text",
   "group": "Kestros Core",
-  "classPath": "io.kestros.cms.components.basic.core.content.richtext.KestrosRichTextStaticDataSource",
-  "edit":{
+  "classPath": "io.kestros.cms.components.basic.core.content.text.KestrosTextStaticDataSource",
+  "edit": {
     "jcr:primaryType": "nt:unstructured",
     "sling:resourceType": "kestros/cms2/dialog",
     "content": {
