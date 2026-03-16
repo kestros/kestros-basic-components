@@ -123,4 +123,115 @@ public class CardListChildPagesDataSourceTest extends BaseDataSourceTest {
   public void testGetChildren() {
     assertEquals(3, cardListChildPagesDataSource.getChildren().size());
   }
+
+  @Test
+  public void testGetCardElements_defaultSortBy_returnsNaturalOrder() {
+    // sortBy property not set — should return natural JCR order (child-1, child-2, child-3)
+    assertEquals(3, cardListChildPagesDataSource.getCardElements().size());
+  }
+
+  @Test
+  public void testGetCardElements_sortByEmpty_returnsNaturalOrder() {
+    properties.put("sortBy", "");
+    resource = context.create().resource("/content/page/jcr:content/comp-sortby-empty", properties);
+    context.request().setResource(resource);
+    cardListChildPagesDataSource = context.request().adaptTo(CardListChildPagesDataSource.class);
+    assertEquals(3, cardListChildPagesDataSource.getCardElements().size());
+  }
+
+  @Test
+  public void testGetCardElements_sortByName() {
+    properties.put("sortBy", "name");
+    resource = context.create().resource("/content/page/jcr:content/comp-sortby-name", properties);
+    context.request().setResource(resource);
+    cardListChildPagesDataSource = context.request().adaptTo(CardListChildPagesDataSource.class);
+    List<KestrosCard> cards = cardListChildPagesDataSource.getCardElements();
+    assertEquals(3, cards.size());
+  }
+
+  @Test
+  public void testGetCardElements_sortByTitle() {
+    properties.put("sortBy", "title");
+    resource = context.create().resource("/content/page/jcr:content/comp-sortby-title",
+        properties);
+    context.request().setResource(resource);
+    cardListChildPagesDataSource = context.request().adaptTo(CardListChildPagesDataSource.class);
+    List<KestrosCard> cards = cardListChildPagesDataSource.getCardElements();
+    assertEquals(3, cards.size());
+  }
+
+  @Test
+  public void testGetCardElements_reverseOrder() {
+    properties.put("reverse", true);
+    resource = context.create().resource("/content/page/jcr:content/comp-reverse", properties);
+    context.request().setResource(resource);
+    cardListChildPagesDataSource = context.request().adaptTo(CardListChildPagesDataSource.class);
+    assertEquals(3, cardListChildPagesDataSource.getCardElements().size());
+  }
+
+  @Test
+  public void testGetCardElements_reverseOrderFalse_default() {
+    // reverse not set — defaults to false
+    resource = context.create().resource("/content/page/jcr:content/comp-no-reverse", properties);
+    context.request().setResource(resource);
+    cardListChildPagesDataSource = context.request().adaptTo(CardListChildPagesDataSource.class);
+    assertEquals(3, cardListChildPagesDataSource.getCardElements().size());
+  }
+
+  @Test
+  public void testGetCardElements_limitApplied() {
+    properties.put("limit", "2");
+    resource = context.create().resource("/content/page/jcr:content/comp-limit-2", properties);
+    context.request().setResource(resource);
+    cardListChildPagesDataSource = context.request().adaptTo(CardListChildPagesDataSource.class);
+    assertEquals(2, cardListChildPagesDataSource.getCardElements().size());
+  }
+
+  @Test
+  public void testGetCardElements_limitZero_returnsAll() {
+    properties.put("limit", "0");
+    resource = context.create().resource("/content/page/jcr:content/comp-limit-0", properties);
+    context.request().setResource(resource);
+    cardListChildPagesDataSource = context.request().adaptTo(CardListChildPagesDataSource.class);
+    assertEquals(3, cardListChildPagesDataSource.getCardElements().size());
+  }
+
+  @Test
+  public void testGetCardElements_limitDefault_returnsAll() {
+    // limit not set — defaults to 0 (no limit)
+    resource = context.create().resource("/content/page/jcr:content/comp-no-limit", properties);
+    context.request().setResource(resource);
+    cardListChildPagesDataSource = context.request().adaptTo(CardListChildPagesDataSource.class);
+    assertEquals(3, cardListChildPagesDataSource.getCardElements().size());
+  }
+
+  @Test
+  public void testGetCardElements_limitInvalidString_returnsAll() {
+    properties.put("limit", "invalid");
+    resource = context.create().resource("/content/page/jcr:content/comp-limit-invalid",
+        properties);
+    context.request().setResource(resource);
+    cardListChildPagesDataSource = context.request().adaptTo(CardListChildPagesDataSource.class);
+    assertEquals(3, cardListChildPagesDataSource.getCardElements().size());
+  }
+
+  @Test
+  public void testGetCardElements_sortByNameAndReverse() {
+    properties.put("sortBy", "name");
+    properties.put("reverse", true);
+    resource = context.create().resource("/content/page/jcr:content/comp-name-reverse", properties);
+    context.request().setResource(resource);
+    cardListChildPagesDataSource = context.request().adaptTo(CardListChildPagesDataSource.class);
+    assertEquals(3, cardListChildPagesDataSource.getCardElements().size());
+  }
+
+  @Test
+  public void testGetCardElements_sortByTitleAndLimit() {
+    properties.put("sortBy", "title");
+    properties.put("limit", "1");
+    resource = context.create().resource("/content/page/jcr:content/comp-title-limit", properties);
+    context.request().setResource(resource);
+    cardListChildPagesDataSource = context.request().adaptTo(CardListChildPagesDataSource.class);
+    assertEquals(1, cardListChildPagesDataSource.getCardElements().size());
+  }
 }

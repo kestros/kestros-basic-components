@@ -10,6 +10,8 @@ import io.kestros.cms.componenttypes.api.services.ComponentUiFrameworkViewRetrie
 import io.kestros.cms.componenttypes.api.services.ComponentVariationRetrievalService;
 import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -35,13 +37,47 @@ public class LinkListChildPageDataSource extends BaseContainerSlingModelDataSour
 
   @Override
   public List<KestrosLink> getLinkElements() {
-    List<KestrosLink> links = new ArrayList<>();
+    List<BaseContentPage> pages = new ArrayList<>();
     for (Resource childResource : getResourceResolver()
         .getResource(getRootPath()).getChildren()) {
       if (childResource.getName().equals("jcr:content")) {
         continue;
       }
       BaseContentPage page = childResource.adaptTo(BaseContentPage.class);
+      if (page != null) {
+        pages.add(page);
+      }
+    }
+
+    String sortBy = getResource().getValueMap().get("sortBy", "");
+    boolean reverse = getResource().getValueMap().get("reverse", false);
+    int limit = 0;
+    try {
+      limit = Integer.parseInt(getResource().getValueMap().get("limit", "0"));
+    } catch (NumberFormatException e) {
+      limit = 0;
+    }
+
+    if (!sortBy.isEmpty()) {
+      pages.sort(Comparator.comparing(p -> {
+        switch (sortBy) {
+          case "name":
+            return p.getName() != null ? p.getName() : "";
+          default:
+            return p.getDisplayTitle() != null ? p.getDisplayTitle() : p.getName();
+        }
+      }));
+    }
+
+    if (reverse) {
+      Collections.reverse(pages);
+    }
+    if (limit > 0 && pages.size() > limit) {
+      pages = pages.subList(0, limit);
+    }
+
+    List<KestrosLink> links = new ArrayList<>();
+    for (BaseContentPage page : pages) {
       KestrosLink link = null;
       try {
         link = new KestrosLinkImpl(page.getDisplayTitle(),

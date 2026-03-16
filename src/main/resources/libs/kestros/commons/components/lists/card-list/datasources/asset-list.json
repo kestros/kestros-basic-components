@@ -21,6 +21,29 @@
           "kes:AssetCollection"
         ],
         "autofocus": false
+      },
+      "sortBy": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/selectfield",
+        "label": "Sort By",
+        "name": "sortBy",
+        "options": [
+          { "value": "", "text": "None (natural order)", "selected": true },
+          { "value": "title", "text": "Title" },
+          { "value": "name", "text": "Name" }
+        ]
+      },
+      "reverse": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/checkbox",
+        "label": "Reverse Order",
+        "name": "reverse"
+      },
+      "limit": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/textfield",
+        "label": "Limit (0 = no limit)",
+        "name": "limit"
       }
     }
   }
