@@ -17,7 +17,7 @@ public class KestrosVideoEmbedImpl extends BaseSyntheticResource implements Kest
       @Nonnull String resourcePrefix, @Nullable String forcedResourceName)
       throws ComponentConfigurationException {
     super(dataSource, resourcePrefix, forcedResourceName);
-
+    this.videoEmbedCode = videoEmbedCode;
   }
 
   @Nullable
