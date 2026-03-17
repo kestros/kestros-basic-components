@@ -2,7 +2,8 @@ package io.kestros.cms.components.basic.core;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
-import io.kestros.cms.componenttypes.api.exceptions.ComponentVariationRetrievalException;
+import io.kestros.cms.componenttypes.api.exceptions.ComponentViewRetrievalException;
+import io.kestros.cms.componenttypes.api.models.ComponentUiFrameworkView;
 import io.kestros.cms.componenttypes.api.models.ComponentVariation;
 import io.kestros.cms.componenttypes.api.services.ComponentUiFrameworkViewRetrievalService;
 import io.kestros.cms.componenttypes.api.services.ComponentVariationRetrievalService;
@@ -10,6 +11,8 @@ import io.kestros.cms.sitebuilding.api.models.BaseComponent;
 import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
 import io.kestros.cms.sitebuilding.api.models.ComponentRequestContext;
 import io.kestros.cms.uiframeworks.api.models.UiFramework;
+import io.kestros.commons.commonutils.jcr.JcrPropertyUtils;
+import io.kestros.commons.structuredslingmodels.exceptions.ModelAdaptionException;
 import io.kestros.commons.structuredslingmodels.exceptions.NoValidAncestorException;
 import java.util.ArrayList;
 import java.util.List;
@@ -98,30 +101,52 @@ public abstract class BaseSlingModelDataSource
   }
 
   public List<ComponentVariation> getVariations() {
-    // TODO verify this.
-    List<Map<String, Object>> variationsMapList = getResource().getValueMap()
-        .get("variations", new ArrayList<>());
-    if (!variationsMapList.isEmpty()) {
-      List<ComponentVariation> variations = new ArrayList<>();
-      for (Map<String, Object> variationMap : variationsMapList) {
+    // Read the applied variation names/paths from the resource property
+    List<String> appliedVariationNames = new ArrayList<>();
+    Object propertyValue = getResource().getValueMap().get("variations");
+    if (propertyValue instanceof List && !((List<?>) propertyValue).isEmpty()
+        && ((List<?>) propertyValue).get(0) instanceof Map) {
+      // dialog-saved format: list of maps with "path" key
+      List<Map<String, Object>> variationMaps = (List<Map<String, Object>>) propertyValue;
+      for (Map<String, Object> variationMap : variationMaps) {
         String path = (String) variationMap.get("path");
-        Resource variationResource = getResourceResolver().getResource(path);
-        if (variationResource == null) {
-          continue;
+        if (path != null) {
+          appliedVariationNames.add(path);
         }
-        try {
-          ComponentVariation variation
-              = getComponentVariationRetrievalService().getComponentVariation(path,
-              getResourceResolver());
-          variations.add(variation);
-        } catch (ComponentVariationRetrievalException e) {
-          continue;
-        }
-
       }
-      return variations;
+    } else {
+      appliedVariationNames = JcrPropertyUtils.getStringListOrEmptyList(
+          getResource(), "variations");
     }
-    return getResource().adaptTo(BaseComponent.class).getAppliedVariations();
+
+    if (appliedVariationNames.isEmpty() && !getResource().getValueMap().containsKey("variations")) {
+      return new ArrayList<>();
+    }
+
+    // Resolve variations by fetching all available variations for this component's view
+    // and matching by name or path — same pattern as getElementVariations()
+    final List<ComponentVariation> appliedVariations = new ArrayList<>();
+    try {
+      BaseComponent component = getResource().adaptTo(BaseComponent.class);
+      ComponentUiFrameworkView uiFrameworkView =
+          getComponentUiFrameworkViewRetrievalService().getResolvedComponentUiFrameworkView(
+              getComponentResourceType(), getUiFramework(),
+              component != null ? component.getResourceResolver() : getResourceResolver());
+      List<ComponentVariation> allVariations =
+          getComponentVariationRetrievalService().getComponentVariations(uiFrameworkView);
+      for (String appliedName : appliedVariationNames) {
+        for (ComponentVariation variation : allVariations) {
+          if (variation.getPath().equals(appliedName)
+              || variation.getName().equals(appliedName)) {
+            appliedVariations.add(variation);
+            break;
+          }
+        }
+      }
+    } catch (ModelAdaptionException | ComponentViewRetrievalException e) {
+      // ignore — return what we have
+    }
+    return appliedVariations;
   }
 
   public String getLayout() {

@@ -1,11 +1,7 @@
 package io.kestros.cms.components.basic.core;
 
-import static org.mockito.Mockito.when;
-
 import io.kestros.cms.assets.api.exceptions.AssetCollectionRetrievalException;
 import io.kestros.cms.components.basic.BaseComponentTest;
-import io.kestros.cms.componenttypes.api.exceptions.ComponentTypeRetrievalException;
-import java.util.HashMap;
 import java.util.Map;
 
 public abstract class BaseDataSourceComponentTest extends BaseComponentTest {
@@ -20,14 +16,7 @@ public abstract class BaseDataSourceComponentTest extends BaseComponentTest {
 
   @Override
   public void setupClassLoaderForComponentType(Map<String, String> componentDataSourceMap) {
-    for (Map.Entry<String, String> entry : componentDataSourceMap.entrySet()) {
-      try {
-        Class clazz = Class.forName(entry.getValue());
-        when(kestrosClassLoader.getClazz(entry.getValue())).thenReturn(clazz);
-      } catch (ClassNotFoundException e) {
-        e.printStackTrace();
-      }
-    }
+    // KestrosClassLoader was removed from the API — no-op; class loading now uses Class.forName directly
   }
 
 

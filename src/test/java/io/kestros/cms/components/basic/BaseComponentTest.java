@@ -21,7 +21,6 @@ import io.kestros.cms.componenttypes.api.services.ComponentUiFrameworkViewRetrie
 import io.kestros.cms.componenttypes.api.services.ComponentVariationRetrievalService;
 import io.kestros.cms.componenttypes.core.services.ComponentTypeRetrievalServiceImpl;
 import io.kestros.cms.componenttypes.core.services.ComponentVariationRetrievalServiceImpl;
-import io.kestros.cms.sitebuilding.api.services.KestrosClassLoader;
 import io.kestros.cms.sitebuilding.api.services.ThemeProviderService;
 import io.kestros.cms.uiframeworks.api.exceptions.UiFrameworkRetrievalException;
 import io.kestros.cms.uiframeworks.api.models.Theme;
@@ -49,7 +48,6 @@ public abstract class BaseComponentTest {
   protected ThemeRetrievalService themeRetrievalService;
   protected ThemeProviderService themeProviderService;
   protected AssetRetrievalService assetRetrievalService;
-  protected KestrosClassLoader kestrosClassLoader;
   protected Theme theme;
   protected UiFramework uiFramework;
 
@@ -222,7 +220,6 @@ public abstract class BaseComponentTest {
     context.addModelsForPackage("io.kestros");
     componentUiFrameworkViewRetrievalService = mock(ComponentUiFrameworkViewRetrievalService.class);
     componentVariationRetrievalService = spy(new ComponentVariationRetrievalServiceImpl());
-    kestrosClassLoader = mock(KestrosClassLoader.class);
     componentTypeRetrievalService = new ComponentTypeRetrievalServiceImpl();
     uiFrameworkRetrievalService = mock(UiFrameworkRetrievalService.class);
     themeRetrievalService = mock(ThemeRetrievalService.class);
@@ -233,7 +230,6 @@ public abstract class BaseComponentTest {
             componentUiFrameworkViewRetrievalService);
     context.registerInjectActivateService(componentVariationRetrievalService);
     context.registerInjectActivateService(componentTypeRetrievalService);
-    context.registerService(KestrosClassLoader.class, kestrosClassLoader);
     context.registerService(UiFrameworkRetrievalService.class, uiFrameworkRetrievalService);
     context.registerService(ThemeRetrievalService.class, themeRetrievalService);
     context.registerService(ThemeProviderService.class, themeProviderService);
