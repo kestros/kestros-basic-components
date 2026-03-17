@@ -19,20 +19,46 @@
 package io.kestros.cms.components.basic.core.content.icon;
 
 import io.kestros.cms.components.basic.api.content.KestrosIcon;
+import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.components.basic.core.BaseSlingModelDataSource;
-import io.kestros.commons.structuredslingmodels.BaseSlingModel;
+import io.kestros.cms.components.basic.core.BaseSyntheticResource;
 import io.kestros.commons.structuredslingmodels.annotation.KestrosProperty;
 import javax.annotation.Nonnull;
-import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.Resource;
-import org.apache.sling.models.annotations.Model;
 
 /**
- * Sling Model implementation of {@link KestrosIcon}.
- * Reads icon properties directly from the JCR resource.
+ * Implementation of {@link KestrosIcon} backed by {@link BaseSyntheticResource}.
+ * Instantiated via constructor with all properties provided by the caller.
  */
-@Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
-public class KestrosIconImpl extends BaseSlingModelDataSource implements KestrosIcon, BaseSlingModel {
+public class KestrosIconImpl extends BaseSyntheticResource implements KestrosIcon {
+
+  private final String iconType;
+  private final String iconClass;
+  private final String iconPath;
+  private final String altText;
+  private final boolean hideFromScreenReader;
+  private final String href;
+  private final String sizeClass;
+
+  public KestrosIconImpl(
+      String iconType,
+      String iconClass,
+      String iconPath,
+      String altText,
+      boolean hideFromScreenReader,
+      String href,
+      String sizeClass,
+      @Nonnull BaseSlingModelDataSource dataSource,
+      String resourcePrefix,
+      String forcedResourceName) throws ComponentConfigurationException {
+    super(dataSource, resourcePrefix, forcedResourceName);
+    this.iconType = iconType != null ? iconType : "font";
+    this.iconClass = iconClass != null ? iconClass : "";
+    this.iconPath = iconPath != null ? iconPath : "";
+    this.altText = altText != null ? altText : "";
+    this.hideFromScreenReader = hideFromScreenReader;
+    this.href = href != null ? href : "";
+    this.sizeClass = sizeClass != null ? sizeClass : "";
+  }
 
   @Nonnull
   @Override
@@ -40,7 +66,7 @@ public class KestrosIconImpl extends BaseSlingModelDataSource implements Kestros
       jcrPropertyName = "iconType",
       description = "Rendering mode for the icon: 'font', 'svg', or 'image'. Defaults to 'font'.")
   public String getIconType() {
-    return getResource().getValueMap().get("iconType", "font");
+    return iconType;
   }
 
   @Nonnull
@@ -50,7 +76,7 @@ public class KestrosIconImpl extends BaseSlingModelDataSource implements Kestros
       description = "CSS class string for font icon mode, e.g. 'fa fa-star'. "
           + "Used when iconType is 'font'.")
   public String getIconClass() {
-    return getResource().getValueMap().get("iconClass", "");
+    return iconClass;
   }
 
   @Nonnull
@@ -60,7 +86,7 @@ public class KestrosIconImpl extends BaseSlingModelDataSource implements Kestros
       description = "DAM asset path for SVG or image mode. "
           + "Used when iconType is 'svg' or 'image'.")
   public String getIconPath() {
-    return getResource().getValueMap().get("iconPath", "");
+    return iconPath;
   }
 
   @Nonnull
@@ -69,7 +95,7 @@ public class KestrosIconImpl extends BaseSlingModelDataSource implements Kestros
       jcrPropertyName = "altText",
       description = "Alt text for accessibility in SVG and image modes.")
   public String getAltText() {
-    return getResource().getValueMap().get("altText", "");
+    return altText;
   }
 
   @Override
@@ -78,7 +104,7 @@ public class KestrosIconImpl extends BaseSlingModelDataSource implements Kestros
       description = "When true, aria-hidden='true' is applied. "
           + "Use for decorative icons that should not be read by screen readers.")
   public boolean getHideFromScreenReader() {
-    return getResource().getValueMap().get("hideFromScreenReader", false);
+    return hideFromScreenReader;
   }
 
   @Nonnull
@@ -88,7 +114,7 @@ public class KestrosIconImpl extends BaseSlingModelDataSource implements Kestros
       description = "Optional link URL to wrap the icon in an anchor element. "
           + "Applies to image mode.")
   public String getHref() {
-    return getResource().getValueMap().get("href", "");
+    return href;
   }
 
   @Nonnull
@@ -97,6 +123,6 @@ public class KestrosIconImpl extends BaseSlingModelDataSource implements Kestros
       jcrPropertyName = "sizeClass",
       description = "Optional CSS size modifier class, e.g. 'kbc-icon--sm'.")
   public String getSizeClass() {
-    return getResource().getValueMap().get("sizeClass", "");
+    return sizeClass;
   }
 }

@@ -23,143 +23,141 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import io.kestros.cms.components.basic.core.BaseDataSourceTest;
-import java.util.HashMap;
-import java.util.Map;
+import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
+import io.kestros.cms.components.basic.core.BaseSyntheticTest;
 import org.apache.sling.api.resource.Resource;
 import org.junit.Test;
 
-public class KestrosIconImplTest extends BaseDataSourceTest {
+public class KestrosIconImplTest extends BaseSyntheticTest {
 
-  private KestrosIconImpl kestrosIconImpl;
-  private Resource resource;
-  private Map<String, Object> properties = new HashMap<>();
+  private KestrosIconImpl icon;
 
   @Override
-  public void doComponentSetup() {
-    properties.put("iconType", "svg");
-    properties.put("iconClass", "fa fa-star");
-    properties.put("iconPath", "/content/dam/icons/star.svg");
-    properties.put("altText", "A star icon");
-    properties.put("hideFromScreenReader", true);
-    properties.put("href", "https://example.com");
-    properties.put("sizeClass", "kbc-icon--sm");
-    resource = context.create().resource("/content/icon/impl", properties);
-    kestrosIconImpl = resource.adaptTo(KestrosIconImpl.class);
+  public void setupElement() throws ComponentConfigurationException {
+    Resource resource = context.create().resource("/content/parent");
+    context.currentResource(resource);
+    IconStaticDataSource dataSource = context.request().adaptTo(IconStaticDataSource.class);
+
+    icon = new KestrosIconImpl("svg", "fa fa-star", "/content/dam/icons/star.svg",
+        "A star icon", true, "https://example.com", "kbc-icon--sm",
+        dataSource, "icon", "icon-resource");
   }
 
   @Override
   public void testToSyntheticResource() {
-    assertNotNull(kestrosIconImpl);
-  }
-
-  @Override
-  public void doComponentTypeSetup() {
-    // nothing.
+    Resource syntheticResource = icon.toSyntheticResource(getResourceResolver(), "/parent");
+    assertNotNull(syntheticResource);
   }
 
   @Test
-  public void testGetIconType_returnsSetValue() {
-    assertNotNull(kestrosIconImpl);
-    assertEquals("svg", kestrosIconImpl.getIconType());
+  public void testGetIconType() {
+    assertEquals("svg", icon.getIconType());
   }
 
   @Test
-  public void testGetIconType_defaultsToFont() {
-    Map<String, Object> emptyProps = new HashMap<>();
-    Resource emptyResource = context.create().resource("/content/icon/impl-empty", emptyProps);
-    KestrosIconImpl emptyImpl = emptyResource.adaptTo(KestrosIconImpl.class);
-    assertNotNull(emptyImpl);
-    assertEquals("font", emptyImpl.getIconType());
+  public void testGetIconTypeDefaultsToFont() throws ComponentConfigurationException {
+    Resource resource = context.create().resource("/content/parent-defaults");
+    context.currentResource(resource);
+    IconStaticDataSource dataSource = context.request().adaptTo(IconStaticDataSource.class);
+
+    KestrosIconImpl defaultIcon = new KestrosIconImpl(null, null, null, null, false,
+        null, null, dataSource, "icon", "icon-defaults");
+    assertEquals("font", defaultIcon.getIconType());
   }
 
   @Test
-  public void testGetIconClass_returnsSetValue() {
-    assertNotNull(kestrosIconImpl);
-    assertEquals("fa fa-star", kestrosIconImpl.getIconClass());
+  public void testGetIconClass() {
+    assertEquals("fa fa-star", icon.getIconClass());
   }
 
   @Test
-  public void testGetIconClass_defaultsToEmpty() {
-    Map<String, Object> emptyProps = new HashMap<>();
-    Resource emptyResource = context.create().resource("/content/icon/impl-empty2", emptyProps);
-    KestrosIconImpl emptyImpl = emptyResource.adaptTo(KestrosIconImpl.class);
-    assertNotNull(emptyImpl);
-    assertEquals("", emptyImpl.getIconClass());
+  public void testGetIconClassDefaultsToEmpty() throws ComponentConfigurationException {
+    Resource resource = context.create().resource("/content/parent-empty-class");
+    context.currentResource(resource);
+    IconStaticDataSource dataSource = context.request().adaptTo(IconStaticDataSource.class);
+
+    KestrosIconImpl emptyIcon = new KestrosIconImpl("font", null, null, null, false,
+        null, null, dataSource, "icon", "icon-empty-class");
+    assertEquals("", emptyIcon.getIconClass());
   }
 
   @Test
-  public void testGetIconPath_returnsSetValue() {
-    assertNotNull(kestrosIconImpl);
-    assertEquals("/content/dam/icons/star.svg", kestrosIconImpl.getIconPath());
+  public void testGetIconPath() {
+    assertEquals("/content/dam/icons/star.svg", icon.getIconPath());
   }
 
   @Test
-  public void testGetIconPath_defaultsToEmpty() {
-    Map<String, Object> emptyProps = new HashMap<>();
-    Resource emptyResource = context.create().resource("/content/icon/impl-empty3", emptyProps);
-    KestrosIconImpl emptyImpl = emptyResource.adaptTo(KestrosIconImpl.class);
-    assertNotNull(emptyImpl);
-    assertEquals("", emptyImpl.getIconPath());
+  public void testGetIconPathDefaultsToEmpty() throws ComponentConfigurationException {
+    Resource resource = context.create().resource("/content/parent-empty-path");
+    context.currentResource(resource);
+    IconStaticDataSource dataSource = context.request().adaptTo(IconStaticDataSource.class);
+
+    KestrosIconImpl emptyIcon = new KestrosIconImpl("svg", null, null, null, false,
+        null, null, dataSource, "icon", "icon-empty-path");
+    assertEquals("", emptyIcon.getIconPath());
   }
 
   @Test
-  public void testGetAltText_returnsSetValue() {
-    assertNotNull(kestrosIconImpl);
-    assertEquals("A star icon", kestrosIconImpl.getAltText());
+  public void testGetAltText() {
+    assertEquals("A star icon", icon.getAltText());
   }
 
   @Test
-  public void testGetAltText_defaultsToEmpty() {
-    Map<String, Object> emptyProps = new HashMap<>();
-    Resource emptyResource = context.create().resource("/content/icon/impl-empty4", emptyProps);
-    KestrosIconImpl emptyImpl = emptyResource.adaptTo(KestrosIconImpl.class);
-    assertNotNull(emptyImpl);
-    assertEquals("", emptyImpl.getAltText());
+  public void testGetAltTextDefaultsToEmpty() throws ComponentConfigurationException {
+    Resource resource = context.create().resource("/content/parent-empty-alt");
+    context.currentResource(resource);
+    IconStaticDataSource dataSource = context.request().adaptTo(IconStaticDataSource.class);
+
+    KestrosIconImpl emptyIcon = new KestrosIconImpl("svg", null, null, null, false,
+        null, null, dataSource, "icon", "icon-empty-alt");
+    assertEquals("", emptyIcon.getAltText());
   }
 
   @Test
-  public void testGetHideFromScreenReader_returnsTrue() {
-    assertNotNull(kestrosIconImpl);
-    assertTrue(kestrosIconImpl.getHideFromScreenReader());
+  public void testGetHideFromScreenReaderTrue() {
+    assertTrue(icon.getHideFromScreenReader());
   }
 
   @Test
-  public void testGetHideFromScreenReader_defaultsFalse() {
-    Map<String, Object> emptyProps = new HashMap<>();
-    Resource emptyResource = context.create().resource("/content/icon/impl-empty5", emptyProps);
-    KestrosIconImpl emptyImpl = emptyResource.adaptTo(KestrosIconImpl.class);
-    assertNotNull(emptyImpl);
-    assertFalse(emptyImpl.getHideFromScreenReader());
+  public void testGetHideFromScreenReaderDefaultsFalse() throws ComponentConfigurationException {
+    Resource resource = context.create().resource("/content/parent-no-hide");
+    context.currentResource(resource);
+    IconStaticDataSource dataSource = context.request().adaptTo(IconStaticDataSource.class);
+
+    KestrosIconImpl defaultIcon = new KestrosIconImpl("font", null, null, null, false,
+        null, null, dataSource, "icon", "icon-no-hide");
+    assertFalse(defaultIcon.getHideFromScreenReader());
   }
 
   @Test
-  public void testGetHref_returnsSetValue() {
-    assertNotNull(kestrosIconImpl);
-    assertEquals("https://example.com", kestrosIconImpl.getHref());
+  public void testGetHref() {
+    assertEquals("https://example.com", icon.getHref());
   }
 
   @Test
-  public void testGetHref_defaultsToEmpty() {
-    Map<String, Object> emptyProps = new HashMap<>();
-    Resource emptyResource = context.create().resource("/content/icon/impl-empty6", emptyProps);
-    KestrosIconImpl emptyImpl = emptyResource.adaptTo(KestrosIconImpl.class);
-    assertNotNull(emptyImpl);
-    assertEquals("", emptyImpl.getHref());
+  public void testGetHrefDefaultsToEmpty() throws ComponentConfigurationException {
+    Resource resource = context.create().resource("/content/parent-empty-href");
+    context.currentResource(resource);
+    IconStaticDataSource dataSource = context.request().adaptTo(IconStaticDataSource.class);
+
+    KestrosIconImpl emptyIcon = new KestrosIconImpl("image", null, null, null, false,
+        null, null, dataSource, "icon", "icon-empty-href");
+    assertEquals("", emptyIcon.getHref());
   }
 
   @Test
-  public void testGetSizeClass_returnsSetValue() {
-    assertNotNull(kestrosIconImpl);
-    assertEquals("kbc-icon--sm", kestrosIconImpl.getSizeClass());
+  public void testGetSizeClass() {
+    assertEquals("kbc-icon--sm", icon.getSizeClass());
   }
 
   @Test
-  public void testGetSizeClass_defaultsToEmpty() {
-    Map<String, Object> emptyProps = new HashMap<>();
-    Resource emptyResource = context.create().resource("/content/icon/impl-empty7", emptyProps);
-    KestrosIconImpl emptyImpl = emptyResource.adaptTo(KestrosIconImpl.class);
-    assertNotNull(emptyImpl);
-    assertEquals("", emptyImpl.getIconPath());
+  public void testGetSizeClassDefaultsToEmpty() throws ComponentConfigurationException {
+    Resource resource = context.create().resource("/content/parent-empty-size");
+    context.currentResource(resource);
+    IconStaticDataSource dataSource = context.request().adaptTo(IconStaticDataSource.class);
+
+    KestrosIconImpl emptyIcon = new KestrosIconImpl("font", null, null, null, false,
+        null, null, dataSource, "icon", "icon-empty-size");
+    assertEquals("", emptyIcon.getSizeClass());
   }
 }

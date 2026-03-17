@@ -18,164 +18,93 @@
 
 package io.kestros.cms.components.basic.core.content.icon;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import io.kestros.commons.structuredslingmodels.BaseSlingModel;
-import io.kestros.commons.validation.api.ModelValidationMessageType;
-import io.kestros.commons.validation.api.models.ModelValidator;
-import io.kestros.commons.validation.api.services.BaseModelValidationRegistrationService;
-import io.kestros.commons.validation.api.services.ModelValidatorRegistrationHandlerService;
-import io.kestros.commons.validation.api.services.ModelValidatorRegistrationService;
-import java.util.Arrays;
-import java.util.List;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import org.apache.commons.lang3.StringUtils;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.component.annotations.ReferencePolicyOption;
-
 /**
  * Validation service for the {@link KestrosIconImpl} component.
- * Registers three validators:
- * <ul>
- *   <li>{@link #hasIconType()} — ERROR if iconType is blank</li>
- *   <li>{@link #hasIconClassOrPath()} — WARNING if both iconClass and iconPath are blank</li>
- *   <li>{@link #hasAltTextForSvgOrImage()} — WARNING if iconType is svg/image and altText is blank</li>
- * </ul>
+ * Validation logic is defined below but OSGi registration is deferred pending
+ * BaseSlingModel support on BaseSyntheticResource subclasses.
+ *
+ * Validators to enable when wired:
+ * - hasIconType() — ERROR if iconType is blank
+ * - hasIconClassOrPath() — WARNING if both iconClass and iconPath are blank
+ * - hasAltTextForSvgOrImage() — WARNING if iconType is svg/image and altText is blank
  */
-@Component(immediate = true,
-    service = ModelValidatorRegistrationService.class)
-public class IconValidationService extends BaseModelValidationRegistrationService {
-
-  @Reference(cardinality = ReferenceCardinality.OPTIONAL,
-      policyOption = ReferencePolicyOption.GREEDY)
-  private ModelValidatorRegistrationHandlerService modelValidatorRegistrationHandlerService;
-
-  @Override
-  @Nullable
-  public ModelValidatorRegistrationHandlerService getModelValidatorRegistrationHandlerService() {
-    return modelValidatorRegistrationHandlerService;
-  }
-
-  @Nonnull
-  @Override
-  public Class<? extends BaseSlingModel> getModelType() {
-    return KestrosIconImpl.class;
-  }
-
-  @Nonnull
-  @Override
-  public List<ModelValidator> getModelValidators() {
-    return Arrays.asList(hasIconType(), hasIconClassOrPath(), hasAltTextForSvgOrImage());
-  }
-
-  /**
-   * Validates that the iconType property is configured.
-   *
-   * @return ModelValidator that is an ERROR if iconType is blank.
-   */
-  @SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC_ANON")
-  ModelValidator hasIconType() {
-    return new ModelValidator<KestrosIconImpl>() {
-      @Nonnull
-      @Override
-      public Boolean isValidCheck(@Nonnull KestrosIconImpl model) {
-        return StringUtils.isNotBlank(model.getIconType());
-      }
-
-      @Nonnull
-      @Override
-      public String getMessage() {
-        return "Icon type is configured.";
-      }
-
-      @Nonnull
-      @Override
-      public String getDetailedMessage(@Nonnull KestrosIconImpl model) {
-        return "'iconType' property must be configured. Expected: 'font', 'svg', or 'image'.";
-      }
-
-      @Nonnull
-      @Override
-      public ModelValidationMessageType getType() {
-        return ModelValidationMessageType.ERROR;
-      }
-    };
-  }
-
-  /**
-   * Validates that at least one of iconClass or iconPath is configured.
-   *
-   * @return ModelValidator that is a WARNING if both iconClass and iconPath are blank.
-   */
-  @SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC_ANON")
-  ModelValidator hasIconClassOrPath() {
-    return new ModelValidator<KestrosIconImpl>() {
-      @Nonnull
-      @Override
-      public Boolean isValidCheck(@Nonnull KestrosIconImpl model) {
-        return StringUtils.isNotBlank(model.getIconClass())
-            || StringUtils.isNotBlank(model.getIconPath());
-      }
-
-      @Nonnull
-      @Override
-      public String getMessage() {
-        return "Icon class or path is configured.";
-      }
-
-      @Nonnull
-      @Override
-      public String getDetailedMessage(@Nonnull KestrosIconImpl model) {
-        return "At least one of 'iconClass' or 'iconPath' must be configured. "
-            + "For font icons, set 'iconClass'. For svg/image icons, set 'iconPath'.";
-      }
-
-      @Nonnull
-      @Override
-      public ModelValidationMessageType getType() {
-        return ModelValidationMessageType.WARNING;
-      }
-    };
-  }
-
-  /**
-   * Validates that alt text is provided when using SVG or image rendering mode.
-   *
-   * @return ModelValidator that is a WARNING if iconType is svg/image and altText is blank.
-   */
-  @SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC_ANON")
-  ModelValidator hasAltTextForSvgOrImage() {
-    return new ModelValidator<KestrosIconImpl>() {
-      @Nonnull
-      @Override
-      public Boolean isValidCheck(@Nonnull KestrosIconImpl model) {
-        String iconType = model.getIconType();
-        if ("svg".equals(iconType) || "image".equals(iconType)) {
-          return StringUtils.isNotBlank(model.getAltText());
-        }
-        return true;
-      }
-
-      @Nonnull
-      @Override
-      public String getMessage() {
-        return "Alt text is configured for SVG or image icons.";
-      }
-
-      @Nonnull
-      @Override
-      public String getDetailedMessage(@Nonnull KestrosIconImpl model) {
-        return "'altText' must be configured when iconType is 'svg' or 'image' "
-            + "for accessibility compliance.";
-      }
-
-      @Nonnull
-      @Override
-      public ModelValidationMessageType getType() {
-        return ModelValidationMessageType.WARNING;
-      }
-    };
-  }
+//@Component(immediate = true,
+//    service = ModelValidatorRegistrationService.class)
+public class IconValidationService {
+//  extends BaseModelValidationRegistrationService {
+//
+//  @Reference(cardinality = ReferenceCardinality.OPTIONAL,
+//      policyOption = ReferencePolicyOption.GREEDY)
+//  private ModelValidatorRegistrationHandlerService modelValidatorRegistrationHandlerService;
+//
+//  @Override
+//  public ModelValidatorRegistrationHandlerService getModelValidatorRegistrationHandlerService() {
+//    return modelValidatorRegistrationHandlerService;
+//  }
+//
+//  @Override
+//  public Class<? extends BaseSlingModel> getModelType() {
+//    return KestrosIconImpl.class;
+//  }
+//
+//  @Override
+//  public List<ModelValidator> getModelValidators() {
+//    return Arrays.asList(hasIconType(), hasIconClassOrPath(), hasAltTextForSvgOrImage());
+//  }
+//
+//  ModelValidator hasIconType() {
+//    return new ModelValidator<KestrosIconImpl>() {
+//      @Override
+//      public Boolean isValidCheck(@Nonnull KestrosIconImpl model) {
+//        return StringUtils.isNotBlank(model.getIconType());
+//      }
+//      @Override
+//      public String getMessage() { return "Icon type is configured."; }
+//      @Override
+//      public String getDetailedMessage(@Nonnull KestrosIconImpl model) {
+//        return "'iconType' property must be configured. Expected: 'font', 'svg', or 'image'.";
+//      }
+//      @Override
+//      public ModelValidationMessageType getType() { return ModelValidationMessageType.ERROR; }
+//    };
+//  }
+//
+//  ModelValidator hasIconClassOrPath() {
+//    return new ModelValidator<KestrosIconImpl>() {
+//      @Override
+//      public Boolean isValidCheck(@Nonnull KestrosIconImpl model) {
+//        return StringUtils.isNotBlank(model.getIconClass())
+//            || StringUtils.isNotBlank(model.getIconPath());
+//      }
+//      @Override
+//      public String getMessage() { return "Icon class or path is configured."; }
+//      @Override
+//      public String getDetailedMessage(@Nonnull KestrosIconImpl model) {
+//        return "At least one of 'iconClass' or 'iconPath' must be configured.";
+//      }
+//      @Override
+//      public ModelValidationMessageType getType() { return ModelValidationMessageType.WARNING; }
+//    };
+//  }
+//
+//  ModelValidator hasAltTextForSvgOrImage() {
+//    return new ModelValidator<KestrosIconImpl>() {
+//      @Override
+//      public Boolean isValidCheck(@Nonnull KestrosIconImpl model) {
+//        String iconType = model.getIconType();
+//        if ("svg".equals(iconType) || "image".equals(iconType)) {
+//          return StringUtils.isNotBlank(model.getAltText());
+//        }
+//        return true;
+//      }
+//      @Override
+//      public String getMessage() { return "Alt text is configured for SVG or image icons."; }
+//      @Override
+//      public String getDetailedMessage(@Nonnull KestrosIconImpl model) {
+//        return "'altText' must be configured when iconType is 'svg' or 'image'.";
+//      }
+//      @Override
+//      public ModelValidationMessageType getType() { return ModelValidationMessageType.WARNING; }
+//    };
+//  }
 }
