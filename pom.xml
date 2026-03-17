@@ -56,6 +56,20 @@
     <module>frontend</module>
   </modules>
 
+  <build>
+    <pluginManagement>
+      <plugins>
+        <!-- Upgrade from 4.1.0 (inherited from parent) to 5.1.9 to fix
+             ConcurrentModificationException in scr-metadata execution phase -->
+        <plugin>
+          <groupId>org.apache.felix</groupId>
+          <artifactId>maven-bundle-plugin</artifactId>
+          <version>5.1.9</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
   <dependencyManagement>
     <dependencies>
       <dependency>
