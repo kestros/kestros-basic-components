@@ -77,6 +77,12 @@ public abstract class BaseComponentTest {
     cardDataSources.put("default",
             "io.kestros.cms.components.basic.core.content.card.CardStaticDataSource");
     dataSourceMap.put("/libs/kestros/commons/components/content/card", cardDataSources);
+
+    // icon
+    Map<String, String> iconDataSources = new HashMap<>();
+    iconDataSources.put("default",
+            "io.kestros.cms.components.basic.core.content.icon.IconStaticDataSource");
+    dataSourceMap.put("/libs/kestros/commons/components/content/icon", iconDataSources);
 //
 //    // code
 //    Map<String, String> codeDataSources = new HashMap<>();

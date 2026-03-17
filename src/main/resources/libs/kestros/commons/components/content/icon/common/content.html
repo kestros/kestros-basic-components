@@ -1,0 +1,35 @@
+<!--/*
+  ~      Copyright (C) 2020  Kestros, Inc.
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  ~
+  */-->
+<sly data-sly-use.icon="${'io.kestros.cms.components.basic.core.content.icon.IconDataSourceComponent'}"/>
+
+<!-- Font mode: renders a CSS icon class via <i> element -->
+<sly data-sly-test="${icon.iconType == 'font'}">
+  <i class="${icon.iconClass} ${icon.sizeClass}"
+     data-sly-attribute.aria-hidden="${icon.hideFromScreenReader ? 'true' : null}"
+     role="${icon.hideFromScreenReader ? null : 'img'}"
+     aria-label="${icon.hideFromScreenReader ? null : icon.altText}"></i>
+</sly>
+
+<!-- SVG/Image mode: renders a DAM asset via <img> element, with optional link wrap -->
+<sly data-sly-test="${icon.iconType == 'svg' || icon.iconType == 'image'}">
+  <sly data-sly-test="${icon.href}"><a href="${icon.href @ context='uri'}"></sly>
+  <img src="${icon.iconPath @ context='uri'}"
+       alt="${icon.altText}"
+       class="kbc-icon ${icon.sizeClass}"/>
+  <sly data-sly-test="${icon.href}"></a></sly>
+</sly>

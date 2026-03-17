@@ -1,0 +1,83 @@
+{
+  "jcr:primaryType": "nt:unstructured",
+  "jcr:title": "Static",
+  "group": "Kestros Core",
+  "classPath": "io.kestros.cms.components.basic.core.content.icon.IconStaticDataSource",
+  "edit": {
+    "jcr:primaryType": "nt:unstructured",
+    "sling:resourceType": "kestros/cms2/dialog",
+    "content": {
+      "jcr:primaryType": "nt:unstructured",
+      "iconType": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/selectfield",
+        "label": "Icon Type",
+        "name": "iconType",
+        "autofocus": true,
+        "options": {
+          "font": {
+            "jcr:primaryType": "nt:unstructured",
+            "text": "Font Icon (CSS class)",
+            "value": "font",
+            "selected": true
+          },
+          "svg": {
+            "jcr:primaryType": "nt:unstructured",
+            "text": "SVG (DAM path)",
+            "value": "svg",
+            "selected": false
+          },
+          "image": {
+            "jcr:primaryType": "nt:unstructured",
+            "text": "Image (DAM path)",
+            "value": "image",
+            "selected": false
+          }
+        }
+      },
+      "iconClass": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/textfield",
+        "label": "Icon CSS Class(es)",
+        "name": "iconClass",
+        "autofocus": false
+      },
+      "iconPath": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/pathfield",
+        "label": "Asset Path",
+        "name": "iconPath",
+        "includePaths": [
+          "/content/assets"
+        ],
+        "resourceTypes": [
+          "kes:Asset"
+        ]
+      },
+      "altText": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/textfield",
+        "label": "Alt Text",
+        "name": "altText"
+      },
+      "hideFromScreenReader": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/checkbox",
+        "label": "Decorative (hide from screen readers)",
+        "name": "hideFromScreenReader"
+      },
+      "href": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/textfield",
+        "label": "Link URL",
+        "name": "href"
+      },
+      "sizeClass": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/textfield",
+        "label": "Size CSS Class",
+        "name": "sizeClass"
+      }
+    }
+  }
+}

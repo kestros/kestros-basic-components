@@ -1,0 +1,75 @@
+/*
+ *      Copyright (C) 2020  Kestros, Inc.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ */
+
+package io.kestros.cms.components.basic.core.content.icon;
+
+import io.kestros.cms.components.basic.api.content.KestrosIcon;
+import io.kestros.cms.components.basic.core.BaseDataSourceComponent;
+import javax.annotation.Nonnull;
+import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.models.annotations.Model;
+
+/**
+ * Data Source Component for the Icon component. Used as the HTL use binding.
+ */
+@Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
+public class IconDataSourceComponent extends BaseDataSourceComponent<KestrosIcon>
+        implements KestrosIcon {
+
+  @Nonnull
+  @Override
+  public String getIconType() {
+    return getComponentData().getIconType();
+  }
+
+  @Nonnull
+  @Override
+  public String getIconClass() {
+    return getComponentData().getIconClass();
+  }
+
+  @Nonnull
+  @Override
+  public String getIconPath() {
+    return getComponentData().getIconPath();
+  }
+
+  @Nonnull
+  @Override
+  public String getAltText() {
+    return getComponentData().getAltText();
+  }
+
+  @Override
+  public boolean getHideFromScreenReader() {
+    return getComponentData().getHideFromScreenReader();
+  }
+
+  @Nonnull
+  @Override
+  public String getHref() {
+    return getComponentData().getHref();
+  }
+
+  @Nonnull
+  @Override
+  public String getSizeClass() {
+    return getComponentData().getSizeClass();
+  }
+}

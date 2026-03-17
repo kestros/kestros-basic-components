@@ -1,0 +1,8 @@
+{
+  "jcr:primaryType": "kes:ComponentType",
+  "jcr:title": "Icon",
+  "jcr:description": "Icon component — supports font icon (CSS class), SVG, and image variants",
+  "componentGroup": "Content Components",
+  "sling:resourceSuperType": "kestros/commons/components/kestros-parent",
+  "fontAwesomeIcon": "far fa-star"
+}
