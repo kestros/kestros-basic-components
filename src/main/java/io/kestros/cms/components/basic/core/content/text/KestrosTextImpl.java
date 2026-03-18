@@ -16,6 +16,7 @@ public class KestrosTextImpl extends BaseSyntheticResource implements KestrosTex
       @Nonnull String resourcePrefix, @Nullable String forcedResourceName)
       throws ComponentConfigurationException {
     super(dataSource, resourcePrefix, forcedResourceName);
+    this.text = text;
   }
 
   @Nullable
