@@ -10,6 +10,8 @@ import io.kestros.cms.tagging.api.models.KestrosTag;
 import io.kestros.cms.tagging.api.services.TagRetrievalService;
 import io.kestros.commons.structuredslingmodels.exceptions.NoValidAncestorException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -110,11 +112,51 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
     return taggedPages;
   }
 
+  String getSortBy() {
+    return getResource().getValueMap().get("sortBy", "");
+  }
+
+  boolean isReverseOrder() {
+    return getResource().getValueMap().get("reverse", false);
+  }
+
+  int getLimit() {
+    try {
+      return Math.max(0, Integer.parseInt(
+          getResource().getValueMap().get("limit", "0").trim()));
+    } catch (NumberFormatException e) {
+      return 0;
+    }
+  }
+
   @Nonnull
   @Override
   public List<KestrosCard> getCardElements() {
+    List<BaseContentPage> pages = new ArrayList<>(getTaggedPages());
+
+    String sortBy = getSortBy();
+    if (!sortBy.isEmpty()) {
+      pages.sort(Comparator.comparing(p -> {
+        switch (sortBy) {
+          case "name":
+            return p.getName() != null ? p.getName() : "";
+          default:
+            return p.getDisplayTitle() != null ? p.getDisplayTitle() : p.getName();
+        }
+      }));
+    }
+
+    if (isReverseOrder()) {
+      Collections.reverse(pages);
+    }
+
+    int limit = getLimit();
+    if (limit > 0 && pages.size() > limit) {
+      pages = new ArrayList<>(pages.subList(0, limit));
+    }
+
     List<KestrosCard> cards = new ArrayList<>();
-    for (BaseContentPage page : getTaggedPages()) {
+    for (BaseContentPage page : pages) {
       try {
         cards.add(
             new KestrosCardImpl(page,
