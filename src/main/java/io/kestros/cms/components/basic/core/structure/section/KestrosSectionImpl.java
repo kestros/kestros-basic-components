@@ -20,6 +20,7 @@ public class KestrosSectionImpl extends KestrosContainerImpl implements KestrosS
       @Nonnull String resourcePrefix, String forcedResourceName)
       throws ComponentConfigurationException {
     super(childElements, dataSource, resourcePrefix, forcedResourceName);
+    this.backgroundImage = backgroundImage;
   }
 
   @Nullable
