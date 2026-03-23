@@ -29,11 +29,25 @@
         "sling:resourceType": "kestros/cms2/fields/general/selectfield",
         "label": "Sort By",
         "name": "sortBy",
-        "options": [
-          { "value": "", "text": "None (natural order)", "selected": true },
-          { "value": "title", "text": "Title" },
-          { "value": "name", "text": "Name" }
-        ]
+        "options": {
+          "jcr:primaryType": "nt:unstructured",
+          "none": {
+            "jcr:primaryType": "nt:unstructured",
+            "text": "None (natural order)",
+            "value": "",
+            "selected": true
+          },
+          "title": {
+            "jcr:primaryType": "nt:unstructured",
+            "text": "Title",
+            "value": "title"
+          },
+          "name": {
+            "jcr:primaryType": "nt:unstructured",
+            "text": "Name",
+            "value": "name"
+          }
+        }
       },
       "reverse": {
         "jcr:primaryType": "nt:unstructured",
