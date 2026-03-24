@@ -19,6 +19,7 @@ import io.kestros.cms.componenttypes.api.models.ComponentVariation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.Nonnull;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -64,14 +65,21 @@ public class CardListAssetsDataSource extends BaseContainerSlingModelDataSource 
     }
 
     if (!sortBy.isEmpty()) {
-      assets.sort(Comparator.comparing(a -> {
-        switch (sortBy) {
-          case "name":
-            return a.getName() != null ? a.getName() : "";
-          default:
-            return a.getTitle() != null ? a.getTitle() : a.getName();
-        }
-      }));
+      if ("created".equals(sortBy) || "modified".equals(sortBy)) {
+        assets.sort(Comparator.comparing(a -> {
+          Date date = "created".equals(sortBy) ? a.getCreatedDate() : a.getModifiedDate();
+          return date != null ? date.getTime() : 0L;
+        }));
+      } else {
+        assets.sort(Comparator.comparing(a -> {
+          switch (sortBy) {
+            case "name":
+              return a.getName() != null ? a.getName() : "";
+            default:
+              return a.getTitle() != null ? a.getTitle() : a.getName();
+          }
+        }));
+      }
     }
 
     if (reverse) {

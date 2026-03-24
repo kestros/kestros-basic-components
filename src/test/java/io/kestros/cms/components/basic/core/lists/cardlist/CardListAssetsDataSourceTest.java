@@ -169,4 +169,46 @@ public class CardListAssetsDataSourceTest extends BaseDataSourceTest {
     cardListAssetsDataSource = context.request().adaptTo(CardListAssetsDataSource.class);
     assertEquals(1, cardListAssetsDataSource.getCardElements().size());
   }
+
+  @Test
+  public void testGetCardElements_sortByCreated_doesNotCrash() {
+    registerAssetRetrievalService();
+    properties.put("sortBy", "created");
+    resource = context.create().resource("/content/page/cardlist/assets-sortby-created", properties);
+    context.request().setResource(resource);
+    cardListAssetsDataSource = context.request().adaptTo(CardListAssetsDataSource.class);
+    assertEquals(3, cardListAssetsDataSource.getCardElements().size());
+  }
+
+  @Test
+  public void testGetCardElements_sortByModified_doesNotCrash() {
+    registerAssetRetrievalService();
+    properties.put("sortBy", "modified");
+    resource = context.create().resource("/content/page/cardlist/assets-sortby-modified", properties);
+    context.request().setResource(resource);
+    cardListAssetsDataSource = context.request().adaptTo(CardListAssetsDataSource.class);
+    assertEquals(3, cardListAssetsDataSource.getCardElements().size());
+  }
+
+  @Test
+  public void testGetCardElements_sortByCreatedReversed() {
+    registerAssetRetrievalService();
+    properties.put("sortBy", "created");
+    properties.put("reverse", true);
+    resource = context.create().resource("/content/page/cardlist/assets-created-reverse", properties);
+    context.request().setResource(resource);
+    cardListAssetsDataSource = context.request().adaptTo(CardListAssetsDataSource.class);
+    assertEquals(3, cardListAssetsDataSource.getCardElements().size());
+  }
+
+  @Test
+  public void testGetCardElements_sortByModifiedWithLimit() {
+    registerAssetRetrievalService();
+    properties.put("sortBy", "modified");
+    properties.put("limit", "2");
+    resource = context.create().resource("/content/page/cardlist/assets-modified-limit", properties);
+    context.request().setResource(resource);
+    cardListAssetsDataSource = context.request().adaptTo(CardListAssetsDataSource.class);
+    assertEquals(2, cardListAssetsDataSource.getCardElements().size());
+  }
 }

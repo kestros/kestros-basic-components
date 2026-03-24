@@ -46,6 +46,16 @@
             "jcr:primaryType": "nt:unstructured",
             "text": "Name",
             "value": "name"
+          },
+          "created": {
+            "jcr:primaryType": "nt:unstructured",
+            "text": "Created Date",
+            "value": "created"
+          },
+          "modified": {
+            "jcr:primaryType": "nt:unstructured",
+            "text": "Last Modified",
+            "value": "modified"
           }
         }
       },

@@ -234,4 +234,130 @@ public class CardListChildPagesDataSourceTest extends BaseDataSourceTest {
     cardListChildPagesDataSource = context.request().adaptTo(CardListChildPagesDataSource.class);
     assertEquals(1, cardListChildPagesDataSource.getCardElements().size());
   }
+
+  @Test
+  public void testGetCardElements_sortByCreated_noDateProperties_doesNotCrash() {
+    properties.put("sortBy", "created");
+    resource = context.create().resource("/content/page/jcr:content/comp-sortby-created", properties);
+    context.request().setResource(resource);
+    cardListChildPagesDataSource = context.request().adaptTo(CardListChildPagesDataSource.class);
+    assertEquals(3, cardListChildPagesDataSource.getCardElements().size());
+  }
+
+  @Test
+  public void testGetCardElements_sortByModified_noDateProperties_doesNotCrash() {
+    properties.put("sortBy", "modified");
+    resource = context.create().resource("/content/page/jcr:content/comp-sortby-modified", properties);
+    context.request().setResource(resource);
+    cardListChildPagesDataSource = context.request().adaptTo(CardListChildPagesDataSource.class);
+    assertEquals(3, cardListChildPagesDataSource.getCardElements().size());
+  }
+
+  @Test
+  public void testGetCardElements_sortByCreatedWithDates() {
+    // Create pages with different jcr:created dates
+    Map<String, Object> pageProps = new HashMap<>();
+    pageProps.put("jcr:primaryType", "kes:Page");
+    context.create().resource("/content/dated-page", pageProps);
+    Map<String, Object> jcrContentProps = new HashMap<>();
+    jcrContentProps.put("jcr:primaryType", "nt:unstructured");
+    jcrContentProps.put("jcr:title", "Parent");
+    context.create().resource("/content/dated-page/jcr:content", jcrContentProps);
+
+    java.util.Calendar cal1 = java.util.Calendar.getInstance();
+    cal1.set(2025, 0, 1);
+    java.util.Calendar cal2 = java.util.Calendar.getInstance();
+    cal2.set(2025, 6, 1);
+    java.util.Calendar cal3 = java.util.Calendar.getInstance();
+    cal3.set(2025, 3, 1);
+
+    context.create().resource("/content/dated-page/page-a", pageProps);
+    Map<String, Object> jcr1 = new HashMap<>();
+    jcr1.put("jcr:primaryType", "nt:unstructured");
+    jcr1.put("jcr:title", "Page A");
+    jcr1.put("jcr:created", cal1);
+    context.create().resource("/content/dated-page/page-a/jcr:content", jcr1);
+
+    context.create().resource("/content/dated-page/page-b", pageProps);
+    Map<String, Object> jcr2 = new HashMap<>();
+    jcr2.put("jcr:primaryType", "nt:unstructured");
+    jcr2.put("jcr:title", "Page B");
+    jcr2.put("jcr:created", cal2);
+    context.create().resource("/content/dated-page/page-b/jcr:content", jcr2);
+
+    context.create().resource("/content/dated-page/page-c", pageProps);
+    Map<String, Object> jcr3 = new HashMap<>();
+    jcr3.put("jcr:primaryType", "nt:unstructured");
+    jcr3.put("jcr:title", "Page C");
+    jcr3.put("jcr:created", cal3);
+    context.create().resource("/content/dated-page/page-c/jcr:content", jcr3);
+
+    Map<String, Object> compProps = new HashMap<>();
+    compProps.put("pagesPath", "/content/dated-page");
+    compProps.put("sortBy", "created");
+    Resource compResource = context.create().resource("/content/dated-page/jcr:content/comp-created-sort", compProps);
+    context.request().setResource(compResource);
+    CardListChildPagesDataSource ds = context.request().adaptTo(CardListChildPagesDataSource.class);
+    List<KestrosCard> cards = ds.getCardElements();
+    assertEquals(3, cards.size());
+  }
+
+  @Test
+  public void testGetCardElements_sortByModifiedWithDates() {
+    Map<String, Object> pageProps = new HashMap<>();
+    pageProps.put("jcr:primaryType", "kes:Page");
+    context.create().resource("/content/mod-page", pageProps);
+    Map<String, Object> jcrContentProps = new HashMap<>();
+    jcrContentProps.put("jcr:primaryType", "nt:unstructured");
+    jcrContentProps.put("jcr:title", "Parent");
+    context.create().resource("/content/mod-page/jcr:content", jcrContentProps);
+
+    java.util.Calendar cal1 = java.util.Calendar.getInstance();
+    cal1.set(2025, 0, 15);
+    java.util.Calendar cal2 = java.util.Calendar.getInstance();
+    cal2.set(2025, 5, 15);
+
+    context.create().resource("/content/mod-page/page-x", pageProps);
+    Map<String, Object> jcr1 = new HashMap<>();
+    jcr1.put("jcr:primaryType", "nt:unstructured");
+    jcr1.put("jcr:title", "Page X");
+    jcr1.put("jcr:lastModified", cal1);
+    context.create().resource("/content/mod-page/page-x/jcr:content", jcr1);
+
+    context.create().resource("/content/mod-page/page-y", pageProps);
+    Map<String, Object> jcr2 = new HashMap<>();
+    jcr2.put("jcr:primaryType", "nt:unstructured");
+    jcr2.put("jcr:title", "Page Y");
+    jcr2.put("jcr:lastModified", cal2);
+    context.create().resource("/content/mod-page/page-y/jcr:content", jcr2);
+
+    Map<String, Object> compProps = new HashMap<>();
+    compProps.put("pagesPath", "/content/mod-page");
+    compProps.put("sortBy", "modified");
+    Resource compResource = context.create().resource("/content/mod-page/jcr:content/comp-mod-sort", compProps);
+    context.request().setResource(compResource);
+    CardListChildPagesDataSource ds = context.request().adaptTo(CardListChildPagesDataSource.class);
+    List<KestrosCard> cards = ds.getCardElements();
+    assertEquals(2, cards.size());
+  }
+
+  @Test
+  public void testGetCardElements_sortByCreatedReversed() {
+    properties.put("sortBy", "created");
+    properties.put("reverse", true);
+    resource = context.create().resource("/content/page/jcr:content/comp-created-reverse", properties);
+    context.request().setResource(resource);
+    cardListChildPagesDataSource = context.request().adaptTo(CardListChildPagesDataSource.class);
+    assertEquals(3, cardListChildPagesDataSource.getCardElements().size());
+  }
+
+  @Test
+  public void testGetCardElements_sortByModifiedWithLimit() {
+    properties.put("sortBy", "modified");
+    properties.put("limit", "1");
+    resource = context.create().resource("/content/page/jcr:content/comp-modified-limit", properties);
+    context.request().setResource(resource);
+    cardListChildPagesDataSource = context.request().adaptTo(CardListChildPagesDataSource.class);
+    assertEquals(1, cardListChildPagesDataSource.getCardElements().size());
+  }
 }

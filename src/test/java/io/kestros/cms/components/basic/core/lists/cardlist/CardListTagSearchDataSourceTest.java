@@ -370,4 +370,47 @@ public class CardListTagSearchDataSourceTest extends BaseDataSourceTest {
         context.request().adaptTo(CardListTagSearchDataSource.class);
     assertNotNull(ds);
   }
+
+  @Test
+  public void testGetCardElements_sortByCreated_doesNotCrash() {
+    Map<String, Object> sortProps = new HashMap<>();
+    sortProps.put("tags", new String[]{"/etc/tags/topic/java"});
+    sortProps.put("readMoreText", "View Session");
+    sortProps.put("sortBy", "created");
+    Resource sortResource = context.create().resource(
+        "/content/sessions/child-1/jcr:content/sort-created-component", sortProps);
+    context.request().setResource(sortResource);
+    CardListTagSearchDataSource ds =
+        context.request().adaptTo(CardListTagSearchDataSource.class);
+    assertEquals(1, ds.getCardElements().size());
+  }
+
+  @Test
+  public void testGetCardElements_sortByModified_doesNotCrash() {
+    Map<String, Object> sortProps = new HashMap<>();
+    sortProps.put("tags", new String[]{"/etc/tags/topic/java"});
+    sortProps.put("readMoreText", "View Session");
+    sortProps.put("sortBy", "modified");
+    Resource sortResource = context.create().resource(
+        "/content/sessions/child-1/jcr:content/sort-modified-component", sortProps);
+    context.request().setResource(sortResource);
+    CardListTagSearchDataSource ds =
+        context.request().adaptTo(CardListTagSearchDataSource.class);
+    assertEquals(1, ds.getCardElements().size());
+  }
+
+  @Test
+  public void testGetCardElements_sortByCreatedReversed() {
+    Map<String, Object> sortProps = new HashMap<>();
+    sortProps.put("tags", new String[]{"/etc/tags/topic/java"});
+    sortProps.put("readMoreText", "View Session");
+    sortProps.put("sortBy", "created");
+    sortProps.put("reverse", true);
+    Resource sortResource = context.create().resource(
+        "/content/sessions/child-1/jcr:content/sort-created-reverse-component", sortProps);
+    context.request().setResource(sortResource);
+    CardListTagSearchDataSource ds =
+        context.request().adaptTo(CardListTagSearchDataSource.class);
+    assertEquals(1, ds.getCardElements().size());
+  }
 }

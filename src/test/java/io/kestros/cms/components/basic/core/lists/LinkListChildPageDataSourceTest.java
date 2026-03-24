@@ -175,4 +175,46 @@ public class LinkListChildPageDataSourceTest extends BaseDataSourceTest {
     assertEquals(1, linkListChildPageDataSource.getLinkElements().size());
   }
 
+  @Test
+  public void testGetLinkElements_sortByCreated_doesNotCrash() {
+    properties.put("sortBy", "created");
+    resource = context.create().resource("/content/linklist/childpages/ds-sortby-created",
+        properties);
+    context.request().setResource(resource);
+    linkListChildPageDataSource = context.request().adaptTo(LinkListChildPageDataSource.class);
+    assertEquals(3, linkListChildPageDataSource.getLinkElements().size());
+  }
+
+  @Test
+  public void testGetLinkElements_sortByModified_doesNotCrash() {
+    properties.put("sortBy", "modified");
+    resource = context.create().resource("/content/linklist/childpages/ds-sortby-modified",
+        properties);
+    context.request().setResource(resource);
+    linkListChildPageDataSource = context.request().adaptTo(LinkListChildPageDataSource.class);
+    assertEquals(3, linkListChildPageDataSource.getLinkElements().size());
+  }
+
+  @Test
+  public void testGetLinkElements_sortByCreatedReversed() {
+    properties.put("sortBy", "created");
+    properties.put("reverse", true);
+    resource = context.create().resource("/content/linklist/childpages/ds-created-reverse",
+        properties);
+    context.request().setResource(resource);
+    linkListChildPageDataSource = context.request().adaptTo(LinkListChildPageDataSource.class);
+    assertEquals(3, linkListChildPageDataSource.getLinkElements().size());
+  }
+
+  @Test
+  public void testGetLinkElements_sortByModifiedWithLimit() {
+    properties.put("sortBy", "modified");
+    properties.put("limit", "2");
+    resource = context.create().resource("/content/linklist/childpages/ds-modified-limit",
+        properties);
+    context.request().setResource(resource);
+    linkListChildPageDataSource = context.request().adaptTo(LinkListChildPageDataSource.class);
+    assertEquals(2, linkListChildPageDataSource.getLinkElements().size());
+  }
+
 }

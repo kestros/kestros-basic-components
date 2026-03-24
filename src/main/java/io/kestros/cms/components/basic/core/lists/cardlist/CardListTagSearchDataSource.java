@@ -10,6 +10,7 @@ import io.kestros.cms.tagging.api.models.KestrosTag;
 import io.kestros.cms.tagging.api.services.TagRetrievalService;
 import io.kestros.commons.structuredslingmodels.exceptions.NoValidAncestorException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -136,14 +137,28 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
 
     String sortBy = getSortBy();
     if (!sortBy.isEmpty()) {
-      pages.sort(Comparator.comparing(p -> {
-        switch (sortBy) {
-          case "name":
-            return p.getName() != null ? p.getName() : "";
-          default:
-            return p.getDisplayTitle() != null ? p.getDisplayTitle() : p.getName();
-        }
-      }));
+      if ("created".equals(sortBy) || "modified".equals(sortBy)) {
+        String jcrProperty = "created".equals(sortBy) ? "jcr:created" : "jcr:lastModified";
+        pages.sort(Comparator.comparing(p -> {
+          Resource content = p.getResource().getChild("jcr:content");
+          if (content != null) {
+            Calendar cal = content.getValueMap().get(jcrProperty, Calendar.class);
+            if (cal != null) {
+              return cal.getTimeInMillis();
+            }
+          }
+          return 0L;
+        }));
+      } else {
+        pages.sort(Comparator.comparing(p -> {
+          switch (sortBy) {
+            case "name":
+              return p.getName() != null ? p.getName() : "";
+            default:
+              return p.getDisplayTitle() != null ? p.getDisplayTitle() : p.getName();
+          }
+        }));
+      }
     }
 
     if (isReverseOrder()) {

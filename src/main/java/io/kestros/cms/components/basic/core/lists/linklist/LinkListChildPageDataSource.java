@@ -10,6 +10,7 @@ import io.kestros.cms.componenttypes.api.services.ComponentUiFrameworkViewRetrie
 import io.kestros.cms.componenttypes.api.services.ComponentVariationRetrievalService;
 import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -59,14 +60,28 @@ public class LinkListChildPageDataSource extends BaseContainerSlingModelDataSour
     }
 
     if (!sortBy.isEmpty()) {
-      pages.sort(Comparator.comparing(p -> {
-        switch (sortBy) {
-          case "name":
-            return p.getName() != null ? p.getName() : "";
-          default:
-            return p.getDisplayTitle() != null ? p.getDisplayTitle() : p.getName();
-        }
-      }));
+      if ("created".equals(sortBy) || "modified".equals(sortBy)) {
+        String jcrProperty = "created".equals(sortBy) ? "jcr:created" : "jcr:lastModified";
+        pages.sort(Comparator.comparing(p -> {
+          Resource content = p.getResource().getChild("jcr:content");
+          if (content != null) {
+            Calendar cal = content.getValueMap().get(jcrProperty, Calendar.class);
+            if (cal != null) {
+              return cal.getTimeInMillis();
+            }
+          }
+          return 0L;
+        }));
+      } else {
+        pages.sort(Comparator.comparing(p -> {
+          switch (sortBy) {
+            case "name":
+              return p.getName() != null ? p.getName() : "";
+            default:
+              return p.getDisplayTitle() != null ? p.getDisplayTitle() : p.getName();
+          }
+        }));
+      }
     }
 
     if (reverse) {
