@@ -200,4 +200,56 @@ public class LinkListTagSearchDataSourceTest extends BaseDataSourceTest {
         context.request().adaptTo(LinkListTagSearchDataSource.class);
     assertEquals("/content/sessions", pathDs.getRootPath());
   }
+
+  @Test
+  public void testGetLinkElementsWithSortByTitle() {
+    Map<String, Object> sortProps = new HashMap<>();
+    sortProps.put("tags", new String[]{"/etc/tags/topic/java"});
+    sortProps.put("sortBy", "title");
+    Resource sortResource = context.create().resource(
+        "/content/sessions/child-1/jcr:content/sort-title-component", sortProps);
+    context.request().setResource(sortResource);
+    LinkListTagSearchDataSource sortDs =
+        context.request().adaptTo(LinkListTagSearchDataSource.class);
+    assertEquals(1, sortDs.getLinkElements().size());
+  }
+
+  @Test
+  public void testGetLinkElementsWithSortByCreatedDate() {
+    Map<String, Object> sortProps = new HashMap<>();
+    sortProps.put("tags", new String[]{"/etc/tags/topic/java"});
+    sortProps.put("sortBy", "createdDate");
+    Resource sortResource = context.create().resource(
+        "/content/sessions/child-1/jcr:content/sort-created-component", sortProps);
+    context.request().setResource(sortResource);
+    LinkListTagSearchDataSource sortDs =
+        context.request().adaptTo(LinkListTagSearchDataSource.class);
+    assertEquals(1, sortDs.getLinkElements().size());
+  }
+
+  @Test
+  public void testGetLinkElementsWithSortByLastModified() {
+    Map<String, Object> sortProps = new HashMap<>();
+    sortProps.put("tags", new String[]{"/etc/tags/topic/java"});
+    sortProps.put("sortBy", "lastModified");
+    Resource sortResource = context.create().resource(
+        "/content/sessions/child-1/jcr:content/sort-modified-component", sortProps);
+    context.request().setResource(sortResource);
+    LinkListTagSearchDataSource sortDs =
+        context.request().adaptTo(LinkListTagSearchDataSource.class);
+    assertEquals(1, sortDs.getLinkElements().size());
+  }
+
+  @Test
+  public void testGetLinkElementsWithInvalidLimit() {
+    Map<String, Object> limitProps = new HashMap<>();
+    limitProps.put("tags", new String[]{"/etc/tags/topic/java"});
+    limitProps.put("limit", "abc");
+    Resource limitResource = context.create().resource(
+        "/content/sessions/child-1/jcr:content/invalid-limit-component", limitProps);
+    context.request().setResource(limitResource);
+    LinkListTagSearchDataSource limitDs =
+        context.request().adaptTo(LinkListTagSearchDataSource.class);
+    assertEquals(1, limitDs.getLinkElements().size());
+  }
 }

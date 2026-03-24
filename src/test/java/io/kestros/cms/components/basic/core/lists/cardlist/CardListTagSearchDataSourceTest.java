@@ -147,4 +147,103 @@ public class CardListTagSearchDataSourceTest extends BaseDataSourceTest {
         context.request().adaptTo(CardListTagSearchDataSource.class);
     assertEquals(0, emptyDs.getConfiguredTags().length);
   }
+
+  @Test
+  public void testGetCardElementsWithSortByName() {
+    Map<String, Object> sortProps = new HashMap<>();
+    sortProps.put("tags", new String[]{"/etc/tags/topic/java"});
+    sortProps.put("readMoreText", "View Session");
+    sortProps.put("sortBy", "name");
+    Resource sortResource = context.create().resource(
+        "/content/sessions/child-1/jcr:content/sort-component", sortProps);
+    context.request().setResource(sortResource);
+    CardListTagSearchDataSource sortDs =
+        context.request().adaptTo(CardListTagSearchDataSource.class);
+    assertEquals(1, sortDs.getCardElements().size());
+  }
+
+  @Test
+  public void testGetCardElementsWithSortByTitle() {
+    Map<String, Object> sortProps = new HashMap<>();
+    sortProps.put("tags", new String[]{"/etc/tags/topic/java"});
+    sortProps.put("readMoreText", "View Session");
+    sortProps.put("sortBy", "title");
+    Resource sortResource = context.create().resource(
+        "/content/sessions/child-1/jcr:content/sort-title-component", sortProps);
+    context.request().setResource(sortResource);
+    CardListTagSearchDataSource sortDs =
+        context.request().adaptTo(CardListTagSearchDataSource.class);
+    assertEquals(1, sortDs.getCardElements().size());
+  }
+
+  @Test
+  public void testGetCardElementsWithSortByCreatedDate() {
+    Map<String, Object> sortProps = new HashMap<>();
+    sortProps.put("tags", new String[]{"/etc/tags/topic/java"});
+    sortProps.put("readMoreText", "View Session");
+    sortProps.put("sortBy", "createdDate");
+    Resource sortResource = context.create().resource(
+        "/content/sessions/child-1/jcr:content/sort-created-component", sortProps);
+    context.request().setResource(sortResource);
+    CardListTagSearchDataSource sortDs =
+        context.request().adaptTo(CardListTagSearchDataSource.class);
+    assertEquals(1, sortDs.getCardElements().size());
+  }
+
+  @Test
+  public void testGetCardElementsWithSortByLastModified() {
+    Map<String, Object> sortProps = new HashMap<>();
+    sortProps.put("tags", new String[]{"/etc/tags/topic/java"});
+    sortProps.put("readMoreText", "View Session");
+    sortProps.put("sortBy", "lastModified");
+    Resource sortResource = context.create().resource(
+        "/content/sessions/child-1/jcr:content/sort-modified-component", sortProps);
+    context.request().setResource(sortResource);
+    CardListTagSearchDataSource sortDs =
+        context.request().adaptTo(CardListTagSearchDataSource.class);
+    assertEquals(1, sortDs.getCardElements().size());
+  }
+
+  @Test
+  public void testGetCardElementsWithReverse() {
+    Map<String, Object> reverseProps = new HashMap<>();
+    reverseProps.put("tags", new String[]{"/etc/tags/topic/java"});
+    reverseProps.put("readMoreText", "View Session");
+    reverseProps.put("reverse", true);
+    Resource reverseResource = context.create().resource(
+        "/content/sessions/child-1/jcr:content/reverse-component", reverseProps);
+    context.request().setResource(reverseResource);
+    CardListTagSearchDataSource reverseDs =
+        context.request().adaptTo(CardListTagSearchDataSource.class);
+    assertEquals(1, reverseDs.getCardElements().size());
+  }
+
+  @Test
+  public void testGetCardElementsWithLimit() {
+    Map<String, Object> limitProps = new HashMap<>();
+    limitProps.put("tags", new String[]{"/etc/tags/topic/java", "/etc/tags/topic/sling"});
+    limitProps.put("readMoreText", "View Session");
+    limitProps.put("limit", "1");
+    Resource limitResource = context.create().resource(
+        "/content/sessions/child-1/jcr:content/limit-component", limitProps);
+    context.request().setResource(limitResource);
+    CardListTagSearchDataSource limitDs =
+        context.request().adaptTo(CardListTagSearchDataSource.class);
+    List<KestrosCard> cards = limitDs.getCardElements();
+    assertEquals(1, cards.size());
+  }
+
+  @Test
+  public void testGetCardElementsWithInvalidLimit() {
+    Map<String, Object> limitProps = new HashMap<>();
+    limitProps.put("tags", new String[]{"/etc/tags/topic/java"});
+    limitProps.put("readMoreText", "View Session");
+    limitProps.put("limit", "abc");
+    Resource limitResource = context.create().resource(
+        "/content/sessions/child-1/jcr:content/invalid-limit-component", limitProps);
+    context.request().setResource(limitResource);
+    CardListTagSearchDataSource limitDs =
+        context.request().adaptTo(CardListTagSearchDataSource.class);
+    assertEquals(1, limitDs.getCardElements().size());
+  }
 }

@@ -12,6 +12,7 @@ import io.kestros.cms.tagging.api.models.KestrosTag;
 import io.kestros.cms.tagging.api.services.TagRetrievalService;
 import io.kestros.commons.structuredslingmodels.exceptions.NoValidAncestorException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -147,14 +148,34 @@ public class LinkListTagSearchDataSource extends BaseContainerSlingModelDataSour
     }
 
     if (!sortBy.isEmpty()) {
-      pages.sort(Comparator.comparing(p -> {
-        switch (sortBy) {
-          case "name":
-            return p.getName() != null ? p.getName() : "";
-          default:
-            return p.getDisplayTitle() != null ? p.getDisplayTitle() : p.getName();
-        }
-      }));
+      switch (sortBy) {
+        case "createdDate":
+          pages.sort(Comparator.comparing(p -> {
+            Calendar cal = p.getResource().getChild("jcr:content") != null
+                ? p.getResource().getChild("jcr:content").getValueMap()
+                    .get("jcr:created", Calendar.class) : null;
+            return cal != null ? cal.getTimeInMillis() : 0L;
+          }));
+          break;
+        case "lastModified":
+          pages.sort(Comparator.comparing(p -> {
+            Calendar cal = p.getResource().getChild("jcr:content") != null
+                ? p.getResource().getChild("jcr:content").getValueMap()
+                    .get("jcr:lastModified", Calendar.class) : null;
+            return cal != null ? cal.getTimeInMillis() : 0L;
+          }));
+          break;
+        default:
+          pages.sort(Comparator.comparing(p -> {
+            switch (sortBy) {
+              case "name":
+                return p.getName() != null ? p.getName() : "";
+              default:
+                return p.getDisplayTitle() != null ? p.getDisplayTitle() : p.getName();
+            }
+          }));
+          break;
+      }
     }
 
     if (reverse) {
