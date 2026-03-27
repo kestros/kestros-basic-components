@@ -57,7 +57,11 @@ public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSou
   @Nonnull
   @Override
   public List<KestrosCard> getCardElements() {
-    List<BaseContentPage> pages = new ArrayList<>(getRootPage().getChildPages());
+    BaseContentPage root = getRootPage();
+    if (root == null) {
+      return new ArrayList<>();
+    }
+    List<BaseContentPage> pages = new ArrayList<>(root.getChildPages());
 
     String sortBy = getResource().getValueMap().get("sortBy", "");
     boolean reverse = getResource().getValueMap().get("reverse", false);

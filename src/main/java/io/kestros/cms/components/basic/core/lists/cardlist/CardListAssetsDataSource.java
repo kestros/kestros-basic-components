@@ -53,7 +53,11 @@ public class CardListAssetsDataSource extends BaseContainerSlingModelDataSource 
   @Nonnull
   @Override
   public List<KestrosCard> getCardElements() {
-    List<Asset> assets = new ArrayList<>(getCollection().getChildAssets());
+    AssetCollection col = getCollection();
+    if (col == null) {
+      return new ArrayList<>();
+    }
+    List<Asset> assets = new ArrayList<>(col.getChildAssets());
 
     String sortBy = getResource().getValueMap().get("sortBy", "");
     boolean reverse = getResource().getValueMap().get("reverse", false);
