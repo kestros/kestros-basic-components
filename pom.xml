@@ -128,6 +128,7 @@
                         <exclude>*-maven-settings.xml</exclude>
                         <exclude>src/main/resources/content/ROOT.json</exclude>
                         <exclude>src/main/resources/startup/favicon.svg</exclude>
+                        <exclude>.gitignore</exclude>
                     </excludes>
                 </configuration>
                 <executions>
