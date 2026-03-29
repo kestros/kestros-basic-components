@@ -61,14 +61,30 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
     return tags;
   }
 
-  BaseContentPage getRootPage() {
-    BaseContentPage currentPage = getContainingPage();
-    if (currentPage != null) {
+  String getRootPath() {
+    String pagesPath = getResource().getValueMap().get("pagesPath", String.class);
+    if (pagesPath != null) {
+      return pagesPath;
+    }
+    BaseContentPage page = getContainingPage();
+    if (page != null) {
       try {
-        return currentPage.getParent();
+        return page.getParent().getPath();
       } catch (Exception e) {
-        return currentPage;
+        return page.getPath();
       }
+    }
+    return null;
+  }
+
+  BaseContentPage getRootPage() {
+    String rootPath = getRootPath();
+    if (rootPath == null) {
+      return null;
+    }
+    Resource rootResource = getResource().getResourceResolver().getResource(rootPath);
+    if (rootResource != null) {
+      return rootResource.adaptTo(BaseContentPage.class);
     }
     return null;
   }
