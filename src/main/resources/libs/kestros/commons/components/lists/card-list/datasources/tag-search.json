@@ -82,9 +82,23 @@
         "label": "Reverse Order",
         "name": "reverse"
       },
+      "pagesPath": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/pathfield",
+        "label": "Root Path (optional)",
+        "name": "pagesPath",
+        "includePaths": [
+          "closest:kes:Site"
+        ],
+        "resourceTypes": [
+          "kes:Site",
+          "kes:Page"
+        ],
+        "autofocus": false
+      },
       "limit": {
         "jcr:primaryType": "nt:unstructured",
-        "sling:resourceType": "kestros/cms2/fields/general/textfield",
+        "sling:resourceType": "kestros/cms2/fields/general/numberfield",
         "label": "Limit (0 = no limit)",
         "name": "limit"
       }
