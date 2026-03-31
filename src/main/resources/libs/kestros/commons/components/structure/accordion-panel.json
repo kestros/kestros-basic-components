@@ -2,7 +2,7 @@
   "jcr:primaryType": "kes:ComponentType",
   "jcr:title": "Accordion Panel",
   "jcr:description": "",
-  "componentGroup": "Accordion Content",
+  "componentGroup": ".hidden",
   "sling:resourceSuperType": "kestros/commons/components/content-area",
   "container": true,
   "kes:allowedComponents": [
