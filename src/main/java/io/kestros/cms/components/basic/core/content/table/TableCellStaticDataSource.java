@@ -33,4 +33,9 @@ public class TableCellStaticDataSource extends BaseContainerSlingModelDataSource
     // This should never get hit, since we can just look to child resources instead of synthesizing them, but we need to return something here to satisfy the interface contract.
     return new ArrayList<>();
   }
+
+  @Override
+  public String getText() {
+    return getResource().getValueMap().get("text", String.class);
+  }
 }
