@@ -1,9 +1,11 @@
-package io.kestros.cms.components.basic.core.lists.cardlist;
+package io.kestros.cms.components.basic.core.lists.linklist;
 
-import io.kestros.cms.components.basic.api.content.KestrosCard;
-import io.kestros.cms.components.basic.api.lists.KestrosCardList;
+import io.kestros.cms.components.basic.api.content.AnchorTarget;
+import io.kestros.cms.components.basic.api.content.KestrosLink;
+import io.kestros.cms.components.basic.api.lists.KestrosLinkList;
 import io.kestros.cms.components.basic.core.BaseContainerSlingModelDataSource;
-import io.kestros.cms.components.basic.core.content.card.KestrosCardImpl;
+import io.kestros.cms.components.basic.core.LinkUtils;
+import io.kestros.cms.components.basic.core.content.link.KestrosLinkImpl;
 import io.kestros.cms.sitebuilding.api.models.BaseComponent;
 import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
 import io.kestros.cms.tagging.api.models.KestrosTag;
@@ -17,26 +19,24 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 
+/**
+ * Tag search datasource for the link list component. Finds pages matching configured
+ * tags and renders them as link elements.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
-public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSource implements
-                                                                                   KestrosCardList {
+public class LinkListTagSearchDataSource extends BaseContainerSlingModelDataSource
+    implements KestrosLinkList {
 
   @OSGiService
   @org.apache.sling.models.annotations.Optional
   private TagRetrievalService tagRetrievalService;
 
   private BaseContentPage containingPage;
-
-  @Nullable
-  public String getReadMoreText() {
-    return getResource().getValueMap().get("readMoreText", String.class);
-  }
 
   BaseContentPage getContainingPage() {
     if (containingPage == null) {
@@ -82,11 +82,15 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
     if (rootPath == null) {
       return null;
     }
-    Resource rootResource = getResource().getResourceResolver().getResource(rootPath);
+    Resource rootResource = getResourceResolver().getResource(rootPath);
     if (rootResource != null) {
       return rootResource.adaptTo(BaseContentPage.class);
     }
     return null;
+  }
+
+  public AnchorTarget getTarget() {
+    return AnchorTarget.lookup(getResource());
   }
 
   List<BaseContentPage> getTaggedPages() {
@@ -131,7 +135,7 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
 
   @Nonnull
   @Override
-  public List<KestrosCard> getCardElements() {
+  public List<KestrosLink> getLinkElements() {
     List<BaseContentPage> pages = new ArrayList<>(getTaggedPages());
 
     String sortBy = getResource().getValueMap().get("sortBy", "");
@@ -181,19 +185,17 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
       pages = pages.subList(0, limit);
     }
 
-    List<KestrosCard> cards = new ArrayList<>();
+    List<KestrosLink> links = new ArrayList<>();
     for (BaseContentPage page : pages) {
       try {
-        cards.add(
-            new KestrosCardImpl(page,
-                getReadMoreText(),
-                this,
-                "card",
-                page.getName()));
+        links.add(new KestrosLinkImpl(page,
+            this,
+            "link",
+            page.getName()));
       } catch (Exception e) {
-        // Skip cards that fail to construct — null-safe
+        // Skip links that fail to construct
       }
     }
-    return new ArrayList<>(cards);
+    return links;
   }
 }

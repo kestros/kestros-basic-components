@@ -19,6 +19,7 @@ import io.kestros.cms.componenttypes.api.models.ComponentVariation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.Nonnull;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -52,7 +53,11 @@ public class CardListAssetsDataSource extends BaseContainerSlingModelDataSource 
   @Nonnull
   @Override
   public List<KestrosCard> getCardElements() {
-    List<Asset> assets = new ArrayList<>(getCollection().getChildAssets());
+    AssetCollection col = getCollection();
+    if (col == null) {
+      return new ArrayList<>();
+    }
+    List<Asset> assets = new ArrayList<>(col.getChildAssets());
 
     String sortBy = getResource().getValueMap().get("sortBy", "");
     boolean reverse = getResource().getValueMap().get("reverse", false);
@@ -64,14 +69,30 @@ public class CardListAssetsDataSource extends BaseContainerSlingModelDataSource 
     }
 
     if (!sortBy.isEmpty()) {
-      assets.sort(Comparator.comparing(a -> {
-        switch (sortBy) {
-          case "name":
-            return a.getName() != null ? a.getName() : "";
-          default:
-            return a.getTitle() != null ? a.getTitle() : a.getName();
-        }
-      }));
+      switch (sortBy) {
+        case "createdDate":
+          assets.sort(Comparator.comparing(a -> {
+            Date date = a.getCreatedDate();
+            return date != null ? date.getTime() : 0L;
+          }));
+          break;
+        case "lastModified":
+          assets.sort(Comparator.comparing(a -> {
+            Date date = a.getModifiedDate();
+            return date != null ? date.getTime() : 0L;
+          }));
+          break;
+        default:
+          assets.sort(Comparator.comparing(a -> {
+            switch (sortBy) {
+              case "name":
+                return a.getName() != null ? a.getName() : "";
+              default:
+                return a.getTitle() != null ? a.getTitle() : a.getName();
+            }
+          }));
+          break;
+      }
     }
 
     if (reverse) {
