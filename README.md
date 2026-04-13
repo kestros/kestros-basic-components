@@ -2,96 +2,70 @@
 
 Reusable Sling components for the Kestros CMS component library.
 
+## Component List
+
 ## Component Categories
 
 ### Content Components
 
-| Component | Datasources | Description |
-|---|---|---|
-| Alert | Static | Alert messages |
-| Button | Static | Clickable buttons |
-| Button Group | Static | Groups of buttons |
-| Card | Static, Page Card, Asset Card | Card with title, image, button |
-| Code | Static | Code blocks |
-| Heading | Static, Page Title | Heading elements (h1-h6) |
-| Image | Static, Asset Image | Image elements |
-| Link | Static | Anchor links |
-| Rich Text | Static | Rich text content |
-| Table | Static | Table with rows, headers, cells |
-| Text | Static, Rich Text | Plain text content |
-| Video | Static, Asset Video | Video elements |
-| Video Embed | YouTube | Embedded video (YouTube) |
+| Component | Datasource Variants |
+|---|---|
+| Alert | default |
+| Button | default |
+| Button Group | default |
+| Card | default, asset-card, page-card |
+| Code | default |
+| Heading | default, page-title |
+| Image | default, asset-image |
+| Link | default |
+| Rich Text | default |
+| Table | default |
+| Table Cell | default |
+| Table Header | default |
+| Table Row | default |
+| Text | default, richtext |
+| Video | default, asset-video |
+| Video Embed | default |
 
 ### List Components
 
-| Component | Datasources | Description |
-|---|---|---|
-| Card List | Static, Child Pages, Asset List, Tag Search | List of cards from various sources |
-| Link List | Static, Child Pages, Tag Search | List of links from various sources |
+| Component | Datasource Variants |
+|---|---|
+| Card List | default, child-pages, asset-list, tag-search |
+| Link List | default, child-pages, tag-search |
 
 ### Navigation Components
 
-| Component | Datasources | Description |
-|---|---|---|
-| Breadcrumb | Static | Single breadcrumb item |
-| Breadcrumbs | Page Path | Breadcrumb trail |
-| Navigation | Static | Navigation menu |
-| Top Navigation | Static | Top-level navigation bar |
+| Component | Datasource Variants |
+|---|---|
+| Breadcrumb | default |
+| Breadcrumbs | default |
+| Navigation | default |
+| Navigation Item | default |
+| Top Navigation | default |
+| Top Navigation Item | default |
 
 ### Structure Components
 
-| Component | Datasources | Description |
-|---|---|---|
-| Accordion | Static | Collapsible accordion panels |
-| Container | Static | Generic container |
-| Grid | Static | CSS grid layout |
-| Section | Static | Page section wrapper |
+| Component | Datasource Variants |
+|---|---|
+| Accordion | default |
+| Accordion Panel | default |
+| Container | default |
+| Grid | default |
+| Section | default |
 
-## Dynamic List Datasources
+## Datasource Architecture
 
-The card-list and link-list components support dynamic datasources that generate list items from JCR content.
+Each component has one or more datasource variants defined in:
+`src/main/resources/libs/kestros/commons/components/{category}/{component}/datasources/{variant}.json`
 
-### Card List Datasources
+Each JSON file declares a `classPath` pointing to a Java class that extends `BaseSlingModelDataSource` (or `BaseContainerSlingModelDataSource` for list/container types).
 
-- **Child Pages** (`child-pages`) -- Lists child pages of a configurable root path as cards.
-- **Asset List** (`asset-list`) -- Lists assets from a configurable asset collection.
-- **Tag Search** (`tag-search`) -- Finds pages matching configured tags using TagRetrievalService. Excludes the current page from results.
+### Tag Search Datasources
 
-### Link List Datasources
+Card List and Link List support tag-based page search via `kestros-tagging-api`:
+- `CardListTagSearchDataSource` - finds pages matching configured tags and renders as card elements
+- `LinkListTagSearchDataSource` - finds pages matching configured tags and renders as link elements
 
-- **Child Pages** (`child-pages`) -- Lists child pages of a configurable root path as links.
-- **Tag Search** (`tag-search`) -- Finds pages matching configured tags using TagRetrievalService. Supports optional root path override. Excludes the current page from results.
-
-### Sort, Reverse, and Limit Controls
-
-All five dynamic list datasources (card-list child-pages, asset-list, tag-search; link-list child-pages, tag-search) support the following dialog controls:
-
-| Field | Property | Type | Description |
-|---|---|---|---|
-| Sort By | `sortBy` | Select | None (natural order), Title, Name, Created Date, Last Modified |
-| Reverse Order | `reverse` | Checkbox | Reverses the sort order |
-| Limit | `limit` | Text | Maximum items to display (0 = no limit) |
-
-Sort options use JCR child node format in the datasource JSON (not JSON arrays) to work correctly with the `@ChildResource` injection pattern used by the selectfield component.
-
-## Datasource JSON Registration
-
-Each datasource is registered as a JSON file under the component's `datasources/` directory:
-
-```
-src/main/resources/libs/kestros/commons/components/{category}/{component}/datasources/{name}.json
-```
-
-The JSON file must include a `classPath` property pointing to the fully-qualified Java class name of the datasource implementation.
-
-## Building
-
-```bash
-mvn clean install -Drat.skip=true
-```
-
-## Deploying
-
-```bash
-mvn clean install -P installBundle -Dsling.host=localhost -Dsling.port=8000 -Dsling.password=<password>
-```
+Both use `TagRetrievalService` for tag lookup and support sort, reverse, and limit options.
