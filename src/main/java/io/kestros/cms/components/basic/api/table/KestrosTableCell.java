@@ -24,6 +24,11 @@ public interface KestrosTableCell extends KestrosContainerElement {
     return cellContent;
   }
 
+  @javax.annotation.Nullable
+  default String getText() {
+    return null;
+  }
+
   @Nonnull
   List<KestrosBasicComponentElement> getCellContentElements();
 

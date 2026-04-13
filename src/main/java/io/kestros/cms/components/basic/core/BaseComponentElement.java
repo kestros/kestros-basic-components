@@ -119,7 +119,7 @@ public abstract class BaseComponentElement implements KestrosBasicComponentEleme
       };
       if (this instanceof KestrosContainerElement) {
         KestrosContainerElement container = (KestrosContainerElement) this;
-        Map<String, Resource> childResources = new HashMap<>();
+        Map<String, Resource> childResources = new java.util.LinkedHashMap<>();
         for (KestrosBasicComponentElement child : container.getChildElements()) {
           Resource childSyntheticResource = child.toSyntheticResource(resourceResolver,
               syntheticResource.getPath());

@@ -4,6 +4,7 @@ import io.kestros.cms.components.basic.api.content.KestrosRichText;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.components.basic.core.BaseSlingModelDataSource;
 import io.kestros.cms.components.basic.core.BaseSyntheticResource;
+import io.kestros.cms.components.basic.core.TextSanitizer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -17,7 +18,7 @@ public class KestrosRichTextImpl extends BaseSyntheticResource implements Kestro
       @Nonnull String resourcePrefix, @Nullable String forcedResourceName)
       throws ComponentConfigurationException {
     super(dataSource, resourcePrefix, forcedResourceName);
-    this.text = text;
+    this.text = TextSanitizer.escapeMultiByteToEntities(text);
   }
 
   @Nullable

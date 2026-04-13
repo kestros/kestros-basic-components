@@ -18,4 +18,10 @@ public class TableCellDataSourceComponent extends BaseContainerDataSourceCompone
   public List<KestrosBasicComponentElement> getCellContentElements() {
     return getComponentData().getCellContentElements();
   }
+
+  @Override
+  public String getText() {
+    KestrosTableCell data = getComponentData();
+    return data == null ? null : data.getText();
+  }
 }
