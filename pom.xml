@@ -82,7 +82,7 @@
         <dependency>
             <groupId>io.kestros.cms</groupId>
             <artifactId>kestros-assets-core</artifactId>
-            <version>0.0.4-SNAPSHOT</version>
+            <version>[0.0.4,0.0.99]</version>
             <scope>test</scope>
         </dependency>
         <!-- Sling -->
