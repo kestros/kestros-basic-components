@@ -71,7 +71,7 @@
         <dependency>
             <groupId>io.kestros.cms</groupId>
             <artifactId>kestros-component-types-core</artifactId>
-            <version>0.1.5-SNAPSHOT</version>
+            <version>[0.1.5,0.1.99]</version>
             <scope>test</scope>
         </dependency>
         <dependency>
