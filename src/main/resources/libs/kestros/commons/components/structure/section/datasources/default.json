@@ -1,6 +1,7 @@
 {
   "jcr:primaryType": "nt:unstructured",
   "jcr:title": "Static Cards",
+  "container": true,
   "group": "Kestros Core",
   "classPath": "io.kestros.cms.components.basic.core.structure.section.SectionStaticDataSource",
   "create": {
