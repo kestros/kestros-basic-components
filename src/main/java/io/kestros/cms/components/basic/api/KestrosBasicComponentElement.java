@@ -9,6 +9,7 @@ import io.kestros.cms.uiframeworks.api.exceptions.InvalidUiFrameworkException;
 import io.kestros.cms.uiframeworks.api.exceptions.ThemeRetrievalException;
 import io.kestros.cms.uiframeworks.api.exceptions.UiFrameworkRetrievalException;
 import io.kestros.cms.uiframeworks.api.models.UiFramework;
+import io.kestros.commons.structuredslingmodels.exceptions.ModelAdaptionException;
 import io.kestros.commons.structuredslingmodels.exceptions.ResourceNotFoundException;
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +22,6 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 
 public interface KestrosBasicComponentElement {
-
 
 
   String getLayout(String propertyName);
@@ -94,7 +94,8 @@ public interface KestrosBasicComponentElement {
 
   @JsonIgnore
   UiFramework getUiFramework() throws InvalidThemeException, ResourceNotFoundException,
-      InvalidUiFrameworkException, ThemeRetrievalException, UiFrameworkRetrievalException;
+      InvalidUiFrameworkException, ThemeRetrievalException, UiFrameworkRetrievalException,
+      ModelAdaptionException;
 
   @JsonIgnore
   Resource getResource();
