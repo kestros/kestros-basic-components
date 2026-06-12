@@ -1,7 +1,7 @@
 {
   "jcr:primaryType": "kes:ComponentType",
   "jcr:title": "Card List",
-  "jcr:description": "",
+  "jcr:description": "Displays a list of cards from a configurable datasource (child pages, assets, or tag search).",
   "componentGroup": "List Components",
   "sling:resourceSuperType": "kestros/commons/components/content-area",
   "editable": true,
