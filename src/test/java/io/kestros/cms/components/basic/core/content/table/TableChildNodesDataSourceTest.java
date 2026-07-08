@@ -65,6 +65,19 @@ public class TableChildNodesDataSourceTest extends BaseDataSourceTest {
   }
 
   @Test
+  public void testGetRowElementsWhenDataPathHasUnresolvedPlaceholder() {
+    // {team} with no matching route parameter resolves to empty -> path misses -> no rows, no crash.
+    final Map<String, Object> props = new HashMap<>();
+    props.put("dataPath", "/content/data/teams/{team}/results");
+    props.put("columns", new String[] {"pos"});
+    final Resource dyn = context.create().resource("/content/page/jcr:content/tabledyn", props);
+    context.request().setResource(dyn);
+    final TableChildNodesDataSource dynDataSource =
+        context.request().adaptTo(TableChildNodesDataSource.class);
+    assertEquals(0, dynDataSource.getRowElements().size());
+  }
+
+  @Test
   public void testGetRowElementsWhenNoDataPath() {
     final Resource bare = context.create().resource("/content/page/jcr:content/table2",
         new HashMap<>());
