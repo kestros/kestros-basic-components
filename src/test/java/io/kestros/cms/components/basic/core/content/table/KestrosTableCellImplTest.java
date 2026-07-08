@@ -41,6 +41,14 @@ public class KestrosTableCellImplTest extends BaseSyntheticTest {
   }
 
   @Test
+  public void testSyntheticResourceCarriesText() {
+    // Regression: getCellContent() returns List<Resource> and must be @JsonIgnore, else it corrupts
+    // the ObjectMapper serialization of the synthetic resource and the cell's text is dropped.
+    final Resource synthetic = cell.toSyntheticResource(getResourceResolver(), "/parent");
+    assertEquals("45", synthetic.getValueMap().get("text", String.class));
+  }
+
+  @Test
   public void testGetCellContentElementsWhenTextOnly() {
     assertTrue(cell.getCellContentElements().isEmpty());
   }
