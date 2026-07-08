@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.api.table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
 import io.kestros.cms.components.basic.api.KestrosContainerElement;
 import java.util.List;
@@ -15,6 +16,7 @@ public interface KestrosTableCell extends KestrosContainerElement {
     return RESOURCE_TYPE;
   }
 
+  @JsonIgnore
   @Nonnull
   default List<Resource> getCellContent() {
     List<Resource> cellContent = new java.util.ArrayList<>();

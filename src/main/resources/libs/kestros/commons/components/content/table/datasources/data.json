@@ -1,0 +1,41 @@
+{
+  "jcr:primaryType": "nt:unstructured",
+  "jcr:title": "Data-driven Table",
+  "group": "Kestros Core",
+  "classPath": "io.kestros.cms.components.basic.core.content.table.TableChildNodesDataSource",
+  "create": {
+    "jcr:primaryType": "nt:unstructured",
+    "sling:resourceType": "kestros/cms2/dialog",
+    "defaultErrorMessage": "Failed to create child resource.",
+    "successEvents": ["navigation", "component", "new-component"],
+    "actions": ["cancel", "create"],
+    "content": {
+      "jcr:primaryType": "nt:unstructured",
+      "component-type": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/kestros/component-picker",
+        "label": "Component",
+        "name": "sling:resourceType"
+      },
+      "dataPath": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/textfield",
+        "label": "Data path",
+        "name": "dataPath"
+      },
+      "columns": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/textfield",
+        "label": "Columns (data node property names, in order)",
+        "name": "columns"
+      },
+      "headers": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/textfield",
+        "label": "Header labels (in order)",
+        "name": "headers"
+      }
+    },
+    "footer": { "jcr:primaryType": "nt:unstructured" }
+  }
+}
