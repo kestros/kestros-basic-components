@@ -4,5 +4,6 @@
   "jcr:description": "Basic text component.",
   "componentGroup": "Content Components",
   "sling:resourceSuperType": "kestros/commons/components/kestros-parent",
-  "fontAwesomeIcon": "fa fa-font"
+  "fontAwesomeIcon": "fa fa-font",
+  "unwrap": true
 }
