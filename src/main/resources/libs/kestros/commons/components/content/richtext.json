@@ -4,5 +4,6 @@
   "jcr:title": "Richtext",
   "jcr:description": "Formatted and stylized text blocks.",
   "componentGroup": "Content Components",
-  "fontAwesomeIcon": "fa fa-align-left"
+  "fontAwesomeIcon": "fa fa-align-left",
+  "unwrap": true
 }

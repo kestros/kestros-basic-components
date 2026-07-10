@@ -4,5 +4,6 @@
   "jcr:description": "Grid component for multi-column layouts",
   "componentGroup": "Layout Components",
   "sling:resourceSuperType": "kestros/commons/components/kestros-parent",
-  "fontAwesomeIcon": "fa fa-columns"
+  "fontAwesomeIcon": "fa fa-columns",
+  "unwrap": true
 }
