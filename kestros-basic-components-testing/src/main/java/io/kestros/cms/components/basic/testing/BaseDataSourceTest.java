@@ -28,6 +28,12 @@ public abstract class BaseDataSourceTest {
   @Rule
   public final SlingContext context = new SlingContext();
 
+  /**
+   * Registers the datasource services every Kestros datasource model resolves at construction
+   * time (theme, UI framework, variation and view retrieval).
+   *
+   * @throws Exception if service registration fails.
+   */
   @Before
   public void registerDataSourceServices() throws Exception {
     context.registerService(ComponentVariationRetrievalService.class,
