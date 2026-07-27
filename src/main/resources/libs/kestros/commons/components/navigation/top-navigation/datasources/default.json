@@ -44,9 +44,17 @@
       },
       "brandHref": {
         "jcr:primaryType": "nt:unstructured",
-        "sling:resourceType": "kestros/cms2/fields/general/textfield",
+        "sling:resourceType": "kestros/cms2/fields/general/pathfield",
         "label": "Brand Link",
-        "name": "brandHref"
+        "name": "brandHref",
+        "includePaths": [
+          "closest:kes:Site"
+        ],
+        "resourceTypes": [
+          "kes:Site",
+          "kes:Page"
+        ],
+        "autofocus": false
       }
     }
   }
