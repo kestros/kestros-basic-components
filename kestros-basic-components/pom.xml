@@ -34,7 +34,7 @@
     <version>0.3.1</version>
 
     <name>Kestros Basic Components</name>
-    <description></description>
+    <description>Basic content components (navigation, lists, structure, media) for Kestros sites.</description>
 
     <licenses>
         <license>
