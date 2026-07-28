@@ -31,28 +31,28 @@ public class VideoEmbedYouTubeDataSource extends BaseSlingModelDataSource
 
   boolean isValidVideoInput(String input) {
     if (input == null) {
-      return Boolean.FALSE;
+      return false;
     }
 
     String value = input.trim();
 
     // 🚫 reject anything that looks like HTML
     if (HTML_PATTERN.matcher(value).find()) {
-      return Boolean.FALSE;
+      return false;
     }
 
     // ✅ raw video ID
     if (YOUTUBE_VIDEO_ID.matcher(value).matches()) {
-      return Boolean.TRUE;
+      return true;
     }
 
     // ✅ known YouTube URL formats
     Matcher matcher = YOUTUBE_URL_ID.matcher(value);
     if (matcher.find()) {
-      return Boolean.TRUE;
+      return true;
     }
 
-    return Boolean.FALSE;
+    return false;
   }
 
 
