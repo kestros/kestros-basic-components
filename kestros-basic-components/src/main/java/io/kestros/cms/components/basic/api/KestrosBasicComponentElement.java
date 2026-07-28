@@ -24,9 +24,12 @@ import org.apache.sling.api.resource.ResourceResolver;
 public interface KestrosBasicComponentElement {
 
 
-  String getLayout(String propertyName);
+  @Nullable
+  String getLayout(@Nonnull String propertyName);
 
-  List<ComponentVariation> getElementVariations(String propertyName, String componentType);
+  @Nonnull
+  List<ComponentVariation> getElementVariations(@Nonnull String propertyName,
+      @Nonnull String componentType);
 
 //  @Deprecated
 //  static List<ComponentVariation> getAppliedVariations(String propertyName,
@@ -93,11 +96,13 @@ public interface KestrosBasicComponentElement {
   String getId();
 
   @JsonIgnore
+  @Nullable
   UiFramework getUiFramework() throws InvalidThemeException, ResourceNotFoundException,
       InvalidUiFrameworkException, ThemeRetrievalException, UiFrameworkRetrievalException,
       ModelAdaptionException;
 
   @JsonIgnore
+  @Nonnull
   Resource getResource();
 
   @JsonIgnore
@@ -105,11 +110,14 @@ public interface KestrosBasicComponentElement {
   SlingHttpServletRequest getRequest();
 
   @JsonIgnore
+  @Nonnull
   ResourceResolver getResourceResolver();
 
   @JsonIgnore
+  @Nullable
   String getParentPath();
 
+  @Nonnull
   List<ComponentVariation> getVariations();
 
   @Nonnull
@@ -154,6 +162,7 @@ public interface KestrosBasicComponentElement {
   }
 
   @JsonIgnore
+  @Nonnull
   Resource toSyntheticResource(@Nonnull final ResourceResolver resourceResolver,
       @Nonnull final String parentPath);
 

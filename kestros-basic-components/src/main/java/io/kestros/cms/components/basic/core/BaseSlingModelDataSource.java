@@ -91,6 +91,7 @@ public abstract class BaseSlingModelDataSource
   }
 
 
+  @Nonnull
   public ResourceResolver getResourceResolver() {
     return getResource().getResourceResolver();
   }

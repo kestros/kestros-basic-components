@@ -17,6 +17,7 @@ public interface KestrosNavigationItem extends KestrosLink, KestrosContainerElem
     return RESOURCE_TYPE;
   }
 
+  @Nonnull
   Boolean isActive();
 
   @Nonnull
