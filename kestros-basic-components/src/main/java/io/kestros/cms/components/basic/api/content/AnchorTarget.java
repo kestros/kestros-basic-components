@@ -66,7 +66,7 @@ public enum AnchorTarget {
     if (resource != null) {
       String anchorTargetString = resource.getValueMap().get("target", String.class);
       target = AnchorTarget.lookup(anchorTargetString);
-      if (target.equals(AnchorTarget.SAME_WINDOW)) {
+      if (target == AnchorTarget.SAME_WINDOW) {
         target = AnchorTarget.lookup(resource.getValueMap().get("openInNewTab", Boolean.FALSE));
       }
     }

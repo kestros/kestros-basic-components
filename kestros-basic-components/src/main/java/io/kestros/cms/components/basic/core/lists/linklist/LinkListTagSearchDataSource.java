@@ -56,6 +56,9 @@ public class LinkListTagSearchDataSource extends BaseContainerSlingModelDataSour
           containingPage = component.getContainingPage();
         }
       } catch (NoValidAncestorException e) {
+        LOG.debug("No containing page for {}; the list has no results. {}",
+            String.valueOf(getResource().getPath()).replaceAll("[\r\n]", ""),
+            String.valueOf(e.getMessage()).replaceAll("[\r\n]", ""));
         return null;
       }
     }
