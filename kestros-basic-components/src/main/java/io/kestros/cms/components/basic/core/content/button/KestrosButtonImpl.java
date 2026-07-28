@@ -66,7 +66,9 @@ public class KestrosButtonImpl extends BaseSyntheticResource implements KestrosB
     this.lang = resource.getValueMap().get("lang", String.class);
     this.disabled = resource.getValueMap().get("disabled", Boolean.FALSE);
     if (StringUtils.isEmpty(href)) {
-      throw new ComponentConfigurationException("Missing required property");
+      throw new ComponentConfigurationException(String.format(
+          "Unable to build a button at %s: href is required and was empty.",
+          resource.getPath()));
     }
   }
 

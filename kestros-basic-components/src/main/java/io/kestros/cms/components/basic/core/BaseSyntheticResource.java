@@ -45,7 +45,10 @@ public abstract class BaseSyntheticResource extends BaseComponentElement {
         || this.layout == null || this.uiFramework == null) {
       // this is not needed, but is included so that the extending classes are required to throw
       // the exception.
-      throw new ComponentConfigurationException("Missing required property");
+      throw new ComponentConfigurationException(String.format(
+          "Unable to build a synthetic resource under %s: one of the resource resolver, parent path,%n"
+          + " variations, layout or UI framework was not supplied.",
+          String.valueOf(parentPath)));
     }
     this.componentVariationRetrievalService = dataSource.getComponentVariationRetrievalService();
     this.componentUiFrameworkViewRetrievalService =
