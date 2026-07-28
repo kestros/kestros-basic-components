@@ -95,4 +95,59 @@ public class ImageStaticDataSourceTest extends BaseDataSourceTest {
     assertNotNull(imageStaticDataSource.getAsset());
   }
 
+  /** altText wins over the asset description; with neither, the result is the empty string. */
+  @Test
+  public void testGetAltTextPrefersTheConfiguredValue() {
+    registerAssetRetrievalService();
+    properties.put("altText", "Configured Alt");
+    resource = context.create().resource("/content/image/static/alt-configured", properties);
+    context.request().setResource(resource);
+
+    assertEquals("Configured Alt",
+        context.request().adaptTo(ImageStaticDataSource.class).getAltText());
+  }
+
+  @Test
+  public void testGetAltTextWhenTheConfiguredValueIsBlank() {
+    registerAssetRetrievalService();
+    final Map<String, Object> props = new HashMap<>();
+    props.put("altText", "   ");
+    resource = context.create().resource("/content/image/static/alt-blank", props);
+    context.request().setResource(resource);
+
+    assertEquals("", context.request().adaptTo(ImageStaticDataSource.class).getAltText());
+  }
+
+  @Test
+  public void testGetAltTextWhenThereIsNoImagePath() {
+    registerAssetRetrievalService();
+    final Map<String, Object> props = new HashMap<>();
+    resource = context.create().resource("/content/image/static/alt-none", props);
+    context.request().setResource(resource);
+
+    assertEquals("", context.request().adaptTo(ImageStaticDataSource.class).getAltText());
+  }
+
+  @Test
+  public void testGetAssetWhenThePathDoesNotResolve() {
+    registerAssetRetrievalService();
+    final Map<String, Object> props = new HashMap<>();
+    props.put("imagePath", "/content/assets/collection/missing");
+    resource = context.create().resource("/content/image/static/missing-asset", props);
+    context.request().setResource(resource);
+
+    assertNull(context.request().adaptTo(ImageStaticDataSource.class).getAsset());
+  }
+
+  @Test
+  public void testGetImageTitleFallsBackToTheComponentProperty() {
+    registerAssetRetrievalService();
+    final Map<String, Object> props = new HashMap<>();
+    props.put("imageTitle", "Configured Title");
+    resource = context.create().resource("/content/image/static/title-configured", props);
+    context.request().setResource(resource);
+
+    assertEquals("Configured Title",
+        context.request().adaptTo(ImageStaticDataSource.class).getImageTitle());
+  }
 }

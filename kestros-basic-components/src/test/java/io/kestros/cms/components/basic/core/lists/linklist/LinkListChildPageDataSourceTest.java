@@ -7,6 +7,7 @@ import io.kestros.cms.assets.api.exceptions.AssetCollectionRetrievalException;
 import io.kestros.cms.components.basic.api.content.KestrosLink;
 import io.kestros.cms.components.basic.api.lists.KestrosLinkList;
 import io.kestros.cms.components.basic.core.BaseDataSourceTest;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -188,5 +189,57 @@ public class LinkListChildPageDataSourceTest extends BaseDataSourceTest {
     context.request().setResource(resource);
     linkListChildPageDataSource = context.request().adaptTo(LinkListChildPageDataSource.class);
     assertEquals(0, linkListChildPageDataSource.getLinkElements().size());
+  }
+
+  /**
+   * The date comparators read jcr:created / jcr:lastModified off each page's jcr:content, guarding
+   * on both the child and the property. The sample pages all have a jcr:content and neither date,
+   * so only one side of each guard was reached.
+   */
+  private void addPagesWithAndWithoutDates() {
+    final Map<String, Object> pageProperties = new HashMap<>();
+    pageProperties.put("jcr:primaryType", "kes:Page");
+    context.create().resource("/content/page/child-no-content", pageProperties);
+
+    final Map<String, Object> datedContent = new HashMap<>();
+    datedContent.put("jcr:primaryType", "nt:unstructured");
+    datedContent.put("jcr:created", Calendar.getInstance());
+    datedContent.put("jcr:lastModified", Calendar.getInstance());
+    context.create().resource("/content/page/child-dated", pageProperties);
+    context.create().resource("/content/page/child-dated/jcr:content", datedContent);
+  }
+
+  private LinkListChildPageDataSource adaptWithSort(final String sortBy, final String name) {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("pagesPath", "/content/page");
+    props.put("sortBy", sortBy);
+    final Resource componentResource =
+        context.create().resource("/content/page/jcr:content/" + name, props);
+    context.request().setResource(componentResource);
+    return context.request().adaptTo(LinkListChildPageDataSource.class);
+  }
+
+  @Test
+  public void testGetLinkElementsSortByCreatedDateAcrossPagesWithAndWithoutDates() {
+    addPagesWithAndWithoutDates();
+
+    assertEquals(5, adaptWithSort("createdDate", "comp-created-mixed").getLinkElements().size());
+  }
+
+  @Test
+  public void testGetLinkElementsSortByLastModifiedAcrossPagesWithAndWithoutDates() {
+    addPagesWithAndWithoutDates();
+
+    assertEquals(5, adaptWithSort("lastModified", "comp-modified-mixed").getLinkElements().size());
+  }
+
+  @Test
+  public void testGetLinkElementsSortByName() {
+    assertEquals(3, adaptWithSort("name", "comp-name").getLinkElements().size());
+  }
+
+  @Test
+  public void testGetLinkElementsSortByTitle() {
+    assertEquals(3, adaptWithSort("title", "comp-title").getLinkElements().size());
   }
 }

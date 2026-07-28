@@ -1,6 +1,8 @@
 package io.kestros.cms.components.basic.core.lists.cardlist;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -17,6 +19,7 @@ import io.kestros.cms.tagging.api.models.KestrosTag;
 import io.kestros.cms.tagging.api.services.TagRetrievalService;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -245,5 +248,183 @@ public class CardListTagSearchDataSourceTest extends BaseDataSourceTest {
     CardListTagSearchDataSource limitDs =
         context.request().adaptTo(CardListTagSearchDataSource.class);
     assertEquals(1, limitDs.getCardElements().size());
+  }
+
+  // ---------------------------------------------------------------------------------------------
+  // The sort comparators only run when there are at least two matching pages. Placing the component
+  // on child-3 (which carries no tags of its own) leaves both child-1 and child-2 in the result, so
+  // the comparator bodies actually execute.
+  // ---------------------------------------------------------------------------------------------
+
+  private CardListTagSearchDataSource twoMatchesWith(final Map<String, Object> extraProperties) {
+    final Map<String, Object> props = new HashMap<>(extraProperties);
+    props.put("tags", new String[]{"/etc/tags/topic/java"});
+    props.put("readMoreText", "View Session");
+    final Resource componentResource = context.create().resource(
+        "/content/sessions/child-3/jcr:content/component-" + extraProperties.hashCode(), props);
+    context.request().setResource(componentResource);
+    return context.request().adaptTo(CardListTagSearchDataSource.class);
+  }
+
+  @Test
+  public void testGetCardElementsSortsTwoPagesByName() {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("sortBy", "name");
+
+    assertEquals(2, twoMatchesWith(props).getCardElements().size());
+  }
+
+  @Test
+  public void testGetCardElementsSortsTwoPagesByTitle() {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("sortBy", "title");
+
+    assertEquals(2, twoMatchesWith(props).getCardElements().size());
+  }
+
+  @Test
+  public void testGetCardElementsSortsTwoPagesByCreatedDate() {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("sortBy", "createdDate");
+
+    assertEquals(2, twoMatchesWith(props).getCardElements().size());
+  }
+
+  @Test
+  public void testGetCardElementsSortsTwoPagesByLastModified() {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("sortBy", "lastModified");
+
+    assertEquals(2, twoMatchesWith(props).getCardElements().size());
+  }
+
+  @Test
+  public void testGetCardElementsReversesTwoPages() {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("sortBy", "name");
+    props.put("reverse", true);
+
+    assertEquals(2, twoMatchesWith(props).getCardElements().size());
+  }
+
+  @Test
+  public void testGetCardElementsLimitsTwoPagesToOne() {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("limit", "1");
+
+    assertEquals(1, twoMatchesWith(props).getCardElements().size());
+  }
+
+  // ---------------------------------------------------------------------------------------------
+  // Guard branches.
+  // ---------------------------------------------------------------------------------------------
+
+  /** pagesPath overrides the containing page's parent as the search root. */
+  @Test
+  public void testGetRootPathUsesTheConfiguredPagesPath() {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("tags", new String[]{"/etc/tags/topic/java"});
+    props.put("pagesPath", "/content/sessions");
+    final Resource componentResource = context.create().resource(
+        "/content/sessions/child-3/jcr:content/pages-path-component", props);
+    context.request().setResource(componentResource);
+
+    assertEquals("/content/sessions",
+        context.request().adaptTo(CardListTagSearchDataSource.class).getRootPath());
+  }
+
+  @Test
+  public void testGetRootPageWhenThePathDoesNotResolve() {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("tags", new String[]{"/etc/tags/topic/java"});
+    props.put("pagesPath", "/content/nowhere");
+    final Resource componentResource = context.create().resource(
+        "/content/sessions/child-3/jcr:content/missing-root-component", props);
+    context.request().setResource(componentResource);
+
+    assertNull(context.request().adaptTo(CardListTagSearchDataSource.class).getRootPage());
+  }
+
+  @Test
+  public void testGetTaggedPagesWhenNoTagsAreConfigured() {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("readMoreText", "View Session");
+    final Resource componentResource = context.create().resource(
+        "/content/sessions/child-3/jcr:content/no-tags-component", props);
+    context.request().setResource(componentResource);
+
+    assertTrue(context.request().adaptTo(CardListTagSearchDataSource.class)
+        .getTaggedPages().isEmpty());
+  }
+
+  @Test
+  public void testGetTaggedPagesWhenTheRootPageDoesNotResolve() {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("tags", new String[]{"/etc/tags/topic/java"});
+    props.put("pagesPath", "/content/nowhere");
+    final Resource componentResource = context.create().resource(
+        "/content/sessions/child-3/jcr:content/no-root-component", props);
+    context.request().setResource(componentResource);
+
+    assertTrue(context.request().adaptTo(CardListTagSearchDataSource.class)
+        .getTaggedPages().isEmpty());
+  }
+
+  @Test
+  public void testGetCardElementsWhenNothingMatches() {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("tags", new String[]{"/etc/tags/topic/nothing-has-this"});
+    final Resource componentResource = context.create().resource(
+        "/content/sessions/child-3/jcr:content/no-match-component", props);
+    context.request().setResource(componentResource);
+
+    assertTrue(context.request().adaptTo(CardListTagSearchDataSource.class)
+        .getCardElements().isEmpty());
+  }
+
+  @Test
+  public void testGetReadMoreTextWhenNotConfigured() {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("tags", new String[]{"/etc/tags/topic/java"});
+    final Resource componentResource = context.create().resource(
+        "/content/sessions/child-3/jcr:content/no-read-more-component", props);
+    context.request().setResource(componentResource);
+
+    assertNull(context.request().adaptTo(CardListTagSearchDataSource.class).getReadMoreText());
+  }
+
+  /**
+   * The date comparators guard on both the jcr:content child and the date property. The fixture
+   * pages all have a jcr:content and neither date, so only one side of each guard was reached.
+   */
+  private void addTaggedPagesWithAndWithoutDates() {
+    final Map<String, Object> pageProperties = new HashMap<>();
+    pageProperties.put("jcr:primaryType", "kes:Page");
+    context.create().resource("/content/sessions/child-4", pageProperties);
+
+    final Map<String, Object> datedContent = new HashMap<>();
+    datedContent.put("jcr:primaryType", "nt:unstructured");
+    datedContent.put("jcr:created", Calendar.getInstance());
+    datedContent.put("jcr:lastModified", Calendar.getInstance());
+    context.create().resource("/content/sessions/child-5", pageProperties);
+    context.create().resource("/content/sessions/child-5/jcr:content", datedContent);
+  }
+
+  @Test
+  public void testSortByCreatedDateAcrossPagesWithAndWithoutDates() {
+    addTaggedPagesWithAndWithoutDates();
+    final Map<String, Object> props = new HashMap<>();
+    props.put("sortBy", "createdDate");
+
+    assertEquals(2, twoMatchesWith(props).getCardElements().size());
+  }
+
+  @Test
+  public void testSortByLastModifiedAcrossPagesWithAndWithoutDates() {
+    addTaggedPagesWithAndWithoutDates();
+    final Map<String, Object> props = new HashMap<>();
+    props.put("sortBy", "lastModified");
+
+    assertEquals(2, twoMatchesWith(props).getCardElements().size());
   }
 }

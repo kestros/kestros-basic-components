@@ -73,4 +73,57 @@ public class CardPageDataSourceTest extends BaseDataSourceTest {
   public void testGetPage() {
     assertNotNull(cardPageDataSource.getPage());
   }
+
+  /**
+   * Every getter guards on getPage(). With no pagePath configured, and with a pagePath that does
+   * not resolve, each must return null rather than throw.
+   */
+  private CardPageDataSource adaptWith(final Map<String, Object> props, final String name) {
+    final Resource componentResource = context.create().resource("/content/" + name, props);
+    context.request().setResource(componentResource);
+    return context.request().adaptTo(CardPageDataSource.class);
+  }
+
+  @Test
+  public void testGettersWhenThereIsNoPagePath() {
+    final CardPageDataSource dataSource = adaptWith(new HashMap<>(), "card-no-path");
+
+    assertNull(dataSource.getPage());
+    assertNull(dataSource.getTitleElement());
+    assertNull(dataSource.getDescription());
+    assertNull(dataSource.getImageElement());
+    assertNull(dataSource.getButtonGroupElement());
+  }
+
+  @Test
+  public void testGettersWhenThePagePathDoesNotResolve() {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("pagePath", "/content/nowhere");
+    final CardPageDataSource dataSource = adaptWith(props, "card-missing-page");
+
+    assertNull(dataSource.getPage());
+    assertNull(dataSource.getTitleElement());
+    assertNull(dataSource.getDescription());
+    assertNull(dataSource.getImageElement());
+    assertNull(dataSource.getButtonGroupElement());
+  }
+
+  @Test
+  public void testGetTitleElementUsesTheConfiguredHeadingLevel() {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("pagePath", "/content/page");
+    props.put("headingLevel", "h3");
+
+    assertNotNull(adaptWith(props, "card-h3").getTitleElement());
+  }
+
+  /** The page is resolved once and cached. */
+  @Test
+  public void testGetPageIsCachedAfterTheFirstLookup() {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("pagePath", "/content/page");
+    final CardPageDataSource dataSource = adaptWith(props, "card-cached");
+
+    assertEquals(dataSource.getPage(), dataSource.getPage());
+  }
 }
