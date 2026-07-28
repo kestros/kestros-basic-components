@@ -44,8 +44,9 @@ public class ImageAssetDataSource extends BaseSlingModelDataSource implements Ke
   @Override
   @Nonnull
   public String getImageTitle() {
-    if (getAsset() != null && StringUtils.isNotBlank(getAsset().getTitle())) {
-      return getAsset().getTitle();
+    final Asset imageAsset = getAsset();
+    if (imageAsset != null && StringUtils.isNotBlank(imageAsset.getTitle())) {
+      return imageAsset.getTitle();
     }
     return getResource().getValueMap().get("imageTitle", "");
   }
@@ -57,8 +58,9 @@ public class ImageAssetDataSource extends BaseSlingModelDataSource implements Ke
     if (StringUtils.isNotBlank(alt)) {
       return alt;
     }
-    if (getAsset() != null && StringUtils.isNotBlank(getAsset().getDescription())) {
-      return getAsset().getDescription();
+    final Asset imageAsset = getAsset();
+    if (imageAsset != null && StringUtils.isNotBlank(imageAsset.getDescription())) {
+      return imageAsset.getDescription();
     }
     return "";
   }

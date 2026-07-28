@@ -43,8 +43,9 @@ public class ImageStaticDataSource extends BaseSlingModelDataSource implements K
   @Nonnull
   public String getImageTitle() {
     String assetTitle = "";
-    if (getAsset() != null) {
-      assetTitle = getAsset().getTitle();
+    final Asset imageAsset = getAsset();
+    if (imageAsset != null) {
+      assetTitle = imageAsset.getTitle();
     }
     return getResource().getValueMap().get("imageTitle", assetTitle);
   }
