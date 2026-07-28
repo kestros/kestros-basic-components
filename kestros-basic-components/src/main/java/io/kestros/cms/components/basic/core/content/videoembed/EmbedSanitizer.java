@@ -143,11 +143,11 @@ public final class EmbedSanitizer {
       }
 
       if (sanitizedAttrs.length() > 0) {
-        sanitizedAttrs.append(" ");
+        sanitizedAttrs.append(' ');
       }
 
       if (attrValue != null) {
-        sanitizedAttrs.append(attrName).append("=\"").append(attrValue).append("\"");
+        sanitizedAttrs.append(attrName).append("=\"").append(attrValue).append('"');
       } else {
         sanitizedAttrs.append(attrName);
       }
