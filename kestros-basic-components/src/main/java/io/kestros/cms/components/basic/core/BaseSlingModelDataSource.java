@@ -25,8 +25,7 @@ import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
-public abstract class BaseSlingModelDataSource
-    extends BaseComponentElement implements KestrosBasicComponentElement {
+public abstract class BaseSlingModelDataSource extends BaseComponentElement {
 
   @Self
   @Optional

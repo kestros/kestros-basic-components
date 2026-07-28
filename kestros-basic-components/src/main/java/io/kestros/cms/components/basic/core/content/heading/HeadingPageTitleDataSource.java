@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
-public class HeadingPageTitleDataSource extends HeadingStaticDataSource implements KestrosHeading {
+public class HeadingPageTitleDataSource extends HeadingStaticDataSource {
   private static final Logger LOG = LoggerFactory.getLogger(HeadingPageTitleDataSource.class);
 
   @Self

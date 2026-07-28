@@ -14,8 +14,7 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 
-public abstract class BaseSyntheticResource extends BaseComponentElement
-    implements KestrosBasicComponentElement {
+public abstract class BaseSyntheticResource extends BaseComponentElement {
   private final ResourceResolver resourceResolver;
   private final String parentPath;
   private final UiFramework uiFramework;

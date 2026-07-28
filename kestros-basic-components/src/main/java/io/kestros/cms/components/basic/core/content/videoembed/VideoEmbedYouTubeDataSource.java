@@ -132,7 +132,7 @@ public class VideoEmbedYouTubeDataSource extends BaseSlingModelDataSource
     }
 
     if (value.contains("youtu.be/")) {
-      return value.substring(value.lastIndexOf("/") + 1);
+      return value.substring(value.lastIndexOf('/') + 1);
     }
 
     int index = value.indexOf("v=");

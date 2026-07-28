@@ -54,7 +54,7 @@ public class LinkListChildPageDataSource extends BaseContainerSlingModelDataSour
       return new ArrayList<>();
     }
     for (Resource childResource : rootResource.getChildren()) {
-      if (childResource.getName().equals("jcr:content")) {
+      if ("jcr:content".equals(childResource.getName())) {
         continue;
       }
       BaseContentPage page = childResource.adaptTo(BaseContentPage.class);
