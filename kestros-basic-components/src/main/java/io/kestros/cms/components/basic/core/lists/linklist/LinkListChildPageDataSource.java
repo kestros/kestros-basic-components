@@ -108,8 +108,9 @@ public class LinkListChildPageDataSource extends BaseContainerSlingModelDataSour
       pages = pages.subList(0, limit);
     }
 
-    List<KestrosLink> links = new ArrayList<>();
-    for (BaseContentPage page : pages) {
+    final List<BaseContentPage> sourceLinks = pages;
+    final List<KestrosLink> links = new ArrayList<>(sourceLinks.size());
+    for (BaseContentPage page : sourceLinks) {
       KestrosLink link = null;
       try {
         link = new KestrosLinkImpl(page.getDisplayTitle(),

@@ -107,8 +107,9 @@ public abstract class BaseSlingModelDataSource
     List<Map<String, Object>> variationsMapList = getResource().getValueMap()
         .get("variations", new ArrayList<>());
     if (!variationsMapList.isEmpty()) {
-      List<ComponentVariation> variations = new ArrayList<>();
-      for (Map<String, Object> variationMap : variationsMapList) {
+      final List<Map<String, Object>> sourceVariations = variationsMapList;
+      final List<ComponentVariation> variations = new ArrayList<>(sourceVariations.size());
+      for (Map<String, Object> variationMap : sourceVariations) {
         String path = (String) variationMap.get("path");
         Resource variationResource = getResourceResolver().getResource(path);
         if (variationResource == null) {

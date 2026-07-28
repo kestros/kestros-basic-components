@@ -20,8 +20,9 @@ public interface KestrosCardList extends KestrosContainerElement {
 
   @Nonnull
   default List<Resource> getCards() {
-    List<Resource> cards = new ArrayList<>();
-    for (KestrosCard card : getCardElements()) {
+    final List<KestrosCard> sourceCards = getCardElements();
+    final List<Resource> cards = new ArrayList<>(sourceCards.size());
+    for (KestrosCard card : sourceCards) {
       cards.add(card.getResource());
     }
     return cards;

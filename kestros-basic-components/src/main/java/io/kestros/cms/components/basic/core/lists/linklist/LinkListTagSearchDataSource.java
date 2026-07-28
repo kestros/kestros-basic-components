@@ -193,8 +193,9 @@ public class LinkListTagSearchDataSource extends BaseContainerSlingModelDataSour
       pages = pages.subList(0, limit);
     }
 
-    List<KestrosLink> links = new ArrayList<>();
-    for (BaseContentPage page : pages) {
+    final List<BaseContentPage> sourceLinks = pages;
+    final List<KestrosLink> links = new ArrayList<>(sourceLinks.size());
+    for (BaseContentPage page : sourceLinks) {
       try {
         links.add(new KestrosLinkImpl(page,
             this,
