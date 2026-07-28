@@ -70,6 +70,7 @@ public abstract class BaseDataSourceComponent<T extends KestrosBasicComponentEle
   }
 
   @Override
+  @Nonnull
   public String getLayout() {
     return getComponentData().getLayout();
   }

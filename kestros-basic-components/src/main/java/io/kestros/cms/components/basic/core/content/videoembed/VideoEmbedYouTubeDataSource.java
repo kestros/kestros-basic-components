@@ -29,7 +29,7 @@ public class VideoEmbedYouTubeDataSource extends BaseSlingModelDataSource
   private static final Pattern HTML_PATTERN =
           Pattern.compile("[<>]");
 
-  boolean isValidVideoInput(String input) {
+  boolean isValidVideoInput(@Nullable final String input) {
     if (input == null) {
       return false;
     }

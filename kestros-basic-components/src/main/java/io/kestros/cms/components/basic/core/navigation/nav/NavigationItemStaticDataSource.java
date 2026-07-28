@@ -21,7 +21,7 @@ public class NavigationItemStaticDataSource extends BaseContainerSlingModelDataS
   private LinkStaticDataSource link;
 
   @Override
-  @Nullable
+  @Nonnull
   public Boolean isActive() {
     return null;
   }

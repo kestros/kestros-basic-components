@@ -15,5 +15,6 @@ public interface KestrosBreadCrumb extends KestrosLink {
 
   @Nonnull
   Boolean isFirstItem();
+  @Nonnull
   Boolean isLastItem();
 }

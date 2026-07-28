@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Orders the assets behind a list component.
@@ -40,10 +41,10 @@ public final class AssetSorter {
     }
     switch (sortBy) {
       case CREATED_DATE:
-        assets.sort(Comparator.comparing(asset -> time(asset.getCreatedDate())));
+        assets.sort(Comparator.comparing(AssetSorter::createdTime));
         break;
       case LAST_MODIFIED:
-        assets.sort(Comparator.comparing(asset -> time(asset.getModifiedDate())));
+        assets.sort(Comparator.comparing(AssetSorter::modifiedTime));
         break;
       case NAME:
         assets.sort(Comparator.comparing(AssetSorter::name));
@@ -55,13 +56,35 @@ public final class AssetSorter {
   }
 
   /**
+   * The asset's creation date, as epoch milliseconds.
+   *
+   * @param asset Asset to read from.
+   * @return The creation date as epoch milliseconds, or 0 when it is absent.
+   */
+  @Nonnull
+  private static Long createdTime(@Nonnull final Asset asset) {
+    return time(asset.getCreatedDate());
+  }
+
+  /**
+   * The asset's last-modified date, as epoch milliseconds.
+   *
+   * @param asset Asset to read from.
+   * @return The last-modified date as epoch milliseconds, or 0 when it is absent.
+   */
+  @Nonnull
+  private static Long modifiedTime(@Nonnull final Asset asset) {
+    return time(asset.getModifiedDate());
+  }
+
+  /**
    * A date as epoch milliseconds.
    *
    * @param date Date to convert, possibly null.
    * @return The date as epoch milliseconds, or 0 when it is absent.
    */
   @Nonnull
-  private static Long time(final Date date) {
+  private static Long time(@Nullable final Date date) {
     return date == null ? 0L : date.getTime();
   }
 

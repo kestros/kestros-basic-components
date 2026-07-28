@@ -42,10 +42,10 @@ public final class ContentPageSorter {
     }
     switch (sortBy) {
       case CREATED_DATE:
-        pages.sort(Comparator.comparing(page -> contentDate(page, "jcr:created")));
+        pages.sort(Comparator.comparing(ContentPageSorter::createdDate));
         break;
       case LAST_MODIFIED:
-        pages.sort(Comparator.comparing(page -> contentDate(page, "jcr:lastModified")));
+        pages.sort(Comparator.comparing(ContentPageSorter::lastModifiedDate));
         break;
       case NAME:
         pages.sort(Comparator.comparing(ContentPageSorter::name));
@@ -54,6 +54,28 @@ public final class ContentPageSorter {
         pages.sort(Comparator.comparing(ContentPageSorter::displayTitle));
         break;
     }
+  }
+
+  /**
+   * The page's creation date, as epoch milliseconds.
+   *
+   * @param page Page to read from.
+   * @return The creation date as epoch milliseconds, or 0 when it is absent.
+   */
+  @Nonnull
+  private static Long createdDate(@Nonnull final BaseContentPage page) {
+    return contentDate(page, "jcr:created");
+  }
+
+  /**
+   * The page's last-modified date, as epoch milliseconds.
+   *
+   * @param page Page to read from.
+   * @return The last-modified date as epoch milliseconds, or 0 when it is absent.
+   */
+  @Nonnull
+  private static Long lastModifiedDate(@Nonnull final BaseContentPage page) {
+    return contentDate(page, "jcr:lastModified");
   }
 
   /**
