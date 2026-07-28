@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.componenttypes.api.models.ComponentVariation;
@@ -28,6 +29,11 @@ public abstract class BaseSyntheticResource extends BaseComponentElement {
   private ComponentUiFrameworkViewRetrievalService componentUiFrameworkViewRetrievalService;
   private BaseSlingModelDataSource dataSource;
 
+  @SuppressFBWarnings(value = {"MC_OVERRIDABLE_METHOD_CALL_IN_CONSTRUCTOR",
+      "OPM_OVERLY_PERMISSIVE_METHOD"},
+      justification = "getComponentResourceType is the subclass's declaration of which"
+          + " component it is, and the variations lookup needs it while the object is still"
+          + " being built. Every implementation returns a constant.")
   public BaseSyntheticResource(
       @Nonnull BaseSlingModelDataSource dataSource,
       @Nonnull String resourcePrefix, @Nullable String forcedResourceName) throws
