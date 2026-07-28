@@ -78,4 +78,39 @@ public class CardAssetDataSourceTest extends BaseDataSourceTest {
     assertNotNull(cardAssetDataSource.getAsset());
   }
 
+  /**
+   * Both element getters were rewritten to a single exit. They return null when there is no asset
+   * behind the card rather than partially building an element.
+   */
+  @Test
+  public void testGetImageElementWhenThereIsNoAsset() {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("imagePath", "/content/assets/collection/missing");
+    props.put("sling:resourceType", KestrosCard.RESOURCE_TYPE);
+    final Resource componentResource =
+        context.create().resource("/content/page/card/no-asset", props);
+    context.request().setResource(componentResource);
+
+    assertNull(context.request().adaptTo(CardAssetDataSource.class).getImageElement());
+  }
+
+  @Test
+  public void testGetTitleElementWhenThereIsNoAsset() {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("imagePath", "/content/assets/collection/missing");
+    props.put("sling:resourceType", KestrosCard.RESOURCE_TYPE);
+    final Resource componentResource =
+        context.create().resource("/content/page/card/no-asset-title", props);
+    context.request().setResource(componentResource);
+
+    assertNull(context.request().adaptTo(CardAssetDataSource.class).getTitleElement());
+  }
+
+  /** getButtonGroupElement has always returned null for this data source. */
+  @Test
+  public void testGetButtonGroupElementIsAlwaysNull() {
+    registerAssetRetrievalService();
+
+    assertNull(context.request().adaptTo(CardAssetDataSource.class).getButtonGroupElement());
+  }
 }
