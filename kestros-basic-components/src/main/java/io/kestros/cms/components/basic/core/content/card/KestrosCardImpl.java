@@ -1,6 +1,5 @@
 package io.kestros.cms.components.basic.core.content.card;
 
-import io.kestros.cms.assets.api.services.AssetRetrievalService;
 import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosButton;
 import io.kestros.cms.components.basic.api.content.KestrosButtonGroup;
@@ -21,8 +20,6 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.sling.models.annotations.Optional;
-import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 
 public class KestrosCardImpl extends BaseContainerSyntheticResource implements KestrosCard {
 
@@ -32,10 +29,6 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
   private String layout;
   private KestrosImage image;
   private KestrosButtonGroup buttonGroup;
-  @OSGiService
-  @Optional
-  private AssetRetrievalService assetRetrievalService;
-
   public KestrosCardImpl(BaseContentPage page, @Nullable String buttonText,
           @Nonnull BaseSlingModelDataSource dataSource,
           @Nonnull String resourcePrefix,
@@ -54,7 +47,12 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
               null, null, null, AnchorTarget.SAME_WINDOW,
               dataSource,
               "image",
-              "imageElement", assetRetrievalService);
+              // No asset retrieval service: this class is built with new, never adapted, so
+              // the @OSGiService field it used to read was always null. Passing null
+              // explicitly rather than through a field that looked injected. A card image
+              // built from a page therefore does not resolve the asset's own title or
+              // description - see the PR note.
+              "imageElement", null);
     } catch (final ComponentConfigurationException e) {
       this.image = null;
     }
