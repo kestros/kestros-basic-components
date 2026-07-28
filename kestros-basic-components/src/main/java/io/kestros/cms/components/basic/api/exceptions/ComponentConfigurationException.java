@@ -7,11 +7,11 @@ public class ComponentConfigurationException extends Exception {
     super(message);
   }
 
-  public ComponentConfigurationException(String message, @Nonnull Throwable cause) {
+  public ComponentConfigurationException(@Nonnull String message, @Nonnull Throwable cause) {
     super(message, cause);
   }
 
-  public ComponentConfigurationException(Throwable cause) {
+  public ComponentConfigurationException(@Nonnull Throwable cause) {
     super(cause);
   }
 }
