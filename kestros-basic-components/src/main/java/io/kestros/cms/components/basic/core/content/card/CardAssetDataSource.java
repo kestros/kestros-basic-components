@@ -61,6 +61,10 @@ public class CardAssetDataSource extends BaseContainerSlingModelDataSource imple
     return null;
   }
 
+  @SuppressFBWarnings(value = "EXS_EXCEPTION_SOFTENING_NO_CHECKED",
+      justification = "Called from HTL, which cannot handle a checked exception. The checked"
+          + " cause is wrapped in a typed ComponentElementRenderingException so the failure"
+          + " stays identifiable, per the ruling on DataSourceComponent.")
   @Nullable
   @Override
   public KestrosImage getImageElement() {

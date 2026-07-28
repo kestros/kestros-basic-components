@@ -57,6 +57,10 @@ public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSou
     return getResource().getValueMap().get("readMoreText", String.class);
   }
 
+  @SuppressFBWarnings(value = "EXS_EXCEPTION_SOFTENING_NO_CHECKED",
+      justification = "Called from HTL, which cannot handle a checked exception. The checked"
+          + " cause is wrapped in a typed ComponentElementRenderingException so the failure"
+          + " stays identifiable, per the ruling on DataSourceComponent.")
   @Nonnull
   @Override
   public List<KestrosCard> getCardElements() {
