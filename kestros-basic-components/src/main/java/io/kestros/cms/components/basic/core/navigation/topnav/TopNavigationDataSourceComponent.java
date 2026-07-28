@@ -11,6 +11,11 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
+/**
+ * Renders a {@link KestrosTopNavigation} handed to it by an upstream datasource, delegating every
+ * value to
+ * that element rather than reading the resource itself.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class TopNavigationDataSourceComponent
     extends BaseContainerDataSourceComponent<KestrosTopNavigation> implements KestrosTopNavigation {
@@ -36,7 +41,7 @@ public class TopNavigationDataSourceComponent
   @Nullable
   @Override
   public KestrosImage getImageElement() {
-      if (logo == null) {
+    if (logo == null) {
       logo = getComponentData().getImageElement();
     }
     return logo;

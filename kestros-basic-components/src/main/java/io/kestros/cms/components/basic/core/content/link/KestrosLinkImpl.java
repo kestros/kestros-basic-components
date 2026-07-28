@@ -11,6 +11,10 @@ import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * Programmatic {@link KestrosLink}, built in code by a datasource rather than adapted from an
+ * authored resource.
+ */
 @SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 public class KestrosLinkImpl extends BaseSyntheticResource implements KestrosLink {
 
@@ -24,6 +28,15 @@ public class KestrosLinkImpl extends BaseSyntheticResource implements KestrosLin
   private String lang;
 
 
+  /**
+   * Constructs a link impl.
+   *
+   * @param page Page.
+   * @param dataSource Data source.
+   * @param resourcePrefix Resource prefix.
+   * @param forcedResourceName Forced resource name.
+   * @throws ComponentConfigurationException If the component configuration is not valid.
+   */
   public KestrosLinkImpl(@Nonnull BaseContentPage page,
       @Nonnull BaseSlingModelDataSource dataSource,
       String resourcePrefix,
@@ -39,6 +52,22 @@ public class KestrosLinkImpl extends BaseSyntheticResource implements KestrosLin
   }
 
 
+  /**
+   * Constructs a link impl.
+   *
+   * @param text Text.
+   * @param href Href.
+   * @param title Title.
+   * @param target Target.
+   * @param rel Rel.
+   * @param ariaLabel Aria label.
+   * @param ariaDescribedBy Aria described by.
+   * @param lang Lang.
+   * @param dataSource Data source.
+   * @param resourcePrefix Resource prefix.
+   * @param forcedResourceName Forced resource name.
+   * @throws ComponentConfigurationException If the component configuration is not valid.
+   */
   public KestrosLinkImpl(String text, String href, String title, AnchorTarget target, String rel,
       String ariaLabel, String ariaDescribedBy, String lang,
       @Nonnull BaseSlingModelDataSource dataSource,

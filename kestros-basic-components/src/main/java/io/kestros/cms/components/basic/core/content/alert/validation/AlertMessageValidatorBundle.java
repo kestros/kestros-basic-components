@@ -1,5 +1,8 @@
 package io.kestros.cms.components.basic.core.content.alert.validation;
 
+/**
+ * Validators applied to the alert message component.
+ */
 @Deprecated
 public class AlertMessageValidatorBundle {
 //        extends ModelValidatorBundle<AlertComponent> {

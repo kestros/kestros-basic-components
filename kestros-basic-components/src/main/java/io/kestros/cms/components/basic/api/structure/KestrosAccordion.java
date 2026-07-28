@@ -50,6 +50,11 @@ public interface KestrosAccordion extends KestrosContainerElement {
   @Nonnull
   List<KestrosAccordionPanel> getPanelElements();
 
+  /**
+   * Child elements.
+   *
+   * @return Child elements.
+   */
   @Nonnull
   default List<KestrosBasicComponentElement> getChildElements() {
     return new ArrayList<>(getPanelElements());

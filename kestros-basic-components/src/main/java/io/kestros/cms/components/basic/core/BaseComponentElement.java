@@ -20,8 +20,15 @@ import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.SyntheticResource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.wrappers.ValueMapDecorator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+/**
+ * The base component element component element.
+ */
 public abstract class BaseComponentElement implements KestrosBasicComponentElement {
+
+  private static final Logger LOG = LoggerFactory.getLogger(BaseComponentElement.class);
   private Resource syntheticResource;
 
   @Override
@@ -81,9 +88,14 @@ public abstract class BaseComponentElement implements KestrosBasicComponentEleme
           }
         }
       }
-    } catch (final ModelAdaptionException exception) {
-    } catch (final ComponentViewRetrievalException e) {
-
+    } catch (final ModelAdaptionException | ComponentViewRetrievalException exception) {
+      // A component whose variations cannot be resolved renders unstyled. That is the right
+      // outcome -- it is better than failing the page -- but it used to happen silently, which
+      // made an unstyled element impossible to tell apart from one with no variations applied.
+      LOG.debug("Unable to resolve variations for {} on {}: {}",
+          String.valueOf(propertyName).replaceAll("[\r\n]", ""),
+          String.valueOf(getResource().getPath()).replaceAll("[\r\n]", ""),
+          String.valueOf(exception.getMessage()).replaceAll("[\r\n]", ""));
     }
     return new ArrayList<>(appliedVariations);
   }

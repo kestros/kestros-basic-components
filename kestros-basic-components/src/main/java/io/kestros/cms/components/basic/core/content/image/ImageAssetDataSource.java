@@ -18,11 +18,11 @@ import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 /**
  * Datasource that resolves image properties from a referenced asset path. The asset's title,
  * description, and path are used to populate the image component fields.
  */
+@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class ImageAssetDataSource extends BaseSlingModelDataSource implements KestrosImage {
 

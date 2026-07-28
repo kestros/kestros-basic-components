@@ -6,9 +6,9 @@ import javax.annotation.Nullable;
 
 /**
  * Represents an alert component that may provide an optional heading and text body.
- * <p>
- * Implementations expose the component's heading and text, and expose the Sling resource type used
- * to render the alert. Nullability of return values is indicated by the {@link Nullable} and
+ *
+ * <p>Implementations expose the component's heading and text, and expose the Sling resource type
+ * used to render the alert. Nullability of return values is indicated by the {@link Nullable} and
  * {@link Nonnull} annotations.
  */
 public interface KestrosAlert extends KestrosBasicComponentElement {

@@ -7,6 +7,9 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import org.apache.sling.api.resource.Resource;
 
+/**
+ * API for the bread crumbs component element.
+ */
 public interface KestrosBreadCrumbs extends KestrosContainerElement {
 
   String RESOURCE_TYPE = "/libs/kestros/commons/components/navigation/breadcrumbs";
@@ -17,6 +20,11 @@ public interface KestrosBreadCrumbs extends KestrosContainerElement {
     return RESOURCE_TYPE;
   }
 
+  /**
+   * Links.
+   *
+   * @return Links.
+   */
   @Nonnull
   default List<Resource> getLinks() {
     final List<KestrosBreadCrumb> sourceLinks = getLinkElements();
@@ -27,6 +35,11 @@ public interface KestrosBreadCrumbs extends KestrosContainerElement {
     return links;
   }
 
+  /**
+   * Link elements.
+   *
+   * @return Link elements.
+   */
   @Nonnull
   List<KestrosBreadCrumb> getLinkElements();
 

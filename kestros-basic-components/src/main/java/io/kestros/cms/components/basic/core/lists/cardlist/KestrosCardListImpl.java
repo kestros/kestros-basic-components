@@ -10,11 +10,24 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
 
+/**
+ * Programmatic {@link KestrosCardList}, built in code by a datasource rather than adapted from an
+ * authored resource.
+ */
 @SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 public class KestrosCardListImpl extends BaseContainerSyntheticResource implements KestrosCardList {
 
   private List<KestrosCard> cards;
 
+  /**
+   * Constructs a card list impl.
+   *
+   * @param cards Cards.
+   * @param dataSource Data source.
+   * @param resourcePrefix Resource prefix.
+   * @param forcedResourceName Forced resource name.
+   * @throws ComponentConfigurationException If the component configuration is not valid.
+   */
   public KestrosCardListImpl(
       @Nonnull List<KestrosCard> cards,
       @Nonnull BaseSlingModelDataSource dataSource,

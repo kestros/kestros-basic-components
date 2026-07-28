@@ -12,12 +12,26 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.sling.api.SlingHttpServletRequest;
 
+/**
+ * Programmatic {@link KestrosBreadCrumbs}, built in code by a datasource rather than adapted from
+ * an
+ * authored resource.
+ */
 @SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 public class KestrosBreadCrumbsImpl extends BaseContainerSyntheticResource
     implements KestrosBreadCrumbs {
 
   private List<KestrosBreadCrumb> breadCrumbs;
 
+  /**
+   * Constructs a bread crumbs impl.
+   *
+   * @param breadCrumbs Bread crumbs.
+   * @param dataSource Data source.
+   * @param resourcePrefix Resource prefix.
+   * @param forcedResourceName Forced resource name.
+   * @throws ComponentConfigurationException If the component configuration is not valid.
+   */
   public KestrosBreadCrumbsImpl(
       @Nonnull List<KestrosBreadCrumb> breadCrumbs,
       @Nonnull BaseSlingModelDataSource dataSource,

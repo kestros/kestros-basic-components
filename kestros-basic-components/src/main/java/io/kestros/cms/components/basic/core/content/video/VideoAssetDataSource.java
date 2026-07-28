@@ -17,11 +17,11 @@ import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 /**
  * Datasource that resolves video source from a referenced asset. The asset path is used directly
  * as the video source, with fallback text for browsers that do not support the video element.
  */
+@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class VideoAssetDataSource extends BaseSlingModelDataSource implements KestrosVideo {
 

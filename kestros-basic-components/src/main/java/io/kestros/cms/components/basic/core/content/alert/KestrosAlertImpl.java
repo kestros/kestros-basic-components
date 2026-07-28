@@ -8,12 +8,26 @@ import io.kestros.cms.components.basic.core.BaseSyntheticResource;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * Programmatic {@link KestrosAlert}, built in code by a datasource rather than adapted from an
+ * authored resource.
+ */
 @SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 public class KestrosAlertImpl extends BaseSyntheticResource implements KestrosAlert {
 
   private String heading;
   private String text;
 
+  /**
+   * Constructs an alert impl.
+   *
+   * @param heading Heading.
+   * @param text Text.
+   * @param dataSource Data source.
+   * @param resourcePrefix Resource prefix.
+   * @param forcedResourceName Forced resource name.
+   * @throws ComponentConfigurationException If the component configuration is not valid.
+   */
   public KestrosAlertImpl(String heading, String text,
       @Nonnull BaseSlingModelDataSource dataSource,
       String resourcePrefix,

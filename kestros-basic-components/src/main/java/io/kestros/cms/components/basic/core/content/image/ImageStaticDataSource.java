@@ -6,8 +6,8 @@ import io.kestros.cms.assets.api.models.Asset;
 import io.kestros.cms.assets.api.services.AssetRetrievalService;
 import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosImage;
-import io.kestros.cms.components.basic.core.LinkUtils;
 import io.kestros.cms.components.basic.core.BaseSlingModelDataSource;
+import io.kestros.cms.components.basic.core.LinkUtils;
 import io.kestros.cms.componenttypes.api.services.ComponentUiFrameworkViewRetrievalService;
 import io.kestros.cms.componenttypes.api.services.ComponentVariationRetrievalService;
 import javax.annotation.Nonnull;
@@ -21,6 +21,9 @@ import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Supplies a {@link KestrosImage} from properties authored on the component's own resource.
+ */
 @SuppressFBWarnings({"IMC_IMMATURE_CLASS_NO_TOSTRING", "FCBL_FIELD_COULD_BE_LOCAL"})
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class ImageStaticDataSource extends BaseSlingModelDataSource implements KestrosImage {

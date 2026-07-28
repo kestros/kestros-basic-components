@@ -17,6 +17,9 @@ import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 
+/**
+ * Supplies a {@link KestrosCard} from properties authored on the component's own resource.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class CardStaticDataSource extends BaseContainerSlingModelDataSource implements KestrosCard {
 

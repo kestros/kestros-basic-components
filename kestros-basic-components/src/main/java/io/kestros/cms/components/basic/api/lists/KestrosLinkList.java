@@ -8,15 +8,28 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import org.apache.sling.api.resource.Resource;
 
+/**
+ * API for the link list component element.
+ */
 public interface KestrosLinkList extends KestrosContainerElement {
 
   String RESOURCE_TYPE = "/libs/kestros/commons/components/lists/link-list";
 
+  /**
+   * Component resource type.
+   *
+   * @return Component resource type.
+   */
   @Nonnull
   default String getComponentResourceType() {
     return RESOURCE_TYPE;
   }
 
+  /**
+   * Links.
+   *
+   * @return Links.
+   */
   @Nonnull
   default List<Resource> getLinks() {
     final List<KestrosLink> sourceLinks = getLinkElements();
@@ -27,6 +40,11 @@ public interface KestrosLinkList extends KestrosContainerElement {
     return links;
   }
 
+  /**
+   * Link elements.
+   *
+   * @return Link elements.
+   */
   @Nonnull
   List<KestrosLink> getLinkElements();
 

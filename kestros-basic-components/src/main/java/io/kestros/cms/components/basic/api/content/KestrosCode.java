@@ -4,6 +4,9 @@ import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * API for the code component element.
+ */
 public interface KestrosCode extends KestrosBasicComponentElement {
 
   String RESOURCE_TYPE = "/libs/kestros/commons/components/content/code";
@@ -14,6 +17,11 @@ public interface KestrosCode extends KestrosBasicComponentElement {
     return RESOURCE_TYPE;
   }
 
+  /**
+   * Code.
+   *
+   * @return Code.
+   */
   @Nullable
   String getCode();
 }

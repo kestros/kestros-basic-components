@@ -1,5 +1,8 @@
 package io.kestros.cms.components.basic.core.validation;
 
+/**
+ * Validators applied to the image path component.
+ */
 public class ImagePathValidatorBundle {
 //  extends ModelValidatorBundle<ImageComponent>
 //} {

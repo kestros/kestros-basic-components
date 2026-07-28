@@ -22,6 +22,11 @@ public interface KestrosCard extends KestrosContainerElement {
     return RESOURCE_TYPE;
   }
 
+  /**
+   * Title.
+   *
+   * @return Title.
+   */
   @JsonIgnore
   @Nullable
   default Resource getTitle() {
@@ -69,6 +74,11 @@ public interface KestrosCard extends KestrosContainerElement {
     return imageElement.toSyntheticResource(getResourceResolver(), getPath());
   }
 
+  /**
+   * Image element.
+   *
+   * @return Image element.
+   */
   @Nullable
   KestrosImage getImageElement();
 
@@ -90,6 +100,11 @@ public interface KestrosCard extends KestrosContainerElement {
     return buttonGroupElement.toSyntheticResource(getResourceResolver(), getPath());
   }
 
+  /**
+   * Button group element.
+   *
+   * @return Button group element.
+   */
   @Nullable
   KestrosButtonGroup getButtonGroupElement();
 

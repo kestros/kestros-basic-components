@@ -1,11 +1,11 @@
 package io.kestros.cms.components.basic.core.lists.cardlist;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.components.basic.api.content.KestrosCard;
+import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.components.basic.api.lists.KestrosCardList;
-import io.kestros.cms.components.basic.core.ContentPageSorter;
 import io.kestros.cms.components.basic.core.BaseContainerSlingModelDataSource;
+import io.kestros.cms.components.basic.core.ContentPageSorter;
 import io.kestros.cms.components.basic.core.content.card.KestrosCardImpl;
 import io.kestros.cms.sitebuilding.api.models.BaseComponent;
 import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
@@ -13,21 +13,24 @@ import io.kestros.cms.tagging.api.models.KestrosTag;
 import io.kestros.cms.tagging.api.services.TagRetrievalService;
 import io.kestros.commons.structuredslingmodels.exceptions.NoParentResourceException;
 import io.kestros.commons.structuredslingmodels.exceptions.NoValidAncestorException;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+/**
+ * Supplies {@link KestrosCardList} built from tag search.
+ */
 @SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSource implements
@@ -42,6 +45,11 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
 
   private BaseContentPage containingPage;
 
+  /**
+   * Read more text.
+   *
+   * @return Read more text.
+   */
   @Nullable
   public String getReadMoreText() {
     return getResource().getValueMap().get("readMoreText", String.class);

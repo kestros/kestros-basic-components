@@ -11,6 +11,9 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 
+/**
+ * Supplies a {@link KestrosCode} from properties authored on the component's own resource.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class KestrosCodeStaticDataSource extends BaseSlingModelDataSource implements KestrosCode {
   @OSGiService

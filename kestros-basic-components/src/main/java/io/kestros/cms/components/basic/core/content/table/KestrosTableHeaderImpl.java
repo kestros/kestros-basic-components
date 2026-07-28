@@ -8,12 +8,13 @@ import io.kestros.cms.components.basic.core.BaseSyntheticResource;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 /**
  * Programmatic (synthetic) {@link KestrosTableHeader}, letting a datasource build table headers in
  * code rather than from authored resources. Mirrors
- * {@link io.kestros.cms.components.basic.core.content.heading.KestrosHeadingImpl} (a text-only leaf).
+ * {@link io.kestros.cms.components.basic.core.content.heading.KestrosHeadingImpl} (a text-only
+ * leaf).
  */
+@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 public class KestrosTableHeaderImpl extends BaseSyntheticResource implements KestrosTableHeader {
 
   private final String text;

@@ -8,6 +8,11 @@ import io.kestros.cms.components.basic.core.BaseSyntheticResource;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * Programmatic {@link KestrosAccordionPanel}, built in code by a datasource rather than adapted
+ * from an
+ * authored resource.
+ */
 @SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 public class KestrosAccordionPanelImpl extends BaseSyntheticResource
     implements KestrosAccordionPanel {
@@ -17,6 +22,18 @@ public class KestrosAccordionPanelImpl extends BaseSyntheticResource
   private final Boolean disabled;
   private final String ariaLabel;
 
+  /**
+   * Constructs an accordion panel impl.
+   *
+   * @param title Title.
+   * @param expanded Expanded.
+   * @param disabled Disabled.
+   * @param ariaLabel Aria label.
+   * @param dataSource Data source.
+   * @param resourcePrefix Resource prefix.
+   * @param forcedResourceName Forced resource name.
+   * @throws ComponentConfigurationException If the component configuration is not valid.
+   */
   public KestrosAccordionPanelImpl(
       @Nonnull String title,
       @Nonnull Boolean expanded,

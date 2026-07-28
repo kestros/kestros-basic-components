@@ -9,6 +9,9 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
+/**
+ * Supplies a {@link KestrosContainer} from properties authored on the component's own resource.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class ContainerStaticDataSource extends BaseContainerSlingModelDataSource
     implements KestrosContainer {

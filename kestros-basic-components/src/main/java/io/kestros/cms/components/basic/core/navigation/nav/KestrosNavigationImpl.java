@@ -12,12 +12,25 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
 
+/**
+ * Programmatic {@link KestrosNavigation}, built in code by a datasource rather than adapted from an
+ * authored resource.
+ */
 @SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 public class KestrosNavigationImpl extends BaseContainerSyntheticResource
     implements KestrosNavigation {
 
   private List<KestrosNavigationItem> navigationLinks;
 
+  /**
+   * Constructs a navigation impl.
+   *
+   * @param navigationLinks Navigation links.
+   * @param dataSource Data source.
+   * @param resourcePrefix Resource prefix.
+   * @param forcedResourceName Forced resource name.
+   * @throws ComponentConfigurationException If the component configuration is not valid.
+   */
   public KestrosNavigationImpl(
       @Nonnull List<KestrosNavigationItem> navigationLinks,
       @Nonnull BaseSlingModelDataSource dataSource,

@@ -7,6 +7,9 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import org.apache.sling.api.resource.Resource;
 
+/**
+ * API for the table component element.
+ */
 public interface KestrosTable extends KestrosContainerElement {
   String RESOURCE_TYPE = "/libs/kestros/commons/components/content/table";
 
@@ -16,9 +19,19 @@ public interface KestrosTable extends KestrosContainerElement {
     return RESOURCE_TYPE;
   }
 
+  /**
+   * Header elements.
+   *
+   * @return Header elements.
+   */
   @Nonnull
   List<KestrosTableHeader> getHeaderElements();
 
+  /**
+   * Headers.
+   *
+   * @return Headers.
+   */
   @Nonnull
   default List<Resource> getHeaders() {
     final List<KestrosTableHeader> sourceHeaders = getHeaderElements();
@@ -33,9 +46,19 @@ public interface KestrosTable extends KestrosContainerElement {
     return headers;
   }
 
+  /**
+   * Row elements.
+   *
+   * @return Row elements.
+   */
   @Nonnull
   List<KestrosTableRow> getRowElements();
 
+  /**
+   * Rows.
+   *
+   * @return Rows.
+   */
   @Nonnull
   default List<Resource> getRows() {
     final List<KestrosTableRow> sourceRows = getRowElements();
@@ -50,6 +73,11 @@ public interface KestrosTable extends KestrosContainerElement {
     return rows;
   }
 
+  /**
+   * Child elements.
+   *
+   * @return Child elements.
+   */
   @Nonnull
   default List<KestrosBasicComponentElement> getChildElements() {
     return new ArrayList<>(getRowElements());

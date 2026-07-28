@@ -13,6 +13,11 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import org.apache.sling.api.resource.Resource;
 
+/**
+ * Programmatic {@link KestrosButtonGroup}, built in code by a datasource rather than adapted from
+ * an
+ * authored resource.
+ */
 @SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 public class KestrosButtonGroupImpl extends BaseContainerSyntheticResource implements
                                                                            KestrosButtonGroup {
@@ -20,6 +25,15 @@ public class KestrosButtonGroupImpl extends BaseContainerSyntheticResource imple
   private List<KestrosButton> buttons;
   private List<ComponentVariation> buttonVariations;
 
+  /**
+   * Constructs a button group impl.
+   *
+   * @param buttons Buttons.
+   * @param dataSource Data source.
+   * @param resourcePrefix Resource prefix.
+   * @param forcedResourceName Forced resource name.
+   * @throws ComponentConfigurationException If the component configuration is not valid.
+   */
   public KestrosButtonGroupImpl(@Nonnull final List<KestrosButton> buttons,
       @Nonnull BaseSlingModelDataSource dataSource,
       String resourcePrefix,
@@ -31,6 +45,15 @@ public class KestrosButtonGroupImpl extends BaseContainerSyntheticResource imple
     this.buttonVariations = dataSource.getElementVariations("button", KestrosButton.RESOURCE_TYPE);
   }
 
+  /**
+   * Constructs a button group impl.
+   *
+   * @param buttonResource Button resource.
+   * @param dataSource Data source.
+   * @param resourcePrefix Resource prefix.
+   * @param forcedResourceName Forced resource name.
+   * @throws ComponentConfigurationException If the component configuration is not valid.
+   */
   public KestrosButtonGroupImpl(@Nonnull Resource buttonResource,
       @Nonnull BaseSlingModelDataSource dataSource,
       String resourcePrefix,

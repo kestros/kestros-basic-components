@@ -10,12 +10,25 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
 
+/**
+ * Programmatic {@link KestrosContainer}, built in code by a datasource rather than adapted from an
+ * authored resource.
+ */
 @SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 public class KestrosContainerImpl extends BaseContainerSyntheticResource
     implements KestrosContainer {
 
   private final List<KestrosBasicComponentElement> childElements;
 
+  /**
+   * Constructs a container impl.
+   *
+   * @param childElements Child elements.
+   * @param dataSource Data source.
+   * @param resourcePrefix Resource prefix.
+   * @param forcedResourceName Forced resource name.
+   * @throws ComponentConfigurationException If the component configuration is not valid.
+   */
   public KestrosContainerImpl(
       @Nonnull List<KestrosBasicComponentElement> childElements,
       @Nonnull BaseSlingModelDataSource dataSource,

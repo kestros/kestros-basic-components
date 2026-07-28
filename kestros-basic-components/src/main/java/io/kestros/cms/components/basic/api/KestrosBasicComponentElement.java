@@ -21,105 +21,115 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 
+/**
+ * API for the basic component element component element.
+ */
 public interface KestrosBasicComponentElement {
 
 
+  /**
+   * Layout.
+   *
+   * @param propertyName Property name.
+   * @return Layout.
+   */
   @Nullable
   String getLayout(@Nonnull String propertyName);
 
+  /**
+   * Layout.
+   *
+   * @return Layout.
+   */
+  @Nonnull
+  String getLayout();
+
+  /**
+   * Element variations.
+   *
+   * @param propertyName Property name.
+   * @param componentType Component type.
+   * @return Element variations.
+   */
   @Nonnull
   List<ComponentVariation> getElementVariations(@Nonnull String propertyName,
       @Nonnull String componentType);
 
-//  @Deprecated
-//  static List<ComponentVariation> getAppliedVariations(String propertyName,
-//      Resource resource,
-//      String componentTypePath,
-//      UiFramework uiFramework,
-//      ComponentVariationRetrievalService componentVariationRetrievalService,
-//      ComponentUiFrameworkViewRetrievalService componentUiFrameworkViewRetrievalService) {
-//
-//    BaseComponent component = resource.adaptTo(BaseComponent.class);
-//    final List<ComponentVariation> appliedVariations = new ArrayList<>();
-//    Object propertyValue = resource.getValueMap().get(propertyName);
-//    // if list of maps
-//    final List<String> appliedVariationNames;
-//    if (propertyValue instanceof List && !((List<?>) propertyValue).isEmpty()
-//        && ((List<?>) propertyValue).get(0) instanceof Map) {
-//      // TODO checking the map here is a bit hacky, but not sure of a better way.
-//      List<Map<String, Object>> variationMaps = (List<Map<String, Object>>) propertyValue;
-//      appliedVariationNames = new ArrayList<>();
-//      for (Map<String, Object> variationMap : variationMaps) {
-//        appliedVariationNames.add((String) variationMap.get("path"));
-//      }
-//    } else {
-//      appliedVariationNames = JcrPropertyUtils.getStringListOrEmptyList(
-//          resource,
-//          propertyName);
-//    }
-//
-//
-//    try {
-//
-//      final ComponentUiFrameworkView uiFrameworkView
-//          = componentUiFrameworkViewRetrievalService.getResolvedComponentUiFrameworkView(
-//          componentTypePath, uiFramework, component.getResourceResolver());
-//      List<ComponentVariation> variations
-//          = componentVariationRetrievalService.getComponentVariations(uiFrameworkView);
-//      if (!appliedVariationNames.isEmpty()) {
-//        for (final String appliedVariation : appliedVariationNames) {
-//          for (final ComponentVariation variation : variations) {
-//            if (variation.getPath().equals(appliedVariation) || variation.getName()
-//                .equals(appliedVariation)) {
-//              appliedVariations.add(variation);
-//            }
-//          }
-//        }
-//      }
-//
-//      if (appliedVariationNames.isEmpty() && !resource.getValueMap()
-//          .containsKey(propertyName)) {
-//        for (ComponentVariation variation : variations) {
-//          if (variation.isDefault()) {
-//            appliedVariations.add(variation);
-//          }
-//        }
-//      }
-//    } catch (final ModelAdaptionException exception) {
-//    } catch (final ComponentViewRetrievalException e) {
-//
-//    }
-//    return new ArrayList<>(appliedVariations);
-//  }
 
+  /**
+   * Id.
+   *
+   * @return Id.
+   */
   @Nullable
   String getId();
 
+  /**
+   * Ui framework.
+   *
+   * @return Ui framework.
+   * @throws InvalidThemeException If the invalid theme is not valid.
+   * @throws ResourceNotFoundException If the resource not found is not valid.
+   * @throws InvalidUiFrameworkException If the invalid ui framework is not valid.
+   * @throws ThemeRetrievalException If the theme retrieval is not valid.
+   * @throws UiFrameworkRetrievalException If the ui framework retrieval is not valid.
+   * @throws ModelAdaptionException If the model adaption is not valid.
+   */
   @JsonIgnore
   @Nullable
   UiFramework getUiFramework() throws InvalidThemeException, ResourceNotFoundException,
       InvalidUiFrameworkException, ThemeRetrievalException, UiFrameworkRetrievalException,
       ModelAdaptionException;
 
+  /**
+   * Resource.
+   *
+   * @return Resource.
+   */
   @JsonIgnore
   @Nonnull
   Resource getResource();
 
+  /**
+   * Request.
+   *
+   * @return Request.
+   */
   @JsonIgnore
   @Nullable
   SlingHttpServletRequest getRequest();
 
+  /**
+   * Resource resolver.
+   *
+   * @return Resource resolver.
+   */
   @JsonIgnore
   @Nonnull
   ResourceResolver getResourceResolver();
 
+  /**
+   * Parent path.
+   *
+   * @return Parent path.
+   */
   @JsonIgnore
   @Nullable
   String getParentPath();
 
+  /**
+   * Variations.
+   *
+   * @return Variations.
+   */
   @Nonnull
   List<ComponentVariation> getVariations();
 
+  /**
+   * Inline variations.
+   *
+   * @return Inline variations.
+   */
   @Nonnull
   default String getInlineVariations() {
     StringJoiner joiner = new StringJoiner(" ");
@@ -131,6 +141,11 @@ public interface KestrosBasicComponentElement {
     return joiner.toString();
   }
 
+  /**
+   * Path.
+   *
+   * @return Path.
+   */
   @JsonIgnore
   @Nonnull
   default String getPath() {
@@ -143,16 +158,31 @@ public interface KestrosBasicComponentElement {
     return getResource().getPath();
   }
 
+  /**
+   * Synthetic.
+   *
+   * @return Synthetic.
+   */
   @Nonnull
   default Boolean isSynthetic() {
     return Boolean.TRUE;
   }
 
+  /**
+   * Data source component.
+   *
+   * @return Data source component.
+   */
   default boolean isDataSourceComponent() {
     // TODO might not need.
     return true;
   }
 
+  /**
+   * Request attributes.
+   *
+   * @return Request attributes.
+   */
   @JsonIgnore
   @Nonnull
   default Map<String, String> getRequestAttributes() {
@@ -161,24 +191,48 @@ public interface KestrosBasicComponentElement {
     return attributes;
   }
 
+  /**
+   * Synthetic resource.
+   *
+   * @param resourceResolver Resource resolver.
+   * @param parentPath Parent path.
+   * @return Synthetic resource.
+   */
   @JsonIgnore
   @Nonnull
   Resource toSyntheticResource(@Nonnull final ResourceResolver resourceResolver,
       @Nonnull final String parentPath);
 
-  @Nonnull
-  String getLayout();
-
+  /**
+   * Component resource type.
+   *
+   * @return Component resource type.
+   */
   @Nonnull
   String getComponentResourceType();
 
+  /**
+   * Forced resource name.
+   *
+   * @return Forced resource name.
+   */
   @Nullable
   String getForcedResourceName();
 
+  /**
+   * Component variation retrieval service.
+   *
+   * @return Component variation retrieval service.
+   */
   @JsonIgnore
   @Nonnull
   ComponentVariationRetrievalService getComponentVariationRetrievalService();
 
+  /**
+   * Component ui framework view retrieval service.
+   *
+   * @return Component ui framework view retrieval service.
+   */
   @JsonIgnore
   @Nonnull
   ComponentUiFrameworkViewRetrievalService getComponentUiFrameworkViewRetrievalService();

@@ -10,11 +10,24 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * Implementation of {@link KestrosSection}.
+ */
 @SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 public class KestrosSectionImpl extends KestrosContainerImpl implements KestrosSection {
 
   private String backgroundImage;
 
+  /**
+   * Constructs a section impl.
+   *
+   * @param backgroundImage Background image.
+   * @param childElements Child elements.
+   * @param dataSource Data source.
+   * @param resourcePrefix Resource prefix.
+   * @param forcedResourceName Forced resource name.
+   * @throws ComponentConfigurationException If the component configuration is not valid.
+   */
   public KestrosSectionImpl(
       @Nullable String backgroundImage,
       @Nonnull List<KestrosBasicComponentElement> childElements,

@@ -7,6 +7,9 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
+/**
+ * Supplies a {@link KestrosTableHeader} from properties authored on the component's own resource.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class TableHeaderStaticDataSource extends BaseSlingModelDataSource
     implements KestrosTableHeader {

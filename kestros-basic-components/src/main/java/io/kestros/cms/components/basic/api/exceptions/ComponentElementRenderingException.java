@@ -1,4 +1,3 @@
-
 package io.kestros.cms.components.basic.api.exceptions;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;

@@ -21,6 +21,11 @@ import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.wrappers.ValueMapDecorator;
 import org.apache.sling.models.annotations.Model;
 
+/**
+ * Renders a {@link KestrosBasicComponentElement} handed to it by an upstream datasource, delegating
+ * every value to
+ * that element rather than reading the resource itself.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public abstract class BaseDataSourceComponent<T extends KestrosBasicComponentElement>
     extends DataSourceComponent<T> implements KestrosBasicComponentElement {
@@ -41,13 +46,20 @@ public abstract class BaseDataSourceComponent<T extends KestrosBasicComponentEle
 
   @Override
   @Nonnull
+  public String getLayout() {
+    return getComponentData().getLayout();
+  }
+
+  @Override
+  @Nonnull
   public String getLayout(@Nonnull String propertyName) {
     return getComponentData().getLayout(propertyName);
   }
 
   @Override
   @Nonnull
-  public List<ComponentVariation> getElementVariations(@Nonnull String propertyName, String componentType) {
+  public List<ComponentVariation> getElementVariations(@Nonnull String propertyName,
+      String componentType) {
     return getComponentData().getElementVariations(propertyName, componentType);
   }
 
@@ -67,12 +79,6 @@ public abstract class BaseDataSourceComponent<T extends KestrosBasicComponentEle
   @Nonnull
   public List<ComponentVariation> getVariations() {
     return getComponentData().getVariations();
-  }
-
-  @Override
-  @Nonnull
-  public String getLayout() {
-    return getComponentData().getLayout();
   }
 
   @Override

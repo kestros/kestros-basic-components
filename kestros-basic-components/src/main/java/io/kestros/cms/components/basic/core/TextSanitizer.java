@@ -12,6 +12,12 @@ public final class TextSanitizer {
   private TextSanitizer() {
   }
 
+  /**
+   * Escape multi byte to entities.
+   *
+   * @param text Text.
+   * @return Escape multi byte to entities.
+   */
   @Nullable
   public static String escapeMultiByteToEntities(@Nullable String text) {
     if (text == null) {

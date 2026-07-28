@@ -13,6 +13,10 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 
+/**
+ * Programmatic {@link KestrosButton}, built in code by a datasource rather than adapted from an
+ * authored resource.
+ */
 @SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 public class KestrosButtonImpl extends BaseSyntheticResource implements KestrosButton {
 
@@ -27,6 +31,23 @@ public class KestrosButtonImpl extends BaseSyntheticResource implements KestrosB
   private boolean disabled;
   private String resourceName;
 
+  /**
+   * Constructs a button impl.
+   *
+   * @param text Text.
+   * @param href Href.
+   * @param title Title.
+   * @param target Target.
+   * @param rel Rel.
+   * @param ariaLabel Aria label.
+   * @param ariaDescribedBy Aria described by.
+   * @param lang Lang.
+   * @param disabled Disabled.
+   * @param dataSource Data source.
+   * @param resourcePrefix Resource prefix.
+   * @param forcedResourceName Forced resource name.
+   * @throws ComponentConfigurationException If the component configuration is not valid.
+   */
   public KestrosButtonImpl(String text, String href,
       String title,
       AnchorTarget target, String rel,
@@ -49,6 +70,15 @@ public class KestrosButtonImpl extends BaseSyntheticResource implements KestrosB
     this.resourceName = forcedResourceName;
   }
 
+  /**
+   * Constructs a button impl.
+   *
+   * @param resource Resource.
+   * @param dataSource Data source.
+   * @param resourcePrefix Resource prefix.
+   * @param forcedResourceName Forced resource name.
+   * @throws ComponentConfigurationException If the component configuration is not valid.
+   */
   public KestrosButtonImpl(@Nonnull Resource resource,
       @Nonnull BaseSlingModelDataSource dataSource,
       String resourcePrefix,

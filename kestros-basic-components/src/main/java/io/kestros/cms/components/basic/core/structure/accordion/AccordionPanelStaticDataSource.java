@@ -8,6 +8,10 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
+/**
+ * Supplies a {@link KestrosAccordionPanel} from properties authored on the component's own
+ * resource.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class AccordionPanelStaticDataSource extends BaseSlingModelDataSource
     implements KestrosAccordionPanel {

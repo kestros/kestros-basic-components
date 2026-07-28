@@ -10,8 +10,13 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
 
+/**
+ * Renders a {@link KestrosLink} handed to it by an upstream datasource, delegating every value to
+ * that element rather than reading the resource itself.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
-public class LinkDataSourceComponent extends BaseDataSourceComponent<KestrosLink> implements KestrosLink {
+public class LinkDataSourceComponent extends BaseDataSourceComponent<KestrosLink>
+    implements KestrosLink {
   @Nullable
   @Override
   public String getText() {

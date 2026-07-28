@@ -9,6 +9,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.sling.api.resource.Resource;
 
+/**
+ * API for the top navigation item component element.
+ */
 public interface KestrosTopNavigationItem extends KestrosContainerElement {
 
   String RESOURCE_TYPE = "/libs/kestros/commons/components/navigation/top-navigation-item";
@@ -20,9 +23,19 @@ public interface KestrosTopNavigationItem extends KestrosContainerElement {
   }
 
 
+  /**
+   * Navigation items.
+   *
+   * @return Navigation items.
+   */
   @Nonnull
   List<KestrosTopNavigationItem> getNavigationItems();
 
+  /**
+   * Navigation item links.
+   *
+   * @return Navigation item links.
+   */
   @Nonnull
   default List<Resource> getNavigationItemLinks() {
     final List<KestrosTopNavigationItem> sourceResources = getNavigationItems();
@@ -39,6 +52,11 @@ public interface KestrosTopNavigationItem extends KestrosContainerElement {
     return new ArrayList<>(getNavigationItems());
   }
 
+  /**
+   * Active.
+   *
+   * @return Active.
+   */
   @Nonnull
   default Boolean isActive() {
     if (getRequest() != null) {
@@ -53,18 +71,24 @@ public interface KestrosTopNavigationItem extends KestrosContainerElement {
 
   /**
    * Visible link text. This should normally be present and meaningful.
+   *
+   * @return Visible link text.
    */
   @Nullable
   String getText();
 
   /**
    * Destination URL. Should be null if the link is not navigable.
+   *
+   * @return Destination URL.
    */
   @Nullable
   String getHref();
 
   /**
    * Target attribute (e.g. "_self", "_blank").
+   *
+   * @return Target attribute (e.g.
    */
   @Nonnull
   AnchorTarget getTarget();
@@ -84,30 +108,40 @@ public interface KestrosTopNavigationItem extends KestrosContainerElement {
 
   /**
    * ARIA label. Used when visible text is missing or insufficient.
+   *
+   * @return ARIA label.
    */
   @Nullable
   String getAriaLabel();
 
   /**
    * Optional title attribute. Use sparingly – should add meaning, not duplicate text.
+   *
+   * @return Optional title attribute.
    */
   @Nullable
   String getTitle();
 
   /**
    * Relationship attribute (e.g. "noopener", "noreferrer", "nofollow").
+   *
+   * @return Relationship attribute (e.g.
    */
   @Nullable
   String getRel();
 
   /**
    * ARIA described-by ID reference.
+   *
+   * @return ARIA described-by ID reference.
    */
   @Nullable
   String getAriaDescribedBy();
 
   /**
    * Language of the link text, if different from the page language. Example: "fr", "de", "en-GB"
+   *
+   * @return Language of the link text, if different from the page language.
    */
   @Nullable
   String getLang();

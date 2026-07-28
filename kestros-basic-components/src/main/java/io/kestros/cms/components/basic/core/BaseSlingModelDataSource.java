@@ -1,9 +1,9 @@
 package io.kestros.cms.components.basic.core;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.kestros.cms.components.basic.api.exceptions.ComponentElementRenderingException;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
+import io.kestros.cms.components.basic.api.exceptions.ComponentElementRenderingException;
 import io.kestros.cms.componenttypes.api.exceptions.ComponentVariationRetrievalException;
 import io.kestros.cms.componenttypes.api.models.ComponentVariation;
 import io.kestros.cms.componenttypes.api.services.ComponentUiFrameworkViewRetrievalService;
@@ -27,6 +27,9 @@ import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 
+/**
+ * Supplies element built from base sling model.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public abstract class BaseSlingModelDataSource extends BaseComponentElement {
 
@@ -45,16 +48,31 @@ public abstract class BaseSlingModelDataSource extends BaseComponentElement {
   private ComponentUiFrameworkViewRetrievalService componentUiFrameworkViewRetrievalService;
 
 
+  /**
+   * Id.
+   *
+   * @return Id.
+   */
   @Nullable
   public String getId() {
     return getResource().getValueMap().get("id", String.class);
   }
 
+  /**
+   * Synthetic.
+   *
+   * @return Synthetic.
+   */
   @Nonnull
   public Boolean isSynthetic() {
     return Boolean.FALSE;
   }
 
+  /**
+   * Resource.
+   *
+   * @return Resource.
+   */
   @Nonnull
   public Resource getResource() {
     if (resource == null && slingHttpServletRequest != null) {
@@ -63,11 +81,22 @@ public abstract class BaseSlingModelDataSource extends BaseComponentElement {
     return resource;
   }
 
+  /**
+   * Request.
+   *
+   * @return Request.
+   */
   @Nullable
   public SlingHttpServletRequest getRequest() {
     return slingHttpServletRequest;
   }
 
+  /**
+   * The page this element is rendering on: the current page when adapted from a request, or the
+   * page containing the element's resource otherwise.
+   *
+   * @return The page this element is rendering on.
+   */
   @SuppressFBWarnings(value = "EXS_EXCEPTION_SOFTENING_NO_CONSTRAINTS",
       justification = "Called from HTL, which cannot handle a checked exception. The checked"
           + " cause is wrapped in a typed exception so the failure stays identifiable, per"
@@ -97,16 +126,31 @@ public abstract class BaseSlingModelDataSource extends BaseComponentElement {
   }
 
 
+  /**
+   * Resource resolver.
+   *
+   * @return Resource resolver.
+   */
   @Nonnull
   public ResourceResolver getResourceResolver() {
     return getResource().getResourceResolver();
   }
 
+  /**
+   * Parent path.
+   *
+   * @return Parent path.
+   */
   @Nonnull
   public String getParentPath() {
     return getResource().getParent().getPath();
   }
 
+  /**
+   * Variations.
+   *
+   * @return Variations.
+   */
   @Nonnull
   public List<ComponentVariation> getVariations() {
     // TODO verify this.
@@ -136,6 +180,11 @@ public abstract class BaseSlingModelDataSource extends BaseComponentElement {
     return getResource().adaptTo(BaseComponent.class).getAppliedVariations();
   }
 
+  /**
+   * Layout.
+   *
+   * @return Layout.
+   */
   @Nonnull
   public String getLayout() {
     return getResource().getValueMap().get("layout", "default");
@@ -148,6 +197,13 @@ public abstract class BaseSlingModelDataSource extends BaseComponentElement {
     return getResource().getName();
   }
 
+  /**
+   * UI framework in force for this element, resolved from the containing page's theme.
+   *
+   * @return UI framework in force for this element.
+   * @throws ComponentElementRenderingException If the containing page, its theme or its UI
+   *     framework cannot be resolved.
+   */
   @SuppressFBWarnings(value = "EXS_EXCEPTION_SOFTENING_HAS_CHECKED",
       justification = "Called from HTL, which cannot handle a checked exception. The"
           + " checked cause is wrapped in a typed exception, per the ruling on"
@@ -168,11 +224,21 @@ public abstract class BaseSlingModelDataSource extends BaseComponentElement {
     }
   }
 
+  /**
+   * Component variation retrieval service.
+   *
+   * @return Component variation retrieval service.
+   */
   @Nonnull
   public ComponentVariationRetrievalService getComponentVariationRetrievalService() {
     return componentVariationRetrievalService;
   }
 
+  /**
+   * Component ui framework view retrieval service.
+   *
+   * @return Component ui framework view retrieval service.
+   */
   @Nonnull
   public ComponentUiFrameworkViewRetrievalService getComponentUiFrameworkViewRetrievalService() {
     return componentUiFrameworkViewRetrievalService;

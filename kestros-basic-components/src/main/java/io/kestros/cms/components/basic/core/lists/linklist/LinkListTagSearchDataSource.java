@@ -1,13 +1,12 @@
 package io.kestros.cms.components.basic.core.lists.linklist;
 
-import javax.annotation.Nullable;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosLink;
+import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.components.basic.api.lists.KestrosLinkList;
-import io.kestros.cms.components.basic.core.ContentPageSorter;
 import io.kestros.cms.components.basic.core.BaseContainerSlingModelDataSource;
+import io.kestros.cms.components.basic.core.ContentPageSorter;
 import io.kestros.cms.components.basic.core.LinkUtils;
 import io.kestros.cms.components.basic.core.content.link.KestrosLinkImpl;
 import io.kestros.cms.sitebuilding.api.models.BaseComponent;
@@ -16,25 +15,26 @@ import io.kestros.cms.tagging.api.models.KestrosTag;
 import io.kestros.cms.tagging.api.services.TagRetrievalService;
 import io.kestros.commons.structuredslingmodels.exceptions.NoParentResourceException;
 import io.kestros.commons.structuredslingmodels.exceptions.NoValidAncestorException;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.annotation.Nonnull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javax.annotation.Nullable;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 /**
  * Tag search datasource for the link list component. Finds pages matching configured
  * tags and renders them as link elements.
  */
+@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class LinkListTagSearchDataSource extends BaseContainerSlingModelDataSource
     implements KestrosLinkList {
@@ -106,6 +106,11 @@ public class LinkListTagSearchDataSource extends BaseContainerSlingModelDataSour
     return null;
   }
 
+  /**
+   * Target.
+   *
+   * @return Target.
+   */
   @Nonnull
   public AnchorTarget getTarget() {
     return AnchorTarget.lookup(getResource());

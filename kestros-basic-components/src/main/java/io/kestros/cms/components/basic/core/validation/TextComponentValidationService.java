@@ -21,8 +21,8 @@ package io.kestros.cms.components.basic.core.validation;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.commons.structuredslingmodels.BaseSlingModel;
 import io.kestros.commons.validation.api.ModelValidationMessageType;
-import io.kestros.commons.validation.api.services.BaseModelValidationRegistrationService;
 import io.kestros.commons.validation.api.models.ModelValidator;
+import io.kestros.commons.validation.api.services.BaseModelValidationRegistrationService;
 import io.kestros.commons.validation.api.services.ModelValidatorRegistrationHandlerService;
 import io.kestros.commons.validation.api.services.ModelValidatorRegistrationService;
 import java.util.Collections;
@@ -38,6 +38,9 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
 // */
 //@Component(immediate = true,
 //           service = ModelValidatorRegistrationService.class)
+/**
+ * Validation service for the text component component.
+ */
 public class TextComponentValidationService {
 //  extends
 //} BaseModelValidationRegistrationService {

@@ -1,12 +1,11 @@
 package io.kestros.cms.components.basic.core.lists.linklist;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import javax.annotation.Nonnull;
 import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosLink;
 import io.kestros.cms.components.basic.api.lists.KestrosLinkList;
-import io.kestros.cms.components.basic.core.ContentPageSorter;
 import io.kestros.cms.components.basic.core.BaseContainerSlingModelDataSource;
+import io.kestros.cms.components.basic.core.ContentPageSorter;
 import io.kestros.cms.components.basic.core.LinkUtils;
 import io.kestros.cms.components.basic.core.content.link.KestrosLinkImpl;
 import io.kestros.cms.componenttypes.api.services.ComponentUiFrameworkViewRetrievalService;
@@ -15,11 +14,15 @@ import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import javax.annotation.Nonnull;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 
+/**
+ * Supplies {@link KestrosLinkList} built from child page.
+ */
 @SuppressFBWarnings("FCBL_FIELD_COULD_BE_LOCAL")
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class LinkListChildPageDataSource extends BaseContainerSlingModelDataSource
@@ -30,11 +33,21 @@ public class LinkListChildPageDataSource extends BaseContainerSlingModelDataSour
   @OSGiService
   private ComponentUiFrameworkViewRetrievalService componentUiFrameworkViewRetrievalService;
 
+  /**
+   * Root path.
+   *
+   * @return Root path.
+   */
   @Nonnull
   public String getRootPath() {
     return getResource().getValueMap().get("pagesPath", String.class);
   }
 
+  /**
+   * Target.
+   *
+   * @return Target.
+   */
   @Nonnull
   public AnchorTarget getTarget() {
     return AnchorTarget.lookup(getResource());

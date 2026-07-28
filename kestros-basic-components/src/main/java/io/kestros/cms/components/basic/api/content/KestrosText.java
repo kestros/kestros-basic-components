@@ -4,6 +4,9 @@ import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * API for the text component element.
+ */
 public interface KestrosText extends KestrosBasicComponentElement {
 
   String RESOURCE_TYPE = "/libs/kestros/commons/components/content/text";
@@ -14,6 +17,11 @@ public interface KestrosText extends KestrosBasicComponentElement {
     return RESOURCE_TYPE;
   }
 
+  /**
+   * Text.
+   *
+   * @return Text.
+   */
   @Nullable
   String getText();
 }

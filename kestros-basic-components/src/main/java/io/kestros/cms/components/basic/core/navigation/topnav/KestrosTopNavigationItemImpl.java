@@ -12,12 +12,27 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * Programmatic {@link KestrosTopNavigationItem}, built in code by a datasource rather than adapted
+ * from an
+ * authored resource.
+ */
 @SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 public class KestrosTopNavigationItemImpl extends BaseContainerSyntheticResource
     implements KestrosTopNavigationItem {
   private KestrosLink link;
   private List<KestrosTopNavigationItem> childItems;
 
+  /**
+   * Constructs a top navigation item impl.
+   *
+   * @param link Link.
+   * @param childItems Child items.
+   * @param dataSource Data source.
+   * @param resourcePrefix Resource prefix.
+   * @param forcedResourceName Forced resource name.
+   * @throws ComponentConfigurationException If the component configuration is not valid.
+   */
   public KestrosTopNavigationItemImpl(
       @Nonnull KestrosLink link,
       @Nonnull List<KestrosTopNavigationItem> childItems,

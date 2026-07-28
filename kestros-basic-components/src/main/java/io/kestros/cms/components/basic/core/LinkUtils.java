@@ -4,12 +4,27 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * The link utils component element.
+ */
 public class LinkUtils {
+  /**
+   * Link external.
+   *
+   * @param value Value.
+   * @return Link external.
+   */
   @Nonnull
   public static boolean isLinkExternal(@Nonnull String value) {
     return StringUtils.isNotEmpty(value) && !value.startsWith("/");
   }
 
+  /**
+   * Link.
+   *
+   * @param value Value.
+   * @return Link.
+   */
   @Nullable
   public static String getLink(@Nullable String value) {
     if (value == null) {

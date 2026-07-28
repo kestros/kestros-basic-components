@@ -1,7 +1,7 @@
 package io.kestros.cms.components.basic.core.content.image;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.assets.api.exceptions.AssetRetrievalException;
 import io.kestros.cms.assets.api.models.Asset;
 import io.kestros.cms.assets.api.services.AssetRetrievalService;
@@ -17,10 +17,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 
+/**
+ * Programmatic {@link KestrosImage}, built in code by a datasource rather than adapted from an
+ * authored resource.
+ */
 @SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 public class KestrosImageImpl extends BaseSyntheticResource implements KestrosImage {
   @OSGiService
@@ -38,6 +42,23 @@ public class KestrosImageImpl extends BaseSyntheticResource implements KestrosIm
   private AnchorTarget target;
   private AssetRetrievalService assetRetrievalService;
 
+  /**
+   * Constructs an image impl.
+   *
+   * @param imagePath Image path.
+   * @param altText Alt text.
+   * @param caption Caption.
+   * @param imageTitle Image title.
+   * @param href Href.
+   * @param ariaLabel Aria label.
+   * @param anchorTitle Anchor title.
+   * @param target Target.
+   * @param dataSource Data source.
+   * @param resourcePrefix Resource prefix.
+   * @param forcedResourceName Forced resource name.
+   * @param assetRetrievalService Asset retrieval service.
+   * @throws ComponentConfigurationException If the component configuration is not valid.
+   */
   public KestrosImageImpl(String imagePath,
           String altText, String caption,
           String imageTitle,
@@ -65,6 +86,16 @@ public class KestrosImageImpl extends BaseSyntheticResource implements KestrosIm
     }
   }
 
+  /**
+   * Constructs an image impl.
+   *
+   * @param resource Resource.
+   * @param dataSource Data source.
+   * @param resourcePrefix Resource prefix.
+   * @param forcedResourceName Forced resource name.
+   * @param assetRetrievalService Asset retrieval service.
+   * @throws ComponentConfigurationException If the component configuration is not valid.
+   */
   public KestrosImageImpl(Resource resource,
           @Nonnull BaseSlingModelDataSource dataSource,
           String resourcePrefix,
@@ -73,7 +104,7 @@ public class KestrosImageImpl extends BaseSyntheticResource implements KestrosIm
     super(dataSource, resourcePrefix, forcedResourceName);
     this.assetRetrievalService = assetRetrievalService;
     String assetPath = resource.getValueMap().get("imagePath", String.class);
-    if(LinkUtils.isLinkExternal(assetPath)) {
+    if (LinkUtils.isLinkExternal(assetPath)) {
       try {
         Asset asset = getAsset(assetPath, resource.getResourceResolver());
         this.imagePath = asset.getPath();

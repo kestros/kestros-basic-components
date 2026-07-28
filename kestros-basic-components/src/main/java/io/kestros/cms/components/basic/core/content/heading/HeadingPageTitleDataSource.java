@@ -1,13 +1,13 @@
 package io.kestros.cms.components.basic.core.content.heading;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import javax.annotation.Nonnull;
-import io.kestros.cms.components.basic.api.exceptions.ComponentElementRenderingException;
 import io.kestros.cms.components.basic.api.content.KestrosHeading;
+import io.kestros.cms.components.basic.api.exceptions.ComponentElementRenderingException;
 import io.kestros.cms.sitebuilding.api.models.BaseComponent;
 import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
 import io.kestros.cms.sitebuilding.api.models.ComponentRequestContext;
 import io.kestros.commons.structuredslingmodels.exceptions.ModelAdaptionException;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -17,6 +17,9 @@ import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Supplies element built from heading page title.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class HeadingPageTitleDataSource extends HeadingStaticDataSource {
   private static final Logger LOG = LoggerFactory.getLogger(HeadingPageTitleDataSource.class);
@@ -58,6 +61,11 @@ public class HeadingPageTitleDataSource extends HeadingStaticDataSource {
     return getPage().getDisplayTitle();
   }
 
+  /**
+   * Override inherited title.
+   *
+   * @return Override inherited title.
+   */
   @Nonnull
   public Boolean isOverrideInheritedTitle() {
     return getResource().getValueMap().get("overrideInheritedTitle", Boolean.FALSE);

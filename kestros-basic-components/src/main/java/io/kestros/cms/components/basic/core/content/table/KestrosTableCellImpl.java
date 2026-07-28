@@ -11,14 +11,15 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 /**
  * Programmatic (synthetic) {@link KestrosTableCell}, letting a datasource build table cells in code
  * rather than from authored child resources. Mirrors
- * {@link io.kestros.cms.components.basic.core.content.card.KestrosCardImpl}. A cell is either simple
- * text or a list of rendered content elements (e.g. a link or image).
+ * {@link io.kestros.cms.components.basic.core.content.card.KestrosCardImpl}. A cell is either
+ * simple text or a list of rendered content elements (e.g. a link or image).
  */
-public class KestrosTableCellImpl extends BaseContainerSyntheticResource implements KestrosTableCell {
+@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
+public class KestrosTableCellImpl extends BaseContainerSyntheticResource
+    implements KestrosTableCell {
 
   private final String text;
   private final List<KestrosBasicComponentElement> cellContentElements;

@@ -9,11 +9,25 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.sling.api.resource.Resource;
 
+/**
+ * Programmatic {@link KestrosHeading}, built in code by a datasource rather than adapted from an
+ * authored resource.
+ */
 @SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 public class KestrosHeadingImpl extends BaseSyntheticResource implements KestrosHeading {
   private String text;
   private String headingType;
 
+  /**
+   * Constructs a heading impl.
+   *
+   * @param text Text.
+   * @param headingType Heading type.
+   * @param dataSource Data source.
+   * @param resourcePrefix Resource prefix.
+   * @param forcedResourceName Forced resource name.
+   * @throws ComponentConfigurationException If the component configuration is not valid.
+   */
   public KestrosHeadingImpl(@Nonnull String text, @Nonnull String headingType,
       @Nonnull BaseSlingModelDataSource dataSource,
       String resourcePrefix, @Nullable String forcedResourceName)
@@ -24,6 +38,15 @@ public class KestrosHeadingImpl extends BaseSyntheticResource implements Kestros
     this.headingType = headingType;
   }
 
+  /**
+   * Constructs a heading impl.
+   *
+   * @param resource Resource.
+   * @param dataSource Data source.
+   * @param resourcePrefix Resource prefix.
+   * @param forcedResourceName Forced resource name.
+   * @throws ComponentConfigurationException If the component configuration is not valid.
+   */
   public KestrosHeadingImpl(@Nonnull Resource resource,
       @Nonnull BaseSlingModelDataSource dataSource,
       String resourcePrefix,

@@ -1,14 +1,18 @@
 package io.kestros.cms.components.basic.core.content.button;
 
-import javax.annotation.Nonnull;
 import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosButton;
 import io.kestros.cms.components.basic.core.BaseDataSourceComponent;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
+/**
+ * Renders a {@link KestrosButton} handed to it by an upstream datasource, delegating every value to
+ * that element rather than reading the resource itself.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class ButtonDataSourceComponent extends BaseDataSourceComponent<KestrosButton> implements
         KestrosButton {

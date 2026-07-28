@@ -5,9 +5,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import io.kestros.cms.components.basic.core.BaseDataSourceTest;
 import java.util.HashMap;
 import java.util.Map;
-import io.kestros.cms.components.basic.core.BaseDataSourceTest;
 import org.apache.sling.api.resource.Resource;
 import org.junit.Test;
 

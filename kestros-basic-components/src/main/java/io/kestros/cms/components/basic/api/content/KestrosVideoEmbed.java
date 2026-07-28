@@ -1,9 +1,12 @@
 package io.kestros.cms.components.basic.api.content;
 
-import javax.annotation.Nonnull;
 import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * API for the video embed component element.
+ */
 public interface KestrosVideoEmbed extends KestrosBasicComponentElement {
 
   String RESOURCE_TYPE = "/libs/kestros/commons/components/content/video-embed";
@@ -14,6 +17,11 @@ public interface KestrosVideoEmbed extends KestrosBasicComponentElement {
     return RESOURCE_TYPE;
   }
 
+  /**
+   * Video embed code.
+   *
+   * @return Video embed code.
+   */
   @Nullable
   String getVideoEmbedCode();
 }

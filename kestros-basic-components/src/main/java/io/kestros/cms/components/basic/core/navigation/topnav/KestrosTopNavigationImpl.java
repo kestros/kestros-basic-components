@@ -12,6 +12,11 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * Programmatic {@link KestrosTopNavigation}, built in code by a datasource rather than adapted from
+ * an
+ * authored resource.
+ */
 @SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 public class KestrosTopNavigationImpl extends BaseContainerSyntheticResource
         implements KestrosTopNavigation {
@@ -20,6 +25,17 @@ public class KestrosTopNavigationImpl extends BaseContainerSyntheticResource
   private KestrosImage logo;
   private String brandName;
 
+  /**
+   * Constructs a top navigation impl.
+   *
+   * @param brandName Brand name.
+   * @param logo Logo.
+   * @param navigationLinks Navigation links.
+   * @param dataSource Data source.
+   * @param resourcePrefix Resource prefix.
+   * @param forcedResourceName Forced resource name.
+   * @throws ComponentConfigurationException If the component configuration is not valid.
+   */
   public KestrosTopNavigationImpl(
           @Nullable String brandName,
           @Nullable KestrosImage logo,

@@ -9,6 +9,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.sling.api.resource.Resource;
 
+/**
+ * API for the top navigation component element.
+ */
 public interface KestrosTopNavigation extends KestrosContainerElement {
 
   String RESOURCE_TYPE = "/libs/kestros/commons/components/navigation/top-navigation";
@@ -19,6 +22,11 @@ public interface KestrosTopNavigation extends KestrosContainerElement {
     return RESOURCE_TYPE;
   }
 
+  /**
+   * Navigation links.
+   *
+   * @return Navigation links.
+   */
   @Nonnull
   default List<Resource> getNavigationLinks() {
     final List<KestrosTopNavigationItem> sourceResources = getNavigationLinkElements();
@@ -29,15 +37,35 @@ public interface KestrosTopNavigation extends KestrosContainerElement {
     return resources;
   }
 
+  /**
+   * Navigation link elements.
+   *
+   * @return Navigation link elements.
+   */
   @Nonnull
   List<KestrosTopNavigationItem> getNavigationLinkElements();
 
+  /**
+   * Brand name.
+   *
+   * @return Brand name.
+   */
   @Nullable
   String getBrandName();
 
+  /**
+   * Image element.
+   *
+   * @return Image element.
+   */
   @Nullable
   KestrosImage getImageElement();
 
+  /**
+   * Image.
+   *
+   * @return Image.
+   */
   @Nullable
   default Resource getImage() {
     if (getImageElement() != null) {

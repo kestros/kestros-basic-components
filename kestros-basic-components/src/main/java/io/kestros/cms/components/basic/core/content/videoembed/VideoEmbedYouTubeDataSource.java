@@ -1,21 +1,30 @@
 package io.kestros.cms.components.basic.core.content.videoembed;
 
-import javax.annotation.Nonnull;
 import io.kestros.cms.components.basic.api.content.KestrosVideoEmbed;
 import io.kestros.cms.components.basic.core.BaseSlingModelDataSource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
+/**
+ * Supplies {@link KestrosVideoEmbed} built from you tube.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class VideoEmbedYouTubeDataSource extends BaseSlingModelDataSource
         implements KestrosVideoEmbed {
+
+  private static final String EMBED_TEMPLATE =
+      "<iframe src=\"%s\" style=\"width:100%%;height:100%%;border:0;\" %s"
+      + " allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope;"
+      + " picture-in-picture; fullscreen\""
+      + " referrerpolicy=\"strict-origin-when-cross-origin\"></iframe>";
 
   private static final Pattern YOUTUBE_VIDEO_ID =
           Pattern.compile("^[a-zA-Z0-9_-]{11}$");
@@ -73,34 +82,18 @@ public class VideoEmbedYouTubeDataSource extends BaseSlingModelDataSource
       return null;
     }
 
-    return String.format(
-            "<iframe src=\"%s\" " +
-                    "        style=\"width:100%%;height:100%%;border:0;\" " +
-                    "        %s " +
-                    "        allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; "
-                    + "gyroscope; "
-                    + "picture-in-picture; fullscreen\" "
-                    +
-                    "        referrerpolicy=\"strict-origin-when-cross-origin\">" +
-                    "</iframe>",
-            src,
-            isAllowFullscreen() ? "allowfullscreen" : ""
-    );
+    return String.format(EMBED_TEMPLATE, src, isAllowFullscreen() ? "allowfullscreen" : "");
   }
 
   @Nonnull
   private String getYoutubeVideo() {
-    return getResource().getValueMap().get("youtubeVideo", String.class);
+    return getResource().getValueMap().get("youtubeVideo", StringUtils.EMPTY);
   }
 
   private boolean isMute() {
     return getResource().getValueMap().get("mute", Boolean.FALSE);
   }
 
-
-    /* ------------------
-       Helpers
-       ------------------ */
 
   private boolean isAllowFullscreen() {
     return getResource().getValueMap().get("allowFullScreen", Boolean.TRUE);

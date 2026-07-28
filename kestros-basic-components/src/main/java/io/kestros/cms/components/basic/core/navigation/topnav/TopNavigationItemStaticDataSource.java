@@ -12,6 +12,10 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 
+/**
+ * Supplies a {@link KestrosTopNavigationItem} from properties authored on the component's own
+ * resource.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class TopNavigationItemStaticDataSource extends BaseContainerSlingModelDataSource
     implements KestrosTopNavigationItem {

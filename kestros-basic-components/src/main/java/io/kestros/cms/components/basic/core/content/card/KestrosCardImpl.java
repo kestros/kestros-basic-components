@@ -16,13 +16,17 @@ import io.kestros.cms.components.basic.core.content.buttongroup.KestrosButtonGro
 import io.kestros.cms.components.basic.core.content.heading.KestrosHeadingImpl;
 import io.kestros.cms.components.basic.core.content.image.KestrosImageImpl;
 import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
-import java.util.Collections;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * Programmatic {@link KestrosCard}, built in code by a datasource rather than adapted from an
+ * authored resource.
+ */
 @SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 public class KestrosCardImpl extends BaseContainerSyntheticResource implements KestrosCard {
 
@@ -30,6 +34,17 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
   private String description;
   private KestrosImage image;
   private KestrosButtonGroup buttonGroup;
+
+  /**
+   * Constructs a card impl.
+   *
+   * @param page Page.
+   * @param buttonText Button text.
+   * @param dataSource Data source.
+   * @param resourcePrefix Resource prefix.
+   * @param forcedResourceName Forced resource name.
+   * @throws ComponentConfigurationException If the component configuration is not valid.
+   */
   public KestrosCardImpl(BaseContentPage page, @Nullable String buttonText,
           @Nonnull BaseSlingModelDataSource dataSource,
           @Nonnull String resourcePrefix,
@@ -75,6 +90,18 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
     }
   }
 
+  /**
+   * Constructs a card impl.
+   *
+   * @param description Description.
+   * @param title Title.
+   * @param image Image.
+   * @param buttonGroup Button group.
+   * @param dataSource Data source.
+   * @param resourcePrefix Resource prefix.
+   * @param forcedResourceName Forced resource name.
+   * @throws ComponentConfigurationException If the component configuration is not valid.
+   */
   public KestrosCardImpl(String description, KestrosHeading title, KestrosImage image,
           KestrosButtonGroup buttonGroup,
           @Nonnull BaseSlingModelDataSource dataSource, String resourcePrefix,

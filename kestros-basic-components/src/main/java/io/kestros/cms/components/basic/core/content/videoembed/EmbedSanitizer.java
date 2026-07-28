@@ -1,13 +1,13 @@
 package io.kestros.cms.components.basic.core.content.videoembed;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import java.util.Locale;
-import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**

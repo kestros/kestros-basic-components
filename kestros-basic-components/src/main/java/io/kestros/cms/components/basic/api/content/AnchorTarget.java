@@ -60,6 +60,12 @@ public enum AnchorTarget {
     return SAME_WINDOW;
   }
 
+  /**
+   * Lookup.
+   *
+   * @param resource Resource.
+   * @return Lookup.
+   */
   @Nonnull
   public static AnchorTarget lookup(@Nullable Resource resource) {
     AnchorTarget target = SAME_WINDOW;

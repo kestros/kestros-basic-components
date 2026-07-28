@@ -12,6 +12,9 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
+/**
+ * Supplies a {@link KestrosButtonGroup} from properties authored on the component's own resource.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class ButtonGroupStaticDataSource extends BaseContainerSlingModelDataSource
     implements KestrosButtonGroup {
@@ -30,6 +33,11 @@ public class ButtonGroupStaticDataSource extends BaseContainerSlingModelDataSour
   }
 
 
+  /**
+   * Button variations.
+   *
+   * @return Button variations.
+   */
   @Nonnull
   public List<ComponentVariation> getButtonVariations() {
     try {

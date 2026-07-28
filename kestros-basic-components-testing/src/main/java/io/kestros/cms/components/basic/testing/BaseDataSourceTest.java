@@ -18,11 +18,11 @@
 
 package io.kestros.cms.components.basic.testing;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.componenttypes.api.services.ComponentUiFrameworkViewRetrievalService;
 import io.kestros.cms.componenttypes.api.services.ComponentVariationRetrievalService;
 import io.kestros.cms.sitebuilding.api.services.ThemeProviderService;
