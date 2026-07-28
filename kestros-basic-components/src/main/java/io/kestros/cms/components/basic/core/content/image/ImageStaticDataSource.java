@@ -127,8 +127,9 @@ public class ImageStaticDataSource extends BaseSlingModelDataSource implements K
       return asset;
     }
     try {
-      if (getImagePath() != null) {
-        this.asset = assetRetrievalService.getAsset(getImagePath(), null,
+      final String path = getImagePath();
+      if (path != null) {
+        this.asset = assetRetrievalService.getAsset(path, null,
                 getResource().getResourceResolver());
         return asset;
       }
