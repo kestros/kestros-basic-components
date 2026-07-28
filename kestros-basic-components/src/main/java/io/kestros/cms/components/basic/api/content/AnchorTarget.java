@@ -30,6 +30,7 @@ public enum AnchorTarget {
    *
    * @return The corresponding AnchorTarget enum, or SAME_WINDOW if not found.
    */
+  @Nonnull
   public static AnchorTarget lookup(@Nullable String targetValue) {
     if (targetValue != null) {
       for (AnchorTarget anchorTarget : values()) {
@@ -49,6 +50,7 @@ public enum AnchorTarget {
    *
    * @return The corresponding AnchorTarget enum.
    */
+  @Nonnull
   public static AnchorTarget lookup(@Nullable Boolean openInNewWindow) {
     if (openInNewWindow != null && openInNewWindow) {
       return NEW_WINDOW;
@@ -56,6 +58,7 @@ public enum AnchorTarget {
     return SAME_WINDOW;
   }
 
+  @Nonnull
   public static AnchorTarget lookup(@Nullable Resource resource) {
     AnchorTarget target = SAME_WINDOW;
     if (resource != null) {

@@ -112,6 +112,7 @@ public interface KestrosBasicComponentElement {
 
   List<ComponentVariation> getVariations();
 
+  @Nonnull
   default String getInlineVariations() {
     StringJoiner joiner = new StringJoiner(" ");
     for (ComponentVariation variation : getVariations()) {
@@ -134,6 +135,7 @@ public interface KestrosBasicComponentElement {
     return getResource().getPath();
   }
 
+  @Nonnull
   default Boolean isSynthetic() {
     return true;
   }
@@ -144,6 +146,7 @@ public interface KestrosBasicComponentElement {
   }
 
   @JsonIgnore
+  @Nonnull
   default Map<String, String> getRequestAttributes() {
     Map<String, String> attributes = new HashMap<>();
     attributes.put("resourceType", getComponentResourceType());

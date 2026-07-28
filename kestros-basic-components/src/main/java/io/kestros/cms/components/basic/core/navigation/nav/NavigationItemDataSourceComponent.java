@@ -16,6 +16,7 @@ public class NavigationItemDataSourceComponent
         implements KestrosNavigationItem {
 
   @Override
+  @Nullable
   public Boolean isActive() {
     return null;
   }

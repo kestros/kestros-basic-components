@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core.lists.linklist;
 
+import javax.annotation.Nonnull;
 import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosLink;
 import io.kestros.cms.components.basic.api.lists.KestrosLinkList;
@@ -28,15 +29,18 @@ public class LinkListChildPageDataSource extends BaseContainerSlingModelDataSour
   @OSGiService
   private ComponentUiFrameworkViewRetrievalService componentUiFrameworkViewRetrievalService;
 
+  @Nonnull
   public String getRootPath() {
     return getResource().getValueMap().get("pagesPath", String.class);
   }
 
+  @Nonnull
   public AnchorTarget getTarget() {
     return AnchorTarget.lookup(getResource());
   }
 
   @Override
+  @Nonnull
   public List<KestrosLink> getLinkElements() {
     List<BaseContentPage> pages = new ArrayList<>();
     String rootPath = getRootPath();

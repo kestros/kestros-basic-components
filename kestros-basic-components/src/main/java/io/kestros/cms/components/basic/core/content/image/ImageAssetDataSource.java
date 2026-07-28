@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core.content.image;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.assets.api.exceptions.AssetRetrievalException;
 import io.kestros.cms.assets.api.models.Asset;
 import io.kestros.cms.assets.api.services.AssetRetrievalService;
@@ -17,6 +18,7 @@ import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 /**
  * Datasource that resolves image properties from a referenced asset path. The asset's title,
  * description, and path are used to populate the image component fields.
@@ -32,7 +34,7 @@ public class ImageAssetDataSource extends BaseSlingModelDataSource implements Ke
 
   private Asset asset;
 
-  @Nullable
+  @Nonnull
   @Override
   public String getImagePath() {
     return StringUtils.trimToNull(
@@ -40,6 +42,7 @@ public class ImageAssetDataSource extends BaseSlingModelDataSource implements Ke
   }
 
   @Override
+  @Nonnull
   public String getImageTitle() {
     if (getAsset() != null && StringUtils.isNotBlank(getAsset().getTitle())) {
       return getAsset().getTitle();

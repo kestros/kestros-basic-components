@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core.lists.cardlist;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.components.basic.api.content.KestrosButton;
 import io.kestros.cms.components.basic.api.content.KestrosButtonGroup;
 import io.kestros.cms.components.basic.api.content.KestrosCard;
@@ -21,11 +22,13 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
+@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSource implements
                                                                                     KestrosCardList {
   private BaseContentPage rootPage;
 
+  @Nullable
   BaseContentPage getRootPage() {
     if (rootPage == null) {
       String pagesPath = getResource().getValueMap().get("pagesPath", String.class);

@@ -1,9 +1,12 @@
 package io.kestros.cms.components.basic.core.lists.cardlist;
 
+import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.assets.api.exceptions.AssetCollectionRetrievalException;
 import io.kestros.cms.assets.api.models.Asset;
 import io.kestros.cms.assets.api.models.AssetCollection;
 import io.kestros.cms.assets.api.services.AssetRetrievalService;
+import io.kestros.cms.components.basic.api.exceptions.ComponentElementRenderingException;
 import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
 import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosCard;
@@ -22,22 +25,30 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.Nonnull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 
+@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class CardListAssetsDataSource extends BaseContainerSlingModelDataSource implements
                                                                                 KestrosCardList {
+  private static final Logger LOG =
+      LoggerFactory.getLogger(CardListAssetsDataSource.class);
+
   @OSGiService
   private AssetRetrievalService assetRetrievalService;
   private AssetCollection collection;
 
+  @Nonnull
   String getHeadingLevel() {
     return getResource().getValueMap().get("headingType", "h2");
   }
 
+  @Nullable
   AssetCollection getCollection() {
     if (collection == null) {
       String collectionPath = getResource().getValueMap().get("collectionPath", String.class);
@@ -102,41 +113,33 @@ public class CardListAssetsDataSource extends BaseContainerSlingModelDataSource 
       assets = assets.subList(0, limit);
     }
 
-    List<KestrosCard> cards = new ArrayList<>();
-    String parentPath = getPath();
+    final List<KestrosCard> cards = new ArrayList<>(assets.size());
 
-    for (Asset asset : assets) {
-      String imagePath = asset.getPath();
-      String altText = null;
-      String caption = null;
-      String imageTitle = null;
-      String href = null;
-      String ariaLabel = null;
-      String anchorTitle = null;
-      AnchorTarget target = null;
-
-      List<ComponentVariation> titleVariations = getElementVariations("titleVariations",
-          KestrosImage.RESOURCE_TYPE);
-      String titleLayout = getLayout("title");
+    for (final Asset asset : assets) {
       KestrosHeading titleElement = null;
       try {
         titleElement = new KestrosHeadingImpl(asset.getTitle(), "h2",
-            this,"title", "titleElement");
+            this, "title", "titleElement");
       } catch (ComponentConfigurationException e) {
-        // do nothing.
+        // A card without its heading still renders; leave it unset.
       }
 
-      List<ComponentVariation> imageVariations = getElementVariations("imageVariations",
-          KestrosImage.RESOURCE_TYPE);
-      String imageLayout = getLayout("image");
-      String imageId = null;
-      KestrosImage image = null;
+      final KestrosImage image;
       try {
-        image = new KestrosImageImpl(imagePath, altText, caption, imageTitle,
-            href, ariaLabel, anchorTitle, target,
-            this, "image", "imageElement",assetRetrievalService);
+        // Arguments after the path are altText, caption, imageTitle, href, ariaLabel, anchorTitle
+        // and target. They were locals initialised to null and passed straight through; the
+        // variations, layout and id locals alongside them were computed and never used.
+        image = new KestrosImageImpl(asset.getPath(), null, null, null,
+            null, null, null, null,
+            this, "image", "imageElement", assetRetrievalService);
       } catch (ComponentConfigurationException e) {
-        return null;
+        // Was `return null` from a @Nonnull getter, so one unbuildable image discarded the whole
+        // list and handed HTL a null. Skip the card instead, which is what the sibling card lists
+        // already do.
+        LOG.warn("Skipping card for asset {}: its image could not be built. {}",
+            String.valueOf(asset.getPath()).replaceAll("[\r\n]", ""),
+            String.valueOf(e.getMessage()).replaceAll("[\r\n]", ""));
+        continue;
       }
       try {
         cards.add(
@@ -144,8 +147,9 @@ public class CardListAssetsDataSource extends BaseContainerSlingModelDataSource 
                 null,
                 this,
                 "card", null));
-      } catch (Exception e) {
-        throw new RuntimeException(e);
+      } catch (ComponentConfigurationException e) {
+        throw new ComponentElementRenderingException(
+            "Unable to build a card for asset " + asset.getPath() + ".", e);
       }
     }
     return new ArrayList<>(cards);

@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core.content.image;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.assets.api.exceptions.AssetRetrievalException;
 import io.kestros.cms.assets.api.models.Asset;
 import io.kestros.cms.assets.api.services.AssetRetrievalService;
@@ -20,6 +21,7 @@ import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class ImageStaticDataSource extends BaseSlingModelDataSource implements KestrosImage {
 
@@ -38,6 +40,7 @@ public class ImageStaticDataSource extends BaseSlingModelDataSource implements K
   private Asset asset;
 
   @Override
+  @Nonnull
   public String getImageTitle() {
     String assetTitle = "";
     if (getAsset() != null) {
@@ -46,7 +49,7 @@ public class ImageStaticDataSource extends BaseSlingModelDataSource implements K
     return getResource().getValueMap().get("imageTitle", assetTitle);
   }
 
-  @Nullable
+  @Nonnull
   @Override
   public String getImagePath() {
     return StringUtils.trimToNull(
@@ -95,7 +98,7 @@ public class ImageStaticDataSource extends BaseSlingModelDataSource implements K
     return AnchorTarget.lookup(getResource());
   }
 
-  @Nullable
+  @Nonnull
   @Override
   public String getAltText() {
     String alt = getResource().getValueMap().get("altText", String.class);

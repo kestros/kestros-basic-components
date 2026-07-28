@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core.content.table;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.components.basic.api.table.KestrosTableCell;
 import io.kestros.cms.components.basic.api.table.KestrosTableRow;
@@ -10,6 +11,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 /**
  * Programmatic (synthetic) {@link KestrosTableRow}, letting a datasource build table rows in code
  * rather than from authored child resources. Mirrors

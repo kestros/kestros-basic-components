@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core.content.buttongroup;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.components.basic.api.content.KestrosButton;
 import io.kestros.cms.components.basic.api.content.KestrosButtonGroup;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
@@ -12,6 +13,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import org.apache.sling.api.resource.Resource;
 
+@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 public class KestrosButtonGroupImpl extends BaseContainerSyntheticResource implements
                                                                            KestrosButtonGroup {
 

@@ -13,6 +13,7 @@ public interface KestrosCardList extends KestrosContainerElement {
   String RESOURCE_TYPE = "/libs/kestros/commons/components/lists/card-list";
 
   @Override
+  @Nonnull
   default String getComponentResourceType() {
     return RESOURCE_TYPE;
   }
@@ -29,6 +30,7 @@ public interface KestrosCardList extends KestrosContainerElement {
   @Nonnull
   List<KestrosCard> getCardElements();
 
+  @Nonnull
   default List<KestrosBasicComponentElement> getChildElements() {
     return new ArrayList<>(getCardElements());
   }

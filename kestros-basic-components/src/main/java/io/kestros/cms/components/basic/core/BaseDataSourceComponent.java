@@ -72,6 +72,7 @@ public abstract class BaseDataSourceComponent<T extends KestrosBasicComponentEle
   }
 
   @Override
+  @Nonnull
   public Resource toSyntheticResource(@Nonnull ResourceResolver resourceResolver,
       @Nonnull String parentPath) {
     // TODO remove duplicate
@@ -98,6 +99,7 @@ public abstract class BaseDataSourceComponent<T extends KestrosBasicComponentEle
         private final ValueMap valueMap = new ValueMapDecorator(props);
 
         @Override
+        @Nonnull
         public ValueMap getValueMap() {
           return valueMap;
         }

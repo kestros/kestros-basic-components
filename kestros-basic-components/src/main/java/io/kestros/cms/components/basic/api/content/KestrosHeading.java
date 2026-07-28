@@ -9,6 +9,7 @@ public interface KestrosHeading extends KestrosBasicComponentElement {
   String RESOURCE_TYPE = "/libs/kestros/commons/components/content/heading";
 
   @Override
+  @Nonnull
   default String getComponentResourceType() {
     return RESOURCE_TYPE;
   }

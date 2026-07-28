@@ -29,12 +29,14 @@ public class TableCellStaticDataSource extends BaseContainerSlingModelDataSource
   @Nonnull
   @Override
   public List<KestrosBasicComponentElement> getCellContentElements() {
-    List<KestrosBasicComponentElement> cellContentElements = new ArrayList<>();
-    // This should never get hit, since we can just look to child resources instead of synthesizing them, but we need to return something here to satisfy the interface contract.
+    // Nothing to synthesize: a static cell's content is its child resources, which getCellContent
+    // returns directly. The empty list satisfies the interface contract. The local that used to be
+    // built here was never returned.
     return new ArrayList<>();
   }
 
   @Override
+  @Nonnull
   public String getText() {
     return getResource().getValueMap().get("text", String.class);
   }

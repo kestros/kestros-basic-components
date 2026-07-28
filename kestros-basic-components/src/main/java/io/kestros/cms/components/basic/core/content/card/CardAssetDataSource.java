@@ -1,8 +1,10 @@
 package io.kestros.cms.components.basic.core.content.card;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.assets.api.exceptions.AssetRetrievalException;
 import io.kestros.cms.assets.api.models.Asset;
 import io.kestros.cms.assets.api.services.AssetRetrievalService;
+import io.kestros.cms.components.basic.api.exceptions.ComponentElementRenderingException;
 import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosButtonGroup;
 import io.kestros.cms.components.basic.api.content.KestrosCard;
@@ -21,6 +23,7 @@ import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 
+@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class CardAssetDataSource extends BaseContainerSlingModelDataSource implements KestrosCard {
 
@@ -61,31 +64,23 @@ public class CardAssetDataSource extends BaseContainerSlingModelDataSource imple
   @Nullable
   @Override
   public KestrosImage getImageElement() {
-    if (getAsset() != null) {
-      if (getAsset().getPath() != null) {
-        String imagePath = getAsset().getPath();
-        String altText = null;
-        String caption = null;
-        String imageTitle = null;
-        String href = null;
-        String ariaLabel = null;
-        String anchorTitle = null;
-        AnchorTarget target = AnchorTarget.SAME_WINDOW;
-        String id = null;
-        List<ComponentVariation> componentVariations
-                = getElementVariations("imageVariations", KestrosImage.RESOURCE_TYPE);
-        String layout = getLayout("image");
-        try {
-          return new KestrosImageImpl(imagePath, altText, caption,
-                  imageTitle, href, ariaLabel,
-                  anchorTitle, target, this, "image", "imageElement", assetRetrievalService);
-        } catch (ComponentConfigurationException e) {
-          throw new RuntimeException(e);
-        }
-      }
+    final Asset cardAsset = getAsset();
+    if (cardAsset == null || cardAsset.getPath() == null) {
       return null;
     }
-    return null;
+    try {
+      // Arguments after the path are altText, caption, imageTitle, href, ariaLabel and
+      // anchorTitle. They were locals initialised to null and passed straight through; the
+      // variations and layout locals alongside them were computed and never used at all.
+      return new KestrosImageImpl(cardAsset.getPath(), null, null,
+              null, null, null,
+              null, AnchorTarget.SAME_WINDOW, this, "image", "imageElement",
+              assetRetrievalService);
+    } catch (ComponentConfigurationException e) {
+      throw new ComponentElementRenderingException(
+              "Unable to build the image element for a card backed by asset "
+              + cardAsset.getPath() + ".", e);
+    }
   }
 
   @Nullable

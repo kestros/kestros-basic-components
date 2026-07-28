@@ -1,5 +1,7 @@
 package io.kestros.cms.components.basic.core.lists.linklist;
 
+import javax.annotation.Nullable;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosLink;
 import io.kestros.cms.components.basic.api.lists.KestrosLinkList;
@@ -24,6 +26,7 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 
+@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 /**
  * Tag search datasource for the link list component. Finds pages matching configured
  * tags and renders them as link elements.
@@ -38,6 +41,7 @@ public class LinkListTagSearchDataSource extends BaseContainerSlingModelDataSour
 
   private BaseContentPage containingPage;
 
+  @Nullable
   BaseContentPage getContainingPage() {
     if (containingPage == null) {
       try {
@@ -61,6 +65,7 @@ public class LinkListTagSearchDataSource extends BaseContainerSlingModelDataSour
     return tags;
   }
 
+  @Nullable
   String getRootPath() {
     String pagesPath = getResource().getValueMap().get("pagesPath", String.class);
     if (pagesPath != null) {
@@ -77,6 +82,7 @@ public class LinkListTagSearchDataSource extends BaseContainerSlingModelDataSour
     return null;
   }
 
+  @Nullable
   BaseContentPage getRootPage() {
     String rootPath = getRootPath();
     if (rootPath == null) {
@@ -89,10 +95,12 @@ public class LinkListTagSearchDataSource extends BaseContainerSlingModelDataSour
     return null;
   }
 
+  @Nonnull
   public AnchorTarget getTarget() {
     return AnchorTarget.lookup(getResource());
   }
 
+  @Nonnull
   List<BaseContentPage> getTaggedPages() {
     List<BaseContentPage> taggedPages = new ArrayList<>();
     if (tagRetrievalService == null) {

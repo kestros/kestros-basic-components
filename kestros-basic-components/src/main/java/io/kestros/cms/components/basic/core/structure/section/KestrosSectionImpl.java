@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core.structure.section;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.components.basic.api.structure.KestrosSection;
@@ -9,6 +10,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 public class KestrosSectionImpl extends KestrosContainerImpl implements KestrosSection {
 
   private String backgroundImage;

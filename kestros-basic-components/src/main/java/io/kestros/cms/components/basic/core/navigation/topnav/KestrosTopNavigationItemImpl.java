@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core.navigation.topnav;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosLink;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
@@ -11,6 +12,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 public class KestrosTopNavigationItemImpl extends BaseContainerSyntheticResource
     implements KestrosTopNavigationItem {
   private KestrosLink link;

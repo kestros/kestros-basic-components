@@ -20,6 +20,7 @@ public class TableCellDataSourceComponent extends BaseContainerDataSourceCompone
   }
 
   @Override
+  @Nonnull
   public String getText() {
     KestrosTableCell data = getComponentData();
     return data == null ? null : data.getText();

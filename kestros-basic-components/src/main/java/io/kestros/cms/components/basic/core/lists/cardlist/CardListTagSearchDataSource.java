@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core.lists.cardlist;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.components.basic.api.content.KestrosCard;
 import io.kestros.cms.components.basic.api.lists.KestrosCardList;
 import io.kestros.cms.components.basic.core.BaseContainerSlingModelDataSource;
@@ -23,6 +24,7 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 
+@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSource implements
                                                                                    KestrosCardList {
@@ -38,6 +40,7 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
     return getResource().getValueMap().get("readMoreText", String.class);
   }
 
+  @Nullable
   BaseContentPage getContainingPage() {
     if (containingPage == null) {
       try {
@@ -61,6 +64,7 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
     return tags;
   }
 
+  @Nullable
   String getRootPath() {
     String pagesPath = getResource().getValueMap().get("pagesPath", String.class);
     if (pagesPath != null) {
@@ -77,6 +81,7 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
     return null;
   }
 
+  @Nullable
   BaseContentPage getRootPage() {
     String rootPath = getRootPath();
     if (rootPath == null) {
@@ -89,6 +94,7 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
     return null;
   }
 
+  @Nonnull
   List<BaseContentPage> getTaggedPages() {
     List<BaseContentPage> taggedPages = new ArrayList<>();
     if (tagRetrievalService == null) {

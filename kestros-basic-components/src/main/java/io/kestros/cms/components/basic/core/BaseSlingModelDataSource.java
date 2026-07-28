@@ -49,10 +49,12 @@ public abstract class BaseSlingModelDataSource
     return getResource().getValueMap().get("id", String.class);
   }
 
+  @Nonnull
   public Boolean isSynthetic() {
     return false;
   }
 
+  @Nonnull
   public Resource getResource() {
     if (resource == null && slingHttpServletRequest != null) {
       return slingHttpServletRequest.getResource();
@@ -66,6 +68,7 @@ public abstract class BaseSlingModelDataSource
   }
 
   @JsonIgnore
+  @Nonnull
   public BaseContentPage getCurrentOrContainingPage() {
     BaseContentPage currentPage = null;
     if (slingHttpServletRequest != null) {
@@ -93,10 +96,12 @@ public abstract class BaseSlingModelDataSource
     return getResource().getResourceResolver();
   }
 
+  @Nonnull
   public String getParentPath() {
     return getResource().getParent().getPath();
   }
 
+  @Nonnull
   public List<ComponentVariation> getVariations() {
     // TODO verify this.
     List<Map<String, Object>> variationsMapList = getResource().getValueMap()
@@ -124,6 +129,7 @@ public abstract class BaseSlingModelDataSource
     return getResource().adaptTo(BaseComponent.class).getAppliedVariations();
   }
 
+  @Nonnull
   public String getLayout() {
     return getResource().getValueMap().get("layout", "default");
   }
@@ -135,6 +141,7 @@ public abstract class BaseSlingModelDataSource
     return getResource().getName();
   }
 
+  @Nonnull
   public UiFramework getUiFramework() {
     try {
       if (slingHttpServletRequest != null) {

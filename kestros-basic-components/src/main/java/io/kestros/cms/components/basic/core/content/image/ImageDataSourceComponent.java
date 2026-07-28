@@ -18,7 +18,7 @@ public class ImageDataSourceComponent extends BaseDataSourceComponent<KestrosIma
     return getComponentData().getImageTitle();
   }
 
-  @Nullable
+  @Nonnull
   @Override
   public String getImagePath() {
     return getComponentData().getImagePath();

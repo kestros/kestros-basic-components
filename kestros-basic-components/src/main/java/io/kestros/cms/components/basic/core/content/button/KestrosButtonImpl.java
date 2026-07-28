@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core.content.button;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosButton;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
@@ -12,6 +13,7 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 
+@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 public class KestrosButtonImpl extends BaseSyntheticResource implements KestrosButton {
 
   private String text;
@@ -86,7 +88,7 @@ public class KestrosButtonImpl extends BaseSyntheticResource implements KestrosB
     return title;
   }
 
-  @Nullable
+  @Nonnull
   @Override
   public AnchorTarget getTarget() {
     return target;

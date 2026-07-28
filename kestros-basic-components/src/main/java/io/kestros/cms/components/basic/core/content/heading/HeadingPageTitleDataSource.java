@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core.content.heading;
 
+import javax.annotation.Nonnull;
 import io.kestros.cms.components.basic.api.content.KestrosHeading;
 import io.kestros.cms.sitebuilding.api.models.BaseComponent;
 import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
@@ -22,6 +23,7 @@ public class HeadingPageTitleDataSource extends HeadingStaticDataSource implemen
   @Optional
   private SlingHttpServletRequest request;
 
+  @Nullable
   BaseContentPage getPage() {
     try {
       if (isOverrideInheritedTitle()) {
@@ -47,6 +49,7 @@ public class HeadingPageTitleDataSource extends HeadingStaticDataSource implemen
     return getPage().getDisplayTitle();
   }
 
+  @Nonnull
   public Boolean isOverrideInheritedTitle() {
     return getResource().getValueMap().get("overrideInheritedTitle", Boolean.FALSE);
   }

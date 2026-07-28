@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core.content.table;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.components.basic.api.table.KestrosTableHeader;
 import io.kestros.cms.components.basic.core.BaseSlingModelDataSource;
@@ -7,6 +8,7 @@ import io.kestros.cms.components.basic.core.BaseSyntheticResource;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 /**
  * Programmatic (synthetic) {@link KestrosTableHeader}, letting a datasource build table headers in
  * code rather than from authored resources. Mirrors
@@ -33,6 +35,7 @@ public class KestrosTableHeaderImpl extends BaseSyntheticResource implements Kes
   }
 
   @Override
+  @Nonnull
   public String getText() {
     return text;
   }

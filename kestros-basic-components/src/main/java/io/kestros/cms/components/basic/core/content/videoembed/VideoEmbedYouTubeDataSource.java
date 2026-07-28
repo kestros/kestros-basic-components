@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core.content.videoembed;
 
+import javax.annotation.Nonnull;
 import io.kestros.cms.components.basic.api.content.KestrosVideoEmbed;
 import io.kestros.cms.components.basic.core.BaseSlingModelDataSource;
 import java.util.ArrayList;
@@ -87,6 +88,7 @@ public class VideoEmbedYouTubeDataSource extends BaseSlingModelDataSource
     );
   }
 
+  @Nonnull
   private String getYoutubeVideo() {
     return getResource().getValueMap().get("youtubeVideo", String.class);
   }
@@ -104,6 +106,7 @@ public class VideoEmbedYouTubeDataSource extends BaseSlingModelDataSource
     return getResource().getValueMap().get("allowFullScreen", true);
   }
 
+  @Nonnull
   private String buildEmbedUrl(String videoId) {
 
 
@@ -118,6 +121,7 @@ public class VideoEmbedYouTubeDataSource extends BaseSlingModelDataSource
   }
 
 
+  @Nullable
   private String extractVideoId(String value) {
     if (StringUtils.isBlank(value)) {
       return null;

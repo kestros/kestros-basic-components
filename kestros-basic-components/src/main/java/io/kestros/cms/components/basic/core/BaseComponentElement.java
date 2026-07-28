@@ -31,6 +31,7 @@ public abstract class BaseComponentElement implements KestrosBasicComponentEleme
   }
 
   @Override
+  @Nonnull
   public List<ComponentVariation> getElementVariations(String propertyName,
       String componentType) {
 
@@ -88,6 +89,7 @@ public abstract class BaseComponentElement implements KestrosBasicComponentEleme
   }
 
   @Override
+  @Nonnull
   public Resource toSyntheticResource(@Nonnull ResourceResolver resourceResolver,
       @Nonnull String parentPath) {
     if (syntheticResource == null) {
@@ -113,6 +115,7 @@ public abstract class BaseComponentElement implements KestrosBasicComponentEleme
         private final ValueMap valueMap = new ValueMapDecorator(props);
 
         @Override
+        @Nonnull
         public ValueMap getValueMap() {
           return valueMap;
         }

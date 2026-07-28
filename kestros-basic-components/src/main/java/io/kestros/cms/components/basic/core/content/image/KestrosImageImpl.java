@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core.content.image;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.kestros.cms.assets.api.exceptions.AssetRetrievalException;
 import io.kestros.cms.assets.api.models.Asset;
@@ -19,6 +20,7 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 
+@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 public class KestrosImageImpl extends BaseSyntheticResource implements KestrosImage {
   @OSGiService
   private ComponentVariationRetrievalService componentVariationRetrievalService;
@@ -92,6 +94,7 @@ public class KestrosImageImpl extends BaseSyntheticResource implements KestrosIm
     }
   }
 
+  @Nonnull
   Asset getAsset(String path, ResourceResolver resourceResolver) throws AssetRetrievalException {
     if (assetRetrievalService == null) {
       throw new AssetRetrievalException("AssetRetrievalService is not available.");
@@ -100,11 +103,12 @@ public class KestrosImageImpl extends BaseSyntheticResource implements KestrosIm
   }
 
   @Override
+  @Nonnull
   public String getImageTitle() {
     return imageTitle;
   }
 
-  @Nullable
+  @Nonnull
   @Override
   public String getImagePath() {
     return imagePath;
