@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core.content.videoembed;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -152,7 +153,7 @@ public final class EmbedSanitizer {
     return "<iframe " + sanitizedAttrs.toString() + "></iframe>";
   }
 
-  private static boolean isDomainAllowed(String url) {
+  private static boolean isDomainAllowed(@Nonnull String url) {
     // Extract domain from URL: https://domain/path
     String withoutScheme = url.substring("https://".length());
     int slashIndex = withoutScheme.indexOf('/');

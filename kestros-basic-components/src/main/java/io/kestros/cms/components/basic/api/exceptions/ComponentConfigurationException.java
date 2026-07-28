@@ -3,7 +3,7 @@ package io.kestros.cms.components.basic.api.exceptions;
 import javax.annotation.Nonnull;
 public class ComponentConfigurationException extends Exception {
 
-  public ComponentConfigurationException(String message) {
+  public ComponentConfigurationException(@Nonnull String message) {
     super(message);
   }
 

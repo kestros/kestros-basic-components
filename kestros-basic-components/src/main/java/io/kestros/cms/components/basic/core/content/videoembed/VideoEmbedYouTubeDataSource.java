@@ -107,7 +107,7 @@ public class VideoEmbedYouTubeDataSource extends BaseSlingModelDataSource
   }
 
   @Nonnull
-  private String buildEmbedUrl(String videoId) {
+  private String buildEmbedUrl(@Nonnull String videoId) {
 
 
     String base = "https://www.youtube.com/embed/";
@@ -122,7 +122,7 @@ public class VideoEmbedYouTubeDataSource extends BaseSlingModelDataSource
 
 
   @Nullable
-  private String extractVideoId(String value) {
+  private String extractVideoId(@Nonnull String value) {
     if (StringUtils.isBlank(value)) {
       return null;
     }

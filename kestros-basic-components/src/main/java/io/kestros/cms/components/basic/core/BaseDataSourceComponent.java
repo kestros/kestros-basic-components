@@ -41,13 +41,13 @@ public abstract class BaseDataSourceComponent<T extends KestrosBasicComponentEle
 
   @Override
   @Nonnull
-  public String getLayout(String propertyName) {
+  public String getLayout(@Nonnull String propertyName) {
     return getComponentData().getLayout(propertyName);
   }
 
   @Override
   @Nonnull
-  public List<ComponentVariation> getElementVariations(String propertyName, String componentType) {
+  public List<ComponentVariation> getElementVariations(@Nonnull String propertyName, String componentType) {
     return getComponentData().getElementVariations(propertyName, componentType);
   }
 

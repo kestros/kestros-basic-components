@@ -43,7 +43,7 @@ public abstract class BaseContainerSlingModelDataSource extends BaseSlingModelDa
   }
 
   @Nonnull
-  public <T extends KestrosBasicComponentElement> List<T> getChildrenOfType(Class<T> clazz) {
+  public <T extends KestrosBasicComponentElement> List<T> getChildrenOfType(@Nonnull Class<T> clazz) {
     List<T> children = new java.util.ArrayList<>();
     for (KestrosBasicComponentElement element : getChildElements()) {
       if (clazz.isInstance(element)) {
