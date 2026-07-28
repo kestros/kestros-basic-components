@@ -63,7 +63,8 @@ public class VideoAssetDataSource extends BaseSlingModelDataSource implements Ke
         asset = assetRetrievalService.getAsset(videoPath, null, getResourceResolver());
         return asset;
       } catch (AssetRetrievalException e) {
-        LOG.warn("Failed to retrieve asset for video: {}", videoPath);
+        LOG.warn("Failed to retrieve asset for video: {}",
+            videoPath.replaceAll("[\r\n]", ""));
       }
     }
     return null;

@@ -21,7 +21,7 @@ import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
+@SuppressFBWarnings({"IMC_IMMATURE_CLASS_NO_TOSTRING", "FCBL_FIELD_COULD_BE_LOCAL"})
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class ImageStaticDataSource extends BaseSlingModelDataSource implements KestrosImage {
 
@@ -132,7 +132,8 @@ public class ImageStaticDataSource extends BaseSlingModelDataSource implements K
         return asset;
       }
     } catch (AssetRetrievalException e) {
-      LOG.warn("Failed to retrieve asset for image: {}", getImagePath());
+      LOG.warn("Failed to retrieve asset for image: {}",
+          String.valueOf(getImagePath()).replaceAll("[\r\n]", ""));
     }
     return null;
   }

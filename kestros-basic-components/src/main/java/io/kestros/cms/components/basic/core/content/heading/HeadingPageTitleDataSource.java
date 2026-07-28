@@ -37,7 +37,8 @@ public class HeadingPageTitleDataSource extends HeadingStaticDataSource implemen
         return request.getResource().adaptTo(BaseComponent.class).getContainingPage();
       }
     } catch (ModelAdaptionException e) {
-      LOG.warn("Unable to find text for page title component {}. {}.", getResource().getPath(),
+      LOG.warn("Unable to find text for page title component {}. {}.",
+          String.valueOf(getResource().getPath()).replaceAll("[\r\n]", ""),
               e.getMessage());
       return null;
     }

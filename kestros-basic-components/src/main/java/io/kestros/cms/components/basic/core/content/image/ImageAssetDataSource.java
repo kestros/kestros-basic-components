@@ -126,7 +126,8 @@ public class ImageAssetDataSource extends BaseSlingModelDataSource implements Ke
         return asset;
       }
     } catch (AssetRetrievalException e) {
-      LOG.warn("Failed to retrieve asset for image: {}", getImagePath());
+      LOG.warn("Failed to retrieve asset for image: {}",
+          String.valueOf(getImagePath()).replaceAll("[\r\n]", ""));
     }
     return null;
   }

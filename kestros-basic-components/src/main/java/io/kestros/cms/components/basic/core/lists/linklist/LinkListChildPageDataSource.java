@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core.lists.linklist;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javax.annotation.Nonnull;
 import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosLink;
@@ -20,6 +21,7 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 
+@SuppressFBWarnings("FCBL_FIELD_COULD_BE_LOCAL")
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class LinkListChildPageDataSource extends BaseContainerSlingModelDataSource
     implements KestrosLinkList {

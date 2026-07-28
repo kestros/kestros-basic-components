@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core.navigation.breadcrumbs;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.components.basic.api.content.KestrosLink;
 import io.kestros.cms.components.basic.api.navigation.KestrosBreadCrumb;
 import io.kestros.cms.components.basic.api.navigation.KestrosBreadCrumbs;
@@ -15,6 +16,7 @@ import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 
+@SuppressFBWarnings("FCBL_FIELD_COULD_BE_LOCAL")
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class BreadCrumbsPagePathDataSource extends BaseSlingModelDataSource
     implements KestrosBreadCrumbs {
