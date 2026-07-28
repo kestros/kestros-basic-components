@@ -82,9 +82,10 @@ public abstract class BaseDataSourceComponent<T extends KestrosBasicComponentEle
     // TODO remove duplicate
     if (syntheticResource == null) {
       ResourceMetadata resourceMetadata = new ResourceMetadata();
+      final String forcedName = getForcedResourceName();
       String name = "child-" + java.util.UUID.randomUUID();
-      if (getForcedResourceName() != null && !getForcedResourceName().isEmpty()) {
-        name = getForcedResourceName();
+      if (forcedName != null && !forcedName.isEmpty()) {
+        name = forcedName;
       }
       String path = parentPath + "/" + name;
       if (!path.startsWith("/synthetics")) {
@@ -92,7 +93,7 @@ public abstract class BaseDataSourceComponent<T extends KestrosBasicComponentEle
       }
       resourceMetadata.setResolutionPath(path);
       resourceMetadata.setModificationTime(System.currentTimeMillis());
-      Map<String, String> parameters = new HashMap<>();
+      final Map<String, String> parameters = new HashMap<>(0);
       resourceMetadata.setParameterMap(parameters);
       ObjectMapper objectMapper = new ObjectMapper();
       Map<String, Object> props = objectMapper.convertValue(this, Map.class);

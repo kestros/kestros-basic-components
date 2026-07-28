@@ -104,7 +104,7 @@ public abstract class BaseComponentElement implements KestrosBasicComponentEleme
       }
       resourceMetadata.setResolutionPath(path);
       resourceMetadata.setModificationTime(System.currentTimeMillis());
-      Map<String, String> parameters = new HashMap<>();
+      final Map<String, String> parameters = new HashMap<>(0);
       resourceMetadata.setParameterMap(parameters);
       ObjectMapper objectMapper = new ObjectMapper();
       Map<String, Object> props = objectMapper.convertValue(this, Map.class);

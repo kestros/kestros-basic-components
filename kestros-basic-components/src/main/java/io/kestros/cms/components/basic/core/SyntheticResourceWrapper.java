@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -11,6 +12,7 @@ import org.apache.sling.api.resource.ResourceWrapper;
 /**
  * ResourceWrapper that allows for synthetic children to be added to the wrapped Resource.
  */
+@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_EQUALS")
 public class SyntheticResourceWrapper extends ResourceWrapper {
 
   private final Map<String, Resource> children;
