@@ -13,6 +13,7 @@ import io.kestros.cms.sitebuilding.api.models.BaseComponent;
 import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
 import io.kestros.cms.tagging.api.models.KestrosTag;
 import io.kestros.cms.tagging.api.services.TagRetrievalService;
+import io.kestros.commons.structuredslingmodels.exceptions.NoParentResourceException;
 import io.kestros.commons.structuredslingmodels.exceptions.NoValidAncestorException;
 import java.util.Arrays;
 import java.util.ArrayList;
@@ -80,7 +81,8 @@ public class LinkListTagSearchDataSource extends BaseContainerSlingModelDataSour
     if (page != null) {
       try {
         return page.getParent().getPath();
-      } catch (Exception e) {
+      } catch (NoParentResourceException e) {
+        // A page with no parent searches from itself.
         return page.getPath();
       }
     }
