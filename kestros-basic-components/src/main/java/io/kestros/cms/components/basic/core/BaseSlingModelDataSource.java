@@ -148,6 +148,10 @@ public abstract class BaseSlingModelDataSource extends BaseComponentElement {
     return getResource().getName();
   }
 
+  @SuppressFBWarnings(value = "EXS_EXCEPTION_SOFTENING_HAS_CHECKED",
+      justification = "Called from HTL, which cannot handle a checked exception. The"
+          + " checked cause is wrapped in a typed exception, per the ruling on"
+          + " DataSourceComponent.")
   @Nonnull
   public UiFramework getUiFramework() {
     try {
