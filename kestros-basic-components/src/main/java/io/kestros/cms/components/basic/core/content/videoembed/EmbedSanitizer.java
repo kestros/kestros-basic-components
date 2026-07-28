@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core.content.videoembed;
 
+import java.util.Locale;
 import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -109,7 +110,7 @@ public final class EmbedSanitizer {
 
     Matcher attrMatcher = ATTR_PATTERN.matcher(attributesStr);
     while (attrMatcher.find()) {
-      String attrName = attrMatcher.group(1).toLowerCase();
+      String attrName = attrMatcher.group(1).toLowerCase(Locale.ROOT);
       String attrValue = attrMatcher.group(2);
 
       if (!ALLOWED_ATTRIBUTES.contains(attrName)) {
@@ -168,6 +169,6 @@ public final class EmbedSanitizer {
     if (portIndex > 0) {
       domain = domain.substring(0, portIndex);
     }
-    return ALLOWED_DOMAINS.contains(domain.toLowerCase());
+    return ALLOWED_DOMAINS.contains(domain.toLowerCase(Locale.ROOT));
   }
 }
