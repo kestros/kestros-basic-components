@@ -14,6 +14,7 @@ import io.kestros.cms.components.basic.api.content.KestrosHeading;
 import io.kestros.cms.components.basic.api.content.KestrosImage;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.components.basic.api.lists.KestrosCardList;
+import io.kestros.cms.components.basic.core.AssetSorter;
 import io.kestros.cms.components.basic.core.BaseContainerSlingModelDataSource;
 import io.kestros.cms.components.basic.core.content.card.KestrosCardImpl;
 import io.kestros.cms.components.basic.core.content.heading.KestrosHeadingImpl;
@@ -21,8 +22,6 @@ import io.kestros.cms.components.basic.core.content.image.KestrosImageImpl;
 import io.kestros.cms.componenttypes.api.models.ComponentVariation;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import javax.annotation.Nonnull;
 import org.slf4j.Logger;
@@ -83,32 +82,7 @@ public class CardListAssetsDataSource extends BaseContainerSlingModelDataSource 
       limit = 0;
     }
 
-    if (!sortBy.isEmpty()) {
-      switch (sortBy) {
-        case "createdDate":
-          assets.sort(Comparator.comparing(a -> {
-            Date date = a.getCreatedDate();
-            return date != null ? date.getTime() : 0L;
-          }));
-          break;
-        case "lastModified":
-          assets.sort(Comparator.comparing(a -> {
-            Date date = a.getModifiedDate();
-            return date != null ? date.getTime() : 0L;
-          }));
-          break;
-        default:
-          assets.sort(Comparator.comparing(a -> {
-            switch (sortBy) {
-              case "name":
-                return a.getName() != null ? a.getName() : "";
-              default:
-                return a.getTitle() != null ? a.getTitle() : a.getName();
-            }
-          }));
-          break;
-      }
-    }
+    AssetSorter.sort(assets, sortBy);
 
     if (reverse) {
       Collections.reverse(assets);
