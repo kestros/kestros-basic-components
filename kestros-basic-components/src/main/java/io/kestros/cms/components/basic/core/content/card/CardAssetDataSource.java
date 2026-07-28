@@ -17,6 +17,8 @@ import io.kestros.cms.components.basic.core.content.image.KestrosImageImpl;
 import io.kestros.cms.componenttypes.api.models.ComponentVariation;
 import java.util.List;
 import javax.annotation.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
@@ -26,6 +28,9 @@ import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 @SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class CardAssetDataSource extends BaseContainerSlingModelDataSource implements KestrosCard {
+
+  private static final Logger LOG =
+      LoggerFactory.getLogger(CardAssetDataSource.class);
 
   private Asset asset;
 
@@ -45,20 +50,22 @@ public class CardAssetDataSource extends BaseContainerSlingModelDataSource imple
   @Nullable
   @Override
   public KestrosHeading getTitleElement() {
-    if (getAsset() != null) {
-      String title = getAsset().getTitle();
-      String headingLevel = getResource().getValueMap().get("headingType", "h1");
-      try {
-        return new KestrosHeadingImpl(title, headingLevel,
-                this,
-                "title",
-                "titleElement");
-      } catch (ComponentConfigurationException e) {
-        // do nothing.
-      }
+    final Asset cardAsset = getAsset();
+    if (cardAsset == null) {
       return null;
     }
-    return null;
+    try {
+      return new KestrosHeadingImpl(cardAsset.getTitle(),
+              getResource().getValueMap().get("headingType", "h1"),
+              this,
+              "title",
+              "titleElement");
+    } catch (ComponentConfigurationException e) {
+      LOG.debug("No title element for the card backed by {}: the heading could not be built. {}",
+          String.valueOf(cardAsset.getPath()).replaceAll("[\r\n]", ""),
+          String.valueOf(e.getMessage()).replaceAll("[\r\n]", ""));
+      return null;
+    }
   }
 
   @SuppressFBWarnings(value = "EXS_EXCEPTION_SOFTENING_NO_CHECKED",

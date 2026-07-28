@@ -58,7 +58,9 @@ public class KestrosImageImpl extends BaseSyntheticResource implements KestrosIm
     this.anchorTitle = anchorTitle;
     this.target = target;
     if (StringUtils.isEmpty(this.imagePath)) {
-      throw new ComponentConfigurationException("Missing required property");
+      throw new ComponentConfigurationException(String.format(
+          "Unable to build the image element %s: imagePath is required and was empty.",
+          String.valueOf(resourcePrefix)));
     }
   }
 
@@ -90,12 +92,15 @@ public class KestrosImageImpl extends BaseSyntheticResource implements KestrosIm
     this.anchorTitle = resource.getValueMap().get("anchorTitle", String.class);
     this.target = AnchorTarget.lookup(resource);
     if (StringUtils.isEmpty(this.imagePath)) {
-      throw new ComponentConfigurationException("Missing required property");
+      throw new ComponentConfigurationException(String.format(
+          "Unable to build an image at %s: imagePath is required and resolved to empty.",
+          resource.getPath()));
     }
   }
 
   @Nonnull
-  Asset getAsset(String path, @Nonnull ResourceResolver resourceResolver) throws AssetRetrievalException {
+  Asset getAsset(@Nonnull final String path, @Nonnull final ResourceResolver resourceResolver)
+      throws AssetRetrievalException {
     if (assetRetrievalService == null) {
       throw new AssetRetrievalException("AssetRetrievalService is not available.");
     }

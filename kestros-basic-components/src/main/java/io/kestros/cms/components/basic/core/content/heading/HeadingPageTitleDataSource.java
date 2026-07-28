@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core.content.heading;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javax.annotation.Nonnull;
 import io.kestros.cms.components.basic.api.exceptions.ComponentElementRenderingException;
 import io.kestros.cms.components.basic.api.content.KestrosHeading;
@@ -24,6 +25,10 @@ public class HeadingPageTitleDataSource extends HeadingStaticDataSource {
   @Optional
   private SlingHttpServletRequest request;
 
+  @SuppressFBWarnings(value = "EXS_EXCEPTION_SOFTENING_NO_CONSTRAINTS",
+      justification = "Called from HTL, which cannot handle a checked exception. The checked"
+          + " cause is wrapped in a typed exception so the failure stays identifiable, per"
+          + " the ruling on DataSourceComponent.")
   @Nullable
   BaseContentPage getPage() {
     try {

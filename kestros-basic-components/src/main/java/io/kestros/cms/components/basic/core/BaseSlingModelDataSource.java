@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.kestros.cms.components.basic.api.exceptions.ComponentElementRenderingException;
 import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
@@ -67,6 +68,10 @@ public abstract class BaseSlingModelDataSource extends BaseComponentElement {
     return slingHttpServletRequest;
   }
 
+  @SuppressFBWarnings(value = "EXS_EXCEPTION_SOFTENING_NO_CONSTRAINTS",
+      justification = "Called from HTL, which cannot handle a checked exception. The checked"
+          + " cause is wrapped in a typed exception so the failure stays identifiable, per"
+          + " the ruling on DataSourceComponent.")
   @JsonIgnore
   @Nonnull
   public BaseContentPage getCurrentOrContainingPage() {
