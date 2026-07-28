@@ -2,6 +2,7 @@ package io.kestros.cms.components.basic.core.lists.linklist;
 
 import javax.annotation.Nullable;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosLink;
 import io.kestros.cms.components.basic.api.lists.KestrosLinkList;
@@ -180,8 +181,10 @@ public class LinkListTagSearchDataSource extends BaseContainerSlingModelDataSour
             this,
             "link",
             page.getName()));
-      } catch (Exception e) {
-        // Skip links that fail to construct
+      } catch (ComponentConfigurationException e) {
+        LOG.debug("Skipping the link for {}: it could not be built. {}",
+            String.valueOf(page.getPath()).replaceAll("[\r\n]", ""),
+            String.valueOf(e.getMessage()).replaceAll("[\r\n]", ""));
       }
     }
     return links;

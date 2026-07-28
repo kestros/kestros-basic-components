@@ -17,6 +17,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 
@@ -84,12 +85,13 @@ public class KestrosImageImpl extends BaseSyntheticResource implements KestrosIm
       this.imagePath = assetPath;
     }
 
-    this.altText = resource.getValueMap().get("altText", String.class);
-    this.caption = resource.getValueMap().get("caption", String.class);
-    this.imageTitle = resource.getValueMap().get("imageTitle", String.class);
-    this.href = resource.getValueMap().get("href", String.class);
-    this.ariaLabel = resource.getValueMap().get("ariaLabel", String.class);
-    this.anchorTitle = resource.getValueMap().get("anchorTitle", String.class);
+    final ValueMap properties = resource.getValueMap();
+    this.altText = properties.get("altText", String.class);
+    this.caption = properties.get("caption", String.class);
+    this.imageTitle = properties.get("imageTitle", String.class);
+    this.href = properties.get("href", String.class);
+    this.ariaLabel = properties.get("ariaLabel", String.class);
+    this.anchorTitle = properties.get("anchorTitle", String.class);
     this.target = AnchorTarget.lookup(resource);
     if (StringUtils.isEmpty(this.imagePath)) {
       throw new ComponentConfigurationException(String.format(
@@ -99,7 +101,8 @@ public class KestrosImageImpl extends BaseSyntheticResource implements KestrosIm
   }
 
   @Nonnull
-  Asset getAsset(@Nonnull final String path, @Nonnull final ResourceResolver resourceResolver)
+  final Asset getAsset(@Nonnull final String path,
+      @Nonnull final ResourceResolver resourceResolver)
       throws AssetRetrievalException {
     if (assetRetrievalService == null) {
       throw new AssetRetrievalException(String.format(
