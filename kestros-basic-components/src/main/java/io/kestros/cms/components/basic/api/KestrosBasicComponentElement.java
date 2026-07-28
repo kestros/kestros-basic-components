@@ -137,7 +137,7 @@ public interface KestrosBasicComponentElement {
 
   @Nonnull
   default Boolean isSynthetic() {
-    return true;
+    return Boolean.TRUE;
   }
 
   default boolean isDataSourceComponent() {

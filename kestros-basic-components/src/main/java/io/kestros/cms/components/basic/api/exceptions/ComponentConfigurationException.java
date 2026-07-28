@@ -1,12 +1,13 @@
 package io.kestros.cms.components.basic.api.exceptions;
 
+import javax.annotation.Nonnull;
 public class ComponentConfigurationException extends Exception {
 
   public ComponentConfigurationException(String message) {
     super(message);
   }
 
-  public ComponentConfigurationException(String message, Throwable cause) {
+  public ComponentConfigurationException(String message, @Nonnull Throwable cause) {
     super(message, cause);
   }
 

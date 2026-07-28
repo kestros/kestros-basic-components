@@ -63,6 +63,6 @@ public class ButtonStaticDataSource extends BaseSlingModelDataSource implements 
 
   @Override
   public boolean isDisabled() {
-    return getResource().getValueMap().get("disabled", false);
+    return getResource().getValueMap().get("disabled", Boolean.FALSE);
   }
 }

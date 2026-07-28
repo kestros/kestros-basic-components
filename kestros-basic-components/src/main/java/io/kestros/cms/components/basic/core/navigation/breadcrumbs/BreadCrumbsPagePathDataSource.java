@@ -31,8 +31,8 @@ public class BreadCrumbsPagePathDataSource extends BaseSlingModelDataSource
   @Override
   public List<KestrosBreadCrumb> getLinkElements() {
     List<KestrosBreadCrumb> crumbs = new ArrayList<>();
-    Boolean first = true;
-    Boolean last = false;
+    boolean first = true;
+    boolean last = false;
     int index = 0;
     List<BaseContentPage> ancestorPages = getAncestorPages();
     for (BaseContentPage page : ancestorPages) {

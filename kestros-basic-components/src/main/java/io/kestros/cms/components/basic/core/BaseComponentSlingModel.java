@@ -9,6 +9,6 @@ public abstract class BaseComponentSlingModel extends BaseComponent implements
   @Override
   @Nonnull
   public Boolean isSynthetic() {
-    return false;
+    return Boolean.FALSE;
   }
 }

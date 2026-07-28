@@ -71,7 +71,7 @@ public class CardListAssetsDataSource extends BaseContainerSlingModelDataSource 
     List<Asset> assets = new ArrayList<>(col.getChildAssets());
 
     String sortBy = getResource().getValueMap().get("sortBy", "");
-    boolean reverse = getResource().getValueMap().get("reverse", false);
+    boolean reverse = getResource().getValueMap().get("reverse", Boolean.FALSE);
     int limit = 0;
     try {
       limit = Integer.parseInt(getResource().getValueMap().get("limit", "0"));

@@ -51,7 +51,7 @@ public abstract class BaseSlingModelDataSource
 
   @Nonnull
   public Boolean isSynthetic() {
-    return false;
+    return Boolean.FALSE;
   }
 
   @Nonnull

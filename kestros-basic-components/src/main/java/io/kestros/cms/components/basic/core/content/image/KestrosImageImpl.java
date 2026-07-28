@@ -95,7 +95,7 @@ public class KestrosImageImpl extends BaseSyntheticResource implements KestrosIm
   }
 
   @Nonnull
-  Asset getAsset(String path, ResourceResolver resourceResolver) throws AssetRetrievalException {
+  Asset getAsset(String path, @Nonnull ResourceResolver resourceResolver) throws AssetRetrievalException {
     if (assetRetrievalService == null) {
       throw new AssetRetrievalException("AssetRetrievalService is not available.");
     }

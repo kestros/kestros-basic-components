@@ -31,28 +31,28 @@ public class VideoEmbedYouTubeDataSource extends BaseSlingModelDataSource
 
   boolean isValidVideoInput(String input) {
     if (input == null) {
-      return false;
+      return Boolean.FALSE;
     }
 
     String value = input.trim();
 
     // 🚫 reject anything that looks like HTML
     if (HTML_PATTERN.matcher(value).find()) {
-      return false;
+      return Boolean.FALSE;
     }
 
     // ✅ raw video ID
     if (YOUTUBE_VIDEO_ID.matcher(value).matches()) {
-      return true;
+      return Boolean.TRUE;
     }
 
     // ✅ known YouTube URL formats
     Matcher matcher = YOUTUBE_URL_ID.matcher(value);
     if (matcher.find()) {
-      return true;
+      return Boolean.TRUE;
     }
 
-    return false;
+    return Boolean.FALSE;
   }
 
 
@@ -94,7 +94,7 @@ public class VideoEmbedYouTubeDataSource extends BaseSlingModelDataSource
   }
 
   private boolean isMute() {
-    return getResource().getValueMap().get("mute", false);
+    return getResource().getValueMap().get("mute", Boolean.FALSE);
   }
 
 
@@ -103,7 +103,7 @@ public class VideoEmbedYouTubeDataSource extends BaseSlingModelDataSource
        ------------------ */
 
   private boolean isAllowFullscreen() {
-    return getResource().getValueMap().get("allowFullScreen", true);
+    return getResource().getValueMap().get("allowFullScreen", Boolean.TRUE);
   }
 
   @Nonnull

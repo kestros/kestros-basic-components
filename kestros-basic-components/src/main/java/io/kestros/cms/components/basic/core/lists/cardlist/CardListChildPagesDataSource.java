@@ -67,7 +67,7 @@ public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSou
     List<BaseContentPage> pages = new ArrayList<>(root.getChildPages());
 
     String sortBy = getResource().getValueMap().get("sortBy", "");
-    boolean reverse = getResource().getValueMap().get("reverse", false);
+    boolean reverse = getResource().getValueMap().get("reverse", Boolean.FALSE);
     int limit = 0;
     try {
       limit = Integer.parseInt(getResource().getValueMap().get("limit", "0"));

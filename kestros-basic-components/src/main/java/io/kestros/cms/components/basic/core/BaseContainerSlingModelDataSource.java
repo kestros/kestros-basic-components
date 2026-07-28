@@ -28,7 +28,7 @@ public abstract class BaseContainerSlingModelDataSource extends BaseSlingModelDa
   }
 
   @Nonnull
-  public <T extends KestrosBasicComponentElement> List<T> getChildrenAsType(String resourceType, Class<T> clazz) {
+  public <T extends KestrosBasicComponentElement> List<T> getChildrenAsType(String resourceType, @Nonnull Class<T> clazz) {
     List<T> items = new ArrayList<>();
     for (Resource childResource : getResource().getChildren()) {
       if(childResource.isResourceType(resourceType) == false) {
