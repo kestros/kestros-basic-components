@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import javax.annotation.Nonnull;
@@ -22,7 +23,7 @@ public class SyntheticResourceWrapper extends ResourceWrapper {
    */
   public SyntheticResourceWrapper(Resource wrapped, @Nonnull Map<String, Resource> children) {
     super(wrapped);
-    this.children = children;
+    this.children = new HashMap<>(children);
   }
 
   @Nullable

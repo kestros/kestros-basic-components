@@ -21,7 +21,7 @@ public class KestrosCardListImpl extends BaseContainerSyntheticResource implemen
       @Nonnull String resourcePrefix, String forcedResourceName)
       throws ComponentConfigurationException {
     super(dataSource, resourcePrefix, forcedResourceName);
-    this.cards = cards;
+    this.cards = new ArrayList<>(cards);
   }
 
 

@@ -42,7 +42,6 @@ public abstract class BaseSlingModelDataSource
   @OSGiService
   private ComponentUiFrameworkViewRetrievalService componentUiFrameworkViewRetrievalService;
 
-  private Resource syntheticResource;
 
   @Nullable
   public String getId() {

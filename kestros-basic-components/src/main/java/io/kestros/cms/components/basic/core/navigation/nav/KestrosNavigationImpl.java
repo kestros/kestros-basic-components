@@ -24,7 +24,7 @@ public class KestrosNavigationImpl extends BaseContainerSyntheticResource
       @Nonnull String resourcePrefix, String forcedResourceName)
       throws ComponentConfigurationException {
     super(dataSource, resourcePrefix, forcedResourceName);
-    this.navigationLinks = navigationLinks;
+    this.navigationLinks = new ArrayList<>(navigationLinks);
   }
 
   @Nonnull

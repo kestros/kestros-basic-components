@@ -30,7 +30,7 @@ public class KestrosTopNavigationImpl extends BaseContainerSyntheticResource
     super(dataSource, resourcePrefix, forcedResourceName);
     this.logo = logo;
     this.brandName = brandName;
-    this.navigationLinks = navigationLinks;
+    this.navigationLinks = new ArrayList<>(navigationLinks);
   }
 
   @Nonnull

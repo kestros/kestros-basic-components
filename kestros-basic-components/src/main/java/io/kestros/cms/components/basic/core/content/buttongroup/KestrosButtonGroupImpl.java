@@ -19,7 +19,6 @@ public class KestrosButtonGroupImpl extends BaseContainerSyntheticResource imple
 
   private List<KestrosButton> buttons;
   private List<ComponentVariation> buttonVariations;
-  private String buttonLayout;
 
   public KestrosButtonGroupImpl(@Nonnull final List<KestrosButton> buttons,
       @Nonnull BaseSlingModelDataSource dataSource,
@@ -28,7 +27,7 @@ public class KestrosButtonGroupImpl extends BaseContainerSyntheticResource imple
       ComponentConfigurationException {
     super(dataSource, resourcePrefix,
         forcedResourceName);
-    this.buttons = buttons;
+    this.buttons = new ArrayList<>(buttons);
     this.buttonVariations = dataSource.getElementVariations("button", KestrosButton.RESOURCE_TYPE);
   }
 
@@ -53,7 +52,7 @@ public class KestrosButtonGroupImpl extends BaseContainerSyntheticResource imple
           "button",
           "buttonElement"));
     }
-    this.buttons = buttons;
+    this.buttons = new ArrayList<>(buttons);
     if (this.buttons.isEmpty()) {
       throw new ComponentConfigurationException("Button Group must have at least one button.");
     }

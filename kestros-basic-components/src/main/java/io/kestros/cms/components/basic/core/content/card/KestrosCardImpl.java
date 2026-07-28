@@ -27,8 +27,6 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
 
   private KestrosHeading title;
   private String description;
-  private String imagePath;
-  private String layout;
   private KestrosImage image;
   private KestrosButtonGroup buttonGroup;
   public KestrosCardImpl(BaseContentPage page, @Nullable String buttonText,

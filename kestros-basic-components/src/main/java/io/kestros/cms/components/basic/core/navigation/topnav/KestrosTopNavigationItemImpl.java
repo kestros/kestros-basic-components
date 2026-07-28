@@ -26,7 +26,7 @@ public class KestrosTopNavigationItemImpl extends BaseContainerSyntheticResource
       throws ComponentConfigurationException {
     super(dataSource, resourcePrefix, forcedResourceName);
     this.link = link;
-    this.childItems = childItems;
+    this.childItems = new ArrayList<>(childItems);
   }
 
   @Nonnull

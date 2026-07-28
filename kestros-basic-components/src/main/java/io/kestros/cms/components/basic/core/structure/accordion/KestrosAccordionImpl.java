@@ -22,7 +22,7 @@ public class KestrosAccordionImpl extends BaseContainerSyntheticResource
       @Nonnull String resourcePrefix, String forcedResourceName)
       throws ComponentConfigurationException {
     super(dataSource, resourcePrefix, forcedResourceName);
-    this.panels = panels;
+    this.panels = new ArrayList<>(panels);
   }
 
 

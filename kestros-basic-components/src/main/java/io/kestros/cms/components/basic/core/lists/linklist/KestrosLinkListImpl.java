@@ -21,7 +21,7 @@ public class KestrosLinkListImpl extends BaseContainerSyntheticResource implemen
       @Nonnull String resourcePrefix, String forcedResourceName)
       throws ComponentConfigurationException {
     super(dataSource, resourcePrefix, forcedResourceName);
-    this.links = links;
+    this.links = new ArrayList<>(links);
   }
 
 

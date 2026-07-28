@@ -24,7 +24,7 @@ public class KestrosBreadCrumbsImpl extends BaseContainerSyntheticResource
       @Nonnull String resourcePrefix, String forcedResourceName)
       throws ComponentConfigurationException {
     super(dataSource, resourcePrefix, forcedResourceName);
-    this.breadCrumbs = breadCrumbs;
+    this.breadCrumbs = new ArrayList<>(breadCrumbs);
   }
 
   @Nonnull
