@@ -1,6 +1,7 @@
 package io.kestros.cms.components.basic.core.content.heading;
 
 import javax.annotation.Nonnull;
+import io.kestros.cms.components.basic.api.exceptions.ComponentElementRenderingException;
 import io.kestros.cms.components.basic.api.content.KestrosHeading;
 import io.kestros.cms.sitebuilding.api.models.BaseComponent;
 import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
@@ -30,8 +31,10 @@ public class HeadingPageTitleDataSource extends HeadingStaticDataSource {
         if (request != null) {
           return request.adaptTo(ComponentRequestContext.class).getCurrentPage();
         } else {
-          throw new RuntimeException(
-                  "SlingHttpServletRequest is required to override inherited title.");
+          throw new ComponentElementRenderingException(String.format(
+                  "Unable to resolve the page title for %s: overrideInheritedTitle needs a"
+                  + " request, and this model was adapted from a resource.",
+                  getResource().getPath()));
         }
       } else {
         return request.getResource().adaptTo(BaseComponent.class).getContainingPage();
@@ -39,7 +42,7 @@ public class HeadingPageTitleDataSource extends HeadingStaticDataSource {
     } catch (ModelAdaptionException e) {
       LOG.warn("Unable to find text for page title component {}. {}.",
           String.valueOf(getResource().getPath()).replaceAll("[\r\n]", ""),
-              e.getMessage());
+          String.valueOf(e.getMessage()).replaceAll("[\r\n]", ""));
       return null;
     }
   }

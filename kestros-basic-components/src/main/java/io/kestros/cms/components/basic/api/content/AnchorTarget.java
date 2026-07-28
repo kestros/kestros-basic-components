@@ -34,7 +34,9 @@ public enum AnchorTarget {
   public static AnchorTarget lookup(@Nullable String targetValue) {
     if (targetValue != null) {
       for (AnchorTarget anchorTarget : values()) {
-        if (anchorTarget.getTargetValue().equalsIgnoreCase(targetValue)) {
+        if (anchorTarget.getTargetValue().regionMatches(true, 0, targetValue, 0,
+            anchorTarget.getTargetValue().length())
+            && anchorTarget.getTargetValue().length() == targetValue.length()) {
           return anchorTarget;
         }
       }

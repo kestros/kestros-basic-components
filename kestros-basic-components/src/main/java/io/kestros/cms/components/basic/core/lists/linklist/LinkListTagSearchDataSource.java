@@ -14,12 +14,15 @@ import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
 import io.kestros.cms.tagging.api.models.KestrosTag;
 import io.kestros.cms.tagging.api.services.TagRetrievalService;
 import io.kestros.commons.structuredslingmodels.exceptions.NoValidAncestorException;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.annotation.Nonnull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
@@ -33,6 +36,9 @@ import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class LinkListTagSearchDataSource extends BaseContainerSlingModelDataSource
     implements KestrosLinkList {
+
+  private static final Logger LOG =
+      LoggerFactory.getLogger(LinkListTagSearchDataSource.class);
 
   @OSGiService
   @org.apache.sling.models.annotations.Optional
@@ -101,7 +107,7 @@ public class LinkListTagSearchDataSource extends BaseContainerSlingModelDataSour
 
   @Nonnull
   List<BaseContentPage> getTaggedPages() {
-    List<BaseContentPage> taggedPages = new ArrayList<>();
+    final List<BaseContentPage> taggedPages = new ArrayList<>();
     if (tagRetrievalService == null) {
       return taggedPages;
     }
@@ -111,10 +117,8 @@ public class LinkListTagSearchDataSource extends BaseContainerSlingModelDataSour
       return taggedPages;
     }
 
-    Set<String> filterTagPaths = new HashSet<>();
-    for (String tagPath : configuredTags) {
-      filterTagPaths.add(tagPath);
-    }
+    final Set<String> filterTagPaths =
+        new HashSet<>(Arrays.asList(configuredTags));
 
     BaseContentPage currentPage = getContainingPage();
     BaseContentPage rootPage = getRootPage();

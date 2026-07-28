@@ -27,4 +27,13 @@ public class ComponentElementRenderingException extends RuntimeException {
       @Nonnull final Throwable cause) {
     super(message, cause);
   }
+
+  /**
+   * Thrown when a basic component cannot build one of its child elements for rendering.
+   *
+   * @param message Which element could not be built, and for which component.
+   */
+  public ComponentElementRenderingException(@Nonnull final String message) {
+    super(message);
+  }
 }

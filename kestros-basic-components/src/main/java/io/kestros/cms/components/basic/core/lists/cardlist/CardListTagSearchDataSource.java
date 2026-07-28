@@ -1,6 +1,7 @@
 package io.kestros.cms.components.basic.core.lists.cardlist;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.components.basic.api.content.KestrosCard;
 import io.kestros.cms.components.basic.api.lists.KestrosCardList;
 import io.kestros.cms.components.basic.core.ContentPageSorter;
@@ -11,6 +12,7 @@ import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
 import io.kestros.cms.tagging.api.models.KestrosTag;
 import io.kestros.cms.tagging.api.services.TagRetrievalService;
 import io.kestros.commons.structuredslingmodels.exceptions.NoValidAncestorException;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -18,6 +20,8 @@ import java.util.List;
 import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
@@ -27,6 +31,9 @@ import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSource implements
                                                                                    KestrosCardList {
+
+  private static final Logger LOG =
+      LoggerFactory.getLogger(CardListTagSearchDataSource.class);
 
   @OSGiService
   @org.apache.sling.models.annotations.Optional
@@ -95,7 +102,7 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
 
   @Nonnull
   List<BaseContentPage> getTaggedPages() {
-    List<BaseContentPage> taggedPages = new ArrayList<>();
+    final List<BaseContentPage> taggedPages = new ArrayList<>();
     if (tagRetrievalService == null) {
       return taggedPages;
     }
@@ -105,10 +112,8 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
       return taggedPages;
     }
 
-    Set<String> filterTagPaths = new HashSet<>();
-    for (String tagPath : configuredTags) {
-      filterTagPaths.add(tagPath);
-    }
+    final Set<String> filterTagPaths =
+        new HashSet<>(Arrays.asList(configuredTags));
 
     BaseContentPage currentPage = getContainingPage();
     BaseContentPage rootPage = getRootPage();
@@ -166,8 +171,10 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
                 this,
                 "card",
                 page.getName()));
-      } catch (Exception e) {
-        // Skip cards that fail to construct — null-safe
+      } catch (ComponentConfigurationException e) {
+        LOG.debug("Skipping the {} for {}: it could not be built. {}", "card",
+            String.valueOf(page.getPath()).replaceAll("[\r\n]", ""),
+            String.valueOf(e.getMessage()).replaceAll("[\r\n]", ""));
       }
     }
     return new ArrayList<>(cards);
