@@ -43,8 +43,8 @@ public abstract class BaseComponentElement implements KestrosBasicComponentEleme
     if (propertyValue instanceof List && !((List<?>) propertyValue).isEmpty()
         && ((List<?>) propertyValue).get(0) instanceof Map) {
       // TODO checking the map here is a bit hacky, but not sure of a better way.
-      List<Map<String, Object>> variationMaps = (List<Map<String, Object>>) propertyValue;
-      appliedVariationNames = new ArrayList<>();
+      final List<Map<String, Object>> variationMaps = (List<Map<String, Object>>) propertyValue;
+      appliedVariationNames = new ArrayList<>(variationMaps.size());
       for (Map<String, Object> variationMap : variationMaps) {
         appliedVariationNames.add((String) variationMap.get("path"));
       }
@@ -122,9 +122,11 @@ public abstract class BaseComponentElement implements KestrosBasicComponentEleme
         }
       };
       if (this instanceof KestrosContainerElement) {
-        KestrosContainerElement container = (KestrosContainerElement) this;
-        Map<String, Resource> childResources = new java.util.LinkedHashMap<>();
-        for (KestrosBasicComponentElement child : container.getChildElements()) {
+        final KestrosContainerElement container = (KestrosContainerElement) this;
+        final List<KestrosBasicComponentElement> children = container.getChildElements();
+        final Map<String, Resource> childResources =
+            new java.util.LinkedHashMap<>((int) (children.size() / 0.75f) + 1);
+        for (final KestrosBasicComponentElement child : children) {
           Resource childSyntheticResource = child.toSyntheticResource(resourceResolver,
               syntheticResource.getPath());
           childResources.put(childSyntheticResource.getName(), childSyntheticResource);

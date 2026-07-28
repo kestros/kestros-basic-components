@@ -110,9 +110,11 @@ public abstract class BaseDataSourceComponent<T extends KestrosBasicComponentEle
         }
       };
       if (this instanceof KestrosContainerElement) {
-        KestrosContainerElement container = (KestrosContainerElement) this;
-        Map<String, Resource> childResources = new HashMap<>();
-        for (KestrosBasicComponentElement child : container.getChildElements()) {
+        final KestrosContainerElement container = (KestrosContainerElement) this;
+        final List<KestrosBasicComponentElement> children = container.getChildElements();
+        final Map<String, Resource> childResources =
+            new HashMap<>((int) (children.size() / 0.75f) + 1);
+        for (final KestrosBasicComponentElement child : children) {
           Resource childSyntheticResource = child.toSyntheticResource(resourceResolver,
               syntheticResource.getPath());
           childResources.put(childSyntheticResource.getName(), childSyntheticResource);
