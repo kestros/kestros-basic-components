@@ -28,8 +28,9 @@ import javax.annotation.Nullable;
 import org.apache.sling.api.resource.Resource;
 
 /**
- * Programmatic {@link KestrosHeading}, built in code by a datasource rather than adapted from an
- * authored resource.
+ * {@link KestrosHeading} built by a datasource. Values are either passed in directly or read from
+ * an
+ * authored resource, depending on which constructor is used.
  */
 @SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 public class KestrosHeadingImpl extends BaseSyntheticResource implements KestrosHeading {

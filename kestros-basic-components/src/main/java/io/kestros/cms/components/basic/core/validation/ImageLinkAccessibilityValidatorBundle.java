@@ -19,7 +19,9 @@
 package io.kestros.cms.components.basic.core.validation;
 
 /**
- * Validators applied to the image link accessibility component.
+ * Placeholder for the image link accessibility validation. The implementation is commented out and
+ * nothing
+ * is registered, so no validation runs for it today.
  */
 public class ImageLinkAccessibilityValidatorBundle {
 //        extends ModelValidatorBundle<ImageComponent> {

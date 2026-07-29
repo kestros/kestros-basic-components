@@ -120,9 +120,12 @@ public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSou
     for (BaseContentPage page : pages) {
       try {
         cards.add(new KestrosCardImpl(page, getReadMoreText(), this, "card", page.getName()));
-      } catch (final ComponentConfigurationException | RuntimeException exception) {
+      } catch (final ComponentConfigurationException exception) {
         // One page that cannot be turned into a card should not empty the whole list. This used
-        // to rethrow, so a single bad page took the component down with it.
+        // to rethrow, so a single bad page took the component down with it. Deliberately narrow:
+        // ComponentElementRenderingException is unchecked and means the component as a whole
+        // cannot render (no resolvable theme or UI framework), which must still reach HTL rather
+        // than be logged once per page.
         LOG.warn("Unable to build a card for {} in the list at {}: {}",
             String.valueOf(page.getPath()).replaceAll("[\r\n]", ""),
             String.valueOf(getResource().getPath()).replaceAll("[\r\n]", ""),

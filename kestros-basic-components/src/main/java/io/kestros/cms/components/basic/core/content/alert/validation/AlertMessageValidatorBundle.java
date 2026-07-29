@@ -19,7 +19,8 @@
 package io.kestros.cms.components.basic.core.content.alert.validation;
 
 /**
- * Validators applied to the alert message component.
+ * Placeholder for the alert message validation. The implementation is commented out and nothing
+ * is registered, so no validation runs for it today.
  */
 @Deprecated
 public class AlertMessageValidatorBundle {

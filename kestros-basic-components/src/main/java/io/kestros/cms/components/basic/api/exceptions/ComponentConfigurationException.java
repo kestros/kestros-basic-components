@@ -21,7 +21,8 @@ package io.kestros.cms.components.basic.api.exceptions;
 import javax.annotation.Nonnull;
 
 /**
- * Thrown when component configuration.
+ * Thrown when a component element cannot be built because its configuration is incomplete or
+ * invalid.
  */
 public class ComponentConfigurationException extends Exception {
 

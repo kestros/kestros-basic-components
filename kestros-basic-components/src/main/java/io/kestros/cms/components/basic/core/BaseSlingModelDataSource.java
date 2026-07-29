@@ -46,7 +46,8 @@ import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 
 /**
- * Supplies element built from base sling model.
+ * Base for component elements adapted from an authored resource or its request. Resolves the
+ * containing page, the UI framework in force and the variations applied to the element.
  */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public abstract class BaseSlingModelDataSource extends BaseComponentElement {

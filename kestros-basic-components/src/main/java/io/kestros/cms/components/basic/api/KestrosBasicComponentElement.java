@@ -40,7 +40,8 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 
 /**
- * API for the basic component element component element.
+ * Common API for every basic component element: its layout, the variations applied to it, and
+ * how it turns itself into a synthetic resource for rendering.
  */
 public interface KestrosBasicComponentElement {
 
