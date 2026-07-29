@@ -1,7 +1,8 @@
 package io.kestros.cms.components.basic.core.validation;
 
 /**
- * Validators applied to the image link path component.
+ * Placeholder for the image link path validation. The implementation is commented out and nothing
+ * is registered, so no validation runs for it today.
  */
 public class ImageLinkPathValidatorBundle {
 //        extends ModelValidatorBundle<ImageComponent> {

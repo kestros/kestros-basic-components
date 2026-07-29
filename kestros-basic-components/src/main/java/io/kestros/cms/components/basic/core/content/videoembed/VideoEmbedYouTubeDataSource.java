@@ -14,7 +14,8 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
 /**
- * Supplies {@link KestrosVideoEmbed} built from you tube.
+ * Supplies a {@link KestrosVideoEmbed} for a YouTube video, from either a raw video id or a
+ * YouTube URL authored on the component.
  */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class VideoEmbedYouTubeDataSource extends BaseSlingModelDataSource

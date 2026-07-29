@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * The link utils component element.
+ * Static helpers for working with link hrefs.
  */
 public class LinkUtils {
   /**

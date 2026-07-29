@@ -14,8 +14,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 
 /**
- * Programmatic {@link KestrosButton}, built in code by a datasource rather than adapted from an
- * authored resource.
+ * {@link KestrosButton} built by a datasource. Values are either passed in directly or read from an
+ * authored resource, depending on which constructor is used.
  */
 @SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 public class KestrosButtonImpl extends BaseSyntheticResource implements KestrosButton {

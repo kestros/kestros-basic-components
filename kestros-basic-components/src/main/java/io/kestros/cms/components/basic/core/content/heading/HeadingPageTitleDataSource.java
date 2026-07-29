@@ -18,7 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Supplies element built from heading page title.
+ * Supplies a heading whose text is the containing page's title, so a page can carry its own
+ * title as a heading without it being authored twice.
  */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class HeadingPageTitleDataSource extends HeadingStaticDataSource {
