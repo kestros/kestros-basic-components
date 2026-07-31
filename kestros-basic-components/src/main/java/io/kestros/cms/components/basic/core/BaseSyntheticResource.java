@@ -1,5 +1,24 @@
+/*
+ *      Copyright (C) 2020  Kestros, Inc.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ */
+
 package io.kestros.cms.components.basic.core;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.componenttypes.api.models.ComponentVariation;
@@ -14,8 +33,10 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 
-public abstract class BaseSyntheticResource extends BaseComponentElement
-    implements KestrosBasicComponentElement {
+/**
+ * The base synthetic resource component element.
+ */
+public abstract class BaseSyntheticResource extends BaseComponentElement {
   private final ResourceResolver resourceResolver;
   private final String parentPath;
   private final UiFramework uiFramework;
@@ -29,6 +50,21 @@ public abstract class BaseSyntheticResource extends BaseComponentElement
   private ComponentUiFrameworkViewRetrievalService componentUiFrameworkViewRetrievalService;
   private BaseSlingModelDataSource dataSource;
 
+  /**
+   * Constructs a synthetic resource on behalf of a datasource.
+   *
+   * @param dataSource Datasource building this element; supplies the resolver, the UI framework
+   *     and the variation lookup services.
+   * @param resourcePrefix Prefix for the synthetic resource's name, used when no name is forced.
+   * @param forcedResourceName Exact resource name to use, overriding the prefix.
+   * @throws ComponentConfigurationException If the datasource cannot supply what the synthetic
+   *     resource needs.
+   */
+  @SuppressFBWarnings(value = {"MC_OVERRIDABLE_METHOD_CALL_IN_CONSTRUCTOR",
+      "OPM_OVERLY_PERMISSIVE_METHOD"},
+      justification = "getComponentResourceType is the subclass's declaration of which"
+          + " component it is, and the variations lookup needs it while the object is still"
+          + " being built. Every implementation returns a constant.")
   public BaseSyntheticResource(
       @Nonnull BaseSlingModelDataSource dataSource,
       @Nonnull String resourcePrefix, @Nullable String forcedResourceName) throws
@@ -46,7 +82,10 @@ public abstract class BaseSyntheticResource extends BaseComponentElement
         || this.layout == null || this.uiFramework == null) {
       // this is not needed, but is included so that the extending classes are required to throw
       // the exception.
-      throw new ComponentConfigurationException("Missing required property");
+      throw new ComponentConfigurationException(String.format(
+          "Unable to build a synthetic resource under %s: one of the resource%n"
+          + " resolver, parent path, variations, layout or UI framework was not supplied.",
+          String.valueOf(parentPath)));
     }
     this.componentVariationRetrievalService = dataSource.getComponentVariationRetrievalService();
     this.componentUiFrameworkViewRetrievalService =
@@ -60,16 +99,19 @@ public abstract class BaseSyntheticResource extends BaseComponentElement
   }
 
   @Override
+  @Nonnull
   public ResourceResolver getResourceResolver() {
     return resourceResolver;
   }
 
   @Override
+  @Nonnull
   public String getParentPath() {
     return parentPath;
   }
 
   @Override
+  @Nonnull
   public Resource getResource() {
     if (syntheticResource == null) {
       syntheticResource = toSyntheticResource(resourceResolver, parentPath);
@@ -90,15 +132,23 @@ public abstract class BaseSyntheticResource extends BaseComponentElement
   }
 
   @Override
+  @Nonnull
   public List<ComponentVariation> getVariations() {
     return new ArrayList<>(componentVariations);
   }
 
   @Override
+  @Nonnull
   public String getLayout() {
     return layout;
   }
 
+  /**
+   * Ui framework.
+   *
+   * @return Ui framework.
+   */
+  @Nonnull
   public UiFramework getUiFramework() {
     return uiFramework;
   }

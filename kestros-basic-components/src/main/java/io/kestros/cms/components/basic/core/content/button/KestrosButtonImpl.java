@@ -1,5 +1,24 @@
+/*
+ *      Copyright (C) 2020  Kestros, Inc.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ */
+
 package io.kestros.cms.components.basic.core.content.button;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosButton;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
@@ -12,6 +31,11 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 
+/**
+ * {@link KestrosButton} built by a datasource. Values are either passed in directly or read from an
+ * authored resource, depending on which constructor is used.
+ */
+@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 public class KestrosButtonImpl extends BaseSyntheticResource implements KestrosButton {
 
   private String text;
@@ -25,6 +49,23 @@ public class KestrosButtonImpl extends BaseSyntheticResource implements KestrosB
   private boolean disabled;
   private String resourceName;
 
+  /**
+   * Constructs a button impl.
+   *
+   * @param text Text.
+   * @param href Href.
+   * @param title Title.
+   * @param target Target.
+   * @param rel Rel.
+   * @param ariaLabel Aria label.
+   * @param ariaDescribedBy Aria described by.
+   * @param lang Lang.
+   * @param disabled Disabled.
+   * @param dataSource Data source.
+   * @param resourcePrefix Resource prefix.
+   * @param forcedResourceName Forced resource name.
+   * @throws ComponentConfigurationException If the component configuration is not valid.
+   */
   public KestrosButtonImpl(String text, String href,
       String title,
       AnchorTarget target, String rel,
@@ -47,6 +88,15 @@ public class KestrosButtonImpl extends BaseSyntheticResource implements KestrosB
     this.resourceName = forcedResourceName;
   }
 
+  /**
+   * Constructs a button impl.
+   *
+   * @param resource Resource.
+   * @param dataSource Data source.
+   * @param resourcePrefix Resource prefix.
+   * @param forcedResourceName Forced resource name.
+   * @throws ComponentConfigurationException If the component configuration is not valid.
+   */
   public KestrosButtonImpl(@Nonnull Resource resource,
       @Nonnull BaseSlingModelDataSource dataSource,
       String resourcePrefix,
@@ -62,9 +112,11 @@ public class KestrosButtonImpl extends BaseSyntheticResource implements KestrosB
     this.ariaLabel = resource.getValueMap().get("ariaLabel", String.class);
     this.ariaDescribedBy = resource.getValueMap().get("ariaDescribedBy", String.class);
     this.lang = resource.getValueMap().get("lang", String.class);
-    this.disabled = resource.getValueMap().get("disabled", false);
+    this.disabled = resource.getValueMap().get("disabled", Boolean.FALSE);
     if (StringUtils.isEmpty(href)) {
-      throw new ComponentConfigurationException("Missing required property");
+      throw new ComponentConfigurationException(String.format(
+          "Unable to build a button at %s: href is required and was empty.",
+          resource.getPath()));
     }
   }
 
@@ -86,7 +138,7 @@ public class KestrosButtonImpl extends BaseSyntheticResource implements KestrosB
     return title;
   }
 
-  @Nullable
+  @Nonnull
   @Override
   public AnchorTarget getTarget() {
     return target;

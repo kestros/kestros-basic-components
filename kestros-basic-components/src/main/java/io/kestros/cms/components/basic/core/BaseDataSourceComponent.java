@@ -1,3 +1,21 @@
+/*
+ *      Copyright (C) 2020  Kestros, Inc.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ */
+
 package io.kestros.cms.components.basic.core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,6 +39,11 @@ import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.wrappers.ValueMapDecorator;
 import org.apache.sling.models.annotations.Model;
 
+/**
+ * Renders a {@link KestrosBasicComponentElement} handed to it by an upstream datasource, delegating
+ * every value to
+ * that element rather than reading the resource itself.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public abstract class BaseDataSourceComponent<T extends KestrosBasicComponentElement>
     extends DataSourceComponent<T> implements KestrosBasicComponentElement {
@@ -40,12 +63,21 @@ public abstract class BaseDataSourceComponent<T extends KestrosBasicComponentEle
   }
 
   @Override
-  public String getLayout(String propertyName) {
+  @Nonnull
+  public String getLayout() {
+    return getComponentData().getLayout();
+  }
+
+  @Override
+  @Nonnull
+  public String getLayout(@Nonnull String propertyName) {
     return getComponentData().getLayout(propertyName);
   }
 
   @Override
-  public List<ComponentVariation> getElementVariations(String propertyName, String componentType) {
+  @Nonnull
+  public List<ComponentVariation> getElementVariations(@Nonnull String propertyName,
+      String componentType) {
     return getComponentData().getElementVariations(propertyName, componentType);
   }
 
@@ -62,24 +94,22 @@ public abstract class BaseDataSourceComponent<T extends KestrosBasicComponentEle
   }
 
   @Override
+  @Nonnull
   public List<ComponentVariation> getVariations() {
     return getComponentData().getVariations();
   }
 
   @Override
-  public String getLayout() {
-    return getComponentData().getLayout();
-  }
-
-  @Override
+  @Nonnull
   public Resource toSyntheticResource(@Nonnull ResourceResolver resourceResolver,
       @Nonnull String parentPath) {
     // TODO remove duplicate
     if (syntheticResource == null) {
       ResourceMetadata resourceMetadata = new ResourceMetadata();
+      final String forcedName = getForcedResourceName();
       String name = "child-" + java.util.UUID.randomUUID();
-      if (getForcedResourceName() != null && !getForcedResourceName().isEmpty()) {
-        name = getForcedResourceName();
+      if (forcedName != null && !forcedName.isEmpty()) {
+        name = forcedName;
       }
       String path = parentPath + "/" + name;
       if (!path.startsWith("/synthetics")) {
@@ -87,25 +117,20 @@ public abstract class BaseDataSourceComponent<T extends KestrosBasicComponentEle
       }
       resourceMetadata.setResolutionPath(path);
       resourceMetadata.setModificationTime(System.currentTimeMillis());
-      Map<String, String> parameters = new HashMap<>();
+      final Map<String, String> parameters = new HashMap<>(0);
       resourceMetadata.setParameterMap(parameters);
       ObjectMapper objectMapper = new ObjectMapper();
       Map<String, Object> props = objectMapper.convertValue(this, Map.class);
       props.put("sling:resourceType", getComponentResourceType());
       props.put("jcr:primaryType", "nt:unstructured");
-      syntheticResource = new SyntheticResource(resourceResolver, resourceMetadata,
-          getComponentResourceType()) {
-        private final ValueMap valueMap = new ValueMapDecorator(props);
-
-        @Override
-        public ValueMap getValueMap() {
-          return valueMap;
-        }
-      };
+      syntheticResource = new PropertyBackedSyntheticResource(resourceResolver,
+          resourceMetadata, getComponentResourceType(), props);
       if (this instanceof KestrosContainerElement) {
-        KestrosContainerElement container = (KestrosContainerElement) this;
-        Map<String, Resource> childResources = new HashMap<>();
-        for (KestrosBasicComponentElement child : container.getChildElements()) {
+        final KestrosContainerElement container = (KestrosContainerElement) this;
+        final List<KestrosBasicComponentElement> children = container.getChildElements();
+        final Map<String, Resource> childResources =
+            new HashMap<>((int) (children.size() / 0.75f) + 1);
+        for (final KestrosBasicComponentElement child : children) {
           Resource childSyntheticResource = child.toSyntheticResource(resourceResolver,
               syntheticResource.getPath());
           childResources.put(childSyntheticResource.getName(), childSyntheticResource);

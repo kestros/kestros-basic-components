@@ -1,3 +1,21 @@
+/*
+ *      Copyright (C) 2020  Kestros, Inc.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ */
+
 package io.kestros.cms.components.basic.core.content.video;
 
 import io.kestros.cms.assets.api.exceptions.AssetRetrievalException;
@@ -14,6 +32,9 @@ import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 
+/**
+ * Supplies a {@link KestrosVideo} from properties authored on the component's own resource.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class VideoStaticDataSource extends BaseSlingModelDataSource implements KestrosVideo {
   @OSGiService
@@ -36,10 +57,12 @@ public class VideoStaticDataSource extends BaseSlingModelDataSource implements K
     return getResource().getValueMap().get("fallbackText", StringUtils.EMPTY);
   }
 
+  @Nonnull
   String getVideoPath() {
     return getResource().getValueMap().get("videoPath", String.class);
   }
 
+  @Nullable
   Asset getVideoAsset() throws AssetRetrievalException {
     if (assetRetrievalService != null) {
       return assetRetrievalService.getAsset(getVideoPath(), null, getResourceResolver());

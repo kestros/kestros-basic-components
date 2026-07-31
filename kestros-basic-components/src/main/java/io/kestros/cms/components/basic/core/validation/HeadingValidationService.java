@@ -23,6 +23,10 @@ package io.kestros.cms.components.basic.core.validation;
 // */
 //@Component(immediate = true,
 //           service = ModelValidatorRegistrationService.class)
+/**
+ * Placeholder for the heading validation. The implementation is commented out and nothing
+ * is registered, so no validation runs for it today.
+ */
 public class HeadingValidationService extends TextComponentValidationService {
 //
 //  @Reference(cardinality = ReferenceCardinality.OPTIONAL,

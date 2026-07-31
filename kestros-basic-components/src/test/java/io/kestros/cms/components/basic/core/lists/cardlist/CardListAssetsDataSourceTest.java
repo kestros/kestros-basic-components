@@ -1,3 +1,21 @@
+/*
+ *      Copyright (C) 2020  Kestros, Inc.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ */
+
 package io.kestros.cms.components.basic.core.lists.cardlist;
 
 import static org.junit.Assert.assertEquals;
@@ -218,5 +236,32 @@ public class CardListAssetsDataSourceTest extends BaseDataSourceTest {
 
     assertEquals("h3",
         context.request().adaptTo(CardListAssetsDataSource.class).getHeadingLevel());
+  }
+
+  /**
+   * getCardElements is annotated @Nonnull but returned null when a single asset's image could not
+   * be built, so one bad asset discarded the whole list and handed HTL a null. It skips that card
+   * now, which is what the sibling card lists already do.
+   */
+  @Test
+  public void testGetCardElementsSkipsAnAssetWhoseImageCannotBeBuilt() {
+    registerAssetRetrievalService();
+    // An asset with no path cannot produce an image; the other three still render.
+    context.create().resource("/content/assets/collection/asset-4", new HashMap<>());
+    resource = context.create().resource("/content/page/cardlist/assets-partial", properties);
+    context.request().setResource(resource);
+
+    assertNotNull(context.request().adaptTo(CardListAssetsDataSource.class).getCardElements());
+  }
+
+  @Test
+  public void testGetCardElementsIsNeverNull() {
+    registerAssetRetrievalService();
+    final Map<String, Object> props = new HashMap<>();
+    props.put("collectionPath", "/content/assets/nowhere");
+    resource = context.create().resource("/content/page/cardlist/assets-missing", props);
+    context.request().setResource(resource);
+
+    assertNotNull(context.request().adaptTo(CardListAssetsDataSource.class).getCardElements());
   }
 }

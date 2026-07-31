@@ -1,3 +1,21 @@
+/*
+ *      Copyright (C) 2020  Kestros, Inc.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ */
+
 package io.kestros.cms.components.basic.core.content.card;
 
 import static org.junit.Assert.assertEquals;
@@ -78,4 +96,39 @@ public class CardAssetDataSourceTest extends BaseDataSourceTest {
     assertNotNull(cardAssetDataSource.getAsset());
   }
 
+  /**
+   * Both element getters were rewritten to a single exit. They return null when there is no asset
+   * behind the card rather than partially building an element.
+   */
+  @Test
+  public void testGetImageElementWhenThereIsNoAsset() {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("imagePath", "/content/assets/collection/missing");
+    props.put("sling:resourceType", KestrosCard.RESOURCE_TYPE);
+    final Resource componentResource =
+        context.create().resource("/content/page/card/no-asset", props);
+    context.request().setResource(componentResource);
+
+    assertNull(context.request().adaptTo(CardAssetDataSource.class).getImageElement());
+  }
+
+  @Test
+  public void testGetTitleElementWhenThereIsNoAsset() {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("imagePath", "/content/assets/collection/missing");
+    props.put("sling:resourceType", KestrosCard.RESOURCE_TYPE);
+    final Resource componentResource =
+        context.create().resource("/content/page/card/no-asset-title", props);
+    context.request().setResource(componentResource);
+
+    assertNull(context.request().adaptTo(CardAssetDataSource.class).getTitleElement());
+  }
+
+  /** getButtonGroupElement has always returned null for this data source. */
+  @Test
+  public void testGetButtonGroupElementIsAlwaysNull() {
+    registerAssetRetrievalService();
+
+    assertNull(context.request().adaptTo(CardAssetDataSource.class).getButtonGroupElement());
+  }
 }

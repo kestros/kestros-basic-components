@@ -1,36 +1,64 @@
+/*
+ *      Copyright (C) 2020  Kestros, Inc.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ */
+
 package io.kestros.cms.components.basic.core.lists.linklist;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosLink;
+import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.components.basic.api.lists.KestrosLinkList;
 import io.kestros.cms.components.basic.core.BaseContainerSlingModelDataSource;
+import io.kestros.cms.components.basic.core.ContentPageSorter;
 import io.kestros.cms.components.basic.core.LinkUtils;
 import io.kestros.cms.components.basic.core.content.link.KestrosLinkImpl;
 import io.kestros.cms.sitebuilding.api.models.BaseComponent;
 import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
 import io.kestros.cms.tagging.api.models.KestrosTag;
 import io.kestros.cms.tagging.api.services.TagRetrievalService;
+import io.kestros.commons.structuredslingmodels.exceptions.NoParentResourceException;
 import io.kestros.commons.structuredslingmodels.exceptions.NoValidAncestorException;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Tag search datasource for the link list component. Finds pages matching configured
  * tags and renders them as link elements.
  */
+@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class LinkListTagSearchDataSource extends BaseContainerSlingModelDataSource
     implements KestrosLinkList {
+
+  private static final Logger LOG =
+      LoggerFactory.getLogger(LinkListTagSearchDataSource.class);
 
   @OSGiService
   @org.apache.sling.models.annotations.Optional
@@ -38,6 +66,7 @@ public class LinkListTagSearchDataSource extends BaseContainerSlingModelDataSour
 
   private BaseContentPage containingPage;
 
+  @Nullable
   BaseContentPage getContainingPage() {
     if (containingPage == null) {
       try {
@@ -46,6 +75,9 @@ public class LinkListTagSearchDataSource extends BaseContainerSlingModelDataSour
           containingPage = component.getContainingPage();
         }
       } catch (NoValidAncestorException e) {
+        LOG.debug("No containing page for {}; the list has no results. {}",
+            String.valueOf(getResource().getPath()).replaceAll("[\r\n]", ""),
+            String.valueOf(e.getMessage()).replaceAll("[\r\n]", ""));
         return null;
       }
     }
@@ -61,6 +93,7 @@ public class LinkListTagSearchDataSource extends BaseContainerSlingModelDataSour
     return tags;
   }
 
+  @Nullable
   String getRootPath() {
     String pagesPath = getResource().getValueMap().get("pagesPath", String.class);
     if (pagesPath != null) {
@@ -70,13 +103,15 @@ public class LinkListTagSearchDataSource extends BaseContainerSlingModelDataSour
     if (page != null) {
       try {
         return page.getParent().getPath();
-      } catch (Exception e) {
+      } catch (NoParentResourceException e) {
+        // A page with no parent searches from itself.
         return page.getPath();
       }
     }
     return null;
   }
 
+  @Nullable
   BaseContentPage getRootPage() {
     String rootPath = getRootPath();
     if (rootPath == null) {
@@ -89,12 +124,19 @@ public class LinkListTagSearchDataSource extends BaseContainerSlingModelDataSour
     return null;
   }
 
+  /**
+   * Target.
+   *
+   * @return Target.
+   */
+  @Nonnull
   public AnchorTarget getTarget() {
     return AnchorTarget.lookup(getResource());
   }
 
+  @Nonnull
   List<BaseContentPage> getTaggedPages() {
-    List<BaseContentPage> taggedPages = new ArrayList<>();
+    final List<BaseContentPage> taggedPages = new ArrayList<>();
     if (tagRetrievalService == null) {
       return taggedPages;
     }
@@ -104,10 +146,8 @@ public class LinkListTagSearchDataSource extends BaseContainerSlingModelDataSour
       return taggedPages;
     }
 
-    Set<String> filterTagPaths = new HashSet<>();
-    for (String tagPath : configuredTags) {
-      filterTagPaths.add(tagPath);
-    }
+    final Set<String> filterTagPaths =
+        new HashSet<>(Arrays.asList(configuredTags));
 
     BaseContentPage currentPage = getContainingPage();
     BaseContentPage rootPage = getRootPage();
@@ -139,7 +179,7 @@ public class LinkListTagSearchDataSource extends BaseContainerSlingModelDataSour
     List<BaseContentPage> pages = new ArrayList<>(getTaggedPages());
 
     String sortBy = getResource().getValueMap().get("sortBy", "");
-    boolean reverse = getResource().getValueMap().get("reverse", false);
+    boolean reverse = getResource().getValueMap().get("reverse", Boolean.FALSE);
     int limit = 0;
     try {
       limit = Integer.parseInt(getResource().getValueMap().get("limit", "0"));
@@ -147,36 +187,7 @@ public class LinkListTagSearchDataSource extends BaseContainerSlingModelDataSour
       limit = 0;
     }
 
-    if (!sortBy.isEmpty()) {
-      switch (sortBy) {
-        case "createdDate":
-          pages.sort(Comparator.comparing(p -> {
-            Calendar cal = p.getResource().getChild("jcr:content") != null
-                ? p.getResource().getChild("jcr:content").getValueMap()
-                    .get("jcr:created", Calendar.class) : null;
-            return cal != null ? cal.getTimeInMillis() : 0L;
-          }));
-          break;
-        case "lastModified":
-          pages.sort(Comparator.comparing(p -> {
-            Calendar cal = p.getResource().getChild("jcr:content") != null
-                ? p.getResource().getChild("jcr:content").getValueMap()
-                    .get("jcr:lastModified", Calendar.class) : null;
-            return cal != null ? cal.getTimeInMillis() : 0L;
-          }));
-          break;
-        default:
-          pages.sort(Comparator.comparing(p -> {
-            switch (sortBy) {
-              case "name":
-                return p.getName() != null ? p.getName() : "";
-              default:
-                return p.getDisplayTitle() != null ? p.getDisplayTitle() : p.getName();
-            }
-          }));
-          break;
-      }
-    }
+    ContentPageSorter.sort(pages, sortBy);
 
     if (reverse) {
       Collections.reverse(pages);
@@ -185,15 +196,18 @@ public class LinkListTagSearchDataSource extends BaseContainerSlingModelDataSour
       pages = pages.subList(0, limit);
     }
 
-    List<KestrosLink> links = new ArrayList<>();
-    for (BaseContentPage page : pages) {
+    final List<BaseContentPage> sourceLinks = pages;
+    final List<KestrosLink> links = new ArrayList<>(sourceLinks.size());
+    for (BaseContentPage page : sourceLinks) {
       try {
         links.add(new KestrosLinkImpl(page,
             this,
             "link",
             page.getName()));
-      } catch (Exception e) {
-        // Skip links that fail to construct
+      } catch (ComponentConfigurationException e) {
+        LOG.debug("Skipping the link for {}: it could not be built. {}",
+            String.valueOf(page.getPath()).replaceAll("[\r\n]", ""),
+            String.valueOf(e.getMessage()).replaceAll("[\r\n]", ""));
       }
     }
     return links;

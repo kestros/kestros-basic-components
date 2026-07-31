@@ -1,3 +1,21 @@
+/*
+ *      Copyright (C) 2020  Kestros, Inc.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ */
+
 package io.kestros.cms.components.basic.core;
 
 import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
@@ -27,10 +45,20 @@ public abstract class BaseContainerSlingModelDataSource extends BaseSlingModelDa
     return children;
   }
 
-  public <T extends KestrosBasicComponentElement> List<T> getChildrenAsType(String resourceType, Class<T> clazz) {
+  /**
+   * Child resources of the given resource type, adapted to the given element type.
+   *
+   * @param resourceType Sling resource type a child must have to be included.
+   * @param clazz Element type each matching child is adapted to.
+   * @param <T> Element type each matching child is adapted to.
+   * @return Child resources of the given resource type, adapted to the given element type.
+   */
+  @Nonnull
+  public <T extends KestrosBasicComponentElement> List<T> getChildrenAsType(String resourceType,
+      @Nonnull Class<T> clazz) {
     List<T> items = new ArrayList<>();
     for (Resource childResource : getResource().getChildren()) {
-      if(childResource.isResourceType(resourceType) == false) {
+      if (!childResource.isResourceType(resourceType)) {
         continue;
       }
       T item = childResource.adaptTo(clazz);
@@ -41,8 +69,17 @@ public abstract class BaseContainerSlingModelDataSource extends BaseSlingModelDa
     return new ArrayList<>(items);
   }
 
-  public <T extends KestrosBasicComponentElement> List<T> getChildrenOfType(Class<T> clazz) {
-    List<T> children = new java.util.ArrayList<>();
+  /**
+   * Child elements that are instances of the given element type.
+   *
+   * @param clazz Element type a child must be an instance of.
+   * @param <T> Element type a child must be an instance of.
+   * @return Child elements that are instances of the given element type.
+   */
+  @Nonnull
+  public <T extends KestrosBasicComponentElement> List<T> getChildrenOfType(
+      @Nonnull Class<T> clazz) {
+    List<T> children = new ArrayList<>();
     for (KestrosBasicComponentElement element : getChildElements()) {
       if (clazz.isInstance(element)) {
         children.add(clazz.cast(element));

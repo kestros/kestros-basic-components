@@ -1,13 +1,32 @@
+/*
+ *      Copyright (C) 2020  Kestros, Inc.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ */
+
 package io.kestros.cms.components.basic.core.content.videoembed;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import io.kestros.cms.components.basic.core.BaseDataSourceTest;
 import java.util.HashMap;
 import java.util.Map;
-import io.kestros.cms.components.basic.core.BaseDataSourceTest;
 import org.apache.sling.api.resource.Resource;
 import org.junit.Test;
 
@@ -104,6 +123,25 @@ public class VideoEmbedYouTubeDataSourceTest extends BaseDataSourceTest {
         context.create().resource("/content/page/jcr:content/embed-" + (++counter), properties);
     context.request().setResource(resource);
     return context.request().adaptTo(VideoEmbedYouTubeDataSource.class);
+  }
+
+  /**
+   * The embed markup itself, pinned. Every existing case asserts only that the src is right, so
+   * the surrounding iframe attributes -- the sandboxing-relevant ones included -- could be
+   * changed by a reformat with nothing failing.
+   */
+  @Test
+  public void testGetVideoEmbedCodeProducesTheExpectedMarkup() {
+    final Map<String, Object> properties = new HashMap<>();
+    properties.put("youtubeVideo", "abcdefghijk");
+    properties.put("allowFullScreen", Boolean.TRUE);
+
+    assertEquals("<iframe src=\"https://www.youtube.com/embed/abcdefghijk\""
+                 + " style=\"width:100%;height:100%;border:0;\" allowfullscreen"
+                 + " allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope;"
+                 + " picture-in-picture; fullscreen\""
+                 + " referrerpolicy=\"strict-origin-when-cross-origin\"></iframe>",
+        adaptWith(properties).getVideoEmbedCode());
   }
 
   @Test

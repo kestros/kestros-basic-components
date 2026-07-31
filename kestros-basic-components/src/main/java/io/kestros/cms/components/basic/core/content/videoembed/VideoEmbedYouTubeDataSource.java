@@ -1,3 +1,21 @@
+/*
+ *      Copyright (C) 2020  Kestros, Inc.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ */
+
 package io.kestros.cms.components.basic.core.content.videoembed;
 
 import io.kestros.cms.components.basic.api.content.KestrosVideoEmbed;
@@ -6,15 +24,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
+/**
+ * Supplies a {@link KestrosVideoEmbed} for a YouTube video, from either a raw video id or a
+ * YouTube URL authored on the component.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class VideoEmbedYouTubeDataSource extends BaseSlingModelDataSource
         implements KestrosVideoEmbed {
+
+  private static final String EMBED_TEMPLATE =
+      "<iframe src=\"%s\" style=\"width:100%%;height:100%%;border:0;\" %s"
+      + " allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope;"
+      + " picture-in-picture; fullscreen\""
+      + " referrerpolicy=\"strict-origin-when-cross-origin\"></iframe>";
 
   private static final Pattern YOUTUBE_VIDEO_ID =
           Pattern.compile("^[a-zA-Z0-9_-]{11}$");
@@ -28,7 +57,7 @@ public class VideoEmbedYouTubeDataSource extends BaseSlingModelDataSource
   private static final Pattern HTML_PATTERN =
           Pattern.compile("[<>]");
 
-  boolean isValidVideoInput(String input) {
+  boolean isValidVideoInput(@Nullable final String input) {
     if (input == null) {
       return false;
     }
@@ -72,39 +101,25 @@ public class VideoEmbedYouTubeDataSource extends BaseSlingModelDataSource
       return null;
     }
 
-    return String.format(
-            "<iframe src=\"%s\" " +
-                    "        style=\"width:100%%;height:100%%;border:0;\" " +
-                    "        %s " +
-                    "        allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; "
-                    + "gyroscope; "
-                    + "picture-in-picture; fullscreen\" "
-                    +
-                    "        referrerpolicy=\"strict-origin-when-cross-origin\">" +
-                    "</iframe>",
-            src,
-            isAllowFullscreen() ? "allowfullscreen" : ""
-    );
+    return String.format(EMBED_TEMPLATE, src, isAllowFullscreen() ? "allowfullscreen" : "");
   }
 
+  @Nonnull
   private String getYoutubeVideo() {
-    return getResource().getValueMap().get("youtubeVideo", String.class);
+    return getResource().getValueMap().get("youtubeVideo", StringUtils.EMPTY);
   }
 
   private boolean isMute() {
-    return getResource().getValueMap().get("mute", false);
+    return getResource().getValueMap().get("mute", Boolean.FALSE);
   }
 
-
-    /* ------------------
-       Helpers
-       ------------------ */
 
   private boolean isAllowFullscreen() {
-    return getResource().getValueMap().get("allowFullScreen", true);
+    return getResource().getValueMap().get("allowFullScreen", Boolean.TRUE);
   }
 
-  private String buildEmbedUrl(String videoId) {
+  @Nonnull
+  private String buildEmbedUrl(@Nonnull String videoId) {
 
 
     String base = "https://www.youtube.com/embed/";
@@ -118,7 +133,8 @@ public class VideoEmbedYouTubeDataSource extends BaseSlingModelDataSource
   }
 
 
-  private String extractVideoId(String value) {
+  @Nullable
+  private String extractVideoId(@Nonnull String value) {
     if (StringUtils.isBlank(value)) {
       return null;
     }
@@ -128,7 +144,7 @@ public class VideoEmbedYouTubeDataSource extends BaseSlingModelDataSource
     }
 
     if (value.contains("youtu.be/")) {
-      return value.substring(value.lastIndexOf("/") + 1);
+      return value.substring(value.lastIndexOf('/') + 1);
     }
 
     int index = value.indexOf("v=");

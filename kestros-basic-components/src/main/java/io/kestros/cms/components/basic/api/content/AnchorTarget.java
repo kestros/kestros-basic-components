@@ -1,3 +1,21 @@
+/*
+ *      Copyright (C) 2020  Kestros, Inc.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ */
+
 package io.kestros.cms.components.basic.api.content;
 
 import javax.annotation.Nonnull;
@@ -30,10 +48,13 @@ public enum AnchorTarget {
    *
    * @return The corresponding AnchorTarget enum, or SAME_WINDOW if not found.
    */
+  @Nonnull
   public static AnchorTarget lookup(@Nullable String targetValue) {
     if (targetValue != null) {
       for (AnchorTarget anchorTarget : values()) {
-        if (anchorTarget.getTargetValue().equalsIgnoreCase(targetValue)) {
+        if (anchorTarget.getTargetValue().regionMatches(true, 0, targetValue, 0,
+            anchorTarget.getTargetValue().length())
+            && anchorTarget.getTargetValue().length() == targetValue.length()) {
           return anchorTarget;
         }
       }
@@ -49,6 +70,7 @@ public enum AnchorTarget {
    *
    * @return The corresponding AnchorTarget enum.
    */
+  @Nonnull
   public static AnchorTarget lookup(@Nullable Boolean openInNewWindow) {
     if (openInNewWindow != null && openInNewWindow) {
       return NEW_WINDOW;
@@ -56,13 +78,20 @@ public enum AnchorTarget {
     return SAME_WINDOW;
   }
 
+  /**
+   * Lookup.
+   *
+   * @param resource Resource.
+   * @return Lookup.
+   */
+  @Nonnull
   public static AnchorTarget lookup(@Nullable Resource resource) {
     AnchorTarget target = SAME_WINDOW;
     if (resource != null) {
       String anchorTargetString = resource.getValueMap().get("target", String.class);
       target = AnchorTarget.lookup(anchorTargetString);
-      if (target.equals(AnchorTarget.SAME_WINDOW)) {
-        target = AnchorTarget.lookup(resource.getValueMap().get("openInNewTab", false));
+      if (target == AnchorTarget.SAME_WINDOW) {
+        target = AnchorTarget.lookup(resource.getValueMap().get("openInNewTab", Boolean.FALSE));
       }
     }
     return target;

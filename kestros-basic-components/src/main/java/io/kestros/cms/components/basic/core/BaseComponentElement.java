@@ -1,3 +1,21 @@
+/*
+ *      Copyright (C) 2020  Kestros, Inc.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ */
+
 package io.kestros.cms.components.basic.core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,8 +38,16 @@ import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.SyntheticResource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.wrappers.ValueMapDecorator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+/**
+ * Base for every component element: resolves which variations apply to it from the UI framework
+ * view registered for its component type.
+ */
 public abstract class BaseComponentElement implements KestrosBasicComponentElement {
+
+  private static final Logger LOG = LoggerFactory.getLogger(BaseComponentElement.class);
   private Resource syntheticResource;
 
   @Override
@@ -31,7 +57,8 @@ public abstract class BaseComponentElement implements KestrosBasicComponentEleme
   }
 
   @Override
-  public List<ComponentVariation> getElementVariations(String propertyName,
+  @Nonnull
+  public List<ComponentVariation> getElementVariations(@Nonnull String propertyName,
       String componentType) {
 
     BaseComponent component = getResource().adaptTo(BaseComponent.class);
@@ -42,8 +69,8 @@ public abstract class BaseComponentElement implements KestrosBasicComponentEleme
     if (propertyValue instanceof List && !((List<?>) propertyValue).isEmpty()
         && ((List<?>) propertyValue).get(0) instanceof Map) {
       // TODO checking the map here is a bit hacky, but not sure of a better way.
-      List<Map<String, Object>> variationMaps = (List<Map<String, Object>>) propertyValue;
-      appliedVariationNames = new ArrayList<>();
+      final List<Map<String, Object>> variationMaps = (List<Map<String, Object>>) propertyValue;
+      appliedVariationNames = new ArrayList<>(variationMaps.size());
       for (Map<String, Object> variationMap : variationMaps) {
         appliedVariationNames.add((String) variationMap.get("path"));
       }
@@ -80,21 +107,30 @@ public abstract class BaseComponentElement implements KestrosBasicComponentEleme
           }
         }
       }
-    } catch (final ModelAdaptionException exception) {
-    } catch (final ComponentViewRetrievalException e) {
-
+    } catch (final ModelAdaptionException | ComponentViewRetrievalException exception) {
+      // A component whose variations cannot be resolved renders unstyled. That is the right
+      // outcome -- it is better than failing the page -- but it used to happen silently, which
+      // made an unstyled element impossible to tell apart from one with no variations applied.
+      if (LOG.isDebugEnabled()) {
+        LOG.debug("Unable to resolve variations for {} on {}: {}",
+            String.valueOf(propertyName).replaceAll("[\r\n]", ""),
+            String.valueOf(getResource().getPath()).replaceAll("[\r\n]", ""),
+            String.valueOf(exception.getMessage()).replaceAll("[\r\n]", ""));
+      }
     }
     return new ArrayList<>(appliedVariations);
   }
 
   @Override
+  @Nonnull
   public Resource toSyntheticResource(@Nonnull ResourceResolver resourceResolver,
       @Nonnull String parentPath) {
     if (syntheticResource == null) {
       ResourceMetadata resourceMetadata = new ResourceMetadata();
+      final String forcedName = this.getForcedResourceName();
       String name = "child-" + java.util.UUID.randomUUID();
-      if (this.getForcedResourceName() != null && !this.getForcedResourceName().isEmpty()) {
-        name = this.getForcedResourceName();
+      if (forcedName != null && !forcedName.isEmpty()) {
+        name = forcedName;
       }
       String path = parentPath + "/" + name;
       if (!path.startsWith("/synthetics")) {
@@ -102,25 +138,20 @@ public abstract class BaseComponentElement implements KestrosBasicComponentEleme
       }
       resourceMetadata.setResolutionPath(path);
       resourceMetadata.setModificationTime(System.currentTimeMillis());
-      Map<String, String> parameters = new HashMap<>();
+      final Map<String, String> parameters = new HashMap<>(0);
       resourceMetadata.setParameterMap(parameters);
       ObjectMapper objectMapper = new ObjectMapper();
       Map<String, Object> props = objectMapper.convertValue(this, Map.class);
       props.put("sling:resourceType", getComponentResourceType());
       props.put("jcr:primaryType", "nt:unstructured");
-      syntheticResource = new SyntheticResource(resourceResolver, resourceMetadata,
-          getComponentResourceType()) {
-        private final ValueMap valueMap = new ValueMapDecorator(props);
-
-        @Override
-        public ValueMap getValueMap() {
-          return valueMap;
-        }
-      };
+      syntheticResource = new PropertyBackedSyntheticResource(resourceResolver,
+          resourceMetadata, getComponentResourceType(), props);
       if (this instanceof KestrosContainerElement) {
-        KestrosContainerElement container = (KestrosContainerElement) this;
-        Map<String, Resource> childResources = new java.util.LinkedHashMap<>();
-        for (KestrosBasicComponentElement child : container.getChildElements()) {
+        final KestrosContainerElement container = (KestrosContainerElement) this;
+        final List<KestrosBasicComponentElement> children = container.getChildElements();
+        final Map<String, Resource> childResources =
+            new java.util.LinkedHashMap<>((int) (children.size() / 0.75f) + 1);
+        for (final KestrosBasicComponentElement child : children) {
           Resource childSyntheticResource = child.toSyntheticResource(resourceResolver,
               syntheticResource.getPath());
           childResources.put(childSyntheticResource.getName(), childSyntheticResource);

@@ -1,5 +1,24 @@
+/*
+ *      Copyright (C) 2020  Kestros, Inc.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ */
+
 package io.kestros.cms.components.basic.core.content.video;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.assets.api.exceptions.AssetRetrievalException;
 import io.kestros.cms.assets.api.models.Asset;
 import io.kestros.cms.assets.api.services.AssetRetrievalService;
@@ -20,6 +39,7 @@ import org.slf4j.LoggerFactory;
  * Datasource that resolves video source from a referenced asset. The asset path is used directly
  * as the video source, with fallback text for browsers that do not support the video element.
  */
+@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class VideoAssetDataSource extends BaseSlingModelDataSource implements KestrosVideo {
 
@@ -61,7 +81,8 @@ public class VideoAssetDataSource extends BaseSlingModelDataSource implements Ke
         asset = assetRetrievalService.getAsset(videoPath, null, getResourceResolver());
         return asset;
       } catch (AssetRetrievalException e) {
-        LOG.warn("Failed to retrieve asset for video: {}", videoPath);
+        LOG.warn("Failed to retrieve asset for video: {}",
+            videoPath.replaceAll("[\r\n]", ""));
       }
     }
     return null;

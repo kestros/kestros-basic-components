@@ -1,3 +1,21 @@
+/*
+ *      Copyright (C) 2020  Kestros, Inc.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ */
+
 package io.kestros.cms.components.basic.core.content.videoembed;
 
 import static org.junit.Assert.assertEquals;
@@ -5,6 +23,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Locale;
 import org.junit.Test;
 
 public class EmbedSanitizerTest {
@@ -143,5 +162,36 @@ public class EmbedSanitizerTest {
     String input = "<svg/onload=alert(1)>";
 
     assertNull("SVG XSS should be rejected", EmbedSanitizer.sanitize(input));
+  }
+
+  /**
+   * The sanitizer decides what to allow through by case-folding attribute names and domains. Case
+   * mapping is locale-dependent: under a Turkish locale the folded form of a name containing I
+   * carries a dotless i, which used to stop it matching the allow-list. Locale.ROOT pins it.
+   */
+  @Test
+  public void testAllowListMatchingIsIndependentOfTheDefaultLocale() {
+    final Locale previous = Locale.getDefault();
+    try {
+      Locale.setDefault(new Locale("tr", "TR"));
+
+      assertNotNull(EmbedSanitizer.sanitize(
+          "<iframe src=\"https://www.youtube.com/embed/abcdefghijk\" TITLE=\"A video\"></iframe>"));
+    } finally {
+      Locale.setDefault(previous);
+    }
+  }
+
+  @Test
+  public void testNonAllowlistedDomainIsStillRefusedUnderATurkishLocale() {
+    final Locale previous = Locale.getDefault();
+    try {
+      Locale.setDefault(new Locale("tr", "TR"));
+
+      assertNull(EmbedSanitizer.sanitize(
+          "<iframe src=\"https://evil.example.com/embed/abcdefghijk\"></iframe>"));
+    } finally {
+      Locale.setDefault(previous);
+    }
   }
 }

@@ -1,10 +1,31 @@
+/*
+ *      Copyright (C) 2020  Kestros, Inc.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ */
+
 package io.kestros.cms.components.basic.core.content.videoembed;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -16,6 +37,12 @@ import javax.annotation.Nullable;
  * datasource implementations (e.g., VideoEmbedYouTubeDataSource). This sanitizer
  * guards against future datasource variants that might not validate as rigorously.</p>
  */
+@SuppressFBWarnings(value = {"IMPROPER_UNICODE", "DM_CONVERT_CASE"},
+    justification = "Attribute names and domains are case-folded with Locale.ROOT"
+        + " before being matched against a fixed allow-list. The detector warns that"
+        + " case mapping can change a string's length; here the folded value is only"
+        + " ever compared to lower-case ASCII constants, so a character that folds"
+        + " differently fails the match rather than passing it.")
 public final class EmbedSanitizer {
 
   private EmbedSanitizer() {
@@ -108,7 +135,7 @@ public final class EmbedSanitizer {
 
     Matcher attrMatcher = ATTR_PATTERN.matcher(attributesStr);
     while (attrMatcher.find()) {
-      String attrName = attrMatcher.group(1).toLowerCase();
+      String attrName = attrMatcher.group(1).toLowerCase(Locale.ROOT);
       String attrValue = attrMatcher.group(2);
 
       if (!ALLOWED_ATTRIBUTES.contains(attrName)) {
@@ -134,11 +161,11 @@ public final class EmbedSanitizer {
       }
 
       if (sanitizedAttrs.length() > 0) {
-        sanitizedAttrs.append(" ");
+        sanitizedAttrs.append(' ');
       }
 
       if (attrValue != null) {
-        sanitizedAttrs.append(attrName).append("=\"").append(attrValue).append("\"");
+        sanitizedAttrs.append(attrName).append("=\"").append(attrValue).append('"');
       } else {
         sanitizedAttrs.append(attrName);
       }
@@ -152,7 +179,7 @@ public final class EmbedSanitizer {
     return "<iframe " + sanitizedAttrs.toString() + "></iframe>";
   }
 
-  private static boolean isDomainAllowed(String url) {
+  private static boolean isDomainAllowed(@Nonnull String url) {
     // Extract domain from URL: https://domain/path
     String withoutScheme = url.substring("https://".length());
     int slashIndex = withoutScheme.indexOf('/');
@@ -167,6 +194,6 @@ public final class EmbedSanitizer {
     if (portIndex > 0) {
       domain = domain.substring(0, portIndex);
     }
-    return ALLOWED_DOMAINS.contains(domain.toLowerCase());
+    return ALLOWED_DOMAINS.contains(domain.toLowerCase(Locale.ROOT));
   }
 }

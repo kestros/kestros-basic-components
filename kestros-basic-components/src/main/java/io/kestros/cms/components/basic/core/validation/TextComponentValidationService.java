@@ -21,8 +21,8 @@ package io.kestros.cms.components.basic.core.validation;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.commons.structuredslingmodels.BaseSlingModel;
 import io.kestros.commons.validation.api.ModelValidationMessageType;
-import io.kestros.commons.validation.api.services.BaseModelValidationRegistrationService;
 import io.kestros.commons.validation.api.models.ModelValidator;
+import io.kestros.commons.validation.api.services.BaseModelValidationRegistrationService;
 import io.kestros.commons.validation.api.services.ModelValidatorRegistrationHandlerService;
 import io.kestros.commons.validation.api.services.ModelValidatorRegistrationService;
 import java.util.Collections;
@@ -38,6 +38,10 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
 // */
 //@Component(immediate = true,
 //           service = ModelValidatorRegistrationService.class)
+/**
+ * Placeholder for the text component validation. The implementation is commented out and nothing
+ * is registered, so no validation runs for it today.
+ */
 public class TextComponentValidationService {
 //  extends
 //} BaseModelValidationRegistrationService {

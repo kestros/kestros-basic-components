@@ -22,6 +22,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.componenttypes.api.services.ComponentUiFrameworkViewRetrievalService;
 import io.kestros.cms.componenttypes.api.services.ComponentVariationRetrievalService;
 import io.kestros.cms.sitebuilding.api.services.ThemeProviderService;
@@ -41,6 +42,10 @@ import org.junit.Rule;
  * {@code context.addModelsForClasses(YourDataSource.class)} and create the resource the datasource
  * adapts from.</p>
  */
+@SuppressFBWarnings(value = "PRMC_POSSIBLY_REDUNDANT_METHOD_CALLS",
+    justification = "The repeated call the detector sees is Mockito's any() matcher, which has"
+        + " to be invoked once per stubbing. Both lookups deliberately resolve to the same"
+        + " theme.")
 public abstract class BaseDataSourceTest {
 
   @Rule
@@ -63,7 +68,9 @@ public abstract class BaseDataSourceTest {
     // Elements resolve the containing page's theme and UI Framework as they are constructed.
     Theme theme = mock(Theme.class);
     when(theme.getUiFramework()).thenReturn(mock(UiFramework.class));
-    ThemeProviderService themeProviderService = mock(ThemeProviderService.class);
+    final ThemeProviderService themeProviderService = mock(ThemeProviderService.class);
+    // Both lookups resolve to the same theme; stubbed from one mock rather than two calls that
+    // read as if they could differ.
     when(themeProviderService.getThemeForPage(any())).thenReturn(theme);
     when(themeProviderService.getThemeForComponent(any())).thenReturn(theme);
     context.registerService(ThemeProviderService.class, themeProviderService);

@@ -1,6 +1,25 @@
+/*
+ *      Copyright (C) 2020  Kestros, Inc.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ */
+
 package io.kestros.cms.components.basic.core.content.image;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.assets.api.exceptions.AssetRetrievalException;
 import io.kestros.cms.assets.api.models.Asset;
 import io.kestros.cms.assets.api.services.AssetRetrievalService;
@@ -17,8 +36,14 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 
+/**
+ * Programmatic {@link KestrosImage}, built in code by a datasource rather than adapted from an
+ * authored resource.
+ */
+@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 public class KestrosImageImpl extends BaseSyntheticResource implements KestrosImage {
   @OSGiService
   private ComponentVariationRetrievalService componentVariationRetrievalService;
@@ -35,6 +60,23 @@ public class KestrosImageImpl extends BaseSyntheticResource implements KestrosIm
   private AnchorTarget target;
   private AssetRetrievalService assetRetrievalService;
 
+  /**
+   * Constructs an image impl.
+   *
+   * @param imagePath Image path.
+   * @param altText Alt text.
+   * @param caption Caption.
+   * @param imageTitle Image title.
+   * @param href Href.
+   * @param ariaLabel Aria label.
+   * @param anchorTitle Anchor title.
+   * @param target Target.
+   * @param dataSource Data source.
+   * @param resourcePrefix Resource prefix.
+   * @param forcedResourceName Forced resource name.
+   * @param assetRetrievalService Asset retrieval service.
+   * @throws ComponentConfigurationException If the component configuration is not valid.
+   */
   public KestrosImageImpl(String imagePath,
           String altText, String caption,
           String imageTitle,
@@ -56,10 +98,22 @@ public class KestrosImageImpl extends BaseSyntheticResource implements KestrosIm
     this.anchorTitle = anchorTitle;
     this.target = target;
     if (StringUtils.isEmpty(this.imagePath)) {
-      throw new ComponentConfigurationException("Missing required property");
+      throw new ComponentConfigurationException(String.format(
+          "Unable to build the image element %s: imagePath is required and was empty.",
+          String.valueOf(resourcePrefix)));
     }
   }
 
+  /**
+   * Constructs an image impl.
+   *
+   * @param resource Resource.
+   * @param dataSource Data source.
+   * @param resourcePrefix Resource prefix.
+   * @param forcedResourceName Forced resource name.
+   * @param assetRetrievalService Asset retrieval service.
+   * @throws ComponentConfigurationException If the component configuration is not valid.
+   */
   public KestrosImageImpl(Resource resource,
           @Nonnull BaseSlingModelDataSource dataSource,
           String resourcePrefix,
@@ -68,7 +122,7 @@ public class KestrosImageImpl extends BaseSyntheticResource implements KestrosIm
     super(dataSource, resourcePrefix, forcedResourceName);
     this.assetRetrievalService = assetRetrievalService;
     String assetPath = resource.getValueMap().get("imagePath", String.class);
-    if(LinkUtils.isLinkExternal(assetPath)) {
+    if (LinkUtils.isLinkExternal(assetPath)) {
       try {
         Asset asset = getAsset(assetPath, resource.getResourceResolver());
         this.imagePath = asset.getPath();
@@ -80,31 +134,39 @@ public class KestrosImageImpl extends BaseSyntheticResource implements KestrosIm
       this.imagePath = assetPath;
     }
 
-    this.altText = resource.getValueMap().get("altText", String.class);
-    this.caption = resource.getValueMap().get("caption", String.class);
-    this.imageTitle = resource.getValueMap().get("imageTitle", String.class);
-    this.href = resource.getValueMap().get("href", String.class);
-    this.ariaLabel = resource.getValueMap().get("ariaLabel", String.class);
-    this.anchorTitle = resource.getValueMap().get("anchorTitle", String.class);
+    final ValueMap properties = resource.getValueMap();
+    this.altText = properties.get("altText", String.class);
+    this.caption = properties.get("caption", String.class);
+    this.imageTitle = properties.get("imageTitle", String.class);
+    this.href = properties.get("href", String.class);
+    this.ariaLabel = properties.get("ariaLabel", String.class);
+    this.anchorTitle = properties.get("anchorTitle", String.class);
     this.target = AnchorTarget.lookup(resource);
     if (StringUtils.isEmpty(this.imagePath)) {
-      throw new ComponentConfigurationException("Missing required property");
+      throw new ComponentConfigurationException(String.format(
+          "Unable to build an image at %s: imagePath is required and resolved to empty.",
+          resource.getPath()));
     }
   }
 
-  Asset getAsset(String path, ResourceResolver resourceResolver) throws AssetRetrievalException {
+  @Nonnull
+  final Asset getAsset(@Nonnull final String path,
+      @Nonnull final ResourceResolver resourceResolver)
+      throws AssetRetrievalException {
     if (assetRetrievalService == null) {
-      throw new AssetRetrievalException("AssetRetrievalService is not available.");
+      throw new AssetRetrievalException(String.format(
+          "Unable to resolve the asset at %s: no AssetRetrievalService is bound.", path));
     }
     return assetRetrievalService.getAsset(path, null, resourceResolver);
   }
 
   @Override
+  @Nonnull
   public String getImageTitle() {
     return imageTitle;
   }
 
-  @Nullable
+  @Nonnull
   @Override
   public String getImagePath() {
     return imagePath;
