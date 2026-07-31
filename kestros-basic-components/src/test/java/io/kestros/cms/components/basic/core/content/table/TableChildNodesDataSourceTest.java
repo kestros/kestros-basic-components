@@ -1,6 +1,7 @@
 package io.kestros.cms.components.basic.core.content.table;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import io.kestros.cms.components.basic.api.table.KestrosTable;
 import io.kestros.cms.components.basic.core.BaseDataSourceTest;
@@ -85,5 +86,58 @@ public class TableChildNodesDataSourceTest extends BaseDataSourceTest {
     final TableChildNodesDataSource emptyDataSource =
         context.request().adaptTo(TableChildNodesDataSource.class);
     assertEquals(0, emptyDataSource.getRowElements().size());
+  }
+
+  /** With no headers property configured, the header list is empty rather than null. */
+  @Test
+  public void testGetHeaderElementsWhenNoHeadersAreConfigured() {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("dataPath", "/content/data/standings");
+    props.put("columns", new String[] {"pos", "club"});
+    final Resource componentResource =
+        context.create().resource("/content/page/jcr:content/table-no-headers", props);
+    context.request().setResource(componentResource);
+
+    assertTrue(context.request().adaptTo(TableChildNodesDataSource.class)
+        .getHeaderElements().isEmpty());
+  }
+
+  /** dataPath and columns are both required; missing either yields no rows. */
+  @Test
+  public void testGetRowElementsWhenNoDataPathIsConfigured() {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("columns", new String[] {"pos", "club"});
+    final Resource componentResource =
+        context.create().resource("/content/page/jcr:content/table-no-path", props);
+    context.request().setResource(componentResource);
+
+    assertTrue(context.request().adaptTo(TableChildNodesDataSource.class)
+        .getRowElements().isEmpty());
+  }
+
+  @Test
+  public void testGetRowElementsWhenNoColumnsAreConfigured() {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("dataPath", "/content/data/standings");
+    final Resource componentResource =
+        context.create().resource("/content/page/jcr:content/table-no-columns", props);
+    context.request().setResource(componentResource);
+
+    assertTrue(context.request().adaptTo(TableChildNodesDataSource.class)
+        .getRowElements().isEmpty());
+  }
+
+  /** A dataPath with no placeholder skips the resolution step entirely. */
+  @Test
+  public void testGetRowElementsWithAPlainDataPath() {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("dataPath", "/content/data/standings");
+    props.put("columns", new String[] {"pos"});
+    final Resource componentResource =
+        context.create().resource("/content/page/jcr:content/table-plain-path", props);
+    context.request().setResource(componentResource);
+
+    assertEquals(2, context.request().adaptTo(TableChildNodesDataSource.class)
+        .getRowElements().size());
   }
 }

@@ -1,6 +1,7 @@
 package io.kestros.cms.components.basic.core.lists.linklist;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
@@ -15,6 +16,7 @@ import io.kestros.cms.tagging.api.models.KestrosTag;
 import io.kestros.cms.tagging.api.services.TagRetrievalService;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -251,5 +253,151 @@ public class LinkListTagSearchDataSourceTest extends BaseDataSourceTest {
     LinkListTagSearchDataSource limitDs =
         context.request().adaptTo(LinkListTagSearchDataSource.class);
     assertEquals(1, limitDs.getLinkElements().size());
+  }
+
+  // ---------------------------------------------------------------------------------------------
+  // The sort comparators only run with at least two matching pages. Placing the component on
+  // child-3 (which carries no tags of its own) leaves both child-1 and child-2 in the result.
+  // ---------------------------------------------------------------------------------------------
+
+  private LinkListTagSearchDataSource twoMatchesWith(final Map<String, Object> extraProperties) {
+    final Map<String, Object> props = new HashMap<>(extraProperties);
+    props.put("tags", new String[]{"/etc/tags/topic/java"});
+    final Resource componentResource = context.create().resource(
+        "/content/sessions/child-3/jcr:content/component-" + extraProperties.hashCode(), props);
+    context.request().setResource(componentResource);
+    return context.request().adaptTo(LinkListTagSearchDataSource.class);
+  }
+
+  @Test
+  public void testGetLinkElementsSortsTwoPagesByName() {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("sortBy", "name");
+
+    assertEquals(2, twoMatchesWith(props).getLinkElements().size());
+  }
+
+  @Test
+  public void testGetLinkElementsSortsTwoPagesByTitle() {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("sortBy", "title");
+
+    assertEquals(2, twoMatchesWith(props).getLinkElements().size());
+  }
+
+  @Test
+  public void testGetLinkElementsSortsTwoPagesByCreatedDate() {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("sortBy", "createdDate");
+
+    assertEquals(2, twoMatchesWith(props).getLinkElements().size());
+  }
+
+  @Test
+  public void testGetLinkElementsSortsTwoPagesByLastModified() {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("sortBy", "lastModified");
+
+    assertEquals(2, twoMatchesWith(props).getLinkElements().size());
+  }
+
+  @Test
+  public void testGetLinkElementsReversesTwoPages() {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("sortBy", "name");
+    props.put("reverse", true);
+
+    assertEquals(2, twoMatchesWith(props).getLinkElements().size());
+  }
+
+  @Test
+  public void testGetLinkElementsLimitsTwoPagesToOne() {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("limit", "1");
+
+    assertEquals(1, twoMatchesWith(props).getLinkElements().size());
+  }
+
+  @Test
+  public void testGetRootPageWhenThePathDoesNotResolve() {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("tags", new String[]{"/etc/tags/topic/java"});
+    props.put("pagesPath", "/content/nowhere");
+    final Resource componentResource = context.create().resource(
+        "/content/sessions/child-3/jcr:content/missing-root-component", props);
+    context.request().setResource(componentResource);
+
+    assertNull(context.request().adaptTo(LinkListTagSearchDataSource.class).getRootPage());
+  }
+
+  @Test
+  public void testGetTaggedPagesWhenNoTagsAreConfigured() {
+    final Map<String, Object> props = new HashMap<>();
+    final Resource componentResource = context.create().resource(
+        "/content/sessions/child-3/jcr:content/no-tags-component", props);
+    context.request().setResource(componentResource);
+
+    assertTrue(context.request().adaptTo(LinkListTagSearchDataSource.class)
+        .getTaggedPages().isEmpty());
+  }
+
+  @Test
+  public void testGetTaggedPagesWhenTheRootPageDoesNotResolve() {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("tags", new String[]{"/etc/tags/topic/java"});
+    props.put("pagesPath", "/content/nowhere");
+    final Resource componentResource = context.create().resource(
+        "/content/sessions/child-3/jcr:content/no-root-component", props);
+    context.request().setResource(componentResource);
+
+    assertTrue(context.request().adaptTo(LinkListTagSearchDataSource.class)
+        .getTaggedPages().isEmpty());
+  }
+
+  @Test
+  public void testGetLinkElementsWhenNothingMatches() {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("tags", new String[]{"/etc/tags/topic/nothing-has-this"});
+    final Resource componentResource = context.create().resource(
+        "/content/sessions/child-3/jcr:content/no-match-component", props);
+    context.request().setResource(componentResource);
+
+    assertTrue(context.request().adaptTo(LinkListTagSearchDataSource.class)
+        .getLinkElements().isEmpty());
+  }
+
+  /**
+   * The date comparators guard on both the jcr:content child and the date property. The fixture
+   * pages all have a jcr:content and neither date, so only one side of each guard was reached.
+   */
+  private void addTaggedPagesWithAndWithoutDates() {
+    final Map<String, Object> pageProperties = new HashMap<>();
+    pageProperties.put("jcr:primaryType", "kes:Page");
+    context.create().resource("/content/sessions/child-4", pageProperties);
+
+    final Map<String, Object> datedContent = new HashMap<>();
+    datedContent.put("jcr:primaryType", "nt:unstructured");
+    datedContent.put("jcr:created", Calendar.getInstance());
+    datedContent.put("jcr:lastModified", Calendar.getInstance());
+    context.create().resource("/content/sessions/child-5", pageProperties);
+    context.create().resource("/content/sessions/child-5/jcr:content", datedContent);
+  }
+
+  @Test
+  public void testSortByCreatedDateAcrossPagesWithAndWithoutDates() {
+    addTaggedPagesWithAndWithoutDates();
+    final Map<String, Object> props = new HashMap<>();
+    props.put("sortBy", "createdDate");
+
+    assertEquals(2, twoMatchesWith(props).getLinkElements().size());
+  }
+
+  @Test
+  public void testSortByLastModifiedAcrossPagesWithAndWithoutDates() {
+    addTaggedPagesWithAndWithoutDates();
+    final Map<String, Object> props = new HashMap<>();
+    props.put("sortBy", "lastModified");
+
+    assertEquals(2, twoMatchesWith(props).getLinkElements().size());
   }
 }

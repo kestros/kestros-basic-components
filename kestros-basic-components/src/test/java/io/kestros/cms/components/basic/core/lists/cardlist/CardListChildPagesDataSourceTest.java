@@ -14,6 +14,7 @@ import io.kestros.cms.components.basic.api.content.KestrosImage;
 import io.kestros.cms.components.basic.api.lists.KestrosCardList;
 import io.kestros.cms.components.basic.core.BaseDataSourceTest;
 import io.kestros.cms.components.basic.core.content.image.ImageStaticDataSource;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -233,5 +234,107 @@ public class CardListChildPagesDataSourceTest extends BaseDataSourceTest {
     context.request().setResource(resource);
     cardListChildPagesDataSource = context.request().adaptTo(CardListChildPagesDataSource.class);
     assertEquals(1, cardListChildPagesDataSource.getCardElements().size());
+  }
+
+  /**
+   * The createdDate and lastModified comparators had no coverage: the existing sort cases only
+   * exercise name and title, which share a different lambda.
+   */
+  @Test
+  public void testGetCardElements_sortByCreatedDate() {
+    properties.put("sortBy", "createdDate");
+    resource = context.create().resource("/content/page/jcr:content/comp-sortby-created",
+        properties);
+    context.request().setResource(resource);
+
+    assertEquals(3, context.request().adaptTo(CardListChildPagesDataSource.class)
+        .getCardElements().size());
+  }
+
+  @Test
+  public void testGetCardElements_sortByLastModified() {
+    properties.put("sortBy", "lastModified");
+    resource = context.create().resource("/content/page/jcr:content/comp-sortby-modified",
+        properties);
+    context.request().setResource(resource);
+
+    assertEquals(3, context.request().adaptTo(CardListChildPagesDataSource.class)
+        .getCardElements().size());
+  }
+
+  @Test
+  public void testGetRootPageWhenThePagesPathDoesNotResolve() {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("pagesPath", "/content/nowhere");
+    resource = context.create().resource("/content/page/jcr:content/comp-missing-root", props);
+    context.request().setResource(resource);
+
+    assertNull(context.request().adaptTo(CardListChildPagesDataSource.class).getRootPage());
+  }
+
+  @Test
+  public void testGetCardElementsWhenThereIsNoRootPage() {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("pagesPath", "/content/nowhere");
+    resource = context.create().resource("/content/page/jcr:content/comp-no-root", props);
+    context.request().setResource(resource);
+
+    assertTrue(context.request().adaptTo(CardListChildPagesDataSource.class)
+        .getCardElements().isEmpty());
+  }
+
+  @Test
+  public void testGetReadMoreTextWhenNotConfigured() {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("pagesPath", "/content/page");
+    resource = context.create().resource("/content/page/jcr:content/comp-no-read-more", props);
+    context.request().setResource(resource);
+
+    assertNull(context.request().adaptTo(CardListChildPagesDataSource.class).getReadMoreText());
+  }
+
+  /**
+   * The date comparators read jcr:created / jcr:lastModified off each page's jcr:content, guarding
+   * on both the child and the property. The sample pages all have a jcr:content and neither date,
+   * so only one side of each guard was reached. These add a page with no jcr:content at all and a
+   * page that does carry the dates.
+   */
+  private void addPagesWithAndWithoutDates() {
+    final Map<String, Object> pageProperties = new HashMap<>();
+    pageProperties.put("jcr:primaryType", "kes:Page");
+    context.create().resource("/content/page/child-no-content", pageProperties);
+
+    final Map<String, Object> datedContent = new HashMap<>();
+    datedContent.put("jcr:primaryType", "nt:unstructured");
+    datedContent.put("jcr:created", Calendar.getInstance());
+    datedContent.put("jcr:lastModified", Calendar.getInstance());
+    context.create().resource("/content/page/child-dated", pageProperties);
+    context.create().resource("/content/page/child-dated/jcr:content", datedContent);
+  }
+
+  @Test
+  public void testGetCardElements_sortByCreatedDateAcrossPagesWithAndWithoutDates() {
+    addPagesWithAndWithoutDates();
+    final Map<String, Object> props = new HashMap<>();
+    props.put("pagesPath", "/content/page");
+    props.put("sortBy", "createdDate");
+    resource = context.create().resource("/content/page/jcr:content/comp-created-mixed", props);
+    context.request().setResource(resource);
+
+    assertEquals(5, context.request().adaptTo(CardListChildPagesDataSource.class)
+        .getCardElements().size());
+  }
+
+  @Test
+  public void testGetCardElements_sortByLastModifiedAcrossPagesWithAndWithoutDates() {
+    addPagesWithAndWithoutDates();
+    final Map<String, Object> props = new HashMap<>();
+    props.put("pagesPath", "/content/page");
+    props.put("sortBy", "lastModified");
+    resource = context.create().resource("/content/page/jcr:content/comp-modified-mixed", props);
+    context.request().setResource(resource);
+
+    assertEquals(5, context.request().adaptTo(CardListChildPagesDataSource.class)
+        .getCardElements().size());
   }
 }

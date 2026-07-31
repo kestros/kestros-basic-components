@@ -169,4 +169,54 @@ public class CardListAssetsDataSourceTest extends BaseDataSourceTest {
     cardListAssetsDataSource = context.request().adaptTo(CardListAssetsDataSource.class);
     assertEquals(1, cardListAssetsDataSource.getCardElements().size());
   }
+
+  /**
+   * The createdDate and lastModified comparators had no coverage: the existing sort cases only
+   * exercise name and title, which share a different lambda.
+   */
+  @Test
+  public void testGetCardElements_sortByCreatedDate() {
+    registerAssetRetrievalService();
+    properties.put("sortBy", "createdDate");
+    resource = context.create().resource("/content/page/cardlist/assets-sortby-created",
+        properties);
+    context.request().setResource(resource);
+
+    assertEquals(3, context.request().adaptTo(CardListAssetsDataSource.class)
+        .getCardElements().size());
+  }
+
+  @Test
+  public void testGetCardElements_sortByLastModified() {
+    registerAssetRetrievalService();
+    properties.put("sortBy", "lastModified");
+    resource = context.create().resource("/content/page/cardlist/assets-sortby-modified",
+        properties);
+    context.request().setResource(resource);
+
+    assertEquals(3, context.request().adaptTo(CardListAssetsDataSource.class)
+        .getCardElements().size());
+  }
+
+  @Test
+  public void testGetHeadingLevelDefaultsToH2() {
+    registerAssetRetrievalService();
+    resource = context.create().resource("/content/page/cardlist/assets-default-heading",
+        properties);
+    context.request().setResource(resource);
+
+    assertEquals("h2",
+        context.request().adaptTo(CardListAssetsDataSource.class).getHeadingLevel());
+  }
+
+  @Test
+  public void testGetHeadingLevelWhenConfigured() {
+    registerAssetRetrievalService();
+    properties.put("headingType", "h3");
+    resource = context.create().resource("/content/page/cardlist/assets-h3", properties);
+    context.request().setResource(resource);
+
+    assertEquals("h3",
+        context.request().adaptTo(CardListAssetsDataSource.class).getHeadingLevel());
+  }
 }
