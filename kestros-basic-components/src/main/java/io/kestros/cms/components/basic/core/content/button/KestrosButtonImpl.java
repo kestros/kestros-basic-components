@@ -64,9 +64,11 @@ public class KestrosButtonImpl extends BaseSyntheticResource implements KestrosB
     this.ariaLabel = resource.getValueMap().get("ariaLabel", String.class);
     this.ariaDescribedBy = resource.getValueMap().get("ariaDescribedBy", String.class);
     this.lang = resource.getValueMap().get("lang", String.class);
-    this.disabled = resource.getValueMap().get("disabled", false);
+    this.disabled = resource.getValueMap().get("disabled", Boolean.FALSE);
     if (StringUtils.isEmpty(href)) {
-      throw new ComponentConfigurationException("Missing required property");
+      throw new ComponentConfigurationException(String.format(
+          "Unable to build a button at %s: href is required and was empty.",
+          resource.getPath()));
     }
   }
 

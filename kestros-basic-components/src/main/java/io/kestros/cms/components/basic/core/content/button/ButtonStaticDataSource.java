@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core.content.button;
 
+import javax.annotation.Nonnull;
 import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosButton;
 import io.kestros.cms.components.basic.core.LinkUtils;
@@ -8,7 +9,6 @@ import javax.annotation.Nullable;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
-import javax.annotation.Nonnull;
 
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class ButtonStaticDataSource extends BaseSlingModelDataSource implements KestrosButton {
@@ -63,6 +63,6 @@ public class ButtonStaticDataSource extends BaseSlingModelDataSource implements 
 
   @Override
   public boolean isDisabled() {
-    return getResource().getValueMap().get("disabled", false);
+    return getResource().getValueMap().get("disabled", Boolean.FALSE);
   }
 }

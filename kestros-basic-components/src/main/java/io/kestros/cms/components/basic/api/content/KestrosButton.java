@@ -1,7 +1,6 @@
 package io.kestros.cms.components.basic.api.content;
 
 import javax.annotation.Nonnull;
-
 /**
  * Core button element API.
  */

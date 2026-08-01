@@ -1,10 +1,10 @@
 package io.kestros.cms.components.basic.core.content.heading;
 
+import javax.annotation.Nonnull;
 import io.kestros.cms.components.basic.api.content.KestrosHeading;
 import io.kestros.cms.components.basic.core.BaseDataSourceComponent;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Model;
-import javax.annotation.Nonnull;
 
 @Model(adaptables = SlingHttpServletRequest.class)
 public class HeadingDataSourceComponent extends BaseDataSourceComponent<KestrosHeading> implements

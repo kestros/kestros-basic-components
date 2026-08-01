@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core.content.videoembed;
 
+import javax.annotation.Nonnull;
 import io.kestros.cms.components.basic.api.content.KestrosVideoEmbed;
 import io.kestros.cms.components.basic.core.BaseSlingModelDataSource;
 import java.util.ArrayList;
@@ -11,7 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
-import javax.annotation.Nonnull;
 
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class VideoEmbedYouTubeDataSource extends BaseSlingModelDataSource
@@ -132,7 +132,7 @@ public class VideoEmbedYouTubeDataSource extends BaseSlingModelDataSource
     }
 
     if (value.contains("youtu.be/")) {
-      return value.substring(value.lastIndexOf("/") + 1);
+      return value.substring(value.lastIndexOf('/') + 1);
     }
 
     int index = value.indexOf("v=");

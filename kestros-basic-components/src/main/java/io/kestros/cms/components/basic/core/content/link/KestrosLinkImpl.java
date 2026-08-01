@@ -32,12 +32,10 @@ public class KestrosLinkImpl extends BaseSyntheticResource implements KestrosLin
     super(dataSource, resourcePrefix, forcedResourceName);
     this.text = page.getDisplayTitle();
     this.href = LinkUtils.getLink(page.getPath());
-    this.title = title;
-    this.target = target;
-    this.rel = rel;
-    this.ariaLabel = ariaLabel;
-    this.ariaDescribedBy = ariaDescribedBy;
-    this.lang = lang;
+    // The six assignments that were here read the fields back into themselves, so they were
+    // no-ops that left every one of them null. Removed rather than guessed at: what a
+    // page-derived link should carry for title, target, rel and the aria attributes is a
+    // product decision, not a cleanup.
   }
 
 

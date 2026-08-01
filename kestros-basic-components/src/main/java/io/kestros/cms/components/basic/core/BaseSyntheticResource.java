@@ -15,8 +15,7 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 
-public abstract class BaseSyntheticResource extends BaseComponentElement
-    implements KestrosBasicComponentElement {
+public abstract class BaseSyntheticResource extends BaseComponentElement {
   private final ResourceResolver resourceResolver;
   private final String parentPath;
   private final UiFramework uiFramework;
@@ -52,7 +51,10 @@ public abstract class BaseSyntheticResource extends BaseComponentElement
         || this.layout == null || this.uiFramework == null) {
       // this is not needed, but is included so that the extending classes are required to throw
       // the exception.
-      throw new ComponentConfigurationException("Missing required property");
+      throw new ComponentConfigurationException(String.format(
+          "Unable to build a synthetic resource under %s: one of the resource resolver, parent path,%n"
+          + " variations, layout or UI framework was not supplied.",
+          String.valueOf(parentPath)));
     }
     this.componentVariationRetrievalService = dataSource.getComponentVariationRetrievalService();
     this.componentUiFrameworkViewRetrievalService =

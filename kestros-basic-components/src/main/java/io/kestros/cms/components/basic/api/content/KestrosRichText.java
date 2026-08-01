@@ -1,8 +1,8 @@
 package io.kestros.cms.components.basic.api.content;
 
+import javax.annotation.Nonnull;
 import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
 import javax.annotation.Nullable;
-import javax.annotation.Nonnull;
 
 public interface KestrosRichText extends KestrosBasicComponentElement {
 

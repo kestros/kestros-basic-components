@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core.content.table;
 
+import javax.annotation.Nullable;
 import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
 import io.kestros.cms.components.basic.api.table.KestrosTableCell;
 import io.kestros.cms.components.basic.core.BaseContainerDataSourceComponent;
@@ -8,7 +9,6 @@ import javax.annotation.Nonnull;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
-import javax.annotation.Nullable;
 
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class TableCellDataSourceComponent extends BaseContainerDataSourceComponent<KestrosTableCell>

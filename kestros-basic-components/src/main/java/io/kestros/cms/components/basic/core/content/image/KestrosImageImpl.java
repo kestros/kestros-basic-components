@@ -59,7 +59,9 @@ public class KestrosImageImpl extends BaseSyntheticResource implements KestrosIm
     this.anchorTitle = anchorTitle;
     this.target = target;
     if (StringUtils.isEmpty(this.imagePath)) {
-      throw new ComponentConfigurationException("Missing required property");
+      throw new ComponentConfigurationException(String.format(
+          "Unable to build the image element %s: imagePath is required and was empty.",
+          String.valueOf(resourcePrefix)));
     }
   }
 

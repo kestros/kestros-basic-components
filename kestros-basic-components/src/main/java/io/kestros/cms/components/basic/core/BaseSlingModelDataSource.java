@@ -12,6 +12,7 @@ import io.kestros.cms.sitebuilding.api.models.BaseComponent;
 import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
 import io.kestros.cms.sitebuilding.api.models.ComponentRequestContext;
 import io.kestros.cms.uiframeworks.api.models.UiFramework;
+import io.kestros.commons.structuredslingmodels.exceptions.ModelAdaptionException;
 import io.kestros.commons.structuredslingmodels.exceptions.NoValidAncestorException;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +28,7 @@ import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
-public abstract class BaseSlingModelDataSource
-    extends BaseComponentElement implements KestrosBasicComponentElement {
+public abstract class BaseSlingModelDataSource extends BaseComponentElement {
 
   @Self
   @Optional
@@ -162,8 +162,9 @@ public abstract class BaseSlingModelDataSource
         return getResource().adaptTo(BaseComponent.class).getContainingPage().getTheme()
             .getUiFramework();
       }
-    } catch (Exception e) {
-      throw new RuntimeException(e);
+    } catch (ModelAdaptionException e) {
+      throw new ComponentElementRenderingException(String.format(
+          "Unable to resolve the UI framework for %s.", getPath()), e);
     }
   }
 

@@ -39,8 +39,8 @@ public class BreadCrumbsPagePathDataSource extends BaseSlingModelDataSource
   @Override
   public List<KestrosBreadCrumb> getLinkElements() {
     List<KestrosBreadCrumb> crumbs = new ArrayList<>();
-    Boolean first = true;
-    Boolean last = false;
+    boolean first = true;
+    boolean last = false;
     int index = 0;
     List<BaseContentPage> ancestorPages = getAncestorPages();
     for (BaseContentPage page : ancestorPages) {
@@ -55,8 +55,10 @@ public class BreadCrumbsPagePathDataSource extends BaseSlingModelDataSource
         crumbs.add(crumb);
         first = false;
         index++;
-      } catch (Exception e) {
-        // Ignore exception and continue.
+      } catch (ComponentConfigurationException e) {
+        LOG.debug("Skipping a breadcrumb for {}: it could not be built. {}",
+            String.valueOf(page.getPath()).replaceAll("[\r\n]", ""),
+            String.valueOf(e.getMessage()).replaceAll("[\r\n]", ""));
       }
     }
     return new ArrayList<>(crumbs);

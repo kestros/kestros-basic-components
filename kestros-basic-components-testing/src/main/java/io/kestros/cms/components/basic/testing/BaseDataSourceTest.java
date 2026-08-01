@@ -68,7 +68,9 @@ public abstract class BaseDataSourceTest {
     // Elements resolve the containing page's theme and UI Framework as they are constructed.
     Theme theme = mock(Theme.class);
     when(theme.getUiFramework()).thenReturn(mock(UiFramework.class));
-    ThemeProviderService themeProviderService = mock(ThemeProviderService.class);
+    final ThemeProviderService themeProviderService = mock(ThemeProviderService.class);
+    // Both lookups resolve to the same theme; stubbed from one mock rather than two calls that
+    // read as if they could differ.
     when(themeProviderService.getThemeForPage(any())).thenReturn(theme);
     when(themeProviderService.getThemeForComponent(any())).thenReturn(theme);
     context.registerService(ThemeProviderService.class, themeProviderService);

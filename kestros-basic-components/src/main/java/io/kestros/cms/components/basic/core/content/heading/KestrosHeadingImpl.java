@@ -33,7 +33,10 @@ public class KestrosHeadingImpl extends BaseSyntheticResource implements Kestros
     this.text = resource.getValueMap().get("headingText", String.class);
     this.headingType = resource.getValueMap().get("headingType", String.class);
     if (this.text == null || this.headingType == null) {
-      throw new ComponentConfigurationException("Missing required property");
+      throw new ComponentConfigurationException(String.format(
+          "Unable to build a heading at %s: headingText and headingType are both required, and%n"
+          + " headingText was %s, headingType was %s.",
+          resource.getPath(), String.valueOf(this.text), String.valueOf(this.headingType)));
     }
   }
 

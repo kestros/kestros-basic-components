@@ -117,7 +117,7 @@ public final class EmbedSanitizer {
 
     Matcher attrMatcher = ATTR_PATTERN.matcher(attributesStr);
     while (attrMatcher.find()) {
-      String attrName = attrMatcher.group(1).toLowerCase();
+      String attrName = attrMatcher.group(1).toLowerCase(Locale.ROOT);
       String attrValue = attrMatcher.group(2);
 
       if (!ALLOWED_ATTRIBUTES.contains(attrName)) {
@@ -143,11 +143,11 @@ public final class EmbedSanitizer {
       }
 
       if (sanitizedAttrs.length() > 0) {
-        sanitizedAttrs.append(" ");
+        sanitizedAttrs.append(' ');
       }
 
       if (attrValue != null) {
-        sanitizedAttrs.append(attrName).append("=\"").append(attrValue).append("\"");
+        sanitizedAttrs.append(attrName).append("=\"").append(attrValue).append('"');
       } else {
         sanitizedAttrs.append(attrName);
       }
@@ -176,6 +176,6 @@ public final class EmbedSanitizer {
     if (portIndex > 0) {
       domain = domain.substring(0, portIndex);
     }
-    return ALLOWED_DOMAINS.contains(domain.toLowerCase());
+    return ALLOWED_DOMAINS.contains(domain.toLowerCase(Locale.ROOT));
   }
 }

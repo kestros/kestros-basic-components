@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core.content.button;
 
+import javax.annotation.Nonnull;
 import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosButton;
 import io.kestros.cms.components.basic.core.BaseDataSourceComponent;
@@ -7,7 +8,6 @@ import javax.annotation.Nullable;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
-import javax.annotation.Nonnull;
 
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class ButtonDataSourceComponent extends BaseDataSourceComponent<KestrosButton> implements
