@@ -1,19 +1,19 @@
 package io.kestros.cms.components.basic.core.lists.cardlist;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.components.basic.api.content.KestrosButton;
 import io.kestros.cms.components.basic.api.content.KestrosButtonGroup;
 import io.kestros.cms.components.basic.api.content.KestrosCard;
 import io.kestros.cms.components.basic.api.content.KestrosImage;
 import io.kestros.cms.components.basic.api.lists.KestrosCardList;
+import io.kestros.cms.components.basic.core.ContentPageSorter;
 import io.kestros.cms.components.basic.core.BaseContainerSlingModelDataSource;
 import io.kestros.cms.components.basic.core.content.card.KestrosCardImpl;
 import io.kestros.cms.sitebuilding.api.models.BaseComponent;
 import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
 import io.kestros.commons.structuredslingmodels.exceptions.NoValidAncestorException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -21,11 +21,13 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
+@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSource implements
                                                                                     KestrosCardList {
   private BaseContentPage rootPage;
 
+  @Nullable
   BaseContentPage getRootPage() {
     if (rootPage == null) {
       String pagesPath = getResource().getValueMap().get("pagesPath", String.class);
@@ -54,6 +56,10 @@ public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSou
     return getResource().getValueMap().get("readMoreText", String.class);
   }
 
+  @SuppressFBWarnings(value = "EXS_EXCEPTION_SOFTENING_NO_CHECKED",
+      justification = "Called from HTL, which cannot handle a checked exception. The checked"
+          + " cause is wrapped in a typed ComponentElementRenderingException so the failure"
+          + " stays identifiable, per the ruling on DataSourceComponent.")
   @Nonnull
   @Override
   public List<KestrosCard> getCardElements() {
@@ -64,7 +70,7 @@ public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSou
     List<BaseContentPage> pages = new ArrayList<>(root.getChildPages());
 
     String sortBy = getResource().getValueMap().get("sortBy", "");
-    boolean reverse = getResource().getValueMap().get("reverse", false);
+    boolean reverse = getResource().getValueMap().get("reverse", Boolean.FALSE);
     int limit = 0;
     try {
       limit = Integer.parseInt(getResource().getValueMap().get("limit", "0"));
@@ -72,36 +78,7 @@ public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSou
       limit = 0;
     }
 
-    if (!sortBy.isEmpty()) {
-      switch (sortBy) {
-        case "createdDate":
-          pages.sort(Comparator.comparing(p -> {
-            Calendar cal = p.getResource().getChild("jcr:content") != null
-                ? p.getResource().getChild("jcr:content").getValueMap()
-                    .get("jcr:created", Calendar.class) : null;
-            return cal != null ? cal.getTimeInMillis() : 0L;
-          }));
-          break;
-        case "lastModified":
-          pages.sort(Comparator.comparing(p -> {
-            Calendar cal = p.getResource().getChild("jcr:content") != null
-                ? p.getResource().getChild("jcr:content").getValueMap()
-                    .get("jcr:lastModified", Calendar.class) : null;
-            return cal != null ? cal.getTimeInMillis() : 0L;
-          }));
-          break;
-        default:
-          pages.sort(Comparator.comparing(p -> {
-            switch (sortBy) {
-              case "name":
-                return p.getName() != null ? p.getName() : "";
-              default:
-                return p.getDisplayTitle() != null ? p.getDisplayTitle() : p.getName();
-            }
-          }));
-          break;
-      }
-    }
+    ContentPageSorter.sort(pages, sortBy);
 
     if (reverse) {
       Collections.reverse(pages);
