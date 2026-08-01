@@ -1,5 +1,7 @@
 package io.kestros.cms.components.basic.core.structure.grid;
 
+import java.util.ArrayList;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.components.basic.api.structure.KestrosContainer;
 import io.kestros.cms.components.basic.api.structure.KestrosGrid;
@@ -7,8 +9,8 @@ import io.kestros.cms.components.basic.core.BaseContainerSyntheticResource;
 import io.kestros.cms.components.basic.core.BaseSlingModelDataSource;
 import java.util.List;
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
 
+@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 public class KestrosGridImpl extends BaseContainerSyntheticResource implements KestrosGrid {
 
   private List<KestrosContainer> columns;

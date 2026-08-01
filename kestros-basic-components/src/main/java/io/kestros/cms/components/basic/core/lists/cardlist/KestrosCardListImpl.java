@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core.lists.cardlist;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.components.basic.api.content.KestrosCard;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.components.basic.api.lists.KestrosCardList;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
 
+@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 public class KestrosCardListImpl extends BaseContainerSyntheticResource implements KestrosCardList {
 
   private List<KestrosCard> cards;

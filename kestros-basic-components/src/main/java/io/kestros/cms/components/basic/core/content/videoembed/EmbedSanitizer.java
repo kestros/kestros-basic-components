@@ -1,12 +1,14 @@
 package io.kestros.cms.components.basic.core.content.videoembed;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.util.Locale;
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.Nullable;
-import javax.annotation.Nonnull;
 
 /**
  * Defense-in-depth sanitizer for video embed HTML output. Validates that embed code
@@ -17,6 +19,12 @@ import javax.annotation.Nonnull;
  * datasource implementations (e.g., VideoEmbedYouTubeDataSource). This sanitizer
  * guards against future datasource variants that might not validate as rigorously.</p>
  */
+@SuppressFBWarnings(value = {"IMPROPER_UNICODE", "DM_CONVERT_CASE"},
+    justification = "Attribute names and domains are case-folded with Locale.ROOT"
+        + " before being matched against a fixed allow-list. The detector warns that"
+        + " case mapping can change a string's length; here the folded value is only"
+        + " ever compared to lower-case ASCII constants, so a character that folds"
+        + " differently fails the match rather than passing it.")
 public final class EmbedSanitizer {
 
   private EmbedSanitizer() {

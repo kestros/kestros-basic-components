@@ -1,6 +1,8 @@
 package io.kestros.cms.components.basic.core;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.kestros.cms.components.basic.api.exceptions.ComponentElementRenderingException;
 import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
 import io.kestros.cms.componenttypes.api.exceptions.ComponentVariationRetrievalException;
 import io.kestros.cms.componenttypes.api.models.ComponentVariation;
@@ -66,7 +68,12 @@ public abstract class BaseSlingModelDataSource
     return slingHttpServletRequest;
   }
 
+  @SuppressFBWarnings(value = "EXS_EXCEPTION_SOFTENING_NO_CONSTRAINTS",
+      justification = "Called from HTL, which cannot handle a checked exception. The checked"
+          + " cause is wrapped in a typed exception so the failure stays identifiable, per"
+          + " the ruling on DataSourceComponent.")
   @JsonIgnore
+  @Nonnull
   public BaseContentPage getCurrentOrContainingPage() {
     BaseContentPage currentPage = null;
     if (slingHttpServletRequest != null) {
@@ -141,6 +148,11 @@ public abstract class BaseSlingModelDataSource
     return getResource().getName();
   }
 
+  @SuppressFBWarnings(value = "EXS_EXCEPTION_SOFTENING_HAS_CHECKED",
+      justification = "Called from HTL, which cannot handle a checked exception. The"
+          + " checked cause is wrapped in a typed exception, per the ruling on"
+          + " DataSourceComponent.")
+  @Nonnull
   public UiFramework getUiFramework() {
     try {
       if (slingHttpServletRequest != null) {

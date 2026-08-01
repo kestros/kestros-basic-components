@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core.content.richtext;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.components.basic.api.content.KestrosRichText;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.components.basic.core.BaseSlingModelDataSource;
@@ -8,6 +9,7 @@ import io.kestros.cms.components.basic.core.TextSanitizer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 public class KestrosRichTextImpl extends BaseSyntheticResource implements KestrosRichText {
 
   private String text;

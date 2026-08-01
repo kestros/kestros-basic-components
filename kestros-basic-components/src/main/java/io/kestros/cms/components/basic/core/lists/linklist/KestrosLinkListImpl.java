@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core.lists.linklist;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.components.basic.api.content.KestrosLink;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.components.basic.api.lists.KestrosLinkList;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
 
+@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 public class KestrosLinkListImpl extends BaseContainerSyntheticResource implements KestrosLinkList {
 
   private List<KestrosLink> links;
