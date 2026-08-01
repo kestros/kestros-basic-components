@@ -7,6 +7,7 @@ import io.kestros.cms.components.basic.core.BaseContainerSyntheticResource;
 import io.kestros.cms.components.basic.core.BaseSlingModelDataSource;
 import java.util.List;
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 
 public class KestrosGridImpl extends BaseContainerSyntheticResource implements KestrosGrid {
 
@@ -18,7 +19,7 @@ public class KestrosGridImpl extends BaseContainerSyntheticResource implements K
       @Nonnull String resourcePrefix, String forcedResourceName)
       throws ComponentConfigurationException {
     super(dataSource, resourcePrefix, forcedResourceName);
-    this.columns = columns;
+    this.columns = new ArrayList<>(columns);
   }
 
 }
