@@ -88,13 +88,15 @@ public abstract class BaseComponentElement implements KestrosBasicComponentEleme
   }
 
   @Override
+  @Nonnull
   public Resource toSyntheticResource(@Nonnull ResourceResolver resourceResolver,
       @Nonnull String parentPath) {
     if (syntheticResource == null) {
       ResourceMetadata resourceMetadata = new ResourceMetadata();
+      final String forcedName = this.getForcedResourceName();
       String name = "child-" + java.util.UUID.randomUUID();
-      if (this.getForcedResourceName() != null && !this.getForcedResourceName().isEmpty()) {
-        name = this.getForcedResourceName();
+      if (forcedName != null && !forcedName.isEmpty()) {
+        name = forcedName;
       }
       String path = parentPath + "/" + name;
       if (!path.startsWith("/synthetics")) {
