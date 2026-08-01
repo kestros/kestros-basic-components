@@ -31,7 +31,8 @@ public abstract class BaseComponentElement implements KestrosBasicComponentEleme
   }
 
   @Override
-  public List<ComponentVariation> getElementVariations(String propertyName,
+  @Nonnull
+  public List<ComponentVariation> getElementVariations(@Nonnull String propertyName,
       String componentType) {
 
     BaseComponent component = getResource().adaptTo(BaseComponent.class);

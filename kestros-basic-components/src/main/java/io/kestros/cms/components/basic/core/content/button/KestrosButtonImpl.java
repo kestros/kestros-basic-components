@@ -86,7 +86,7 @@ public class KestrosButtonImpl extends BaseSyntheticResource implements KestrosB
     return title;
   }
 
-  @Nullable
+  @Nonnull
   @Override
   public AnchorTarget getTarget() {
     return target;

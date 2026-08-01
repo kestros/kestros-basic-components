@@ -18,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
+import org.apache.sling.api.resource.ValueMap;
 
 public class KestrosImageImpl extends BaseSyntheticResource implements KestrosImage {
   @OSGiService
@@ -80,31 +81,39 @@ public class KestrosImageImpl extends BaseSyntheticResource implements KestrosIm
       this.imagePath = assetPath;
     }
 
-    this.altText = resource.getValueMap().get("altText", String.class);
-    this.caption = resource.getValueMap().get("caption", String.class);
-    this.imageTitle = resource.getValueMap().get("imageTitle", String.class);
-    this.href = resource.getValueMap().get("href", String.class);
-    this.ariaLabel = resource.getValueMap().get("ariaLabel", String.class);
-    this.anchorTitle = resource.getValueMap().get("anchorTitle", String.class);
+    final ValueMap properties = resource.getValueMap();
+    this.altText = properties.get("altText", String.class);
+    this.caption = properties.get("caption", String.class);
+    this.imageTitle = properties.get("imageTitle", String.class);
+    this.href = properties.get("href", String.class);
+    this.ariaLabel = properties.get("ariaLabel", String.class);
+    this.anchorTitle = properties.get("anchorTitle", String.class);
     this.target = AnchorTarget.lookup(resource);
     if (StringUtils.isEmpty(this.imagePath)) {
-      throw new ComponentConfigurationException("Missing required property");
+      throw new ComponentConfigurationException(String.format(
+          "Unable to build an image at %s: imagePath is required and resolved to empty.",
+          resource.getPath()));
     }
   }
 
-  Asset getAsset(String path, ResourceResolver resourceResolver) throws AssetRetrievalException {
+  @Nonnull
+  final Asset getAsset(@Nonnull final String path,
+      @Nonnull final ResourceResolver resourceResolver)
+      throws AssetRetrievalException {
     if (assetRetrievalService == null) {
-      throw new AssetRetrievalException("AssetRetrievalService is not available.");
+      throw new AssetRetrievalException(String.format(
+          "Unable to resolve the asset at %s: no AssetRetrievalService is bound.", path));
     }
     return assetRetrievalService.getAsset(path, null, resourceResolver);
   }
 
   @Override
+  @Nonnull
   public String getImageTitle() {
     return imageTitle;
   }
 
-  @Nullable
+  @Nonnull
   @Override
   public String getImagePath() {
     return imagePath;

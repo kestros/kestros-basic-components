@@ -60,16 +60,19 @@ public abstract class BaseSyntheticResource extends BaseComponentElement
   }
 
   @Override
+  @Nonnull
   public ResourceResolver getResourceResolver() {
     return resourceResolver;
   }
 
   @Override
+  @Nonnull
   public String getParentPath() {
     return parentPath;
   }
 
   @Override
+  @Nonnull
   public Resource getResource() {
     if (syntheticResource == null) {
       syntheticResource = toSyntheticResource(resourceResolver, parentPath);
@@ -90,15 +93,18 @@ public abstract class BaseSyntheticResource extends BaseComponentElement
   }
 
   @Override
+  @Nonnull
   public List<ComponentVariation> getVariations() {
     return new ArrayList<>(componentVariations);
   }
 
   @Override
+  @Nonnull
   public String getLayout() {
     return layout;
   }
 
+  @Nonnull
   public UiFramework getUiFramework() {
     return uiFramework;
   }

@@ -74,7 +74,7 @@ public class KestrosLinkImpl extends BaseSyntheticResource implements KestrosLin
     return title;
   }
 
-  @Nullable
+  @Nonnull
   @Override
   public AnchorTarget getTarget() {
     return target;

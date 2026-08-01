@@ -32,7 +32,7 @@ public class ImageAssetDataSource extends BaseSlingModelDataSource implements Ke
 
   private Asset asset;
 
-  @Nullable
+  @Nonnull
   @Override
   public String getImagePath() {
     return StringUtils.trimToNull(

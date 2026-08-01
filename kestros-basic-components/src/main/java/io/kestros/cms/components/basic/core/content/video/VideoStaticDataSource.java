@@ -36,10 +36,12 @@ public class VideoStaticDataSource extends BaseSlingModelDataSource implements K
     return getResource().getValueMap().get("fallbackText", StringUtils.EMPTY);
   }
 
+  @Nonnull
   String getVideoPath() {
     return getResource().getValueMap().get("videoPath", String.class);
   }
 
+  @Nullable
   Asset getVideoAsset() throws AssetRetrievalException {
     if (assetRetrievalService != null) {
       return assetRetrievalService.getAsset(getVideoPath(), null, getResourceResolver());

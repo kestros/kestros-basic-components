@@ -42,17 +42,18 @@ public abstract class BaseSlingModelDataSource
   @OSGiService
   private ComponentUiFrameworkViewRetrievalService componentUiFrameworkViewRetrievalService;
 
-  private Resource syntheticResource;
 
   @Nullable
   public String getId() {
     return getResource().getValueMap().get("id", String.class);
   }
 
+  @Nonnull
   public Boolean isSynthetic() {
-    return false;
+    return Boolean.FALSE;
   }
 
+  @Nonnull
   public Resource getResource() {
     if (resource == null && slingHttpServletRequest != null) {
       return slingHttpServletRequest.getResource();
@@ -128,6 +129,7 @@ public abstract class BaseSlingModelDataSource
     return getResource().adaptTo(BaseComponent.class).getAppliedVariations();
   }
 
+  @Nonnull
   public String getLayout() {
     return getResource().getValueMap().get("layout", "default");
   }

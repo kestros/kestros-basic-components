@@ -97,7 +97,7 @@ public class ImageStaticDataSource extends BaseSlingModelDataSource implements K
     return AnchorTarget.lookup(getResource());
   }
 
-  @Nullable
+  @Nonnull
   @Override
   public String getAltText() {
     String alt = getResource().getValueMap().get("altText", String.class);

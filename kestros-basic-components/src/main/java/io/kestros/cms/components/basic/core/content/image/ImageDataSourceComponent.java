@@ -14,11 +14,12 @@ public class ImageDataSourceComponent extends BaseDataSourceComponent<KestrosIma
                                                                                     KestrosImage {
 
   @Override
+  @Nonnull
   public String getImageTitle() {
     return getComponentData().getImageTitle();
   }
 
-  @Nullable
+  @Nonnull
   @Override
   public String getImagePath() {
     return getComponentData().getImagePath();

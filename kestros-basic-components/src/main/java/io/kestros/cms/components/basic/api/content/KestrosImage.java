@@ -9,6 +9,7 @@ public interface KestrosImage extends KestrosBasicComponentElement {
   String RESOURCE_TYPE = "/libs/kestros/commons/components/content/image";
 
   @Override
+  @Nonnull
   default String getComponentResourceType() {
     return RESOURCE_TYPE;
   }

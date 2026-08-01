@@ -13,6 +13,7 @@ import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import javax.annotation.Nonnull;
 
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class HeadingPageTitleDataSource extends HeadingStaticDataSource implements KestrosHeading {
@@ -47,6 +48,7 @@ public class HeadingPageTitleDataSource extends HeadingStaticDataSource implemen
     return getPage().getDisplayTitle();
   }
 
+  @Nonnull
   public Boolean isOverrideInheritedTitle() {
     return getResource().getValueMap().get("overrideInheritedTitle", Boolean.FALSE);
   }
