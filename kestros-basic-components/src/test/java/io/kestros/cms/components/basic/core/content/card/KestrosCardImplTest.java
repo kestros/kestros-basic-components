@@ -210,4 +210,45 @@ public class KestrosCardImplTest extends BaseSyntheticTest {
                             "No AssetRetrievalService")));
   }
 
+  /**
+   * An unchecked failure from the asset service must not escape the constructor.
+   * CardListChildPagesDataSource wraps anything thrown here in a RuntimeException, which loses the
+   * whole card list, so one unreadable asset would blank the page rather than drop one caption.
+   */
+  @Test
+  public void testCardStillBuildsWhenTheAssetServiceThrowsAnUncheckedException() throws Exception {
+    AssetRetrievalService service = mock(AssetRetrievalService.class);
+    when(service.getAsset("/content/assets/photo.jpg", null,
+            context.resourceResolver())).thenThrow(new IllegalStateException("resolver closed"));
+
+    KestrosCardImpl pageCard = new KestrosCardImpl(pageWithImage(), "Read more", newDataSource(),
+            "card", "uncheckedCard", service);
+
+    KestrosImage cardImage = pageCard.getImageElement();
+    assertNotNull("the card must still be built", cardImage);
+    assertEquals("the image path still comes from the page", "/content/assets/photo.jpg",
+            cardImage.getImagePath());
+    assertNull("with no resolvable asset there is no title to show", cardImage.getAltText());
+  }
+
+  /**
+   * A page with no image must not warn about a missing AssetRetrievalService. The blank-path check
+   * runs first, so an instance without the service does not log once per card per page.
+   */
+  @Test
+  public void testPageWithNoImageDoesNotWarnAboutTheMissingAssetService() throws Exception {
+    ListAppender<ILoggingEvent> appender = attachAppenderToCardLogger();
+
+    Map<String, Object> pageProperties = new HashMap<>();
+    pageProperties.put("jcr:primaryType", "kes:Page");
+    Resource pageResource = context.create().resource("/content/pages/no-image", pageProperties);
+    BaseContentPage page = spy(pageResource.adaptTo(BaseContentPage.class));
+    doReturn("").when(page).getImagePath();
+
+    new KestrosCardImpl(page, "Read more", newDataSource(), "card", "noImageCard", null);
+
+    assertTrue("a page with no image must not warn about the asset service",
+            appender.list.stream().noneMatch(
+                    event -> event.getFormattedMessage().contains("No AssetRetrievalService")));
+  }
 }

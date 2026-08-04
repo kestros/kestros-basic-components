@@ -23,8 +23,6 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.sling.models.annotations.Optional;
-import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,8 +36,12 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
   private String layout;
   private KestrosImage image;
   private KestrosButtonGroup buttonGroup;
-  @OSGiService
-  @Optional
+  /**
+   * Set from the constructor, never injected: this class is not a Sling Model and is only ever
+   * built with {@code new}. It previously carried {@code @OSGiService @Optional}, which looked like
+   * injection and did nothing - the exact confusion this card was opened to remove.
+   */
+  @Nullable
   private AssetRetrievalService assetRetrievalService;
 
   public KestrosCardImpl(BaseContentPage page, @Nullable String buttonText,
@@ -74,9 +76,7 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
           throws ComponentConfigurationException {
     super(dataSource, resourcePrefix, forcedResourceName);
 
-    if (assetRetrievalService != null) {
-      this.assetRetrievalService = assetRetrievalService;
-    }
+    this.assetRetrievalService = assetRetrievalService;
 
     this.description = page.getDisplayDescription();
     try {
@@ -131,14 +131,14 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
    */
   @Nullable
   Asset getAssetForPage(@Nonnull final BaseContentPage page) {
+    final String imagePath = page.getImagePath();
+    if (StringUtils.isBlank(imagePath)) {
+      return null;
+    }
     if (assetRetrievalService == null) {
       LOG.warn("Unable to resolve the asset for card image on {}. No AssetRetrievalService "
               + "available; the image renders without the asset's title or description.",
               page.getPath());
-      return null;
-    }
-    final String imagePath = page.getImagePath();
-    if (StringUtils.isBlank(imagePath)) {
       return null;
     }
     try {
@@ -147,8 +147,17 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
       LOG.warn("Unable to resolve asset {} for card image on {}. {} The image renders without the "
               + "asset's title or description.", imagePath, page.getPath(), e.getMessage());
       return null;
+    } catch (final RuntimeException e) {
+      // A card that cannot resolve its asset must still render. CardListChildPagesDataSource wraps
+      // anything escaping this constructor in a RuntimeException, which loses the WHOLE card list -
+      // so one unreadable asset would blank the page rather than drop one caption.
+      LOG.warn("Unexpected failure resolving asset {} for card image on {}. {}: {} The image "
+              + "renders without the asset's title or description.", imagePath, page.getPath(),
+              e.getClass().getSimpleName(), e.getMessage());
+      return null;
     }
   }
+
 
   public KestrosCardImpl(String description, KestrosHeading title, KestrosImage image,
           KestrosButtonGroup buttonGroup,
