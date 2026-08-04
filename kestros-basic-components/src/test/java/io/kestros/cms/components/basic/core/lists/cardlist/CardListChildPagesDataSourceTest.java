@@ -29,6 +29,7 @@ public class CardListChildPagesDataSourceTest extends BaseDataSourceTest {
 
   @Override
   public void doComponentSetup() throws AssetCollectionRetrievalException {
+    registerAssetRetrievalService();
     setUpSampleCollection("/content/collection");
     setupSamplePage("/content/page", "/content/collection/asset-1");
 
@@ -337,4 +338,72 @@ public class CardListChildPagesDataSourceTest extends BaseDataSourceTest {
     assertEquals(5, context.request().adaptTo(CardListChildPagesDataSource.class)
         .getCardElements().size());
   }
+
+  /**
+   * The defect this card exists for lives in the DATA SOURCE, not in the card model: the data source
+   * did not pass its AssetRetrievalService when constructing each card, so every card built from a
+   * page lost its image's title and description.
+   *
+   * <p>This test drives the data source, which is the path an author actually exercises. A test that
+   * calls the card constructor directly cannot catch the bug, because the constructor was never the
+   * broken part - it passes whether or not the data source hands the service over.
+   *
+   * <p>The page and the asset carry deliberately different titles ("Title" against "Asset 1 Title"),
+   * so an assertion on the asset's wording cannot pass by accident from the page's.
+   */
+  @Test
+  public void testGetCardElementsResolvesTheAssetTitleAndDescriptionThroughTheDataSource() {
+    // A correctly shaped asset: kes:Asset on the node itself, because AssetResource is declared
+    // @Model(resourceType = "kes:Asset") and extends BasePage, so its text lives on jcr:content.
+    // The shared setUpSampleCollection fixture inverts this and puts kes:Asset on jcr:content, which
+    // no real asset can resolve through AssetRetrievalServiceImpl. See the card.
+    final Map<String, Object> assetProperties = new HashMap<>();
+    assetProperties.put("jcr:primaryType", "kes:Asset");
+    final Map<String, Object> assetContentProperties = new HashMap<>();
+    assetContentProperties.put("jcr:primaryType", "nt:unstructured");
+    assetContentProperties.put("jcr:title", "Asset 1 Title");
+    assetContentProperties.put("jcr:description", "Asset 1 Description");
+    context.create().resource("/content/real-assets/photo", assetProperties);
+    context.create().resource("/content/real-assets/photo/jcr:content", assetContentProperties);
+
+    // A page whose children point their image at that asset. The page's own title and description are
+    // deliberately different, so an assertion on the asset's wording cannot pass from the page's.
+    final Map<String, Object> pageProperties = new HashMap<>();
+    pageProperties.put("jcr:primaryType", "kes:Page");
+    final Map<String, Object> pageContentProperties = new HashMap<>();
+    pageContentProperties.put("jcr:primaryType", "nt:unstructured");
+    pageContentProperties.put("jcr:title", "Page Title");
+    pageContentProperties.put("jcr:description", "Page Description");
+    pageContentProperties.put("cardImage", "/content/real-assets/photo");
+    pageContentProperties.put("image", "/content/real-assets/photo");
+    context.create().resource("/content/asset-root", pageProperties);
+    context.create().resource("/content/asset-root/jcr:content", pageContentProperties);
+    context.create().resource("/content/asset-root/child-1", pageProperties);
+    context.create().resource("/content/asset-root/child-1/jcr:content", pageContentProperties);
+
+    final Map<String, Object> props = new HashMap<>();
+    props.put("pagesPath", "/content/asset-root");
+    props.put("readMoreText", "Button Text");
+    final Resource dataSourceResource = context.create().resource(
+        "/content/asset-root/jcr:content/comp-asset-resolution", props);
+    context.request().setResource(dataSourceResource);
+
+    final CardListChildPagesDataSource dataSource = context.request().adaptTo(
+        CardListChildPagesDataSource.class);
+    assertNotNull(dataSource);
+
+    final List<KestrosCard> cards = dataSource.getCardElements();
+    assertFalse("the root page has a child, so the data source must build a card",
+        cards.isEmpty());
+
+    final KestrosImage image = cards.get(0).getImageElement();
+    assertNotNull("a card built from a page with an image must have an image element", image);
+    assertEquals("alt text must come from the asset, not the page", "Asset 1 Title",
+        image.getAltText());
+    assertEquals("caption must come from the asset, not the page", "Asset 1 Description",
+        image.getCaption());
+    assertEquals("image title must come from the asset, not the page", "Asset 1 Title",
+        image.getImageTitle());
+  }
+
 }
