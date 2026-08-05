@@ -85,12 +85,12 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
     } catch (final ComponentConfigurationException e) {
       this.title = null;
     }
-    final Asset asset = getAssetForPage(page);
+    final AssetText assetText = readAssetTextForPage(page);
     try {
       this.image = new KestrosImageImpl(page.getImagePath(),
-              asset != null ? asset.getTitle() : null,
-              asset != null ? asset.getDescription() : null,
-              asset != null ? asset.getTitle() : null,
+              assetText.title,
+              assetText.description,
+              assetText.title,
               null, null, null, AnchorTarget.SAME_WINDOW,
               dataSource,
               "image",
@@ -129,6 +129,50 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
    * @return The page image's asset, or null when there is no service, no image path, or the asset
    *         cannot be resolved.
    */
+  /**
+   * The asset's title and description, already read. Reading them is part of resolving the asset:
+   * an asset that resolves but whose properties cannot be read is just as unreadable as one that
+   * does not resolve, and the caller must not have to guard the getters separately.
+   */
+  static final class AssetText {
+    private final String title;
+    private final String description;
+
+    AssetText(@Nullable final String title, @Nullable final String description) {
+      this.title = title;
+      this.description = description;
+    }
+  }
+
+  /**
+   * Resolves the page's image asset AND reads its title and description, with every call against
+   * the asset inside the same guard.
+   *
+   * <p>The properties are read here rather than by the caller deliberately. When they were read at
+   * the call site, an asset that resolved but threw from {@code getTitle()} escaped the constructor,
+   * and {@code CardListChildPagesDataSource} turns anything escaping into a RuntimeException that
+   * loses the whole card list. One unreadable asset blanked the page.
+   *
+   * @param page Page the card is built from.
+   * @return The asset's title and description, both null when there is no service, no image path, or
+   *         the asset cannot be resolved or read.
+   */
+  @Nonnull
+  AssetText readAssetTextForPage(@Nonnull final BaseContentPage page) {
+    final Asset asset = getAssetForPage(page);
+    if (asset == null) {
+      return new AssetText(null, null);
+    }
+    try {
+      return new AssetText(asset.getTitle(), asset.getDescription());
+    } catch (final RuntimeException e) {
+      LOG.warn("Resolved the asset for card image on {} but could not read its properties. {}: {} "
+              + "The image renders without the asset's title or description.", page.getPath(),
+              e.getClass().getSimpleName(), e.getMessage());
+      return new AssetText(null, null);
+    }
+  }
+
   @Nullable
   Asset getAssetForPage(@Nonnull final BaseContentPage page) {
     final String imagePath = page.getImagePath();

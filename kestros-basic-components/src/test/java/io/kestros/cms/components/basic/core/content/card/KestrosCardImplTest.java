@@ -251,4 +251,26 @@ public class KestrosCardImplTest extends BaseSyntheticTest {
             appender.list.stream().noneMatch(
                     event -> event.getFormattedMessage().contains("No AssetRetrievalService")));
   }
+
+  /**
+   * The defect the previous round missed: the asset resolved, but reading its properties threw, and
+   * that read sat outside the guard. It escaped the constructor and blanked the whole card list.
+   */
+  @Test
+  public void testCardStillBuildsWhenTheResolvedAssetCannotBeRead() throws Exception {
+    Asset unreadable = mock(Asset.class);
+    when(unreadable.getTitle()).thenThrow(new IllegalStateException("asset resolver closed"));
+    AssetRetrievalService service = mock(AssetRetrievalService.class);
+    when(service.getAsset("/content/assets/photo.jpg", null,
+            context.resourceResolver())).thenReturn(unreadable);
+
+    KestrosCardImpl pageCard = new KestrosCardImpl(pageWithImage(), "Read more", newDataSource(),
+            "card", "unreadableAssetCard", service);
+
+    KestrosImage cardImage = pageCard.getImageElement();
+    assertNotNull("the card must still be built", cardImage);
+    assertEquals("the image path still comes from the page", "/content/assets/photo.jpg",
+            cardImage.getImagePath());
+    assertNull("an unreadable asset yields no title", cardImage.getAltText());
+  }
 }

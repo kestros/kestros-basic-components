@@ -353,10 +353,9 @@ public class CardListChildPagesDataSourceTest extends BaseDataSourceTest {
    */
   @Test
   public void testGetCardElementsResolvesTheAssetTitleAndDescriptionThroughTheDataSource() {
-    // A correctly shaped asset: kes:Asset on the node itself, because AssetResource is declared
-    // @Model(resourceType = "kes:Asset") and extends BasePage, so its text lives on jcr:content.
-    // The shared setUpSampleCollection fixture inverts this and puts kes:Asset on jcr:content, which
-    // no real asset can resolve through AssetRetrievalServiceImpl. See the card.
+    // This test builds its own asset rather than reusing the shared setUpSampleCollection fixture,
+    // so the wording it asserts on is local to the test and cannot drift when that fixture changes.
+    // (The shared fixture does resolve - an earlier note here claiming otherwise was wrong.)
     final Map<String, Object> assetProperties = new HashMap<>();
     assetProperties.put("jcr:primaryType", "kes:Asset");
     final Map<String, Object> assetContentProperties = new HashMap<>();
