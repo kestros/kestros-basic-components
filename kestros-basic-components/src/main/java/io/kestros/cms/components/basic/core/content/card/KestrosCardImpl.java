@@ -117,19 +117,6 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
   }
 
   /**
-   * Resolves the asset behind a page's image, so the card can carry the asset's own title and
-   * description.
-   *
-   * <p>A card whose asset cannot be resolved still renders its image - it simply loses the title
-   * and description - and the failure is logged rather than swallowed. Danny, 2026-08-04: dropping
-   * the card would surprise an author more than a missing caption, and silence is what hid this
-   * for months.
-   *
-   * @param page Page the card is built from.
-   * @return The page image's asset, or null when there is no service, no image path, or the asset
-   *         cannot be resolved.
-   */
-  /**
    * The asset's title and description, already read. Reading them is part of resolving the asset:
    * an asset that resolves but whose properties cannot be read is just as unreadable as one that
    * does not resolve, and the caller must not have to guard the getters separately.
@@ -149,16 +136,18 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
    * the asset inside the same guard.
    *
    * <p>The properties are read here rather than by the caller deliberately. When they were read at
-   * the call site, an asset that resolved but threw from {@code getTitle()} escaped the constructor,
+   * the call site, an asset that resolved but threw from {@code getTitle()} escaped the
+   * constructor,
    * and {@code CardListChildPagesDataSource} turns anything escaping into a RuntimeException that
    * loses the whole card list. One unreadable asset blanked the page.
    *
    * @param page Page the card is built from.
-   * @return The asset's title and description, both null when there is no service, no image path, or
+   * @return The asset's title and description, both null when there is no service, no image
+   *         path, or
    *         the asset cannot be resolved or read.
    */
   @Nonnull
-  AssetText readAssetTextForPage(@Nonnull final BaseContentPage page) {
+  final AssetText readAssetTextForPage(@Nonnull final BaseContentPage page) {
     final Asset asset = getAssetForPage(page);
     if (asset == null) {
       return new AssetText(null, null);
@@ -166,15 +155,30 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
     try {
       return new AssetText(asset.getTitle(), asset.getDescription());
     } catch (final RuntimeException e) {
+      final String safePath = page.getPath().replaceAll("[\r\n]", "");
       LOG.warn("Resolved the asset for card image on {} but could not read its properties. {}: {} "
-              + "The image renders without the asset's title or description.", page.getPath(),
-              e.getClass().getSimpleName(), e.getMessage());
+              + "The image renders without the asset's title or description.", safePath,
+              e.getClass().getSimpleName(), e.getMessage(), e);
       return new AssetText(null, null);
     }
   }
 
+  /**
+   * Resolves the asset behind a page's image, so the card can carry the asset's own title and
+   * description.
+   *
+   * <p>A card whose asset cannot be resolved still renders its image - it simply loses the title
+   * and description - and the failure is logged rather than swallowed. Danny, 2026-08-04: dropping
+   * the card would surprise an author more than a missing caption, and silence is what hid this
+   * for months.
+   *
+   * @param page Page the card is built from.
+   * @return The page image's asset, or null when there is no service, no image path, or the asset
+   *         cannot be resolved.
+   */
   @Nullable
-  Asset getAssetForPage(@Nonnull final BaseContentPage page) {
+  final Asset getAssetForPage(@Nonnull final BaseContentPage page) {
+    final String safePath = page.getPath().replaceAll("[\r\n]", "");
     final String imagePath = page.getImagePath();
     if (StringUtils.isBlank(imagePath)) {
       return null;
@@ -182,22 +186,22 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
     if (assetRetrievalService == null) {
       LOG.warn("Unable to resolve the asset for card image on {}. No AssetRetrievalService "
               + "available; the image renders without the asset's title or description.",
-              page.getPath());
+              safePath);
       return null;
     }
     try {
       return assetRetrievalService.getAsset(imagePath, null, page.getResourceResolver());
     } catch (final AssetRetrievalException e) {
       LOG.warn("Unable to resolve asset {} for card image on {}. {} The image renders without the "
-              + "asset's title or description.", imagePath, page.getPath(), e.getMessage());
+              + "asset's title or description.", imagePath, safePath, e.getMessage(), e);
       return null;
     } catch (final RuntimeException e) {
       // A card that cannot resolve its asset must still render. CardListChildPagesDataSource wraps
       // anything escaping this constructor in a RuntimeException, which loses the WHOLE card list -
       // so one unreadable asset would blank the page rather than drop one caption.
       LOG.warn("Unexpected failure resolving asset {} for card image on {}. {}: {} The image "
-              + "renders without the asset's title or description.", imagePath, page.getPath(),
-              e.getClass().getSimpleName(), e.getMessage());
+              + "renders without the asset's title or description.", imagePath, safePath,
+              e.getClass().getSimpleName(), e.getMessage(), e);
       return null;
     }
   }
