@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core.lists.cardlist;
 
+import io.kestros.cms.assets.api.services.AssetRetrievalService;
 import io.kestros.cms.components.basic.api.content.KestrosCard;
 import io.kestros.cms.components.basic.api.lists.KestrosCardList;
 import io.kestros.cms.components.basic.core.BaseContainerSlingModelDataSource;
@@ -30,6 +31,10 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
   @OSGiService
   @org.apache.sling.models.annotations.Optional
   private TagRetrievalService tagRetrievalService;
+
+  @OSGiService
+  @org.apache.sling.models.annotations.Optional
+  private AssetRetrievalService assetRetrievalService;
 
   private BaseContentPage containingPage;
 
@@ -189,7 +194,8 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
                 getReadMoreText(),
                 this,
                 "card",
-                page.getName()));
+                page.getName(),
+                assetRetrievalService));
       } catch (Exception e) {
         // Skip cards that fail to construct — null-safe
       }
