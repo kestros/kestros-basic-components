@@ -21,6 +21,7 @@ import javax.annotation.Nullable;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
@@ -28,7 +29,7 @@ public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSou
                                                                                     KestrosCardList {
 
   @OSGiService
-  @org.apache.sling.models.annotations.Optional
+  @Optional
   private AssetRetrievalService assetRetrievalService;
 
   private BaseContentPage rootPage;
