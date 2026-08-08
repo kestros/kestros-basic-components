@@ -1,6 +1,7 @@
 package io.kestros.cms.components.basic.core.lists.cardlist;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import io.kestros.cms.assets.api.services.AssetRetrievalService;
 import io.kestros.cms.components.basic.api.content.KestrosCard;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.components.basic.api.lists.KestrosCardList;
@@ -18,6 +19,8 @@ import javax.annotation.Nullable;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.Optional;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,6 +34,12 @@ public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSou
 
   private static final Logger LOG =
       LoggerFactory.getLogger(CardListChildPagesDataSource.class);
+
+  @OSGiService
+  @Optional
+  private AssetRetrievalService assetRetrievalService;
+
+
   private BaseContentPage rootPage;
 
   @Nullable
@@ -101,13 +110,17 @@ public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSou
     List<KestrosCard> cards = new ArrayList<>();
     for (BaseContentPage page : pages) {
       try {
-        cards.add(new KestrosCardImpl(page, getReadMoreText(), this, "card", page.getName()));
+        cards.add(
+            new KestrosCardImpl(page, getReadMoreText(), this, "card", page.getName(),
+                assetRetrievalService));
       } catch (final ComponentConfigurationException exception) {
-        // One page that cannot be turned into a card should not empty the whole list. This used
-        // to rethrow, so a single bad page took the component down with it. Deliberately narrow:
+        // One page that cannot be turned into a card should not empty the whole list. develop
+        // still had `catch (Exception e) { throw new RuntimeException(e); }` here, so a single
+        // bad page took the component down with it. Deliberately narrow:
         // ComponentElementRenderingException is unchecked and means the component as a whole
         // cannot render (no resolvable theme or UI framework), which must still reach HTL rather
-        // than be logged once per page.
+        // than be logged once per page. The asset failures develop was guarding against are
+        // caught inside KestrosCardImpl, so they never reach this catch.
         LOG.warn("Unable to build a card for {} in the list at {}: {}",
             String.valueOf(page.getPath()).replaceAll("[\r\n]", ""),
             String.valueOf(getResource().getPath()).replaceAll("[\r\n]", ""),

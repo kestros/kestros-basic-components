@@ -1,6 +1,7 @@
 package io.kestros.cms.components.basic.core.lists.cardlist;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import io.kestros.cms.assets.api.services.AssetRetrievalService;
 import io.kestros.cms.components.basic.api.content.KestrosCard;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.components.basic.api.lists.KestrosCardList;
@@ -42,6 +43,10 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
   @OSGiService
   @org.apache.sling.models.annotations.Optional
   private TagRetrievalService tagRetrievalService;
+
+  @OSGiService
+  @org.apache.sling.models.annotations.Optional
+  private AssetRetrievalService assetRetrievalService;
 
   private BaseContentPage containingPage;
 
@@ -180,8 +185,16 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
                 getReadMoreText(),
                 this,
                 "card",
-                page.getName()));
+                page.getName(),
+                assetRetrievalService));
       } catch (ComponentConfigurationException e) {
+        // develop caught bare Exception here to stop one unreadable asset blanking the
+        // whole list. That guard now lives INSIDE KestrosCardImpl, which catches
+        // AssetRetrievalException and RuntimeException around the asset reads and lets
+        // only ComponentConfigurationException escape — so narrowing here does not
+        // reinstate that bug. It is deliberate: ComponentElementRenderingException is
+        // unchecked and means the component as a whole cannot render, which must reach
+        // HTL rather than be swallowed once per page.
         LOG.debug("Skipping the {} for {}: it could not be built. {}", "card",
             String.valueOf(page.getPath()).replaceAll("[\r\n]", ""),
             String.valueOf(e.getMessage()).replaceAll("[\r\n]", ""));
