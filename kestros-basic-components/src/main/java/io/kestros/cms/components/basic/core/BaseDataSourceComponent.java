@@ -59,7 +59,7 @@ public abstract class BaseDataSourceComponent<T extends KestrosBasicComponentEle
   @Override
   @Nonnull
   public List<ComponentVariation> getElementVariations(@Nonnull String propertyName,
-      String componentType) {
+      @Nonnull String componentType) {
     return getComponentData().getElementVariations(propertyName, componentType);
   }
 

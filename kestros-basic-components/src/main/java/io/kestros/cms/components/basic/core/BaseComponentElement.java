@@ -41,7 +41,7 @@ public abstract class BaseComponentElement implements KestrosBasicComponentEleme
   @Override
   @Nonnull
   public List<ComponentVariation> getElementVariations(@Nonnull String propertyName,
-      String componentType) {
+      @Nonnull String componentType) {
 
     BaseComponent component = getResource().adaptTo(BaseComponent.class);
     final List<ComponentVariation> appliedVariations = new ArrayList<>();
@@ -93,12 +93,10 @@ public abstract class BaseComponentElement implements KestrosBasicComponentEleme
       // A component whose variations cannot be resolved renders unstyled. That is the right
       // outcome -- it is better than failing the page -- but it used to happen silently, which
       // made an unstyled element impossible to tell apart from one with no variations applied.
-      if (LOG.isDebugEnabled()) {
-        LOG.debug("Unable to resolve variations for {} on {}: {}",
-            String.valueOf(propertyName).replaceAll("[\r\n]", ""),
-            String.valueOf(getResource().getPath()).replaceAll("[\r\n]", ""),
-            String.valueOf(exception.getMessage()).replaceAll("[\r\n]", ""));
-      }
+      LOG.debug("Unable to resolve variations for {} on {}: {}",
+          String.valueOf(propertyName).replaceAll("[\r\n]", ""),
+          String.valueOf(getResource().getPath()).replaceAll("[\r\n]", ""),
+          String.valueOf(exception.getMessage()).replaceAll("[\r\n]", ""));
     }
     return new ArrayList<>(appliedVariations);
   }

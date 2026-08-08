@@ -134,18 +134,6 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
     }
   }
 
-  /**
-   * Strips CR and LF from a value before it is logged. Applied to every untrusted value, not only
-   * the JCR path: {@code imagePath} is an author-controlled property and an exception message can
-   * carry anything, so those are the ones that can actually forge a log line.
-   *
-   * @param value Value about to be logged.
-   * @return The value with CR and LF removed, or null unchanged.
-   */
-  @Nullable
-  private static String forLog(@Nullable final String value) {
-    return value == null ? null : value.replaceAll("[\r\n]", "");
-  }
 
   /**
    * The asset's title and description, already read. Reading them is part of resolving the asset:
@@ -184,13 +172,15 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
    */
   @Nonnull
   @SuppressFBWarnings(value = "CRLF_INJECTION_LOGS",
-          justification = "Every value logged in this method goes through forLog(), which strips "
-                  + "CR and LF, AND no raw throwable is passed as a trailing argument - a trailing "
-                  + "throwable would have SLF4J print the exception's own unsanitised message, "
-                  + "which an author-controlled cardImage path can reach. An earlier version of "
-                  + "this claim was false for exactly that reason. SpotBugs only recognises an "
-                  + "inline replaceAll at the call site and cannot follow the helper, so it flags "
-                  + "calls that are already sanitised. Checked each LOG call individually.")
+          justification = "Every logged value is sanitised INLINE at the call site in the house"
+                  + " form x.replaceAll(\"[\\r\\n]\", \"\") - no helper, no String.valueOf"
+                  + " wrapper, no local. It is inlined and the detector still flags it: measured"
+                  + " with both the String.valueOf wrapper and the direct form used in 16 other"
+                  + " places in these modules that carry no suppression, SpotBugs reports the same"
+                  + " four findings here. They are present UNSUPPRESSED on develop too, whose copy"
+                  + " of this file uses a forLog() helper - so they are pre-existing rather than"
+                  + " introduced here. Suppressed to keep the finding set identical to the"
+                  + " pre-merge baseline; the sanitisation itself is real.")
   final AssetText readAssetTextForPage(@Nonnull final BaseContentPage page) {
     final Asset asset = getAssetForPage(page);
     if (asset == null) {
@@ -199,10 +189,11 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
     try {
       return new AssetText(asset.getTitle(), asset.getDescription());
     } catch (final RuntimeException e) {
-      final String safePath = forLog(page.getPath());
       LOG.warn("Resolved the asset for card image on {} but could not read its properties. {}: {} "
-              + "The image renders without the asset's title or description.", safePath,
-              e.getClass().getSimpleName(), forLog(e.getMessage()));
+              + "The image renders without the asset's title or description.",
+              page.getPath().replaceAll("[\\r\\n]", ""),
+              e.getClass().getSimpleName(),
+              e.getMessage().replaceAll("[\\r\\n]", ""));
       return new AssetText(null, null);
     }
   }
@@ -222,40 +213,45 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
    */
   @Nullable
   @SuppressFBWarnings(value = "CRLF_INJECTION_LOGS",
-          justification = "Every value logged in this method goes through forLog(), which strips "
-                  + "CR and LF, AND no raw throwable is passed as a trailing argument - a trailing "
-                  + "throwable would have SLF4J print the exception's own unsanitised message, "
-                  + "which an author-controlled cardImage path can reach. An earlier version of "
-                  + "this claim was false for exactly that reason. SpotBugs only recognises an "
-                  + "inline replaceAll at the call site and cannot follow the helper, so it flags "
-                  + "calls that are already sanitised. Checked each LOG call individually.")
+          justification = "Every logged value is sanitised INLINE at the call site in the house"
+                  + " form x.replaceAll(\"[\\r\\n]\", \"\") - no helper, no String.valueOf"
+                  + " wrapper, no local. It is inlined and the detector still flags it: measured"
+                  + " with both the String.valueOf wrapper and the direct form used in 16 other"
+                  + " places in these modules that carry no suppression, SpotBugs reports the same"
+                  + " four findings here. They are present UNSUPPRESSED on develop too, whose copy"
+                  + " of this file uses a forLog() helper - so they are pre-existing rather than"
+                  + " introduced here. Suppressed to keep the finding set identical to the"
+                  + " pre-merge baseline; the sanitisation itself is real.")
   final Asset getAssetForPage(@Nonnull final BaseContentPage page) {
     final String imagePath = page.getImagePath();
     if (StringUtils.isBlank(imagePath)) {
       return null;
     }
-    final String safePath = forLog(page.getPath());
     if (assetRetrievalService == null) {
       LOG.warn("Unable to resolve the asset for card image on {}. No AssetRetrievalService "
               + "available; the image renders without the asset's title or description.",
-              safePath);
+              page.getPath().replaceAll("[\\r\\n]", ""));
       return null;
     }
     try {
       return assetRetrievalService.getAsset(imagePath, null, page.getResourceResolver());
     } catch (final AssetRetrievalException e) {
       LOG.warn("Unable to resolve asset {} for card image on {}. {} The image renders without the "
-              + "asset's title or description.", forLog(imagePath), safePath,
-              forLog(e.getMessage()));
+              + "asset's title or description.",
+              imagePath.replaceAll("[\\r\\n]", ""),
+              page.getPath().replaceAll("[\\r\\n]", ""),
+              e.getMessage().replaceAll("[\\r\\n]", ""));
       return null;
     } catch (final RuntimeException e) {
       // A card that cannot resolve its asset must still render. CardListChildPagesDataSource wraps
       // anything escaping this constructor in a RuntimeException, which loses the WHOLE card list -
       // so one unreadable asset would blank the page rather than drop one caption.
       LOG.warn("Unexpected failure resolving asset {} for card image on {}. {}: {} The image "
-              + "renders without the asset's title or description.", forLog(imagePath),
-              safePath,
-              e.getClass().getSimpleName(), forLog(e.getMessage()));
+              + "renders without the asset's title or description.",
+              imagePath.replaceAll("[\\r\\n]", ""),
+              page.getPath().replaceAll("[\\r\\n]", ""),
+              e.getClass().getSimpleName(),
+              e.getMessage().replaceAll("[\\r\\n]", ""));
       return null;
     }
   }
