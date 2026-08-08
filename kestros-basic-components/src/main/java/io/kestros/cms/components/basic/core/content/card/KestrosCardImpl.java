@@ -185,9 +185,12 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
   @Nonnull
   @SuppressFBWarnings(value = "CRLF_INJECTION_LOGS",
           justification = "Every value logged in this method goes through forLog(), which strips "
-                  + "CR and LF. SpotBugs only recognises an inline replaceAll at the call site and "
-                  + "cannot follow the helper, so it flags calls that are already sanitised. "
-                  + "Checked each LOG call in this method individually, not assumed.")
+                  + "CR and LF, AND no raw throwable is passed as a trailing argument - a trailing "
+                  + "throwable would have SLF4J print the exception's own unsanitised message, "
+                  + "which an author-controlled cardImage path can reach. An earlier version of "
+                  + "this claim was false for exactly that reason. SpotBugs only recognises an "
+                  + "inline replaceAll at the call site and cannot follow the helper, so it flags "
+                  + "calls that are already sanitised. Checked each LOG call individually.")
   final AssetText readAssetTextForPage(@Nonnull final BaseContentPage page) {
     final Asset asset = getAssetForPage(page);
     if (asset == null) {
@@ -199,7 +202,7 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
       final String safePath = forLog(page.getPath());
       LOG.warn("Resolved the asset for card image on {} but could not read its properties. {}: {} "
               + "The image renders without the asset's title or description.", safePath,
-              e.getClass().getSimpleName(), forLog(e.getMessage()), e);
+              e.getClass().getSimpleName(), forLog(e.getMessage()));
       return new AssetText(null, null);
     }
   }
@@ -220,9 +223,12 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
   @Nullable
   @SuppressFBWarnings(value = "CRLF_INJECTION_LOGS",
           justification = "Every value logged in this method goes through forLog(), which strips "
-                  + "CR and LF. SpotBugs only recognises an inline replaceAll at the call site and "
-                  + "cannot follow the helper, so it flags calls that are already sanitised. "
-                  + "Checked each LOG call in this method individually, not assumed.")
+                  + "CR and LF, AND no raw throwable is passed as a trailing argument - a trailing "
+                  + "throwable would have SLF4J print the exception's own unsanitised message, "
+                  + "which an author-controlled cardImage path can reach. An earlier version of "
+                  + "this claim was false for exactly that reason. SpotBugs only recognises an "
+                  + "inline replaceAll at the call site and cannot follow the helper, so it flags "
+                  + "calls that are already sanitised. Checked each LOG call individually.")
   final Asset getAssetForPage(@Nonnull final BaseContentPage page) {
     final String imagePath = page.getImagePath();
     if (StringUtils.isBlank(imagePath)) {
@@ -240,7 +246,7 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
     } catch (final AssetRetrievalException e) {
       LOG.warn("Unable to resolve asset {} for card image on {}. {} The image renders without the "
               + "asset's title or description.", forLog(imagePath), safePath,
-              forLog(e.getMessage()), e);
+              forLog(e.getMessage()));
       return null;
     } catch (final RuntimeException e) {
       // A card that cannot resolve its asset must still render. CardListChildPagesDataSource wraps
@@ -249,7 +255,7 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
       LOG.warn("Unexpected failure resolving asset {} for card image on {}. {}: {} The image "
               + "renders without the asset's title or description.", forLog(imagePath),
               safePath,
-              e.getClass().getSimpleName(), forLog(e.getMessage()), e);
+              e.getClass().getSimpleName(), forLog(e.getMessage()));
       return null;
     }
   }

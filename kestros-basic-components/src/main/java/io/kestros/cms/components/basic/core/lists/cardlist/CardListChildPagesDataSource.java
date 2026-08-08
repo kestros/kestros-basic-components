@@ -119,8 +119,13 @@ public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSou
         // bad page took the component down with it. Deliberately narrow:
         // ComponentElementRenderingException is unchecked and means the component as a whole
         // cannot render (no resolvable theme or UI framework), which must still reach HTL rather
-        // than be logged once per page. The asset failures develop was guarding against are
-        // caught inside KestrosCardImpl, so they never reach this catch.
+        // than be logged once per page.
+        // NOTE: do not copy the reasoning that used to be here, which claimed KestrosCardImpl
+        // catches everything but ComponentConfigurationException internally. It does not -
+        // getImagePath() can throw an unchecked IllegalStateException straight out of the
+        // constructor. Narrowing is right HERE only because develop rethrew as a
+        // RuntimeException at this site, so nothing is lost; the sibling TagSearch datasource
+        // skipped-and-continued instead and must keep its broad catch.
         LOG.warn("Unable to build a card for {} in the list at {}: {}",
             String.valueOf(page.getPath()).replaceAll("[\r\n]", ""),
             String.valueOf(getResource().getPath()).replaceAll("[\r\n]", ""),

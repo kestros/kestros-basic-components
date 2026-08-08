@@ -3,7 +3,6 @@ package io.kestros.cms.components.basic.core.lists.cardlist;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.assets.api.services.AssetRetrievalService;
 import io.kestros.cms.components.basic.api.content.KestrosCard;
-import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.components.basic.api.lists.KestrosCardList;
 import io.kestros.cms.components.basic.core.BaseContainerSlingModelDataSource;
 import io.kestros.cms.components.basic.core.ContentPageSorter;
@@ -187,15 +186,18 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
                 "card",
                 page.getName(),
                 assetRetrievalService));
-      } catch (ComponentConfigurationException e) {
-        // develop caught bare Exception here to stop one unreadable asset blanking the
-        // whole list. That guard now lives INSIDE KestrosCardImpl, which catches
-        // AssetRetrievalException and RuntimeException around the asset reads and lets
-        // only ComponentConfigurationException escape — so narrowing here does not
-        // reinstate that bug. It is deliberate: ComponentElementRenderingException is
-        // unchecked and means the component as a whole cannot render, which must reach
-        // HTL rather than be swallowed once per page.
-        LOG.debug("Skipping the {} for {}: it could not be built. {}", "card",
+      } catch (Exception e) {
+        // Deliberately broad, and it must stay broad. develop caught Exception here so that
+        // one unbuildable page is SKIPPED and the rest of the list still renders (PR #114).
+        // An earlier version of this branch narrowed it to the checked config exception on
+        // the argument that KestrosCardImpl catches everything else internally. That argument
+        // was FALSE: BaseContentPage.getImagePath() calls getContentComponent(), which throws
+        // an unchecked IllegalStateException (BaseContentPage:422 and :431) when a page or its
+        // jcr:content will not adapt to BaseComponent - the normal state when a bundle is
+        // unresolved. It is reached from KestrosCardImpl:106 outside any try, so it escaped the
+        // constructor and one broken page blanked the WHOLE tag-search list.
+        // Logged rather than swallowed, which is the one thing improved on develop here.
+        LOG.warn("Skipping the {} for {}: it could not be built. {}", "card",
             String.valueOf(page.getPath()).replaceAll("[\r\n]", ""),
             String.valueOf(e.getMessage()).replaceAll("[\r\n]", ""));
       }

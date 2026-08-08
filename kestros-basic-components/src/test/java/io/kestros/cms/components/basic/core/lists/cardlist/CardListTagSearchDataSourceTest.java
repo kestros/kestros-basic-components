@@ -6,7 +6,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 import io.kestros.cms.assets.api.exceptions.AssetCollectionRetrievalException;
@@ -16,6 +18,7 @@ import io.kestros.cms.components.basic.api.content.KestrosCard;
 import io.kestros.cms.components.basic.api.content.KestrosImage;
 import io.kestros.cms.components.basic.api.lists.KestrosCardList;
 import io.kestros.cms.components.basic.core.BaseDataSourceTest;
+import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
 import io.kestros.cms.tagging.api.models.KestrosTag;
 import io.kestros.cms.tagging.api.services.TagRetrievalService;
 import java.util.Arrays;
@@ -101,6 +104,35 @@ public class CardListTagSearchDataSourceTest extends BaseDataSourceTest {
   public void testGetCardElementsReturnsTagMatchedPages() {
     // child-1 is current page (excluded), child-2 shares tag1 (matched), child-3 has no tags
     assertEquals(1, cardListTagSearchDataSource.getCardElements().size());
+  }
+
+  @Test
+  public void testGetCardElementsSkipsAPageThatCannotBuildAndStillRendersTheRest() {
+    // Regression guard for the whole-list blanking this branch briefly reintroduced.
+    // BaseContentPage.getImagePath() calls getContentComponent(), which throws an UNCHECKED
+    // IllegalStateException when a page or its jcr:content will not adapt to BaseComponent -
+    // the normal state when a component bundle is unresolved. It escapes the KestrosCardImpl
+    // constructor, so a catch narrowed to the checked config exception lets one bad page empty
+    // the entire tag-search list. develop skipped the bad page and rendered the rest; so must we.
+    final BaseContentPage broken = mock(BaseContentPage.class);
+    when(broken.getPath()).thenReturn("/content/pages/broken");
+    when(broken.getName()).thenReturn("broken");
+    when(broken.getImagePath()).thenThrow(
+        new IllegalStateException("Unable to adapt /content/pages/broken to BaseComponent."));
+
+    final CardListTagSearchDataSource dataSource = spy(cardListTagSearchDataSource);
+    final List<BaseContentPage> good = dataSource.getTaggedPages();
+    assertEquals("the fixture must supply exactly one good page for this to mean anything",
+        1, good.size());
+
+    final List<BaseContentPage> mixed = new java.util.ArrayList<>();
+    mixed.add(broken);
+    mixed.addAll(good);
+    doReturn(mixed).when(dataSource).getTaggedPages();
+
+    // The broken page is skipped; the good one still renders. Narrowing the catch makes this
+    // throw instead, and the list renders nothing.
+    assertEquals(1, dataSource.getCardElements().size());
   }
 
   @Test
