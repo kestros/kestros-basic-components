@@ -1,7 +1,7 @@
 package io.kestros.cms.components.basic.core.lists.cardlist;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
+import io.kestros.cms.assets.api.services.AssetRetrievalService;
 import io.kestros.cms.components.basic.api.content.KestrosCard;
 import io.kestros.cms.components.basic.api.lists.KestrosCardList;
 import io.kestros.cms.components.basic.core.ContentPageSorter;
@@ -39,6 +39,10 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
   @OSGiService
   @org.apache.sling.models.annotations.Optional
   private TagRetrievalService tagRetrievalService;
+
+  @OSGiService
+  @org.apache.sling.models.annotations.Optional
+  private AssetRetrievalService assetRetrievalService;
 
   private BaseContentPage containingPage;
 
@@ -172,10 +176,17 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
                 getReadMoreText(),
                 this,
                 "card",
-                page.getName()));
-      } catch (ComponentConfigurationException e) {
-        LOG.debug("Skipping the {} for {}: it could not be built. {}", "card",
-            String.valueOf(page.getPath()).replaceAll("[\r\n]", ""),
+                page.getName(),
+                assetRetrievalService));
+      } catch (Exception e) {
+        // Deliberately broad, and it must stay broad. develop catches Exception here so one
+        // unbuildable page is SKIPPED and the rest of the list still renders (PR #114).
+        // Narrowing it to the checked config exception lets an unchecked IllegalStateException out
+        // of BaseContentPage.getImagePath() and blanks the WHOLE tag-search list — that regression
+        // was caught on the phase-4 pre-screen and must not be reintroduced here.
+        // Logged rather than swallowed, which is the one improvement on develop.
+        LOG.warn("Skipping the {} for {}: it could not be built. {}", "card",
+            page.getPath().replaceAll("[\r\n]", ""),
             String.valueOf(e.getMessage()).replaceAll("[\r\n]", ""));
       }
     }
