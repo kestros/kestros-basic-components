@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Locale;
 import org.junit.Test;
 
 public class EmbedSanitizerTest {
@@ -143,5 +144,36 @@ public class EmbedSanitizerTest {
     String input = "<svg/onload=alert(1)>";
 
     assertNull("SVG XSS should be rejected", EmbedSanitizer.sanitize(input));
+  }
+
+  /**
+   * The sanitizer decides what to allow through by case-folding attribute names and domains. Case
+   * mapping is locale-dependent: under a Turkish locale the folded form of a name containing I
+   * carries a dotless i, which used to stop it matching the allow-list. Locale.ROOT pins it.
+   */
+  @Test
+  public void testAllowListMatchingIsIndependentOfTheDefaultLocale() {
+    final Locale previous = Locale.getDefault();
+    try {
+      Locale.setDefault(new Locale("tr", "TR"));
+
+      assertNotNull(EmbedSanitizer.sanitize(
+          "<iframe src=\"https://www.youtube.com/embed/abcdefghijk\" TITLE=\"A video\"></iframe>"));
+    } finally {
+      Locale.setDefault(previous);
+    }
+  }
+
+  @Test
+  public void testNonAllowlistedDomainIsStillRefusedUnderATurkishLocale() {
+    final Locale previous = Locale.getDefault();
+    try {
+      Locale.setDefault(new Locale("tr", "TR"));
+
+      assertNull(EmbedSanitizer.sanitize(
+          "<iframe src=\"https://evil.example.com/embed/abcdefghijk\"></iframe>"));
+    } finally {
+      Locale.setDefault(previous);
+    }
   }
 }

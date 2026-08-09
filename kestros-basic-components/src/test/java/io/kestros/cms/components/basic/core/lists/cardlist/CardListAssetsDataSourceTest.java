@@ -219,4 +219,31 @@ public class CardListAssetsDataSourceTest extends BaseDataSourceTest {
     assertEquals("h3",
         context.request().adaptTo(CardListAssetsDataSource.class).getHeadingLevel());
   }
+
+  /**
+   * getCardElements is annotated @Nonnull but returned null when a single asset's image could not
+   * be built, so one bad asset discarded the whole list and handed HTL a null. It skips that card
+   * now, which is what the sibling card lists already do.
+   */
+  @Test
+  public void testGetCardElementsSkipsAnAssetWhoseImageCannotBeBuilt() {
+    registerAssetRetrievalService();
+    // An asset with no path cannot produce an image; the other three still render.
+    context.create().resource("/content/assets/collection/asset-4", new HashMap<>());
+    resource = context.create().resource("/content/page/cardlist/assets-partial", properties);
+    context.request().setResource(resource);
+
+    assertNotNull(context.request().adaptTo(CardListAssetsDataSource.class).getCardElements());
+  }
+
+  @Test
+  public void testGetCardElementsIsNeverNull() {
+    registerAssetRetrievalService();
+    final Map<String, Object> props = new HashMap<>();
+    props.put("collectionPath", "/content/assets/nowhere");
+    resource = context.create().resource("/content/page/cardlist/assets-missing", props);
+    context.request().setResource(resource);
+
+    assertNotNull(context.request().adaptTo(CardListAssetsDataSource.class).getCardElements());
+  }
 }

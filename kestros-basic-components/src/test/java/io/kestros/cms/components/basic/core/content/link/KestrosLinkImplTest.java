@@ -25,6 +25,9 @@ import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.components.basic.core.BaseSyntheticTest;
 import io.kestros.cms.components.basic.core.lists.cardlist.CardListStaticDataSource;
+import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
+import java.util.HashMap;
+import java.util.Map;
 import org.apache.sling.api.resource.Resource;
 import org.junit.Test;
 
@@ -88,5 +91,40 @@ public class KestrosLinkImplTest extends BaseSyntheticTest {
   @Test
   public void testGetLang() {
     assertEquals("en", link.getLang());
+  }
+
+  /**
+   * The page constructor used to assign six fields to themselves, so title, target, rel and the
+   * aria attributes were silently always null. The assignments are gone; this asserts what the
+   * constructor actually provides, so that changing it is a deliberate act rather than a surprise.
+   */
+  @Test
+  public void testPageConstructorSetsOnlyTheTextAndHref() throws ComponentConfigurationException {
+    final Map<String, Object> pageProperties = new HashMap<>();
+    pageProperties.put("jcr:primaryType", "kes:Page");
+    final Map<String, Object> contentProperties = new HashMap<>();
+    contentProperties.put("jcr:primaryType", "nt:unstructured");
+    contentProperties.put("jcr:title", "A Page Title");
+    context.create().resource("/content/sample-page", pageProperties);
+    context.create().resource("/content/sample-page/jcr:content", contentProperties);
+
+    final BaseContentPage page = context.resourceResolver().getResource("/content/sample-page")
+        .adaptTo(BaseContentPage.class);
+    final Resource parent = context.create().resource("/content/link-parent");
+    context.currentResource(parent);
+    final CardListStaticDataSource dataSource =
+        context.request().adaptTo(CardListStaticDataSource.class);
+
+    final KestrosLinkImpl pageLink =
+        new KestrosLinkImpl(page, dataSource, "link", "linkElement");
+
+    assertEquals("A Page Title", pageLink.getText());
+    assertNotNull(pageLink.getHref());
+    assertNull(pageLink.getTitle());
+    assertNull(pageLink.getTarget());
+    assertNull(pageLink.getRel());
+    assertNull(pageLink.getAriaLabel());
+    assertNull(pageLink.getAriaDescribedBy());
+    assertNull(pageLink.getLang());
   }
 }
