@@ -13,7 +13,7 @@ import javax.annotation.Nullable;
  *
  * <p>Extracted from the inline comparators in CardListAssetsDataSource so the ordering rules can
  * carry their own nullability contract, which a lambda body cannot. Mirrors
- * {@link ContentPageSorter} for pages.</p>
+ * {@link ContentPageSorter} for pages.
  */
 @SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 public final class AssetSorter {
@@ -30,7 +30,7 @@ public final class AssetSorter {
    * Sorts the supplied assets in place, by the named property.
    *
    * <p>An unrecognised sort key falls back to the title, which is the behaviour the inline
-   * comparators had.</p>
+   * comparators had.
    *
    * @param assets Assets to sort, modified in place.
    * @param sortBy Sort key: createdDate, lastModified, name, or anything else for title.

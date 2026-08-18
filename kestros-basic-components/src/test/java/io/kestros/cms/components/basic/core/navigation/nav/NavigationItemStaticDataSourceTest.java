@@ -38,7 +38,7 @@ public class NavigationItemStaticDataSourceTest extends BaseDataSourceTest {
    * {@code if (item.isActive())} unboxed a null and threw. It has to be a real Boolean now.
    *
    * <p>Nothing computes active state yet, so FALSE is the only correct answer; this asserts the
-   * contract, not the feature.</p>
+   * contract, not the feature.
    */
   @Test
   public void testIsActiveIsNeverNull() {

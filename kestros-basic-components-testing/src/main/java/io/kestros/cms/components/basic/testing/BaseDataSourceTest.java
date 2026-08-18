@@ -40,7 +40,7 @@ import org.junit.Rule;
  *
  * <p>Extend this, then in your own {@code @Before} call
  * {@code context.addModelsForClasses(YourDataSource.class)} and create the resource the datasource
- * adapts from.</p>
+ * adapts from.
  */
 @SuppressFBWarnings(value = "PRMC_POSSIBLY_REDUNDANT_METHOD_CALLS",
     justification = "The repeated call the detector sees is Mockito's any() matcher, which has"

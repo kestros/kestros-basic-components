@@ -13,7 +13,7 @@ import org.apache.sling.api.resource.Resource;
  *
  * <p>The four list data sources that sort pages carried an identical copy of these three
  * comparators as inline lambdas. Extracted here so the ordering rules live in one place and can
- * carry their own nullability contract, which a lambda body cannot.</p>
+ * carry their own nullability contract, which a lambda body cannot.
  */
 @SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 public final class ContentPageSorter {
@@ -30,7 +30,7 @@ public final class ContentPageSorter {
    * Sorts the supplied pages in place, by the named property.
    *
    * <p>An unrecognised sort key falls back to the display title, which is the behaviour the
-   * inline comparators had.</p>
+   * inline comparators had.
    *
    * @param pages Pages to sort, modified in place.
    * @param sortBy Sort key: createdDate, lastModified, name, or anything else for display title.

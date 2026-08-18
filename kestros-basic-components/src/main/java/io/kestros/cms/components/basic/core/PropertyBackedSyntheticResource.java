@@ -14,7 +14,7 @@ import org.apache.sling.api.wrappers.ValueMapDecorator;
  * A synthetic resource whose properties come from a supplied map rather than from the repository.
  *
  * <p>Both synthetic-resource builders used an anonymous subclass for this, which captured the
- * enclosing component for no reason and could carry no nullability contract of its own.</p>
+ * enclosing component for no reason and could carry no nullability contract of its own.
  */
 @SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 public class PropertyBackedSyntheticResource extends SyntheticResource {

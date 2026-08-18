@@ -17,7 +17,7 @@ import javax.annotation.Nullable;
  *
  * <p>This is a second line of defense — the primary validation happens in individual
  * datasource implementations (e.g., VideoEmbedYouTubeDataSource). This sanitizer
- * guards against future datasource variants that might not validate as rigorously.</p>
+ * guards against future datasource variants that might not validate as rigorously.
  */
 @SuppressFBWarnings(value = {"IMPROPER_UNICODE", "DM_CONVERT_CASE"},
     justification = "Attribute names and domains are case-folded with Locale.ROOT"
