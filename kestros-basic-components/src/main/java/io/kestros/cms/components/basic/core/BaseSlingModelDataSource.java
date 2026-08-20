@@ -59,9 +59,10 @@ public abstract class BaseSlingModelDataSource
       return slingHttpServletRequest.getResource();
     }
     if (resource == null) {
-      throw new ComponentElementRenderingException(
-          "Unable to read the resource for a data source that was adapted from neither a resource"
-          + " nor a request.");
+      // Not getPath() here - that reads getResource(), which is what has just failed.
+      throw new ComponentElementRenderingException(String.format(
+          "Unable to read the resource for %s: it was adapted from neither a resource nor a"
+          + " request.", getClass().getName()));
     }
     return resource;
   }
