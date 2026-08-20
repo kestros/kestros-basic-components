@@ -57,4 +57,18 @@ public class KestrosGridImplTest extends BaseSyntheticTest {
     assertNotNull(syntheticResource);
     assertEquals("/synthetics/parent/gridElement", syntheticResource.getPath());
   }
+
+  @Test
+  public void testGetChildElements() {
+    List<KestrosBasicComponentElement> childElements = grid.getChildElements();
+
+    assertEquals(2, childElements.size());
+    assertEquals("col1", childElements.get(0).getForcedResourceName());
+    assertEquals("col2", childElements.get(1).getForcedResourceName());
+  }
+
+  @Test
+  public void testGetChildrenRendersTheColumns() {
+    assertEquals(2, grid.getChildren().size());
+  }
 }

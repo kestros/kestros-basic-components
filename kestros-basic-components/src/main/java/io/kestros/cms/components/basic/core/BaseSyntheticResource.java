@@ -24,7 +24,6 @@ public abstract class BaseSyntheticResource extends BaseComponentElement
   private final String layout;
   private final String id;
   private Resource syntheticResource;
-  private Resource resource;
   private String resourceName;
   private ComponentVariationRetrievalService componentVariationRetrievalService;
   private ComponentUiFrameworkViewRetrievalService componentUiFrameworkViewRetrievalService;
