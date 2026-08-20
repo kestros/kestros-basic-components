@@ -4,6 +4,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.kestros.cms.components.basic.api.exceptions.ComponentElementRenderingException;
 import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
+import io.kestros.cms.components.basic.api.exceptions.ComponentElementRenderingException;
 import io.kestros.cms.componenttypes.api.exceptions.ComponentVariationRetrievalException;
 import io.kestros.cms.componenttypes.api.models.ComponentVariation;
 import io.kestros.cms.componenttypes.api.services.ComponentUiFrameworkViewRetrievalService;
@@ -60,6 +61,11 @@ public abstract class BaseSlingModelDataSource extends BaseComponentElement {
     if (resource == null && slingHttpServletRequest != null) {
       return slingHttpServletRequest.getResource();
     }
+    if (resource == null) {
+      throw new ComponentElementRenderingException(
+          "Unable to read the resource for a data source that was adapted from neither a resource"
+          + " nor a request.");
+    }
     return resource;
   }
 
@@ -93,6 +99,10 @@ public abstract class BaseSlingModelDataSource extends BaseComponentElement {
         throw new RuntimeException(e);
       }
     }
+    if (currentPage == null) {
+      throw new ComponentElementRenderingException(String.format(
+          "Unable to resolve the current or containing page for %s.", getPath()));
+    }
     return currentPage;
   }
 
@@ -104,7 +114,12 @@ public abstract class BaseSlingModelDataSource extends BaseComponentElement {
 
   @Nonnull
   public String getParentPath() {
-    return getResource().getParent().getPath();
+    Resource parent = getResource().getParent();
+    if (parent == null) {
+      throw new ComponentElementRenderingException(String.format(
+          "Unable to resolve the parent path for %s: the resource has no parent.", getPath()));
+    }
+    return parent.getPath();
   }
 
   @Nonnull
@@ -133,7 +148,13 @@ public abstract class BaseSlingModelDataSource extends BaseComponentElement {
       }
       return variations;
     }
-    return getResource().adaptTo(BaseComponent.class).getAppliedVariations();
+    BaseComponent component = getResource().adaptTo(BaseComponent.class);
+    if (component == null) {
+      throw new ComponentElementRenderingException(String.format(
+          "Unable to read the applied variations for %s: the resource does not adapt to a"
+          + " component.", getPath()));
+    }
+    return component.getAppliedVariations();
   }
 
   @Nonnull
@@ -156,11 +177,22 @@ public abstract class BaseSlingModelDataSource extends BaseComponentElement {
   public UiFramework getUiFramework() {
     try {
       if (slingHttpServletRequest != null) {
-        return slingHttpServletRequest.adaptTo(ComponentRequestContext.class).getCurrentPage()
-            .getTheme().getUiFramework();
+        ComponentRequestContext requestContext =
+            slingHttpServletRequest.adaptTo(ComponentRequestContext.class);
+        if (requestContext == null) {
+          throw new ComponentElementRenderingException(String.format(
+              "Unable to resolve the UI framework for %s: the request does not adapt to a"
+              + " component request context.", getPath()));
+        }
+        return requestContext.getCurrentPage().getTheme().getUiFramework();
       } else {
-        return getResource().adaptTo(BaseComponent.class).getContainingPage().getTheme()
-            .getUiFramework();
+        BaseComponent component = getResource().adaptTo(BaseComponent.class);
+        if (component == null) {
+          throw new ComponentElementRenderingException(String.format(
+              "Unable to resolve the UI framework for %s: the resource does not adapt to a"
+              + " component.", getPath()));
+        }
+        return component.getContainingPage().getTheme().getUiFramework();
       }
     } catch (ModelAdaptionException e) {
       throw new ComponentElementRenderingException(String.format(
