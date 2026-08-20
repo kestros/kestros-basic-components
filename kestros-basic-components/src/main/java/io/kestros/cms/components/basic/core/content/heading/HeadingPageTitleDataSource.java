@@ -33,16 +33,32 @@ public class HeadingPageTitleDataSource extends HeadingStaticDataSource {
   BaseContentPage getPage() {
     try {
       if (isOverrideInheritedTitle()) {
-        if (request != null) {
-          return request.adaptTo(ComponentRequestContext.class).getCurrentPage();
-        } else {
+        if (request == null) {
           throw new ComponentElementRenderingException(String.format(
                   "Unable to resolve the page title for %s: overrideInheritedTitle needs a"
                   + " request, and this model was adapted from a resource.",
                   getResource().getPath()));
         }
+        ComponentRequestContext requestContext = request.adaptTo(ComponentRequestContext.class);
+        if (requestContext == null) {
+          LOG.warn("Unable to find text for page title component {}. The request does not adapt"
+                  + " to a component request context.", getResource().getPath());
+          return null;
+        }
+        return requestContext.getCurrentPage();
       } else {
-        return request.getResource().adaptTo(BaseComponent.class).getContainingPage();
+        if (request == null) {
+          LOG.warn("Unable to find text for page title component {}. No request is available.",
+                  getResource().getPath());
+          return null;
+        }
+        BaseComponent component = request.getResource().adaptTo(BaseComponent.class);
+        if (component == null) {
+          LOG.warn("Unable to find text for page title component {}. The resource does not adapt"
+                  + " to a component.", getResource().getPath());
+          return null;
+        }
+        return component.getContainingPage();
       }
     } catch (ModelAdaptionException e) {
       LOG.warn("Unable to find text for page title component {}. {}.",
@@ -55,7 +71,11 @@ public class HeadingPageTitleDataSource extends HeadingStaticDataSource {
   @Nullable
   @Override
   public String getHeadingText() {
-    return getPage().getDisplayTitle();
+    BaseContentPage page = getPage();
+    if (page == null) {
+      return null;
+    }
+    return page.getDisplayTitle();
   }
 
   @Nonnull

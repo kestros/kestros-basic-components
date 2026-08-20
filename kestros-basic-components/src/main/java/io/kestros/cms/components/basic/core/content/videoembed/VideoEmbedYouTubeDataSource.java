@@ -88,9 +88,19 @@ public class VideoEmbedYouTubeDataSource extends BaseSlingModelDataSource
     );
   }
 
+  /**
+   * The configured YouTube video reference.
+   *
+   * <p>Empty rather than null when nothing has been chosen, so the @Nonnull this already declared
+   * is true. Both callers pass the value straight to isValidVideoInput and extractVideoId, which
+   * reject a blank string, so an unset video is turned away where it was previously dereferenced.
+   * </p>
+   *
+   * @return The video reference, or the empty string when none is set.
+   */
   @Nonnull
   private String getYoutubeVideo() {
-    return getResource().getValueMap().get("youtubeVideo", String.class);
+    return getResource().getValueMap().get("youtubeVideo", StringUtils.EMPTY);
   }
 
   private boolean isMute() {

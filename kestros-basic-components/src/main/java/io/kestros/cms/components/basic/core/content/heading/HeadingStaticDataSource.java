@@ -15,9 +15,19 @@ public class HeadingStaticDataSource extends BaseSlingModelDataSource implements
     return getResource().getValueMap().get("headingText", String.class);
   }
 
+  /**
+   * The heading element to render.
+   *
+   * <p>Declared @Nonnull on KestrosHeading, but the property is absent until an author picks a
+   * level, so this used to return null. "h1" is what the dialog preselects and what the HTL
+   * renders when data-sly-element gets nothing, so the default matches what was already on the
+   * page.</p>
+   *
+   * @return The heading element name.
+   */
   @Override
   @Nonnull
   public String getHeadingType() {
-    return getResource().getValueMap().get("headingType", String.class);
+    return getResource().getValueMap().get("headingType", "h1");
   }
 }

@@ -6,6 +6,7 @@ import io.kestros.cms.components.basic.core.BaseContainerSlingModelDataSource;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
@@ -35,8 +36,16 @@ public class TableCellStaticDataSource extends BaseContainerSlingModelDataSource
     return new ArrayList<>();
   }
 
+  /**
+   * The cell's text.
+   *
+   * <p>@Nullable, not @Nonnull: the property is absent on a cell that holds child components
+   * rather than text, and KestrosTableCell declares it nullable for that reason.</p>
+   *
+   * @return The cell's text, or null when it has none.
+   */
   @Override
-  @Nonnull
+  @Nullable
   public String getText() {
     return getResource().getValueMap().get("text", String.class);
   }
