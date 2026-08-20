@@ -37,6 +37,10 @@ public abstract class BaseComponentElement implements KestrosBasicComponentEleme
 
     BaseComponent component = getResource().adaptTo(BaseComponent.class);
     final List<ComponentVariation> appliedVariations = new ArrayList<>();
+    if (component == null) {
+      // Nothing to resolve variations against; the resolver below is read off the component.
+      return appliedVariations;
+    }
     Object propertyValue = getResource().getValueMap().get(propertyName);
     // if list of maps
     final List<String> appliedVariationNames;
