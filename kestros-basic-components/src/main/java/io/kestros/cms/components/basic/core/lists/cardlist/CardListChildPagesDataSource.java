@@ -1,6 +1,7 @@
 package io.kestros.cms.components.basic.core.lists.cardlist;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import io.kestros.cms.assets.api.services.AssetRetrievalService;
 import io.kestros.cms.components.basic.api.content.KestrosButton;
 import io.kestros.cms.components.basic.api.content.KestrosButtonGroup;
 import io.kestros.cms.components.basic.api.content.KestrosCard;
@@ -20,11 +21,18 @@ import javax.annotation.Nullable;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.Optional;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 
 @SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSource implements
                                                                                     KestrosCardList {
+
+  @OSGiService
+  @Optional
+  private AssetRetrievalService assetRetrievalService;
+
   private BaseContentPage rootPage;
 
   @Nullable
@@ -104,7 +112,8 @@ public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSou
 //                getElementVariations("buttonVariations", KestrosButton.RESOURCE_TYPE),
 //                getLayout("button"),
 //                null,
-                page.getName()));
+                page.getName(),
+                assetRetrievalService));
       } catch (Exception e) {
         throw new RuntimeException(e);
       }

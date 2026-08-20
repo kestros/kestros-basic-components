@@ -1,6 +1,7 @@
 package io.kestros.cms.components.basic.core.lists.cardlist;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertNotNull;
@@ -39,6 +40,9 @@ public class CardListTagSearchDataSourceTest extends BaseDataSourceTest {
   public void doComponentSetup() throws AssetCollectionRetrievalException {
     tagRetrievalService = mock(TagRetrievalService.class);
     context.registerService(TagRetrievalService.class, tagRetrievalService);
+    // Before anything adapts: Sling Models resolves @OSGiService at the first adaptTo, so a service
+    // registered later never appears on the model.
+    registerAssetRetrievalService();
 
     setUpSampleCollection("/content/collection");
     setupSamplePage("/content/sessions", "/content/collection/asset-1");
@@ -426,5 +430,29 @@ public class CardListTagSearchDataSourceTest extends BaseDataSourceTest {
     props.put("sortBy", "lastModified");
 
     assertEquals(2, twoMatchesWith(props).getCardElements().size());
+  }
+
+  /**
+   * The other half of the fix. CardListTagSearchDataSource had to pass its AssetRetrievalService
+   * too, and nothing tested it: reverting that data source alone left the whole suite green, which
+   * is the same "passes whether the bug is present" fault the child-pages test was written to close.
+   *
+   * <p>The asset and the page carry deliberately different wording, so an assertion on the asset's
+   * title cannot pass from the page's.
+   */
+  @Test
+  public void testGetCardElementsResolvesTheAssetTitleAndDescriptionThroughTheDataSource() {
+    // setupSamplePage points every child at /content/collection/asset-1, whose title and description
+    // ("Asset 1 Title"/"Asset 1 Description") differ from the page's own ("Title"/"Description"), so
+    // an assertion on the asset wording cannot pass from the page's.
+    final List<KestrosCard> cards = cardListTagSearchDataSource.getCardElements();
+    assertFalse("the tag search must match at least one page", cards.isEmpty());
+
+    final KestrosImage image = cards.get(0).getImageElement();
+    assertNotNull("a card built from a tagged page with an image must have an image element", image);
+    assertEquals("alt text must come from the asset, not the page", "Asset 1 Title",
+        image.getAltText());
+    assertEquals("caption must come from the asset, not the page", "Asset 1 Description",
+        image.getCaption());
   }
 }
