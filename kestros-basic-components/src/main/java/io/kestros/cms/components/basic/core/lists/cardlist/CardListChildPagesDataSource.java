@@ -50,7 +50,11 @@ public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSou
         }
       } else {
         try {
-          rootPage = getResource().adaptTo(BaseComponent.class).getContainingPage();
+          BaseComponent component = getResource().adaptTo(BaseComponent.class);
+          if (component == null) {
+            return null;
+          }
+          rootPage = component.getContainingPage();
         } catch (NoValidAncestorException e) {
           return null;
         }
