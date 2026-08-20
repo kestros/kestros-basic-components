@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
@@ -30,9 +31,17 @@ public class LinkListChildPageDataSource extends BaseContainerSlingModelDataSour
   @OSGiService
   private ComponentUiFrameworkViewRetrievalService componentUiFrameworkViewRetrievalService;
 
+  /**
+   * The path the child pages are read from.
+   *
+   * <p>Empty rather than null when no path has been configured, so the @Nonnull this already
+   * declared is true. getLinkElements treats empty the same way it used to treat null.</p>
+   *
+   * @return The configured path, or the empty string when none is set.
+   */
   @Nonnull
   public String getRootPath() {
-    return getResource().getValueMap().get("pagesPath", String.class);
+    return getResource().getValueMap().get("pagesPath", StringUtils.EMPTY);
   }
 
   @Nonnull
@@ -49,7 +58,7 @@ public class LinkListChildPageDataSource extends BaseContainerSlingModelDataSour
   public List<KestrosLink> getLinkElements() {
     List<BaseContentPage> pages = new ArrayList<>();
     String rootPath = getRootPath();
-    if (rootPath == null) {
+    if (StringUtils.isEmpty(rootPath)) {
       return new ArrayList<>();
     }
     Resource rootResource = getResourceResolver().getResource(rootPath);
