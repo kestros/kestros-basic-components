@@ -42,20 +42,22 @@ public class HeadingPageTitleDataSource extends HeadingStaticDataSource {
         ComponentRequestContext requestContext = request.adaptTo(ComponentRequestContext.class);
         if (requestContext == null) {
           LOG.warn("Unable to find text for page title component {}. The request does not adapt"
-                  + " to a component request context.", getResource().getPath());
+                  + " to a component request context.",
+                  String.valueOf(getResource().getPath()).replaceAll("[\r\n]", ""));
           return null;
         }
         return requestContext.getCurrentPage();
       } else {
         if (request == null) {
           LOG.warn("Unable to find text for page title component {}. No request is available.",
-                  getResource().getPath());
+                  String.valueOf(getResource().getPath()).replaceAll("[\r\n]", ""));
           return null;
         }
         BaseComponent component = request.getResource().adaptTo(BaseComponent.class);
         if (component == null) {
           LOG.warn("Unable to find text for page title component {}. The resource does not adapt"
-                  + " to a component.", getResource().getPath());
+                  + " to a component.",
+                  String.valueOf(getResource().getPath()).replaceAll("[\r\n]", ""));
           return null;
         }
         return component.getContainingPage();
