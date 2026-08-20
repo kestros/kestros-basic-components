@@ -144,4 +144,26 @@ public class EmbedSanitizerTest {
 
     assertNull("SVG XSS should be rejected", EmbedSanitizer.sanitize(input));
   }
+
+  /**
+   * A host that is not ASCII must be rejected outright, not case-folded into the allow-list.
+   * "www.youtube-nocooKie.com" below uses U+212A KELVIN SIGN in place of the 'k'. Java's
+   * toLowerCase folds it to 'k', so the previous implementation accepted this host as
+   * www.youtube-nocookie.com. This test fails against that implementation.
+   */
+  @Test
+  public void testNonAsciiHostFoldingOntoAllowedDomainIsRejected() {
+    String input = "<iframe src=\"https://www.youtube-nocoo\u212Aie.com/embed/abc\"></iframe>";
+
+    assertNull("A host containing U+212A must not fold onto www.youtube-nocookie.com",
+        EmbedSanitizer.sanitize(input));
+  }
+
+  @Test
+  public void testAsciiHostCaseIsStillAccepted() {
+    String input = "<iframe src=\"https://WWW.YouTube.com/embed/abc\"></iframe>";
+
+    assertNotNull("ASCII case variation of an allowed host must still be accepted",
+        EmbedSanitizer.sanitize(input));
+  }
 }
