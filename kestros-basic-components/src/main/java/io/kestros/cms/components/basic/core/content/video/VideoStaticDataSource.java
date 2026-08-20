@@ -36,9 +36,18 @@ public class VideoStaticDataSource extends BaseSlingModelDataSource implements K
     return getResource().getValueMap().get("fallbackText", StringUtils.EMPTY);
   }
 
+  /**
+   * The configured video path.
+   *
+   * <p>Empty rather than null when no video has been chosen, so the @Nonnull this already
+   * declared is true. An empty path fails asset retrieval, which getVideoSource already
+   * handles, instead of reaching the retrieval service as null.</p>
+   *
+   * @return The video path, or the empty string when none is set.
+   */
   @Nonnull
   String getVideoPath() {
-    return getResource().getValueMap().get("videoPath", String.class);
+    return getResource().getValueMap().get("videoPath", StringUtils.EMPTY);
   }
 
   @Nullable
