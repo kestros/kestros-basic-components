@@ -51,6 +51,10 @@ public class CardListAssetsDataSource extends BaseContainerSlingModelDataSource 
   AssetCollection getCollection() {
     if (collection == null) {
       String collectionPath = getResource().getValueMap().get("collectionPath", String.class);
+      if (collectionPath == null) {
+        // No collection has been chosen yet; the retrieval service takes a non-null path.
+        return null;
+      }
       try {
         collection = assetRetrievalService.getCollection(collectionPath, getResourceResolver());
       } catch (AssetCollectionRetrievalException e) {
