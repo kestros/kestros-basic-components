@@ -96,7 +96,7 @@ public interface KestrosBasicComponentElement {
   String getId();
 
   @JsonIgnore
-  @Nullable
+  @Nonnull
   UiFramework getUiFramework() throws InvalidThemeException, ResourceNotFoundException,
       InvalidUiFrameworkException, ThemeRetrievalException, UiFrameworkRetrievalException,
       ModelAdaptionException;
