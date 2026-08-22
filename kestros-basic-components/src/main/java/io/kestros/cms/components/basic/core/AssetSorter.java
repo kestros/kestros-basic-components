@@ -15,7 +15,9 @@ import javax.annotation.Nullable;
  * carry their own nullability contract, which a lambda body cannot. Mirrors
  * {@link ContentPageSorter} for pages.</p>
  */
-@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
+@SuppressFBWarnings(value = "IMC_IMMATURE_CLASS_NO_TOSTRING",
+    justification = "A static utility class: private constructor, no instance state, every"
+        + " method static. There is never an instance to print.")
 public final class AssetSorter {
 
   private static final String CREATED_DATE = "createdDate";

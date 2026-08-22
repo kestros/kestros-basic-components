@@ -16,7 +16,10 @@ import org.apache.sling.api.wrappers.ValueMapDecorator;
  * <p>Both synthetic-resource builders used an anonymous subclass for this, which captured the
  * enclosing component for no reason and could carry no nullability contract of its own.</p>
  */
-@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
+@SuppressFBWarnings(value = "IMC_IMMATURE_CLASS_NO_TOSTRING",
+    justification = "A style rule rather than a defect: the detector fires on every class that"
+        + " does not declare toString. The properties here are author content and can be"
+        + " arbitrarily large, so a default rendering of them is not something to add.")
 public class PropertyBackedSyntheticResource extends SyntheticResource {
 
   private final ValueMap valueMap;
