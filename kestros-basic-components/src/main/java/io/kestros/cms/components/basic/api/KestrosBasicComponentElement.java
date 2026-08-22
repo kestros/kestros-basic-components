@@ -24,7 +24,7 @@ import org.apache.sling.api.resource.ResourceResolver;
 public interface KestrosBasicComponentElement {
 
 
-  @Nullable
+  @Nonnull
   String getLayout(@Nonnull String propertyName);
 
   @Nonnull
@@ -114,7 +114,7 @@ public interface KestrosBasicComponentElement {
   ResourceResolver getResourceResolver();
 
   @JsonIgnore
-  @Nullable
+  @Nonnull
   String getParentPath();
 
   @Nonnull
