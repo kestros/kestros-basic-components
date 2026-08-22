@@ -38,15 +38,17 @@ public class ImageStaticDataSource extends BaseSlingModelDataSource implements K
   private Asset asset;
 
   @Override
+  @Nonnull
   public String getImageTitle() {
     String assetTitle = "";
-    if (getAsset() != null) {
-      assetTitle = getAsset().getTitle();
+    final Asset imageAsset = getAsset();
+    if (imageAsset != null) {
+      assetTitle = imageAsset.getTitle();
     }
     return getResource().getValueMap().get("imageTitle", assetTitle);
   }
 
-  @Nullable
+  @Nonnull
   @Override
   public String getImagePath() {
     return StringUtils.trimToNull(
@@ -123,13 +125,15 @@ public class ImageStaticDataSource extends BaseSlingModelDataSource implements K
       return asset;
     }
     try {
-      if (getImagePath() != null) {
-        this.asset = assetRetrievalService.getAsset(getImagePath(), null,
+      final String path = getImagePath();
+      if (path != null) {
+        this.asset = assetRetrievalService.getAsset(path, null,
                 getResource().getResourceResolver());
         return asset;
       }
     } catch (AssetRetrievalException e) {
-      LOG.warn("Failed to retrieve asset for image: {}", getImagePath());
+      LOG.warn("Failed to retrieve asset for image: {}",
+          String.valueOf(getImagePath()).replaceAll("[\r\n]", ""));
     }
     return null;
   }
