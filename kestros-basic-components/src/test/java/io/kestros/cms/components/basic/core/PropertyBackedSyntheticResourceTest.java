@@ -1,7 +1,9 @@
 package io.kestros.cms.components.basic.core;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -56,5 +58,31 @@ public class PropertyBackedSyntheticResourceTest {
   @Test
   public void testGetValueMapWhenPropertyIsAbsent() {
     assertNull(resource.getValueMap().get("missing", String.class));
+  }
+
+  @Test
+  public void testEqualsAndHashCode() {
+    PropertyBackedSyntheticResource same = new PropertyBackedSyntheticResource(
+        context.resourceResolver(), new ResourceMetadata(), "kestros/components/heading",
+        properties);
+
+    assertEquals(resource, same);
+    assertEquals(resource.hashCode(), same.hashCode());
+  }
+
+  @Test
+  public void testEqualsWhenPropertiesDiffer() {
+    Map<String, Object> other = new HashMap<>();
+    other.put("heading", "Another Heading");
+    PropertyBackedSyntheticResource different = new PropertyBackedSyntheticResource(
+        context.resourceResolver(), new ResourceMetadata(), "kestros/components/heading", other);
+
+    assertNotEquals(resource, different);
+  }
+
+  @Test
+  public void testToStringNamesTheTypeAndPropertyCount() {
+    assertTrue(resource.toString().contains("kestros/components/heading"));
+    assertTrue(resource.toString().contains("properties=1"));
   }
 }
