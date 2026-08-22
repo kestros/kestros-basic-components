@@ -55,8 +55,11 @@ public class PropertyBackedSyntheticResource extends SyntheticResource {
    * @return True when the other object is a PropertyBackedSyntheticResource at the same path, of
    *     the same resource type, reporting the same properties.
    */
+  // @Nonnull, not @Nullable: the package declares parameters non-null by default, so the inherited
+  // equals(Object) is already annotated that way and widening it here is an incompatible override.
+  // The instanceof below still returns false for a null argument, so nothing throws either way.
   @Override
-  public boolean equals(final Object other) {
+  public boolean equals(@Nonnull final Object other) {
     if (this == other) {
       return true;
     }
