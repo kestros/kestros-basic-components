@@ -41,10 +41,7 @@ public interface KestrosLink extends KestrosBasicComponentElement {
    */
   @Nonnull
   default String getTargetAsString() {
-    if(getTarget() != null) {
-      return getTarget().getTargetValue();
-    }
-    return AnchorTarget.SAME_WINDOW.getTargetValue();
+    return getTarget().getTargetValue();
   }
 
   /**

@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Comparator;
 import java.util.List;
 import javax.annotation.Nonnull;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 
 /**
@@ -100,13 +101,16 @@ public final class ContentPageSorter {
   /**
    * The page's node name, never null.
    *
+   * <p>The fallback goes through {@code defaultString} rather than an {@code == null} test on
+   * purpose: BaseContentPage declares these getters @Nonnull, so SpotBugs reads an inline null
+   * check as redundant and reports it. The behaviour is the same either way.</p>
+   *
    * @param page Page to read from.
    * @return The page's node name, or the empty string when it has none.
    */
   @Nonnull
   private static String name(@Nonnull final BaseContentPage page) {
-    final String pageName = page.getName();
-    return pageName == null ? "" : pageName;
+    return StringUtils.defaultString(page.getName());
   }
 
   /**
@@ -118,7 +122,6 @@ public final class ContentPageSorter {
    */
   @Nonnull
   private static String displayTitle(@Nonnull final BaseContentPage page) {
-    final String title = page.getDisplayTitle();
-    return title == null ? name(page) : title;
+    return StringUtils.defaultString(page.getDisplayTitle(), name(page));
   }
 }

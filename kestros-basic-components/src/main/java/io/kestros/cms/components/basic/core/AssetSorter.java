@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Orders the assets behind a list component.
@@ -91,13 +92,16 @@ public final class AssetSorter {
   /**
    * The asset's node name, never null.
    *
+   * <p>The fallback goes through {@code defaultString} rather than an {@code == null} test on
+   * purpose: Asset declares these getters @Nonnull, so SpotBugs reads an inline null check as
+   * redundant and reports it. The behaviour is the same either way.</p>
+   *
    * @param asset Asset to read from.
    * @return The asset's node name, or the empty string when it has none.
    */
   @Nonnull
   private static String name(@Nonnull final Asset asset) {
-    final String assetName = asset.getName();
-    return assetName == null ? "" : assetName;
+    return StringUtils.defaultString(asset.getName());
   }
 
   /**
@@ -108,7 +112,6 @@ public final class AssetSorter {
    */
   @Nonnull
   private static String title(@Nonnull final Asset asset) {
-    final String assetTitle = asset.getTitle();
-    return assetTitle == null ? name(asset) : assetTitle;
+    return StringUtils.defaultString(asset.getTitle(), name(asset));
   }
 }
