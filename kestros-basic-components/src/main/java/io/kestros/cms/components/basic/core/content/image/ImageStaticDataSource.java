@@ -48,7 +48,7 @@ public class ImageStaticDataSource extends BaseSlingModelDataSource implements K
     return getResource().getValueMap().get("imageTitle", assetTitle);
   }
 
-  @Nonnull
+  @Nullable
   @Override
   public String getImagePath() {
     return StringUtils.trimToNull(
