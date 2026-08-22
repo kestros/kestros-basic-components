@@ -19,8 +19,9 @@ public interface KestrosBreadCrumbs extends KestrosContainerElement {
 
   @Nonnull
   default List<Resource> getLinks() {
-    List<Resource> links = new ArrayList<>();
-    for (KestrosBreadCrumb link : getLinkElements()) {
+    final List<KestrosBreadCrumb> sourceLinks = getLinkElements();
+    final List<Resource> links = new ArrayList<>(sourceLinks.size());
+    for (KestrosBreadCrumb link : sourceLinks) {
       links.add(link.getResource());
     }
     return links;

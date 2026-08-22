@@ -1,6 +1,7 @@
 package io.kestros.cms.components.basic.core;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
@@ -51,7 +52,7 @@ public class BaseSyntheticResourceTest extends BaseSyntheticTest {
       exception = e;
     }
     assertNotNull(exception);
-    assertEquals("Missing required property", exception.getMessage());
+    assertTrue(exception.getMessage().startsWith("Unable to build a synthetic resource under"));
   }
 
   @Test
@@ -69,7 +70,7 @@ public class BaseSyntheticResourceTest extends BaseSyntheticTest {
       exception = e;
     }
     assertNotNull(exception);
-    assertEquals("Missing required property", exception.getMessage());
+    assertTrue(exception.getMessage().startsWith("Unable to build a synthetic resource under"));
   }
 
   @Test
@@ -87,7 +88,7 @@ public class BaseSyntheticResourceTest extends BaseSyntheticTest {
       exception = e;
     }
     assertNotNull(exception);
-    assertEquals("Missing required property", exception.getMessage());
+    assertTrue(exception.getMessage().startsWith("Unable to build a synthetic resource under"));
   }
 
   @Test

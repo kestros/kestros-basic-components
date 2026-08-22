@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core.content.heading;
 
+import javax.annotation.Nonnull;
 import io.kestros.cms.components.basic.api.content.KestrosHeading;
 import io.kestros.cms.components.basic.core.BaseDataSourceComponent;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -9,11 +10,13 @@ import org.apache.sling.models.annotations.Model;
 public class HeadingDataSourceComponent extends BaseDataSourceComponent<KestrosHeading> implements
         KestrosHeading {
   @Override
+  @Nonnull
   public String getHeadingText() {
     return getComponentData().getHeadingText();
   }
 
   @Override
+  @Nonnull
   public String getHeadingType() {
     return getComponentData().getHeadingType();
   }

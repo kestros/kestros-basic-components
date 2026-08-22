@@ -30,8 +30,9 @@ public interface KestrosAccordion extends KestrosContainerElement {
   @JsonIgnore
   @Nonnull
   default List<Resource> getPanels() {
-    List<Resource> panelResources = new ArrayList<>();
-    for (KestrosAccordionPanel panel : getPanelElements()) {
+    final List<KestrosAccordionPanel> sourcePanelResources = getPanelElements();
+    final List<Resource> panelResources = new ArrayList<>(sourcePanelResources.size());
+    for (KestrosAccordionPanel panel : sourcePanelResources) {
       if (panel.isSynthetic()) {
         panelResources.add(panel.toSyntheticResource(getResourceResolver(), getPath()));
       } else {

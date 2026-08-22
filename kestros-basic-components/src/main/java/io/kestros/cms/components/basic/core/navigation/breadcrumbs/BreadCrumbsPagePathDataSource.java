@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core.navigation.breadcrumbs;
 
+import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.components.basic.api.content.KestrosLink;
 import io.kestros.cms.components.basic.api.navigation.KestrosBreadCrumb;
 import io.kestros.cms.components.basic.api.navigation.KestrosBreadCrumbs;
@@ -9,30 +10,25 @@ import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.Optional;
-import org.apache.sling.models.annotations.injectorspecific.Self;
 
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class BreadCrumbsPagePathDataSource extends BaseSlingModelDataSource
     implements KestrosBreadCrumbs {
 
-  @Self
-  @Optional
-  private SlingHttpServletRequest slingHttpServletRequest;
-
-  @Self
-  @Optional
-  private Resource resource;
+  private static final Logger LOG =
+      LoggerFactory.getLogger(BreadCrumbsPagePathDataSource.class);
 
   @Nonnull
   @Override
   public List<KestrosBreadCrumb> getLinkElements() {
     List<KestrosBreadCrumb> crumbs = new ArrayList<>();
-    Boolean first = true;
-    Boolean last = false;
+    boolean first = true;
+    boolean last = false;
     int index = 0;
     List<BaseContentPage> ancestorPages = getAncestorPages();
     for (BaseContentPage page : ancestorPages) {
@@ -47,8 +43,10 @@ public class BreadCrumbsPagePathDataSource extends BaseSlingModelDataSource
         crumbs.add(crumb);
         first = false;
         index++;
-      } catch (Exception e) {
-        // Ignore exception and continue.
+      } catch (ComponentConfigurationException e) {
+        LOG.debug("Skipping a breadcrumb for {}: it could not be built. {}",
+            String.valueOf(page.getPath()).replaceAll("[\r\n]", ""),
+            String.valueOf(e.getMessage()).replaceAll("[\r\n]", ""));
       }
     }
     return new ArrayList<>(crumbs);
@@ -61,6 +59,7 @@ public class BreadCrumbsPagePathDataSource extends BaseSlingModelDataSource
     return List.of();
   }
 
+  @Nonnull
   List<BaseContentPage> getAncestorPages() {
     List<BaseContentPage> pages = new ArrayList<>();
     BaseContentPage page = getCurrentOrContainingPage();
