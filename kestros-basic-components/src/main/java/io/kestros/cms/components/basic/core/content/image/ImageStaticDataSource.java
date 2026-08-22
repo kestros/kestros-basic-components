@@ -8,8 +8,6 @@ import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosImage;
 import io.kestros.cms.components.basic.core.LinkUtils;
 import io.kestros.cms.components.basic.core.BaseSlingModelDataSource;
-import io.kestros.cms.componenttypes.api.services.ComponentUiFrameworkViewRetrievalService;
-import io.kestros.cms.componenttypes.api.services.ComponentVariationRetrievalService;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
@@ -21,7 +19,11 @@ import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@SuppressFBWarnings({"IMC_IMMATURE_CLASS_NO_TOSTRING", "FCBL_FIELD_COULD_BE_LOCAL"})
+@SuppressFBWarnings(value = "IMC_IMMATURE_CLASS_NO_TOSTRING",
+    justification = "A style rule rather than a defect: the detector fires on every class that"
+        + " does not declare toString. The fields here are author content read from the"
+        + " repository and are reached through the getters HTL calls, so a default rendering of"
+        + " them is not something to add.")
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class ImageStaticDataSource extends BaseSlingModelDataSource implements KestrosImage {
 
@@ -30,12 +32,6 @@ public class ImageStaticDataSource extends BaseSlingModelDataSource implements K
   @OSGiService
   @Optional
   private AssetRetrievalService assetRetrievalService;
-
-  @OSGiService
-  private ComponentVariationRetrievalService componentVariationRetrievalService;
-
-  @OSGiService
-  private ComponentUiFrameworkViewRetrievalService componentUiFrameworkViewRetrievalService;
 
   private Asset asset;
 

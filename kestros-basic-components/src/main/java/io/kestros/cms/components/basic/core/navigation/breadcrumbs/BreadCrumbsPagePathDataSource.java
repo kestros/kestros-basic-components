@@ -1,6 +1,5 @@
 package io.kestros.cms.components.basic.core.navigation.breadcrumbs;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.components.basic.api.content.KestrosLink;
 import io.kestros.cms.components.basic.api.navigation.KestrosBreadCrumb;
@@ -16,26 +15,13 @@ import org.slf4j.LoggerFactory;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.Optional;
-import org.apache.sling.models.annotations.injectorspecific.Self;
 
-@SuppressFBWarnings(value = "FCBL_FIELD_COULD_BE_LOCAL",
-    justification = "Both fields are @Self @Optional injection points. Sling Models writes them"
-        + " after the object is constructed, so neither can be a local variable.")
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class BreadCrumbsPagePathDataSource extends BaseSlingModelDataSource
     implements KestrosBreadCrumbs {
 
   private static final Logger LOG =
       LoggerFactory.getLogger(BreadCrumbsPagePathDataSource.class);
-
-  @Self
-  @Optional
-  private SlingHttpServletRequest slingHttpServletRequest;
-
-  @Self
-  @Optional
-  private Resource resource;
 
   @Nonnull
   @Override

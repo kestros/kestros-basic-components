@@ -9,8 +9,6 @@ import io.kestros.cms.components.basic.core.ContentPageSorter;
 import io.kestros.cms.components.basic.core.BaseContainerSlingModelDataSource;
 import io.kestros.cms.components.basic.core.LinkUtils;
 import io.kestros.cms.components.basic.core.content.link.KestrosLinkImpl;
-import io.kestros.cms.componenttypes.api.services.ComponentUiFrameworkViewRetrievalService;
-import io.kestros.cms.componenttypes.api.services.ComponentVariationRetrievalService;
 import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,19 +17,10 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 
-@SuppressFBWarnings(value = "FCBL_FIELD_COULD_BE_LOCAL",
-    justification = "Both fields are @OSGiService injection points. Sling Models writes them"
-        + " after the object is constructed, so neither can be a local variable.")
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class LinkListChildPageDataSource extends BaseContainerSlingModelDataSource
     implements KestrosLinkList {
-
-  @OSGiService
-  private ComponentVariationRetrievalService componentVariationRetrievalService;
-  @OSGiService
-  private ComponentUiFrameworkViewRetrievalService componentUiFrameworkViewRetrievalService;
 
   /**
    * The path the child pages are read from.
