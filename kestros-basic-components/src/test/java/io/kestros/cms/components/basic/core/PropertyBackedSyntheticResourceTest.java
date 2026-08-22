@@ -71,6 +71,11 @@ public class PropertyBackedSyntheticResourceTest {
   }
 
   @Test
+  public void testEqualsWhenComparedToNull() {
+    assertNotEquals(null, resource);
+  }
+
+  @Test
   public void testEqualsWhenPropertiesDiffer() {
     Map<String, Object> other = new HashMap<>();
     other.put("heading", "Another Heading");
