@@ -12,7 +12,9 @@ import javax.annotation.Nonnull;
  * apart from any other runtime failure, and so the message names the component and the element
  * that failed rather than surfacing a bare cause.</p>
  */
-@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_EQUALS")
+@SuppressFBWarnings(value = "IMC_IMMATURE_CLASS_NO_EQUALS",
+    justification = "An exception type. Throwable compares by identity, nothing here compares"
+        + " two of these, and value equality on a thrown exception is not meaningful.")
 public class ComponentElementRenderingException extends RuntimeException {
 
   private static final long serialVersionUID = 1L;

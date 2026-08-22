@@ -19,7 +19,9 @@ import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 
-@SuppressFBWarnings("FCBL_FIELD_COULD_BE_LOCAL")
+@SuppressFBWarnings(value = "FCBL_FIELD_COULD_BE_LOCAL",
+    justification = "Both fields are @Self @Optional injection points. Sling Models writes them"
+        + " after the object is constructed, so neither can be a local variable.")
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class BreadCrumbsPagePathDataSource extends BaseSlingModelDataSource
     implements KestrosBreadCrumbs {
