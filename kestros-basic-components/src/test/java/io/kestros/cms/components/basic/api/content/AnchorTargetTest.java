@@ -28,6 +28,23 @@ public class AnchorTargetTest {
   @Test
   public void testLookupByStringValueIsCaseInsensitive() {
     assertEquals(AnchorTarget.NEW_WINDOW, AnchorTarget.lookup("_BLANK"));
+    assertEquals(AnchorTarget.NEW_WINDOW, AnchorTarget.lookup("_BlAnK"));
+    assertEquals(AnchorTarget.SAME_WINDOW, AnchorTarget.lookup("_SELF"));
+  }
+
+  /**
+   * Case-insensitivity is ASCII-only: a non-ASCII character that Unicode case-folds onto an ASCII
+   * one must not match. Both inputs below matched before the fold was narrowed, because
+   * String.equalsIgnoreCase folds the whole Unicode range - U+212A KELVIN SIGN lowercases to 'k'
+   * and U+017F LATIN SMALL LETTER LONG S uppercases to 'S'. Both must now fall through to the
+   * SAME_WINDOW default. This test fails against the previous implementation.
+   */
+  @Test
+  public void testLookupByStringValueDoesNotFoldNonAsciiOntoAscii() {
+    assertEquals("U+212A KELVIN SIGN must not match the 'k' of _blank", AnchorTarget.SAME_WINDOW,
+        AnchorTarget.lookup("_blan\u212A"));
+    assertEquals("U+017F LONG S must not match the 's' of _self", AnchorTarget.SAME_WINDOW,
+        AnchorTarget.lookup("_\u017Felf"));
   }
 
   @Test
