@@ -55,10 +55,11 @@ final class CardListSupport {
    * this drifting out of step with that constructor.
    *
    * <p>Only the UI framework is checked for null afterwards. The other four either return a value
-   * or throw: the resolver and the path come off the data source's own resource, the variations are
-   * always a list, and the layout falls back to "default". {@code BaseSyntheticResource} null-checks
-   * all five, and if one of those ever does start returning null the card list would drop every page
-   * for the same reason - which is what the whole-component test is there to catch.
+   * or throw: the resolver and the path come off the data source's own resource, the variations
+   * are always a list, and the layout falls back to "default". {@code BaseSyntheticResource}
+   * null-checks all five, and if one of those ever does start returning null the card list would
+   * drop every page for the same reason - which is what the whole-component test is there to
+   * catch.
    *
    * @param dataSource Data source the cards will be built from.
    * @throws IllegalStateException The component's page has no resolvable UI framework.
