@@ -42,8 +42,8 @@ public abstract class BaseComponentElement implements KestrosBasicComponentEleme
     if (propertyValue instanceof List && !((List<?>) propertyValue).isEmpty()
         && ((List<?>) propertyValue).get(0) instanceof Map) {
       // TODO checking the map here is a bit hacky, but not sure of a better way.
-      List<Map<String, Object>> variationMaps = (List<Map<String, Object>>) propertyValue;
-      appliedVariationNames = new ArrayList<>();
+      final List<Map<String, Object>> variationMaps = (List<Map<String, Object>>) propertyValue;
+      appliedVariationNames = new ArrayList<>(variationMaps.size());
       for (Map<String, Object> variationMap : variationMaps) {
         appliedVariationNames.add((String) variationMap.get("path"));
       }
