@@ -19,7 +19,7 @@ import org.apache.sling.api.wrappers.ValueMapDecorator;
 @SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 public class PropertyBackedSyntheticResource extends SyntheticResource {
 
-  private final ValueMap valueMap;
+  private final Map<String, Object> properties;
 
   /**
    * A synthetic resource whose properties come from a supplied map.
@@ -34,12 +34,18 @@ public class PropertyBackedSyntheticResource extends SyntheticResource {
       @Nonnull final ResourceMetadata resourceMetadata, @Nonnull final String resourceType,
       @Nonnull final Map<String, Object> properties) {
     super(resourceResolver, resourceMetadata, resourceType);
-    this.valueMap = new ValueMapDecorator(new HashMap<>(properties));
+    this.properties = new HashMap<>(properties);
   }
 
+  /**
+   * The properties the resource reports.
+   *
+   * @return A fresh value map over a copy of the properties. Writing to it changes nothing the
+   *     resource reports, and one caller's writes are invisible to the next.
+   */
   @Override
   @Nonnull
   public ValueMap getValueMap() {
-    return valueMap;
+    return new ValueMapDecorator(new HashMap<>(properties));
   }
 }

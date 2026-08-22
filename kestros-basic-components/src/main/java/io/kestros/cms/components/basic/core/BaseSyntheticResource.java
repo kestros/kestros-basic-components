@@ -16,7 +16,6 @@ import org.apache.sling.api.resource.ResourceResolver;
 
 public abstract class BaseSyntheticResource extends BaseComponentElement
     implements KestrosBasicComponentElement {
-  private final ResourceResolver resourceResolver;
   private final String parentPath;
   private final UiFramework uiFramework;
   private final List<ComponentVariation> componentVariations;
@@ -33,7 +32,7 @@ public abstract class BaseSyntheticResource extends BaseComponentElement
       @Nonnull String resourcePrefix, @Nullable String forcedResourceName) throws
       ComponentConfigurationException {
     this.dataSource = dataSource;
-    this.resourceResolver = dataSource.getResourceResolver();
+    final ResourceResolver resourceResolver = dataSource.getResourceResolver();
     this.parentPath = dataSource.getResource().getPath();
     this.uiFramework = dataSource.getUiFramework();
     this.componentVariations = dataSource.getElementVariations(resourcePrefix + "Variations",
@@ -61,7 +60,7 @@ public abstract class BaseSyntheticResource extends BaseComponentElement
   @Override
   @Nonnull
   public ResourceResolver getResourceResolver() {
-    return resourceResolver;
+    return dataSource.getResourceResolver();
   }
 
   @Override
@@ -74,7 +73,7 @@ public abstract class BaseSyntheticResource extends BaseComponentElement
   @Nonnull
   public Resource getResource() {
     if (syntheticResource == null) {
-      syntheticResource = toSyntheticResource(resourceResolver, parentPath);
+      syntheticResource = toSyntheticResource(getResourceResolver(), parentPath);
     }
     return syntheticResource;
   }
