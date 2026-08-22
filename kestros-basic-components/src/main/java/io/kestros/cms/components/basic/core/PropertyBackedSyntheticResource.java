@@ -1,0 +1,48 @@
+package io.kestros.cms.components.basic.core;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.util.HashMap;
+import java.util.Map;
+import javax.annotation.Nonnull;
+import org.apache.sling.api.resource.ResourceMetadata;
+import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.resource.SyntheticResource;
+import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.api.wrappers.ValueMapDecorator;
+
+/**
+ * A synthetic resource whose properties come from a supplied map rather than from the repository.
+ *
+ * <p>Both synthetic-resource builders used an anonymous subclass for this, which captured the
+ * enclosing component for no reason and could carry no nullability contract of its own.</p>
+ */
+@SuppressFBWarnings(value = "IMC_IMMATURE_CLASS_NO_TOSTRING",
+    justification = "A style rule rather than a defect: the detector fires on every class that"
+        + " does not declare toString. The properties here are author content and can be"
+        + " arbitrarily large, so a default rendering of them is not something to add.")
+public class PropertyBackedSyntheticResource extends SyntheticResource {
+
+  private final ValueMap valueMap;
+
+  /**
+   * A synthetic resource whose properties come from a supplied map.
+   *
+   * @param resourceResolver Resolver the synthetic resource belongs to.
+   * @param resourceMetadata Metadata describing where the resource sits.
+   * @param resourceType Resource type the synthetic resource reports.
+   * @param properties Properties the resource exposes. Copied, so a later change by the caller
+   *     cannot rewrite what the resource reports.
+   */
+  public PropertyBackedSyntheticResource(@Nonnull final ResourceResolver resourceResolver,
+      @Nonnull final ResourceMetadata resourceMetadata, @Nonnull final String resourceType,
+      @Nonnull final Map<String, Object> properties) {
+    super(resourceResolver, resourceMetadata, resourceType);
+    this.valueMap = new ValueMapDecorator(new HashMap<>(properties));
+  }
+
+  @Override
+  @Nonnull
+  public ValueMap getValueMap() {
+    return valueMap;
+  }
+}
