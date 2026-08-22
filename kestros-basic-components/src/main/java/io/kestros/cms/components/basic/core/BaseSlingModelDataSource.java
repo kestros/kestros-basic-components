@@ -1,8 +1,7 @@
 package io.kestros.cms.components.basic.core;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.kestros.cms.components.basic.api.exceptions.ComponentElementRenderingException;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
 import io.kestros.cms.components.basic.api.exceptions.ComponentElementRenderingException;
 import io.kestros.cms.componenttypes.api.exceptions.ComponentVariationRetrievalException;
