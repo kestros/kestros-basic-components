@@ -102,6 +102,9 @@ public class KestrosBasicComponentElementTest extends BaseSyntheticTest {
 
   @Test
   public void testTestGetLayout() {
+    // The property-scoped overload falls back to "default" rather than null, which is what
+    // lets the interface declare it @Nonnull.
+    assertEquals("default", alert.getLayout("absentProperty"));
   }
 
   @Test

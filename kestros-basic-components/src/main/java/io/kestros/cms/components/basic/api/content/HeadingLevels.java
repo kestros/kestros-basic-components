@@ -29,10 +29,12 @@ public enum HeadingLevels {
     return null;
   }
 
+  @Nonnull
   public String getDisplayText() {
     return displayText;
   }
 
+  @Nonnull
   public String getValue() {
     return value;
   }

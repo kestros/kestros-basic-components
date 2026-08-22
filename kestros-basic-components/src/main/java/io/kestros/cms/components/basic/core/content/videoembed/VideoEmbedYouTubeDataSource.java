@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
+import javax.annotation.Nonnull;
 
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class VideoEmbedYouTubeDataSource extends BaseSlingModelDataSource
@@ -28,7 +29,7 @@ public class VideoEmbedYouTubeDataSource extends BaseSlingModelDataSource
   private static final Pattern HTML_PATTERN =
           Pattern.compile("[<>]");
 
-  boolean isValidVideoInput(String input) {
+  boolean isValidVideoInput(@Nullable final String input) {
     if (input == null) {
       return false;
     }
@@ -87,12 +88,23 @@ public class VideoEmbedYouTubeDataSource extends BaseSlingModelDataSource
     );
   }
 
+  /**
+   * The configured YouTube video reference.
+   *
+   * <p>Empty rather than null when nothing has been chosen, so the @Nonnull this already declared
+   * is true. Both callers pass the value straight to isValidVideoInput and extractVideoId, which
+   * reject a blank string, so an unset video is turned away where it was previously dereferenced.
+   * </p>
+   *
+   * @return The video reference, or the empty string when none is set.
+   */
+  @Nonnull
   private String getYoutubeVideo() {
-    return getResource().getValueMap().get("youtubeVideo", String.class);
+    return getResource().getValueMap().get("youtubeVideo", StringUtils.EMPTY);
   }
 
   private boolean isMute() {
-    return getResource().getValueMap().get("mute", false);
+    return getResource().getValueMap().get("mute", Boolean.FALSE);
   }
 
 
@@ -101,10 +113,11 @@ public class VideoEmbedYouTubeDataSource extends BaseSlingModelDataSource
        ------------------ */
 
   private boolean isAllowFullscreen() {
-    return getResource().getValueMap().get("allowFullScreen", true);
+    return getResource().getValueMap().get("allowFullScreen", Boolean.TRUE);
   }
 
-  private String buildEmbedUrl(String videoId) {
+  @Nonnull
+  private String buildEmbedUrl(@Nonnull String videoId) {
 
 
     String base = "https://www.youtube.com/embed/";
@@ -118,7 +131,8 @@ public class VideoEmbedYouTubeDataSource extends BaseSlingModelDataSource
   }
 
 
-  private String extractVideoId(String value) {
+  @Nullable
+  private String extractVideoId(@Nonnull String value) {
     if (StringUtils.isBlank(value)) {
       return null;
     }

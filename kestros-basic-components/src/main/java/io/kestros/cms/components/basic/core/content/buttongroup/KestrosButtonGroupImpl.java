@@ -26,7 +26,7 @@ public class KestrosButtonGroupImpl extends BaseContainerSyntheticResource imple
       ComponentConfigurationException {
     super(dataSource, resourcePrefix,
         forcedResourceName);
-    this.buttons = buttons;
+    this.buttons = new ArrayList<>(buttons);
     this.buttonVariations = dataSource.getElementVariations("button", KestrosButton.RESOURCE_TYPE);
   }
 
@@ -51,9 +51,11 @@ public class KestrosButtonGroupImpl extends BaseContainerSyntheticResource imple
           "button",
           "buttonElement"));
     }
-    this.buttons = buttons;
+    this.buttons = new ArrayList<>(buttons);
     if (this.buttons.isEmpty()) {
-      throw new ComponentConfigurationException("Button Group must have at least one button.");
+      throw new ComponentConfigurationException(String.format(
+          "Unable to build the button group %s: a button group must have at least one button.",
+          String.valueOf(resourcePrefix)));
     }
   }
 

@@ -22,8 +22,9 @@ public abstract class BaseContainerSyntheticResource extends BaseSyntheticResour
   @Nonnull
   @Override
   public List<Resource> getChildren() {
-    List<Resource> children = new ArrayList<>();
-    for (KestrosBasicComponentElement componentElement : getChildElements()) {
+    final List<KestrosBasicComponentElement> sourceChildren = getChildElements();
+    final List<Resource> children = new ArrayList<>(sourceChildren.size());
+    for (KestrosBasicComponentElement componentElement : sourceChildren) {
       children.add(componentElement.toSyntheticResource(getResourceResolver(), getPath()));
     }
     return children;

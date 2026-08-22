@@ -20,7 +20,7 @@ public class KestrosContainerImpl extends BaseContainerSyntheticResource
       @Nonnull String resourcePrefix, String forcedResourceName)
       throws ComponentConfigurationException {
     super(dataSource, resourcePrefix, forcedResourceName);
-    this.childElements = childElements;
+    this.childElements = new ArrayList<>(childElements);
   }
 
   @Nonnull
