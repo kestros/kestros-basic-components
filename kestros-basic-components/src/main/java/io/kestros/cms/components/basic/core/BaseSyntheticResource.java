@@ -1,7 +1,6 @@
 package io.kestros.cms.components.basic.core;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.componenttypes.api.models.ComponentVariation;
 import io.kestros.cms.componenttypes.api.services.ComponentUiFrameworkViewRetrievalService;
@@ -15,8 +14,7 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 
-public abstract class BaseSyntheticResource extends BaseComponentElement
-    implements KestrosBasicComponentElement {
+public abstract class BaseSyntheticResource extends BaseComponentElement {
   private final String parentPath;
   private final UiFramework uiFramework;
   private final List<ComponentVariation> componentVariations;
