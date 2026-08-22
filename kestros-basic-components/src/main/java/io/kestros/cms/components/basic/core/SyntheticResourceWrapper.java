@@ -12,7 +12,9 @@ import org.apache.sling.api.resource.ResourceWrapper;
 /**
  * ResourceWrapper that allows for synthetic children to be added to the wrapped Resource.
  */
-@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_EQUALS")
+@SuppressFBWarnings(value = "IMC_IMMATURE_CLASS_NO_EQUALS",
+    justification = "A ResourceWrapper. ResourceWrapper declares no equals of its own, and Sling"
+        + " identifies a resource by its path rather than by which wrapper holds it.")
 public class SyntheticResourceWrapper extends ResourceWrapper {
 
   private final Map<String, Resource> children;

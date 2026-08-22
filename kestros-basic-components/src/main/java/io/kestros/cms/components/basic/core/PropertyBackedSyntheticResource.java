@@ -1,9 +1,11 @@
 package io.kestros.cms.components.basic.core;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.apache.sling.api.resource.ResourceMetadata;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.SyntheticResource;
@@ -55,11 +57,15 @@ public class PropertyBackedSyntheticResource extends SyntheticResource {
    * @return True when the other object is a PropertyBackedSyntheticResource at the same path, of
    *     the same resource type, reporting the same properties.
    */
-  // @Nonnull, not @Nullable: the package declares parameters non-null by default, so the inherited
-  // equals(Object) is already annotated that way and widening it here is an incompatible override.
-  // The instanceof below still returns false for a null argument, so nothing throws either way.
+  @SuppressFBWarnings(value = "NP_METHOD_PARAMETER_TIGHTENS_ANNOTATION",
+      justification = "equals(Object) has to accept null under the Object contract, and this one"
+          + " returns false for it. PropertyBackedSyntheticResourceTest covers that. The"
+          + " detector reports the parameter as incompatible with the inherited signature"
+          + " whichever way it is spelled: measured on 2026-08-22, @Nonnull and @Nullable both"
+          + " raise this, and leaving the annotation off raises PARAMETER_NULLABILITY instead."
+          + " @Nullable is the spelling that matches the contract, so it stays.")
   @Override
-  public boolean equals(@Nonnull final Object other) {
+  public boolean equals(@Nullable final Object other) {
     if (this == other) {
       return true;
     }

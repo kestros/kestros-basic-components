@@ -11,7 +11,11 @@ import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
+@SuppressFBWarnings(value = "IMC_IMMATURE_CLASS_NO_TOSTRING",
+    justification = "A style rule rather than a defect: the detector fires on every class that"
+        + " does not declare toString. The fields here are author content read from the"
+        + " repository and are reached through the getters HTL calls, so a default rendering of"
+        + " them is not something to add.")
 public class KestrosLinkImpl extends BaseSyntheticResource implements KestrosLink {
 
   private String text;
