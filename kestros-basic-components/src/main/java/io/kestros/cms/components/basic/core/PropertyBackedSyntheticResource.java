@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import org.apache.sling.api.resource.ResourceMetadata;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.SyntheticResource;
@@ -57,7 +56,7 @@ public class PropertyBackedSyntheticResource extends SyntheticResource {
    *     the same resource type, reporting the same properties.
    */
   @Override
-  public boolean equals(@Nullable final Object other) {
+  public boolean equals(final Object other) {
     if (this == other) {
       return true;
     }
