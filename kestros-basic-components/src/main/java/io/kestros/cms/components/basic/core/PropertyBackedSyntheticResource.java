@@ -1,9 +1,10 @@
 package io.kestros.cms.components.basic.core;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.apache.sling.api.resource.ResourceMetadata;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.SyntheticResource;
@@ -16,7 +17,6 @@ import org.apache.sling.api.wrappers.ValueMapDecorator;
  * <p>Both synthetic-resource builders used an anonymous subclass for this, which captured the
  * enclosing component for no reason and could carry no nullability contract of its own.</p>
  */
-@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
 public class PropertyBackedSyntheticResource extends SyntheticResource {
 
   private final ValueMap valueMap;
@@ -47,5 +47,45 @@ public class PropertyBackedSyntheticResource extends SyntheticResource {
   @Nonnull
   public ValueMap getValueMap() {
     return new ValueMapDecorator(new HashMap<>(valueMap));
+  }
+
+  /**
+   * Whether another object is a synthetic resource reporting the same thing as this one.
+   *
+   * @param other Object to compare against.
+   * @return True when the other object is a PropertyBackedSyntheticResource at the same path, of
+   *     the same resource type, reporting the same properties.
+   */
+  @Override
+  public boolean equals(@Nullable final Object other) {
+    if (this == other) {
+      return true;
+    }
+    if (!(other instanceof PropertyBackedSyntheticResource)) {
+      return false;
+    }
+    final PropertyBackedSyntheticResource that = (PropertyBackedSyntheticResource) other;
+    return Objects.equals(getPath(), that.getPath())
+        && Objects.equals(getResourceType(), that.getResourceType())
+        && Objects.equals(valueMap, that.valueMap);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(getPath(), getResourceType(), valueMap);
+  }
+
+  /**
+   * Describes the resource for a log line.
+   *
+   * @return The resource's path, type, and how many properties it reports. The property values
+   *     are not included: they are author content and can be arbitrarily large.
+   */
+  @Override
+  @Nonnull
+  public String toString() {
+    return "PropertyBackedSyntheticResource{path=" + getPath()
+        + ", resourceType=" + getResourceType()
+        + ", properties=" + valueMap.size() + "}";
   }
 }
