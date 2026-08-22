@@ -120,6 +120,11 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
   // imagePath is an author-controlled property and an exception message can carry anything, so
   // those are the ones that can forge a log line. A helper reads better but SpotBugs' CRLF
   // analysis does not follow one, so it cannot see the value is already clean.
+  //
+  // The three that log an exception format the message first and call warn(String, Throwable)
+  // rather than the varargs overload. Passing the Throwable in the Object[] is what the detector
+  // reports, and it reports it whatever the other arguments are - the single-argument warn below
+  // is identical in every other respect and is not flagged. The stack trace still reaches the log.
 
   /**
    * The asset's title and description, already read. Reading them is part of resolving the asset:
@@ -179,11 +184,11 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
     try {
       return new AssetText(asset.getTitle(), asset.getDescription());
     } catch (final RuntimeException e) {
-      LOG.warn("Resolved the asset for card image on {} but could not read its properties. {}: {} "
-              + "The image renders without the asset's title or description.",
+      LOG.warn(String.format("Resolved the asset for card image on %s but could not read its "
+              + "properties. %s: %s The image renders without the asset's title or description.",
               String.valueOf(page.getPath()).replaceAll("[\r\n]", ""),
               e.getClass().getSimpleName(),
-              String.valueOf(e.getMessage()).replaceAll("[\r\n]", ""), e);
+              String.valueOf(e.getMessage()).replaceAll("[\r\n]", "")), e);
       return new AssetText(null, null);
     }
   }
@@ -216,22 +221,22 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
     try {
       return assetRetrievalService.getAsset(imagePath, null, page.getResourceResolver());
     } catch (final AssetRetrievalException e) {
-      LOG.warn("Unable to resolve asset {} for card image on {}. {} The image renders without the "
-              + "asset's title or description.",
+      LOG.warn(String.format("Unable to resolve asset %s for card image on %s. %s The image "
+              + "renders without the asset's title or description.",
               String.valueOf(imagePath).replaceAll("[\r\n]", ""),
               String.valueOf(page.getPath()).replaceAll("[\r\n]", ""),
-              String.valueOf(e.getMessage()).replaceAll("[\r\n]", ""), e);
+              String.valueOf(e.getMessage()).replaceAll("[\r\n]", "")), e);
       return null;
     } catch (final RuntimeException e) {
       // A card that cannot resolve its asset must still render. CardListChildPagesDataSource wraps
       // anything escaping this constructor in a RuntimeException, which loses the WHOLE card list -
       // so one unreadable asset would blank the page rather than drop one caption.
-      LOG.warn("Unexpected failure resolving asset {} for card image on {}. {}: {} The image "
-              + "renders without the asset's title or description.",
+      LOG.warn(String.format("Unexpected failure resolving asset %s for card image on %s. %s: %s "
+              + "The image renders without the asset's title or description.",
               String.valueOf(imagePath).replaceAll("[\r\n]", ""),
               String.valueOf(page.getPath()).replaceAll("[\r\n]", ""),
               e.getClass().getSimpleName(),
-              String.valueOf(e.getMessage()).replaceAll("[\r\n]", ""), e);
+              String.valueOf(e.getMessage()).replaceAll("[\r\n]", "")), e);
       return null;
     }
   }
