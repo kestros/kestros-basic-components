@@ -20,7 +20,9 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 
-@SuppressFBWarnings("FCBL_FIELD_COULD_BE_LOCAL")
+@SuppressFBWarnings(value = "FCBL_FIELD_COULD_BE_LOCAL",
+    justification = "Both fields are @OSGiService injection points. Sling Models writes them"
+        + " after the object is constructed, so neither can be a local variable.")
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class LinkListChildPageDataSource extends BaseContainerSlingModelDataSource
     implements KestrosLinkList {

@@ -15,7 +15,9 @@ import org.apache.sling.api.resource.Resource;
  * comparators as inline lambdas. Extracted here so the ordering rules live in one place and can
  * carry their own nullability contract, which a lambda body cannot.</p>
  */
-@SuppressFBWarnings("IMC_IMMATURE_CLASS_NO_TOSTRING")
+@SuppressFBWarnings(value = "IMC_IMMATURE_CLASS_NO_TOSTRING",
+    justification = "A static utility class: private constructor, no instance state, every"
+        + " method static. There is never an instance to print.")
 public final class ContentPageSorter {
 
   private static final String CREATED_DATE = "createdDate";
