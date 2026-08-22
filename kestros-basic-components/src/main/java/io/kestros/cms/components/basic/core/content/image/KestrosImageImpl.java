@@ -57,7 +57,9 @@ public class KestrosImageImpl extends BaseSyntheticResource implements KestrosIm
     this.href = href;
     this.ariaLabel = ariaLabel;
     this.anchorTitle = anchorTitle;
-    this.target = target;
+    // An image with no target opens in the same window. getTargetAsString already said so; keeping
+    // the field null instead made getTarget break the @Nonnull the interface declares.
+    this.target = target == null ? AnchorTarget.SAME_WINDOW : target;
     if (StringUtils.isEmpty(this.imagePath)) {
       throw new ComponentConfigurationException(String.format(
           "Unable to build the image element %s: imagePath is required and was empty.",
