@@ -76,10 +76,7 @@ public interface KestrosTopNavigationItem extends KestrosContainerElement {
    */
   @Nonnull
   default String getTargetAsString() {
-    if (getTarget() != null) {
-      return getTarget().getTargetValue();
-    }
-    return AnchorTarget.SAME_WINDOW.getTargetValue();
+    return getTarget().getTargetValue();
   }
 
   /**

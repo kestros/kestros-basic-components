@@ -116,18 +116,10 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
     }
   }
 
-  /**
-   * Strips CR and LF from a value before it is logged. Applied to every untrusted value, not only
-   * the JCR path: {@code imagePath} is an author-controlled property and an exception message can
-   * carry anything, so those are the ones that can actually forge a log line.
-   *
-   * @param value Value about to be logged.
-   * @return The value with CR and LF removed, or null unchanged.
-   */
-  @Nullable
-  private static String forLog(@Nullable final String value) {
-    return value == null ? null : value.replaceAll("[\r\n]", "");
-  }
+  // Every untrusted value below is stripped of CR and LF where it is logged, not through a helper:
+  // imagePath is an author-controlled property and an exception message can carry anything, so
+  // those are the ones that can forge a log line. A helper reads better but SpotBugs' CRLF
+  // analysis does not follow one, so it cannot see the value is already clean.
 
   /**
    * The asset's title and description, already read. Reading them is part of resolving the asset:
@@ -187,10 +179,11 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
     try {
       return new AssetText(asset.getTitle(), asset.getDescription());
     } catch (final RuntimeException e) {
-      final String safePath = forLog(page.getPath());
       LOG.warn("Resolved the asset for card image on {} but could not read its properties. {}: {} "
-              + "The image renders without the asset's title or description.", safePath,
-              e.getClass().getSimpleName(), forLog(e.getMessage()), e);
+              + "The image renders without the asset's title or description.",
+              String.valueOf(page.getPath()).replaceAll("[\r\n]", ""),
+              e.getClass().getSimpleName(),
+              String.valueOf(e.getMessage()).replaceAll("[\r\n]", ""), e);
       return new AssetText(null, null);
     }
   }
@@ -214,28 +207,31 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
     if (StringUtils.isBlank(imagePath)) {
       return null;
     }
-    final String safePath = forLog(page.getPath());
     if (assetRetrievalService == null) {
       LOG.warn("Unable to resolve the asset for card image on {}. No AssetRetrievalService "
               + "available; the image renders without the asset's title or description.",
-              safePath);
+              String.valueOf(page.getPath()).replaceAll("[\r\n]", ""));
       return null;
     }
     try {
       return assetRetrievalService.getAsset(imagePath, null, page.getResourceResolver());
     } catch (final AssetRetrievalException e) {
       LOG.warn("Unable to resolve asset {} for card image on {}. {} The image renders without the "
-              + "asset's title or description.", forLog(imagePath), safePath,
-              forLog(e.getMessage()), e);
+              + "asset's title or description.",
+              String.valueOf(imagePath).replaceAll("[\r\n]", ""),
+              String.valueOf(page.getPath()).replaceAll("[\r\n]", ""),
+              String.valueOf(e.getMessage()).replaceAll("[\r\n]", ""), e);
       return null;
     } catch (final RuntimeException e) {
       // A card that cannot resolve its asset must still render. CardListChildPagesDataSource wraps
       // anything escaping this constructor in a RuntimeException, which loses the WHOLE card list -
       // so one unreadable asset would blank the page rather than drop one caption.
       LOG.warn("Unexpected failure resolving asset {} for card image on {}. {}: {} The image "
-              + "renders without the asset's title or description.", forLog(imagePath),
-              safePath,
-              e.getClass().getSimpleName(), forLog(e.getMessage()), e);
+              + "renders without the asset's title or description.",
+              String.valueOf(imagePath).replaceAll("[\r\n]", ""),
+              String.valueOf(page.getPath()).replaceAll("[\r\n]", ""),
+              e.getClass().getSimpleName(),
+              String.valueOf(e.getMessage()).replaceAll("[\r\n]", ""), e);
       return null;
     }
   }

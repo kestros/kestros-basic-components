@@ -17,6 +17,7 @@ import io.kestros.cms.components.basic.core.content.image.KestrosImageImpl;
 import io.kestros.cms.componenttypes.api.models.ComponentVariation;
 import java.util.List;
 import javax.annotation.Nullable;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -76,7 +77,9 @@ public class CardAssetDataSource extends BaseContainerSlingModelDataSource imple
   @Override
   public KestrosImage getImageElement() {
     final Asset cardAsset = getAsset();
-    if (cardAsset == null || cardAsset.getPath() == null) {
+    // isEmpty rather than an inline == null: Asset declares getPath() @Nonnull, so SpotBugs reads
+    // a null check here as redundant. Same behaviour, and it also rejects an empty path.
+    if (cardAsset == null || StringUtils.isEmpty(cardAsset.getPath())) {
       return null;
     }
     try {

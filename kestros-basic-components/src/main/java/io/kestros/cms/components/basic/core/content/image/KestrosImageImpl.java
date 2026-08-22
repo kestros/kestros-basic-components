@@ -71,7 +71,7 @@ public class KestrosImageImpl extends BaseSyntheticResource implements KestrosIm
     super(dataSource, resourcePrefix, forcedResourceName);
     this.assetRetrievalService = assetRetrievalService;
     String assetPath = resource.getValueMap().get("imagePath", String.class);
-    if(LinkUtils.isLinkExternal(assetPath)) {
+    if (assetPath != null && LinkUtils.isLinkExternal(assetPath)) {
       try {
         Asset asset = getAsset(assetPath, resource.getResourceResolver());
         this.imagePath = asset.getPath();
