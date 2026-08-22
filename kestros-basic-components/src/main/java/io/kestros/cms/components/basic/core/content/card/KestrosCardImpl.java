@@ -277,4 +277,19 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
     return buttonGroup;
   }
 
+  /**
+   * Describes the card for a log line. Names which of the four child elements were built, which is
+   * what anyone reading a card-list failure needs: the card renders with any of them missing.
+   *
+   * @return A description of the card and the elements it holds.
+   */
+  @Nonnull
+  @Override
+  public String toString() {
+    return "KestrosCardImpl{title=" + (title == null ? "none" : "built")
+            + ", description=" + (description == null ? "none" : "set")
+            + ", image=" + (image == null ? "none" : "built")
+            + ", buttonGroup=" + (buttonGroup == null ? "none" : "built") + "}";
+  }
+
 }
