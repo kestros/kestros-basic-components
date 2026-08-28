@@ -1,5 +1,7 @@
 package io.kestros.cms.components.basic.api.content;
 
+import javax.annotation.Nonnull;
+
 public enum TextElementType {
   PARAGRAPH("Paragraph", "paragraph"),
   PREFORMATTED("Preformatted", "preformatted"),
@@ -13,10 +15,12 @@ public enum TextElementType {
     this.value = value;
   }
 
+  @Nonnull
   public String getDisplayText() {
     return displayText;
   }
 
+  @Nonnull
   public String getValue() {
     return value;
   }

@@ -4,6 +4,7 @@ import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosButton;
 import io.kestros.cms.components.basic.core.LinkUtils;
 import io.kestros.cms.components.basic.core.BaseSlingModelDataSource;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -30,7 +31,7 @@ public class ButtonStaticDataSource extends BaseSlingModelDataSource implements 
     return getResource().getValueMap().get("title", String.class);
   }
 
-  @Nullable
+  @Nonnull
   @Override
   public AnchorTarget getTarget() {
     return AnchorTarget.lookup(getResource());

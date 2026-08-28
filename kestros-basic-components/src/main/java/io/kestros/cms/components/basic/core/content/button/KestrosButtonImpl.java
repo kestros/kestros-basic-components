@@ -27,7 +27,7 @@ public class KestrosButtonImpl extends BaseSyntheticResource implements KestrosB
 
   public KestrosButtonImpl(String text, String href,
       String title,
-      AnchorTarget target, String rel,
+      @Nullable AnchorTarget target, String rel,
       String ariaLabel, String ariaDescribedBy,
       String lang, boolean disabled,
       @Nonnull BaseSlingModelDataSource dataSource,
@@ -38,7 +38,7 @@ public class KestrosButtonImpl extends BaseSyntheticResource implements KestrosB
     this.text = text;
     this.href = href;
     this.title = title;
-    this.target = target;
+    this.target = target != null ? target : AnchorTarget.SAME_WINDOW;
     this.rel = rel;
     this.ariaLabel = ariaLabel;
     this.ariaDescribedBy = ariaDescribedBy;
@@ -86,7 +86,7 @@ public class KestrosButtonImpl extends BaseSyntheticResource implements KestrosB
     return title;
   }
 
-  @Nullable
+  @Nonnull
   @Override
   public AnchorTarget getTarget() {
     return target;

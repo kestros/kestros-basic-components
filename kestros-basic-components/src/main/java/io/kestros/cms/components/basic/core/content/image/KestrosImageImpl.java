@@ -39,7 +39,7 @@ public class KestrosImageImpl extends BaseSyntheticResource implements KestrosIm
           String altText, String caption,
           String imageTitle,
           String href, String ariaLabel,
-          String anchorTitle, AnchorTarget target,
+          String anchorTitle, @Nullable AnchorTarget target,
           @Nonnull BaseSlingModelDataSource dataSource,
           String resourcePrefix,
           String forcedResourceName, AssetRetrievalService assetRetrievalService) throws
@@ -54,7 +54,7 @@ public class KestrosImageImpl extends BaseSyntheticResource implements KestrosIm
     this.href = href;
     this.ariaLabel = ariaLabel;
     this.anchorTitle = anchorTitle;
-    this.target = target;
+    this.target = target != null ? target : AnchorTarget.SAME_WINDOW;
     if (StringUtils.isEmpty(this.imagePath)) {
       throw new ComponentConfigurationException("Missing required property");
     }
