@@ -29,24 +29,35 @@ public interface KestrosLink extends KestrosBasicComponentElement {
 
   String RESOURCE_TYPE = "/libs/kestros/commons/components/content/link";
 
+  /**
+   * Resource type the link renders as.
+   *
+   * @return Resource type the link renders as.
+   */
   default String getComponentResourceType() {
     return RESOURCE_TYPE;
   }
 
   /**
    * Visible link text. This should normally be present and meaningful.
+   *
+   * @return Visible link text.
    */
   @Nullable
   String getText();
 
   /**
    * Destination URL. Should be null if the link is not navigable.
+   *
+   * @return Destination URL, or null if the link is not navigable.
    */
   @Nullable
   String getHref();
 
   /**
    * Target attribute (e.g. "_self", "_blank").
+   *
+   * @return Target attribute.
    */
   @Nonnull
   AnchorTarget getTarget();
@@ -58,7 +69,7 @@ public interface KestrosLink extends KestrosBasicComponentElement {
    */
   @Nonnull
   default String getTargetAsString() {
-    if(getTarget() != null) {
+    if (getTarget() != null) {
       return getTarget().getTargetValue();
     }
     return AnchorTarget.SAME_WINDOW.getTargetValue();
@@ -66,30 +77,40 @@ public interface KestrosLink extends KestrosBasicComponentElement {
 
   /**
    * ARIA label. Used when visible text is missing or insufficient.
+   *
+   * @return ARIA label.
    */
   @Nullable
   String getAriaLabel();
 
   /**
    * Optional title attribute. Use sparingly – should add meaning, not duplicate text.
+   *
+   * @return Title attribute.
    */
   @Nullable
   String getTitle();
 
   /**
    * Relationship attribute (e.g. "noopener", "noreferrer", "nofollow").
+   *
+   * @return Relationship attribute.
    */
   @Nullable
   String getRel();
 
   /**
    * ARIA described-by ID reference.
+   *
+   * @return ARIA described-by ID reference.
    */
   @Nullable
   String getAriaDescribedBy();
 
   /**
    * Language of the link text, if different from the page language. Example: "fr", "de", "en-GB"
+   *
+   * @return Language of the link text.
    */
   @Nullable
   String getLang();

@@ -25,18 +25,37 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import org.apache.sling.api.resource.Resource;
 
+/**
+ * Table element, holding a row of headers and the rows beneath them.
+ */
 public interface KestrosTable extends KestrosContainerElement {
   String RESOURCE_TYPE = "/libs/kestros/commons/components/content/table";
 
+  /**
+   * Resource type the table renders as.
+   *
+   * @return Resource type the table renders as.
+   */
   @Nonnull
   @Override
   default String getComponentResourceType() {
     return RESOURCE_TYPE;
   }
 
+  /**
+   * Header elements of the table.
+   *
+   * @return Header elements of the table.
+   */
   @Nonnull
   List<KestrosTableHeader> getHeaderElements();
 
+  /**
+   * Resources for the table's headers, built synthetically where the header has no stored
+   * resource.
+   *
+   * @return Resources for the table's headers.
+   */
   @Nonnull
   default List<Resource> getHeaders() {
     List<Resource> headers = new ArrayList<>();
@@ -50,9 +69,19 @@ public interface KestrosTable extends KestrosContainerElement {
     return headers;
   }
 
+  /**
+   * Row elements of the table.
+   *
+   * @return Row elements of the table.
+   */
   @Nonnull
   List<KestrosTableRow> getRowElements();
 
+  /**
+   * Resources for the table's rows, built synthetically where the row has no stored resource.
+   *
+   * @return Resources for the table's rows.
+   */
   @Nonnull
   default List<Resource> getRows() {
     List<Resource> rows = new ArrayList<>();
@@ -66,6 +95,11 @@ public interface KestrosTable extends KestrosContainerElement {
     return rows;
   }
 
+  /**
+   * Rows of the table, as generic child elements.
+   *
+   * @return Rows of the table, as generic child elements.
+   */
   @Nonnull
   default List<KestrosBasicComponentElement> getChildElements() {
     return new ArrayList<>(getRowElements());

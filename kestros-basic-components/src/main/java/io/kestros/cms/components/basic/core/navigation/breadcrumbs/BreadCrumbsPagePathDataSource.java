@@ -33,6 +33,9 @@ import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 
+/**
+ * Datasource that builds breadcrumbs from the path of the page being rendered.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class BreadCrumbsPagePathDataSource extends BaseSlingModelDataSource
     implements KestrosBreadCrumbs {

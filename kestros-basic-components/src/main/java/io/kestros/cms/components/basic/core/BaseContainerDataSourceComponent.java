@@ -26,6 +26,9 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
+/**
+ * Baseline datasource component for elements that hold other elements.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public abstract class BaseContainerDataSourceComponent<T extends KestrosContainerElement> extends
         BaseDataSourceComponent<T> implements KestrosContainerElement {

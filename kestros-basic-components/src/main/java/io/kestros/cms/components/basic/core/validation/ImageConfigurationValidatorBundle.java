@@ -18,6 +18,9 @@
 
 package io.kestros.cms.components.basic.core.validation;
 
+/**
+ * Validators for how an image is configured.
+ */
 public class ImageConfigurationValidatorBundle {
 //        extends ModelValidatorBundle<ImageComponent> {
 //

@@ -22,6 +22,9 @@ package io.kestros.cms.components.basic.core.content.button.validation;
 //@Deprecated
 //@Component(immediate = true,
 //        service = ModelValidatorRegistrationService.class)
+/**
+ * Validation service for the button component.
+ */
 public class ButtonValidationService {
 //  extends
 //} TextComponentValidationService {

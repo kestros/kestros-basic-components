@@ -18,6 +18,9 @@
 
 package io.kestros.cms.components.basic.core.validation;
 
+/**
+ * Validators for the accessibility properties of an image link.
+ */
 public class ImageLinkAccessibilityPropertiesValidatorBundle {
 //        extends ModelValidatorBundle<ImageComponent> {
 //

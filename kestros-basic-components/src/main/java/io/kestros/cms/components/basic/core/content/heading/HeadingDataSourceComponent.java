@@ -23,6 +23,9 @@ import io.kestros.cms.components.basic.core.BaseDataSourceComponent;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Model;
 
+/**
+ * Component that renders a heading from the data its datasource supplies.
+ */
 @Model(adaptables = SlingHttpServletRequest.class)
 public class HeadingDataSourceComponent extends BaseDataSourceComponent<KestrosHeading> implements
         KestrosHeading {

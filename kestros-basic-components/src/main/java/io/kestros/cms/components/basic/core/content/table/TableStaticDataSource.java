@@ -29,6 +29,9 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
+/**
+ * Datasource that builds a table from the resource it is adapted from.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class TableStaticDataSource extends BaseContainerSlingModelDataSource
         implements KestrosTable {

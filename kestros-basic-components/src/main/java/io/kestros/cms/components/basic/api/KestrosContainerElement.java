@@ -26,22 +26,43 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 
+/**
+ * Basic component element that holds other elements.
+ */
 public interface KestrosContainerElement extends KestrosBasicComponentElement {
 
+  /**
+   * ResourceResolver the container reads through.
+   *
+   * @return ResourceResolver the container reads through.
+   */
   @JsonIgnore
   @Nonnull
   ResourceResolver getResourceResolver();
 
+  /**
+   * Resource the container was built from.
+   *
+   * @return Resource the container was built from.
+   */
   @JsonIgnore
   @Nonnull
   Resource getResource();
 
-
-
+  /**
+   * Resources of the elements the container holds.
+   *
+   * @return Resources of the elements the container holds.
+   */
   @JsonIgnore
   @Nonnull
   List<Resource> getChildren();
 
+  /**
+   * Elements the container holds.
+   *
+   * @return Elements the container holds.
+   */
   @JsonIgnore
   @Nonnull
   List<KestrosBasicComponentElement> getChildElements();

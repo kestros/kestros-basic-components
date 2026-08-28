@@ -30,6 +30,9 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 
+/**
+ * Datasource that builds a navigation item from the resource it is adapted from.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class NavigationItemStaticDataSource extends BaseContainerSlingModelDataSource
         implements KestrosNavigationItem {

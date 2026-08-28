@@ -22,6 +22,9 @@ import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * Image element, with the anchor attributes it renders when the image is also a link.
+ */
 public interface KestrosImage extends KestrosBasicComponentElement {
 
   String RESOURCE_TYPE = "/libs/kestros/commons/components/content/image";
@@ -31,26 +34,50 @@ public interface KestrosImage extends KestrosBasicComponentElement {
     return RESOURCE_TYPE;
   }
 
+  /**
+   * Path to the image asset.
+   *
+   * @return Path to the image asset.
+   */
   @Nonnull
   String getImagePath();
 
+  /**
+   * Title shown for the image, if one was configured.
+   *
+   * @return Title shown for the image, if one was configured.
+   */
   @Nullable
   String getImageTitle();
 
+  /**
+   * Caption rendered beneath the image, if one was configured.
+   *
+   * @return Caption rendered beneath the image, if one was configured.
+   */
   @Nullable
   String getCaption();
 
+  /**
+   * Alternative text for the image.
+   *
+   * @return Alternative text for the image.
+   */
   @Nonnull
   String getAltText();
 
   /**
    * Destination URL. Should be null if the link is not navigable.
+   *
+   * @return Destination URL, or null if the link is not navigable.
    */
   @Nullable
   String getHref();
 
   /**
    * Target attribute (e.g. "_self", "_blank").
+   *
+   * @return Target attribute.
    */
   @Nonnull
   AnchorTarget getTarget();
@@ -62,7 +89,7 @@ public interface KestrosImage extends KestrosBasicComponentElement {
    */
   @Nonnull
   default String getTargetAsString() {
-    if(getTarget() != null) {
+    if (getTarget() != null) {
       return getTarget().getTargetValue();
     }
     return AnchorTarget.SAME_WINDOW.getTargetValue();
@@ -70,30 +97,40 @@ public interface KestrosImage extends KestrosBasicComponentElement {
 
   /**
    * ARIA label. Used when visible text is missing or insufficient.
+   *
+   * @return ARIA label.
    */
   @Nullable
   String getAriaLabel();
 
   /**
    * Optional title attribute. Use sparingly – should add meaning, not duplicate text.
+   *
+   * @return Title attribute.
    */
   @Nullable
   String getAnchorTitle();
 
   /**
    * Relationship attribute (e.g. "noopener", "noreferrer", "nofollow").
+   *
+   * @return Relationship attribute.
    */
   @Nullable
   String getRel();
 
   /**
    * ARIA described-by ID reference.
+   *
+   * @return ARIA described-by ID reference.
    */
   @Nullable
   String getAriaDescribedBy();
 
   /**
    * Language of the link text, if different from the page language. Example: "fr", "de", "en-GB"
+   *
+   * @return Language of the link text.
    */
   @Nullable
   String getLang();

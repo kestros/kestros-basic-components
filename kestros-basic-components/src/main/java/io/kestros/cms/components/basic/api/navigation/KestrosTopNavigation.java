@@ -27,16 +27,29 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.sling.api.resource.Resource;
 
+/**
+ * Top navigation element, holding the navigation items and the branding shown alongside them.
+ */
 public interface KestrosTopNavigation extends KestrosContainerElement {
 
   String RESOURCE_TYPE = "/libs/kestros/commons/components/navigation/top-navigation";
 
+  /**
+   * Resource type the top navigation renders as.
+   *
+   * @return Resource type the top navigation renders as.
+   */
   @Nonnull
   @Override
   default String getComponentResourceType() {
     return RESOURCE_TYPE;
   }
 
+  /**
+   * Resources backing the navigation items.
+   *
+   * @return Resources backing the navigation items.
+   */
   @Nonnull
   default List<Resource> getNavigationLinks() {
     List<Resource> resources = new ArrayList<>();
@@ -46,15 +59,35 @@ public interface KestrosTopNavigation extends KestrosContainerElement {
     return resources;
   }
 
+  /**
+   * Navigation items the top navigation holds.
+   *
+   * @return Navigation items the top navigation holds.
+   */
   @Nonnull
   List<KestrosTopNavigationItem> getNavigationLinkElements();
 
+  /**
+   * Brand name shown in the navigation, if one was configured.
+   *
+   * @return Brand name shown in the navigation, if one was configured.
+   */
   @Nullable
   String getBrandName();
 
+  /**
+   * Image element used as the branding, if one was configured.
+   *
+   * @return Image element used as the branding, if one was configured.
+   */
   @Nullable
   KestrosImage getImageElement();
 
+  /**
+   * Resource backing the branding image, if one was configured.
+   *
+   * @return Resource backing the branding image, if one was configured.
+   */
   @Nullable
   default Resource getImage() {
     if (getImageElement() != null) {
@@ -63,6 +96,11 @@ public interface KestrosTopNavigation extends KestrosContainerElement {
     return null;
   }
 
+  /**
+   * Navigation items, as generic child elements.
+   *
+   * @return Navigation items, as generic child elements.
+   */
   @Nonnull
   @Override
   default List<KestrosBasicComponentElement> getChildElements() {

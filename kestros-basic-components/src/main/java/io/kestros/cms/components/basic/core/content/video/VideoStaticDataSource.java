@@ -32,6 +32,9 @@ import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 
+/**
+ * Datasource that builds a video from the resource it is adapted from.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class VideoStaticDataSource extends BaseSlingModelDataSource implements KestrosVideo {
   @OSGiService

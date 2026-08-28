@@ -29,6 +29,9 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 
+/**
+ * Datasource that builds a code block from the resource it is adapted from.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class KestrosCodeStaticDataSource extends BaseSlingModelDataSource implements KestrosCode {
   @OSGiService

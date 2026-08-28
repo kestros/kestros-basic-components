@@ -18,6 +18,9 @@
 
 package io.kestros.cms.components.basic.core.validation;
 
+/**
+ * Validators for how an image link is configured.
+ */
 public class ImageLinkConfigurationValidatorBundle {
 //  extends ModelValidatorBundle<ImageComponent>
 //} {

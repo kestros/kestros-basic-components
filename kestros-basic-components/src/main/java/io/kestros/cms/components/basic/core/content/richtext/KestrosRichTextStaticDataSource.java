@@ -25,6 +25,9 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
+/**
+ * Datasource that builds rich text from the resource it is adapted from.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class KestrosRichTextStaticDataSource extends BaseSlingModelDataSource
     implements KestrosRichText {

@@ -24,6 +24,9 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
+/**
+ * Datasource that builds a single breadcrumb from the resource it is adapted from.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class BreadCrumbStaticDataSource extends LinkStaticDataSource
     implements KestrosBreadCrumb {

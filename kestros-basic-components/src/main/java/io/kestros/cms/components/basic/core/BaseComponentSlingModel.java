@@ -21,6 +21,9 @@ package io.kestros.cms.components.basic.core;
 import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
 import io.kestros.cms.sitebuilding.api.models.BaseComponent;
 
+/**
+ * Baseline Sling Model for components that render as basic component elements.
+ */
 public abstract class BaseComponentSlingModel extends BaseComponent implements
         KestrosBasicComponentElement {
   @Override

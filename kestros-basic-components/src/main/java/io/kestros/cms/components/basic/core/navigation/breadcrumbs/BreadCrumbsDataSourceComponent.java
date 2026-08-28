@@ -27,6 +27,9 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
+/**
+ * Component that renders breadcrumbs from the data its datasource supplies.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class BreadCrumbsDataSourceComponent
     extends BaseContainerDataSourceComponent<KestrosBreadCrumbs> implements KestrosBreadCrumbs {

@@ -45,6 +45,9 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 
+/**
+ * Datasource that builds card list entries from the assets under the configured path.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class CardListAssetsDataSource extends BaseContainerSlingModelDataSource implements
                                                                                 KestrosCardList {

@@ -30,6 +30,9 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
+/**
+ * Datasource that turns a configured YouTube video id or URL into an embed iframe.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class VideoEmbedYouTubeDataSource extends BaseSlingModelDataSource
         implements KestrosVideoEmbed {
@@ -91,15 +94,14 @@ public class VideoEmbedYouTubeDataSource extends BaseSlingModelDataSource
     }
 
     return String.format(
-            "<iframe src=\"%s\" " +
-                    "        style=\"width:100%%;height:100%%;border:0;\" " +
-                    "        %s " +
-                    "        allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; "
+            "<iframe src=\"%s\" "
+                    + "        style=\"width:100%%;height:100%%;border:0;\" "
+                    + "        %s "
+                    + "        allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; "
                     + "gyroscope; "
                     + "picture-in-picture; fullscreen\" "
-                    +
-                    "        referrerpolicy=\"strict-origin-when-cross-origin\">" +
-                    "</iframe>",
+                    + "        referrerpolicy=\"strict-origin-when-cross-origin\">"
+                    + "</iframe>",
             src,
             isAllowFullscreen() ? "allowfullscreen" : ""
     );
@@ -114,9 +116,9 @@ public class VideoEmbedYouTubeDataSource extends BaseSlingModelDataSource
   }
 
 
-    /* ------------------
-       Helpers
-       ------------------ */
+  /* ------------------
+     Helpers
+     ------------------ */
 
   private boolean isAllowFullscreen() {
     return getResource().getValueMap().get("allowFullScreen", true);

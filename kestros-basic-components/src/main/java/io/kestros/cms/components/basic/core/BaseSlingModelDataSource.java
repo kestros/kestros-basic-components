@@ -42,6 +42,9 @@ import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 
+/**
+ * Baseline Sling Model for datasource components, adaptable from either a request or a resource.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public abstract class BaseSlingModelDataSource
     extends BaseComponentElement implements KestrosBasicComponentElement {
@@ -62,15 +65,30 @@ public abstract class BaseSlingModelDataSource
 
   private Resource syntheticResource;
 
+  /**
+   * Unique id configured on the resource, if one was set.
+   *
+   * @return Unique id configured on the resource, if one was set.
+   */
   @Nullable
   public String getId() {
     return getResource().getValueMap().get("id", String.class);
   }
 
+  /**
+   * Whether the element is synthetic rather than backed by a stored resource.
+   *
+   * @return Whether the element is synthetic rather than backed by a stored resource.
+   */
   public Boolean isSynthetic() {
     return false;
   }
 
+  /**
+   * Resource the model was adapted from, falling back to the request's resource.
+   *
+   * @return Resource the model was adapted from.
+   */
   public Resource getResource() {
     if (resource == null && slingHttpServletRequest != null) {
       return slingHttpServletRequest.getResource();
@@ -78,11 +96,21 @@ public abstract class BaseSlingModelDataSource
     return resource;
   }
 
+  /**
+   * Request the model was adapted from, if it was adapted from one.
+   *
+   * @return Request the model was adapted from, if it was adapted from one.
+   */
   @Nullable
   public SlingHttpServletRequest getRequest() {
     return slingHttpServletRequest;
   }
 
+  /**
+   * Page currently being rendered, falling back to the page containing this resource.
+   *
+   * @return Page currently being rendered, falling back to the page containing this resource.
+   */
   @JsonIgnore
   public BaseContentPage getCurrentOrContainingPage() {
     BaseContentPage currentPage = null;
@@ -107,14 +135,30 @@ public abstract class BaseSlingModelDataSource
   }
 
 
+  /**
+   * ResourceResolver the model reads through.
+   *
+   * @return ResourceResolver the model reads through.
+   */
   public ResourceResolver getResourceResolver() {
     return getResource().getResourceResolver();
   }
 
+  /**
+   * Path of the resource that contains this one.
+   *
+   * @return Path of the resource that contains this one.
+   */
   public String getParentPath() {
     return getResource().getParent().getPath();
   }
 
+  /**
+   * Variations applied to the component, read from the resource where they were configured
+   * inline and from the adapted component otherwise.
+   *
+   * @return Variations applied to the component.
+   */
   public List<ComponentVariation> getVariations() {
     // TODO verify this.
     List<Map<String, Object>> variationsMapList = getResource().getValueMap()
@@ -142,6 +186,11 @@ public abstract class BaseSlingModelDataSource
     return getResource().adaptTo(BaseComponent.class).getAppliedVariations();
   }
 
+  /**
+   * Layout the component renders with, defaulting to "default".
+   *
+   * @return Layout the component renders with.
+   */
   public String getLayout() {
     return getResource().getValueMap().get("layout", "default");
   }
@@ -153,6 +202,13 @@ public abstract class BaseSlingModelDataSource
     return getResource().getName();
   }
 
+  /**
+   * UiFramework the component renders against, taken from the current page when the model was
+   * adapted from a request and from the containing page otherwise.
+   *
+   * @return UiFramework the component renders against.
+   * @throws RuntimeException Theme or UiFramework could not be resolved.
+   */
   public UiFramework getUiFramework() {
     try {
       if (slingHttpServletRequest != null) {
@@ -167,11 +223,21 @@ public abstract class BaseSlingModelDataSource
     }
   }
 
+  /**
+   * Service the component looks its variations up through.
+   *
+   * @return Service the component looks its variations up through.
+   */
   @Nonnull
   public ComponentVariationRetrievalService getComponentVariationRetrievalService() {
     return componentVariationRetrievalService;
   }
 
+  /**
+   * Service the component looks its UiFramework views up through.
+   *
+   * @return Service the component looks its UiFramework views up through.
+   */
   @Nonnull
   public ComponentUiFrameworkViewRetrievalService getComponentUiFrameworkViewRetrievalService() {
     return componentUiFrameworkViewRetrievalService;

@@ -36,6 +36,9 @@ import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 
+/**
+ * Datasource that builds a top navigation from the resource it is adapted from.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class TopNavigationStaticDataSource extends BaseContainerSlingModelDataSource
         implements KestrosTopNavigation {
