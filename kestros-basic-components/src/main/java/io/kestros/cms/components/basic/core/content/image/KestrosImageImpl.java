@@ -37,6 +37,9 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 
+/**
+ * Implementation of the image element.
+ */
 public class KestrosImageImpl extends BaseSyntheticResource implements KestrosImage {
   @OSGiService
   private ComponentVariationRetrievalService componentVariationRetrievalService;

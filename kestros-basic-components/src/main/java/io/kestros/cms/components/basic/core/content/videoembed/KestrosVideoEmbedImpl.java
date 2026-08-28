@@ -25,6 +25,9 @@ import io.kestros.cms.components.basic.core.BaseSyntheticResource;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * Implementation of the embedded video element.
+ */
 public class KestrosVideoEmbedImpl extends BaseSyntheticResource implements KestrosVideoEmbed {
 
   private String videoEmbedCode;

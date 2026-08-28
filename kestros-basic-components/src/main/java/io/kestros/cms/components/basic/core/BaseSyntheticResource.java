@@ -32,6 +32,9 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 
+/**
+ * Synthetic resource for a basic component element that has no stored resource.
+ */
 public abstract class BaseSyntheticResource extends BaseComponentElement
     implements KestrosBasicComponentElement {
   private final ResourceResolver resourceResolver;
@@ -117,6 +120,11 @@ public abstract class BaseSyntheticResource extends BaseComponentElement
     return layout;
   }
 
+  /**
+   * UiFramework the synthetic resource renders against.
+   *
+   * @return UiFramework the synthetic resource renders against.
+   */
   public UiFramework getUiFramework() {
     return uiFramework;
   }

@@ -27,6 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
 
+/**
+ * Implementation of the link list element.
+ */
 public class KestrosLinkListImpl extends BaseContainerSyntheticResource implements KestrosLinkList {
 
   private List<KestrosLink> links;

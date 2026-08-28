@@ -21,6 +21,9 @@ package io.kestros.cms.components.basic.api.navigation;
 import io.kestros.cms.components.basic.api.content.KestrosLink;
 import javax.annotation.Nonnull;
 
+/**
+ * One entry in a breadcrumb trail.
+ */
 public interface KestrosBreadCrumb extends KestrosLink {
 
   String RESOURCE_TYPE = "/libs/kestros/commons/components/navigation/breadcrumb";
@@ -31,6 +34,16 @@ public interface KestrosBreadCrumb extends KestrosLink {
     return RESOURCE_TYPE;
   }
 
+  /**
+   * Whether this is the first crumb in the trail.
+   *
+   * @return Whether this is the first crumb in the trail.
+   */
   Boolean isFirstItem();
+  /**
+   * Whether this is the last crumb in the trail.
+   *
+   * @return Whether this is the last crumb in the trail.
+   */
   Boolean isLastItem();
 }

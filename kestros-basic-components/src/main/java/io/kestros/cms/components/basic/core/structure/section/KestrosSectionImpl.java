@@ -27,6 +27,9 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * Implementation of the section element.
+ */
 public class KestrosSectionImpl extends KestrosContainerImpl implements KestrosSection {
 
   private String backgroundImage;

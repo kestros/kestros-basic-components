@@ -42,6 +42,9 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 
+/**
+ * Datasource that builds card list entries from the pages matching the configured tags.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSource implements
                                                                                    KestrosCardList {
@@ -56,6 +59,11 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
 
   private BaseContentPage containingPage;
 
+  /**
+   * Text shown on the read-more control of each card.
+   *
+   * @return Text shown on the read-more control of each card.
+   */
   @Nullable
   public String getReadMoreText() {
     return getResource().getValueMap().get("readMoreText", String.class);

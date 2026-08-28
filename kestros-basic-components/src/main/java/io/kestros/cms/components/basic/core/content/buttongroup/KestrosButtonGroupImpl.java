@@ -30,6 +30,9 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import org.apache.sling.api.resource.Resource;
 
+/**
+ * Implementation of the button group element.
+ */
 public class KestrosButtonGroupImpl extends BaseContainerSyntheticResource implements
                                                                            KestrosButtonGroup {
 

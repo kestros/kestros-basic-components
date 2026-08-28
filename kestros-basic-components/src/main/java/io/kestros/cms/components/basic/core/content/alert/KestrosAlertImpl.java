@@ -25,6 +25,9 @@ import io.kestros.cms.components.basic.core.BaseSyntheticResource;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * Implementation of the alert element.
+ */
 public class KestrosAlertImpl extends BaseSyntheticResource implements KestrosAlert {
 
   private String heading;

@@ -29,6 +29,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.sling.api.SlingHttpServletRequest;
 
+/**
+ * Implementation of the breadcrumbs element.
+ */
 public class KestrosBreadCrumbsImpl extends BaseContainerSyntheticResource
     implements KestrosBreadCrumbs {
 

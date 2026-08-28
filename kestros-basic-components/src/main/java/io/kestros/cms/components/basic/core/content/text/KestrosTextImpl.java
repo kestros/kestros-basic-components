@@ -25,6 +25,9 @@ import io.kestros.cms.components.basic.core.BaseSyntheticResource;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * Implementation of the text element.
+ */
 public class KestrosTextImpl extends BaseSyntheticResource implements KestrosText {
   private String text;
 

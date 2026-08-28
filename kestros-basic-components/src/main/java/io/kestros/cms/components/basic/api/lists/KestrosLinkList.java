@@ -26,15 +26,28 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import org.apache.sling.api.resource.Resource;
 
+/**
+ * List of links, built from the entries configured on it.
+ */
 public interface KestrosLinkList extends KestrosContainerElement {
 
   String RESOURCE_TYPE = "/libs/kestros/commons/components/lists/link-list";
 
+  /**
+   * Resource type the link list renders as.
+   *
+   * @return Resource type the link list renders as.
+   */
   @Nonnull
   default String getComponentResourceType() {
     return RESOURCE_TYPE;
   }
 
+  /**
+   * Resources backing the links in the list.
+   *
+   * @return Resources backing the links in the list.
+   */
   @Nonnull
   default List<Resource> getLinks() {
     List<Resource> links = new ArrayList<>();
@@ -44,6 +57,11 @@ public interface KestrosLinkList extends KestrosContainerElement {
     return links;
   }
 
+  /**
+   * Links the list holds.
+   *
+   * @return Links the list holds.
+   */
   @Nonnull
   List<KestrosLink> getLinkElements();
 

@@ -25,6 +25,9 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import org.apache.sling.api.resource.Resource;
 
+/**
+ * Navigation element, holding the items it lists.
+ */
 public interface KestrosNavigation extends KestrosContainerElement {
 
   String RESOURCE_TYPE = "/libs/kestros/commons/components/navigation/navigation";
@@ -35,6 +38,11 @@ public interface KestrosNavigation extends KestrosContainerElement {
     return RESOURCE_TYPE;
   }
 
+  /**
+   * Resources backing the navigation items.
+   *
+   * @return Resources backing the navigation items.
+   */
   @Nonnull
   default List<Resource> getNavigationLinks() {
     List<Resource> resources = new ArrayList<>();
@@ -45,9 +53,19 @@ public interface KestrosNavigation extends KestrosContainerElement {
   }
 
 
+  /**
+   * Navigation items the navigation holds.
+   *
+   * @return Navigation items the navigation holds.
+   */
   @Nonnull
   List<KestrosNavigationItem> getNavigationLinkElements();
 
+  /**
+   * Navigation items, as generic child elements.
+   *
+   * @return Navigation items, as generic child elements.
+   */
   @Nonnull
   default List<KestrosBasicComponentElement> getChildElements() {
     return new ArrayList<>(getNavigationLinkElements());

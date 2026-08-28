@@ -29,6 +29,9 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
 
+/**
+ * Implementation of the navigation element.
+ */
 public class KestrosNavigationImpl extends BaseContainerSyntheticResource
     implements KestrosNavigation {
 

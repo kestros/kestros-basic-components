@@ -30,6 +30,9 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
+/**
+ * Datasource that builds a button group from the resource it is adapted from.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class ButtonGroupStaticDataSource extends BaseContainerSlingModelDataSource
     implements KestrosButtonGroup {
@@ -48,6 +51,11 @@ public class ButtonGroupStaticDataSource extends BaseContainerSlingModelDataSour
   }
 
 
+  /**
+   * Variations applied to the buttons in the group.
+   *
+   * @return Variations applied to the buttons in the group.
+   */
   public List<ComponentVariation> getButtonVariations() {
     try {
       return getElementVariations("buttonVariations", KestrosButton.RESOURCE_TYPE);

@@ -39,6 +39,9 @@ import org.apache.sling.api.resource.SyntheticResource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.wrappers.ValueMapDecorator;
 
+/**
+ * Baseline implementation shared by the basic component elements.
+ */
 public abstract class BaseComponentElement implements KestrosBasicComponentElement {
   private Resource syntheticResource;
 

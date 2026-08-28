@@ -26,6 +26,9 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import org.apache.sling.api.resource.Resource;
 
+/**
+ * List of cards, built from the entries configured on it.
+ */
 public interface KestrosCardList extends KestrosContainerElement {
 
   String RESOURCE_TYPE = "/libs/kestros/commons/components/lists/card-list";
@@ -35,6 +38,11 @@ public interface KestrosCardList extends KestrosContainerElement {
     return RESOURCE_TYPE;
   }
 
+  /**
+   * Resources backing the cards in the list.
+   *
+   * @return Resources backing the cards in the list.
+   */
   @Nonnull
   default List<Resource> getCards() {
     List<Resource> cards = new ArrayList<>();
@@ -44,9 +52,19 @@ public interface KestrosCardList extends KestrosContainerElement {
     return cards;
   }
 
+  /**
+   * Cards the list holds.
+   *
+   * @return Cards the list holds.
+   */
   @Nonnull
   List<KestrosCard> getCardElements();
 
+  /**
+   * Cards the list holds, as generic child elements.
+   *
+   * @return Cards the list holds, as generic child elements.
+   */
   default List<KestrosBasicComponentElement> getChildElements() {
     return new ArrayList<>(getCardElements());
   }

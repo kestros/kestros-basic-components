@@ -18,6 +18,9 @@
 
 package io.kestros.cms.components.basic.api.exceptions;
 
+/**
+ * Thrown when a component is configured in a way it cannot render from.
+ */
 public class ComponentConfigurationException extends Exception {
 
   public ComponentConfigurationException(String message) {

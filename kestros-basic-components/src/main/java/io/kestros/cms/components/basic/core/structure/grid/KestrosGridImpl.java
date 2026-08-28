@@ -26,6 +26,9 @@ import io.kestros.cms.components.basic.core.BaseSlingModelDataSource;
 import java.util.List;
 import javax.annotation.Nonnull;
 
+/**
+ * Implementation of the grid element.
+ */
 public class KestrosGridImpl extends BaseContainerSyntheticResource implements KestrosGrid {
 
   private List<KestrosContainer> columns;

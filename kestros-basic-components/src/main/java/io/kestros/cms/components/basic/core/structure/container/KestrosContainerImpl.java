@@ -27,6 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
 
+/**
+ * Implementation of the container element.
+ */
 public class KestrosContainerImpl extends BaseContainerSyntheticResource
     implements KestrosContainer {
 

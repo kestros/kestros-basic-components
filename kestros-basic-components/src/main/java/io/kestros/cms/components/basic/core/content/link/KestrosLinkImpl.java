@@ -28,6 +28,9 @@ import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * Implementation of the link element.
+ */
 public class KestrosLinkImpl extends BaseSyntheticResource implements KestrosLink {
 
   private String text;

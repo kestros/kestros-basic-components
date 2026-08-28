@@ -39,6 +39,9 @@ import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.wrappers.ValueMapDecorator;
 import org.apache.sling.models.annotations.Model;
 
+/**
+ * Baseline Sling Model for components rendered from datasource data.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public abstract class BaseDataSourceComponent<T extends KestrosBasicComponentElement>
     extends DataSourceComponent<T> implements KestrosBasicComponentElement {

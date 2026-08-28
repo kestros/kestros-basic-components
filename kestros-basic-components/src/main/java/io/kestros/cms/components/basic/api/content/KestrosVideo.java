@@ -22,6 +22,9 @@ import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * Video element played from an uploaded asset.
+ */
 public interface KestrosVideo extends KestrosBasicComponentElement {
 
   String RESOURCE_TYPE = "/libs/kestros/commons/components/content/video";
@@ -31,9 +34,19 @@ public interface KestrosVideo extends KestrosBasicComponentElement {
     return RESOURCE_TYPE;
   }
 
+  /**
+   * Path to the video the element plays.
+   *
+   * @return Path to the video the element plays.
+   */
   @Nullable
   String getVideoSource();
 
+  /**
+   * Text shown where the video cannot be played.
+   *
+   * @return Text shown where the video cannot be played.
+   */
   @Nonnull
   String getFallbackText();
 }

@@ -22,6 +22,9 @@ import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * Code block element.
+ */
 public interface KestrosCode extends KestrosBasicComponentElement {
 
   String RESOURCE_TYPE = "/libs/kestros/commons/components/content/code";
@@ -32,6 +35,11 @@ public interface KestrosCode extends KestrosBasicComponentElement {
     return RESOURCE_TYPE;
   }
 
+  /**
+   * Code the element renders.
+   *
+   * @return Code the element renders.
+   */
   @Nullable
   String getCode();
 }

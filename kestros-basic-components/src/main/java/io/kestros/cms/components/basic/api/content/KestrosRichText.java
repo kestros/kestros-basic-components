@@ -21,6 +21,9 @@ package io.kestros.cms.components.basic.api.content;
 import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
 import javax.annotation.Nullable;
 
+/**
+ * Rich text element.
+ */
 public interface KestrosRichText extends KestrosBasicComponentElement {
 
   String RESOURCE_TYPE = "/libs/kestros/commons/components/content/richtext";
@@ -30,6 +33,11 @@ public interface KestrosRichText extends KestrosBasicComponentElement {
     return RESOURCE_TYPE;
   }
 
+  /**
+   * Rich text the element renders.
+   *
+   * @return Rich text the element renders.
+   */
   @Nullable
   String getText();
 }

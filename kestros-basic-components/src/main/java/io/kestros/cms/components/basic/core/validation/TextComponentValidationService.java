@@ -38,6 +38,9 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
 // */
 //@Component(immediate = true,
 //           service = ModelValidatorRegistrationService.class)
+/**
+ * Validation service for the text component.
+ */
 public class TextComponentValidationService {
 //  extends
 //} BaseModelValidationRegistrationService {

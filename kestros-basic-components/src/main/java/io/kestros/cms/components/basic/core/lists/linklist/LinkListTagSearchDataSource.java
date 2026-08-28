@@ -107,6 +107,11 @@ public class LinkListTagSearchDataSource extends BaseContainerSlingModelDataSour
     return null;
   }
 
+  /**
+   * Target attribute the generated links render with.
+   *
+   * @return Target attribute the generated links render with.
+   */
   public AnchorTarget getTarget() {
     return AnchorTarget.lookup(getResource());
   }

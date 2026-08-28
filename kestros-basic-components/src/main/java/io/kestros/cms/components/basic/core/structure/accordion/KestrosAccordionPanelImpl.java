@@ -25,6 +25,9 @@ import io.kestros.cms.components.basic.core.BaseSyntheticResource;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * Implementation of an accordion panel.
+ */
 public class KestrosAccordionPanelImpl extends BaseSyntheticResource
     implements KestrosAccordionPanel {
 

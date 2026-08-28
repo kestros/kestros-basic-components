@@ -37,6 +37,9 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 
+/**
+ * Datasource that builds link list entries from the child pages of the configured page.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class LinkListChildPageDataSource extends BaseContainerSlingModelDataSource
     implements KestrosLinkList {
@@ -46,10 +49,20 @@ public class LinkListChildPageDataSource extends BaseContainerSlingModelDataSour
   @OSGiService
   private ComponentUiFrameworkViewRetrievalService componentUiFrameworkViewRetrievalService;
 
+  /**
+   * Path of the page whose children the list is built from.
+   *
+   * @return Path of the page whose children the list is built from.
+   */
   public String getRootPath() {
     return getResource().getValueMap().get("pagesPath", String.class);
   }
 
+  /**
+   * Target attribute the generated links render with.
+   *
+   * @return Target attribute the generated links render with.
+   */
   public AnchorTarget getTarget() {
     return AnchorTarget.lookup(getResource());
   }

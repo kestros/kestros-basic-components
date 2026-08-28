@@ -27,6 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
 
+/**
+ * Implementation of the accordion element.
+ */
 public class KestrosAccordionImpl extends BaseContainerSyntheticResource
     implements KestrosAccordion {
 

@@ -27,6 +27,9 @@ import io.kestros.cms.components.basic.core.BaseSyntheticResource;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * Implementation of a single breadcrumb.
+ */
 public class KestrosBreadCrumbImpl extends BaseSyntheticResource implements KestrosBreadCrumb {
 
   private KestrosLink link;

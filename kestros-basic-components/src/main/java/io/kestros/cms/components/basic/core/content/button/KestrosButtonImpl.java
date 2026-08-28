@@ -30,6 +30,9 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 
+/**
+ * Implementation of the button element.
+ */
 public class KestrosButtonImpl extends BaseSyntheticResource implements KestrosButton {
 
   private String text;

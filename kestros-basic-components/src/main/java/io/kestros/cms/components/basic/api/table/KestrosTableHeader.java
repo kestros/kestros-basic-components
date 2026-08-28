@@ -22,6 +22,9 @@ import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * Header cell of a table.
+ */
 public interface KestrosTableHeader extends KestrosBasicComponentElement {
   String RESOURCE_TYPE = "/libs/kestros/commons/components/content/table-header";
 
@@ -31,6 +34,11 @@ public interface KestrosTableHeader extends KestrosBasicComponentElement {
     return RESOURCE_TYPE;
   }
 
+  /**
+   * Text shown in the header cell.
+   *
+   * @return Text shown in the header cell.
+   */
   @Nullable
   String getText();
 }

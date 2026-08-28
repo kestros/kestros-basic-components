@@ -18,6 +18,9 @@
 
 package io.kestros.cms.components.basic.api.content;
 
+/**
+ * HTML elements a text element can render as.
+ */
 public enum TextElementType {
   PARAGRAPH("Paragraph", "paragraph"),
   PREFORMATTED("Preformatted", "preformatted"),
@@ -31,10 +34,20 @@ public enum TextElementType {
     this.value = value;
   }
 
+  /**
+   * Text shown for this type in the authoring dialog.
+   *
+   * @return Text shown for this type in the authoring dialog.
+   */
   public String getDisplayText() {
     return displayText;
   }
 
+  /**
+   * Value stored for this type.
+   *
+   * @return Value stored for this type.
+   */
   public String getValue() {
     return value;
   }

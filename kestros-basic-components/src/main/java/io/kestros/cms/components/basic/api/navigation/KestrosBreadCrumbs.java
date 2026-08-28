@@ -25,6 +25,9 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import org.apache.sling.api.resource.Resource;
 
+/**
+ * Breadcrumb trail leading to the page being rendered.
+ */
 public interface KestrosBreadCrumbs extends KestrosContainerElement {
 
   String RESOURCE_TYPE = "/libs/kestros/commons/components/navigation/breadcrumbs";
@@ -35,6 +38,11 @@ public interface KestrosBreadCrumbs extends KestrosContainerElement {
     return RESOURCE_TYPE;
   }
 
+  /**
+   * Resources backing the crumbs in the trail.
+   *
+   * @return Resources backing the crumbs in the trail.
+   */
   @Nonnull
   default List<Resource> getLinks() {
     List<Resource> links = new ArrayList<>();
@@ -44,6 +52,11 @@ public interface KestrosBreadCrumbs extends KestrosContainerElement {
     return links;
   }
 
+  /**
+   * Crumbs the trail holds.
+   *
+   * @return Crumbs the trail holds.
+   */
   @Nonnull
   List<KestrosBreadCrumb> getLinkElements();
 

@@ -21,6 +21,9 @@ package io.kestros.cms.components.basic.api.content;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * Heading levels a heading element can render at.
+ */
 public enum HeadingLevels {
   H1("Heading 1", "h1"),
   H2("Heading 2", "h2"),
@@ -47,10 +50,20 @@ public enum HeadingLevels {
     return null;
   }
 
+  /**
+   * Text shown for this level in the authoring dialog.
+   *
+   * @return Text shown for this level in the authoring dialog.
+   */
   public String getDisplayText() {
     return displayText;
   }
 
+  /**
+   * Value stored for this level.
+   *
+   * @return Value stored for this level.
+   */
   public String getValue() {
     return value;
   }

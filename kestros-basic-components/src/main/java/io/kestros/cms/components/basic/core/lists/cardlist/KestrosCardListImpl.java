@@ -27,6 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
 
+/**
+ * Implementation of the card list element.
+ */
 public class KestrosCardListImpl extends BaseContainerSyntheticResource implements KestrosCardList {
 
   private List<KestrosCard> cards;

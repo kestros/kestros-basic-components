@@ -28,6 +28,9 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
 
+/**
+ * Component that renders a link from the data its datasource supplies.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class LinkDataSourceComponent extends BaseDataSourceComponent<KestrosLink> implements KestrosLink {
   @Nullable

@@ -26,6 +26,9 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import org.apache.sling.api.resource.Resource;
 
+/**
+ * Group of buttons rendered together.
+ */
 public interface KestrosButtonGroup extends KestrosContainerElement {
 
   String RESOURCE_TYPE = "/libs/kestros/commons/components/content/button-group";
@@ -36,6 +39,11 @@ public interface KestrosButtonGroup extends KestrosContainerElement {
     return RESOURCE_TYPE;
   }
 
+  /**
+   * Resources backing the buttons in the group.
+   *
+   * @return Resources backing the buttons in the group.
+   */
   @Nonnull
   default List<Resource> getButtons() {
     List<Resource> buttons = new ArrayList<>();
@@ -45,12 +53,27 @@ public interface KestrosButtonGroup extends KestrosContainerElement {
     return buttons;
   }
 
+  /**
+   * Buttons the group holds.
+   *
+   * @return Buttons the group holds.
+   */
   @Nonnull
   List<KestrosButton> getButtonsElements();
 
+  /**
+   * Variations applied to the buttons in the group.
+   *
+   * @return Variations applied to the buttons in the group.
+   */
   @Nonnull
   List<ComponentVariation> getButtonVariations();
 
+  /**
+   * Buttons of the group, as generic child elements.
+   *
+   * @return Buttons of the group, as generic child elements.
+   */
   @Nonnull
   default List<KestrosBasicComponentElement> getChildElements() {
     return new ArrayList<>(getButtonsElements());

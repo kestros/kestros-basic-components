@@ -32,6 +32,9 @@ import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Datasource that builds a heading from the title of the page being rendered.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class HeadingPageTitleDataSource extends HeadingStaticDataSource implements KestrosHeading {
   private static final Logger LOG = LoggerFactory.getLogger(HeadingPageTitleDataSource.class);
@@ -65,6 +68,11 @@ public class HeadingPageTitleDataSource extends HeadingStaticDataSource implemen
     return getPage().getDisplayTitle();
   }
 
+  /**
+   * Whether the configured title replaces the one inherited from the page.
+   *
+   * @return Whether the configured title replaces the one inherited from the page.
+   */
   public Boolean isOverrideInheritedTitle() {
     return getResource().getValueMap().get("overrideInheritedTitle", Boolean.FALSE);
   }

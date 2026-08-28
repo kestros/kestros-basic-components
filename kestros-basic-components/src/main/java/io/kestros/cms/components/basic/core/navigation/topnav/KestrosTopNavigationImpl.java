@@ -29,6 +29,9 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * Implementation of the top navigation element.
+ */
 public class KestrosTopNavigationImpl extends BaseContainerSyntheticResource
         implements KestrosTopNavigation {
 

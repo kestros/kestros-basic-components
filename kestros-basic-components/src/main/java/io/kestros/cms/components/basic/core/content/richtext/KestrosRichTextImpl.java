@@ -26,6 +26,9 @@ import io.kestros.cms.components.basic.core.TextSanitizer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * Implementation of the rich text element.
+ */
 public class KestrosRichTextImpl extends BaseSyntheticResource implements KestrosRichText {
 
   private String text;

@@ -22,6 +22,9 @@ import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * Heading element.
+ */
 public interface KestrosHeading extends KestrosBasicComponentElement {
 
   String RESOURCE_TYPE = "/libs/kestros/commons/components/content/heading";
@@ -31,9 +34,19 @@ public interface KestrosHeading extends KestrosBasicComponentElement {
     return RESOURCE_TYPE;
   }
 
+  /**
+   * Text shown in the heading.
+   *
+   * @return Text shown in the heading.
+   */
   @Nullable
   String getHeadingText();
 
+  /**
+   * Heading level the element renders at.
+   *
+   * @return Heading level the element renders at.
+   */
   @Nonnull
   String getHeadingType();
 }

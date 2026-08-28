@@ -25,6 +25,9 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import org.apache.sling.api.resource.Resource;
 
+/**
+ * Single cell of a table row.
+ */
 public interface KestrosTableCell extends KestrosContainerElement {
   String RESOURCE_TYPE = "/libs/kestros/commons/components/content/table-cell";
 
@@ -34,6 +37,11 @@ public interface KestrosTableCell extends KestrosContainerElement {
     return RESOURCE_TYPE;
   }
 
+  /**
+   * Resources backing the elements the cell contains.
+   *
+   * @return Resources backing the elements the cell contains.
+   */
   @JsonIgnore
   @Nonnull
   default List<Resource> getCellContent() {
@@ -44,11 +52,21 @@ public interface KestrosTableCell extends KestrosContainerElement {
     return cellContent;
   }
 
+  /**
+   * Text shown in the cell, where the cell holds text rather than elements.
+   *
+   * @return Text shown in the cell, or null where the cell holds elements.
+   */
   @javax.annotation.Nullable
   default String getText() {
     return null;
   }
 
+  /**
+   * Elements the cell contains.
+   *
+   * @return Elements the cell contains.
+   */
   @Nonnull
   List<KestrosBasicComponentElement> getCellContentElements();
 

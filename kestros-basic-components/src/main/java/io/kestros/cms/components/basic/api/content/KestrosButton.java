@@ -25,6 +25,11 @@ public interface KestrosButton extends KestrosLink {
 
   String RESOURCE_TYPE = "/libs/kestros/commons/components/content/button";
 
+  /**
+   * Resource type the button renders as.
+   *
+   * @return Resource type the button renders as.
+   */
   default String getComponentResourceType() {
     return RESOURCE_TYPE;
   }

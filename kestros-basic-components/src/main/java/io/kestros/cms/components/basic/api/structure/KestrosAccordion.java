@@ -67,6 +67,11 @@ public interface KestrosAccordion extends KestrosContainerElement {
   @Nonnull
   List<KestrosAccordionPanel> getPanelElements();
 
+  /**
+   * Panels of the accordion, as generic child elements.
+   *
+   * @return Panels of the accordion, as generic child elements.
+   */
   @Nonnull
   default List<KestrosBasicComponentElement> getChildElements() {
     return new ArrayList<>(getPanelElements());

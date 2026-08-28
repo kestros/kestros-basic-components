@@ -26,6 +26,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.sling.api.resource.Resource;
 
+/**
+ * Implementation of the heading element.
+ */
 public class KestrosHeadingImpl extends BaseSyntheticResource implements KestrosHeading {
   private String text;
   private String headingType;

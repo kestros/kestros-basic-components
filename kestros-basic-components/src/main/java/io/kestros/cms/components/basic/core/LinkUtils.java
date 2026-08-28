@@ -22,6 +22,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * Helpers for reading link properties off a resource.
+ */
 public class LinkUtils {
   @Nonnull
   public static boolean isLinkExternal(@Nonnull String value) {

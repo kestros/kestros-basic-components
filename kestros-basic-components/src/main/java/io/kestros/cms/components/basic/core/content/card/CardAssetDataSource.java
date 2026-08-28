@@ -39,6 +39,9 @@ import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 
+/**
+ * Datasource that builds a card from the asset it points at.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class CardAssetDataSource extends BaseContainerSlingModelDataSource implements KestrosCard {
 
