@@ -11,6 +11,7 @@ public interface KestrosLink extends KestrosBasicComponentElement {
 
   String RESOURCE_TYPE = "/libs/kestros/commons/components/content/link";
 
+  @Nonnull
   default String getComponentResourceType() {
     return RESOURCE_TYPE;
   }

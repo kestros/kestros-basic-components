@@ -3,6 +3,7 @@ package io.kestros.cms.components.basic.core.content.button;
 import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosButton;
 import io.kestros.cms.components.basic.core.BaseDataSourceComponent;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -30,7 +31,7 @@ public class ButtonDataSourceComponent extends BaseDataSourceComponent<KestrosBu
     return getComponentData().getTitle();
   }
 
-  @Nullable
+  @Nonnull
   @Override
   public AnchorTarget getTarget() {
     return getComponentData().getTarget();

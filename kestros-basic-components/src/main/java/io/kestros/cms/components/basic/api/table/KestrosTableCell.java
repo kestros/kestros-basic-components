@@ -19,8 +19,9 @@ public interface KestrosTableCell extends KestrosContainerElement {
   @JsonIgnore
   @Nonnull
   default List<Resource> getCellContent() {
-    List<Resource> cellContent = new java.util.ArrayList<>();
-    for (KestrosBasicComponentElement element : getCellContentElements()) {
+    List<KestrosBasicComponentElement> contentElements = getCellContentElements();
+    List<Resource> cellContent = new java.util.ArrayList<>(contentElements.size());
+    for (KestrosBasicComponentElement element : contentElements) {
       cellContent.add(element.getResource());
     }
     return cellContent;

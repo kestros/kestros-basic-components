@@ -13,6 +13,9 @@ public interface KestrosBreadCrumb extends KestrosLink {
     return RESOURCE_TYPE;
   }
 
+  @Nonnull
   Boolean isFirstItem();
+
+  @Nonnull
   Boolean isLastItem();
 }

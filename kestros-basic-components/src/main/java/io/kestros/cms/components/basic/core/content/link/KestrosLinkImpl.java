@@ -30,17 +30,12 @@ public class KestrosLinkImpl extends BaseSyntheticResource implements KestrosLin
     super(dataSource, resourcePrefix, forcedResourceName);
     this.text = page.getDisplayTitle();
     this.href = LinkUtils.getLink(page.getPath());
-    this.title = title;
-    this.target = target;
-    this.rel = rel;
-    this.ariaLabel = ariaLabel;
-    this.ariaDescribedBy = ariaDescribedBy;
-    this.lang = lang;
+    this.target = AnchorTarget.SAME_WINDOW;
   }
 
 
-  public KestrosLinkImpl(String text, String href, String title, AnchorTarget target, String rel,
-      String ariaLabel, String ariaDescribedBy, String lang,
+  public KestrosLinkImpl(String text, String href, String title, @Nullable AnchorTarget target,
+      String rel, String ariaLabel, String ariaDescribedBy, String lang,
       @Nonnull BaseSlingModelDataSource dataSource,
       String resourcePrefix,
       String forcedResourceName)
@@ -49,7 +44,7 @@ public class KestrosLinkImpl extends BaseSyntheticResource implements KestrosLin
     this.text = text;
     this.href = href;
     this.title = title;
-    this.target = target;
+    this.target = target != null ? target : AnchorTarget.SAME_WINDOW;
     this.rel = rel;
     this.ariaLabel = ariaLabel;
     this.ariaDescribedBy = ariaDescribedBy;
@@ -74,7 +69,7 @@ public class KestrosLinkImpl extends BaseSyntheticResource implements KestrosLin
     return title;
   }
 
-  @Nullable
+  @Nonnull
   @Override
   public AnchorTarget getTarget() {
     return target;
