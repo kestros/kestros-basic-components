@@ -134,4 +134,19 @@ public abstract class BaseComponentElement implements KestrosBasicComponentEleme
 
     return syntheticResource;
   }
+
+  /**
+   * Identity of the element, for log lines and debugger output.
+   *
+   * <p>Built from the component's own type rather than its Resource. Every element in this bundle
+   * inherits this, and a synthetic one is routinely constructed before it has a Resource -
+   * {@code getResource()} throws in that state, and a toString that can throw is worse than none.
+   *
+   * @return Simple class name and the component's resource type.
+   */
+  @Override
+  @Nonnull
+  public String toString() {
+    return getClass().getSimpleName() + "{resourceType=" + getComponentResourceType() + "}";
+  }
 }

@@ -129,4 +129,25 @@ public abstract class BaseSyntheticResource extends BaseComponentElement
   public ComponentUiFrameworkViewRetrievalService getComponentUiFrameworkViewRetrievalService() {
     return componentUiFrameworkViewRetrievalService;
   }
+
+  /**
+   * Synthetic elements compare by identity, deliberately.
+   *
+   * <p>Comparing by value is not available here: the fields this class holds - parent path, layout,
+   * forced resource name - are shared by every element a data source builds. Every card heading in
+   * a list carries the prefix "title" and the name "titleElement" off one data source, so a
+   * value-based equals would report headings with different text as the same heading.
+   *
+   * @param other Object to compare against.
+   * @return True only when this is the same object.
+   */
+  @Override
+  public boolean equals(@Nullable final Object other) {
+    return this == other;
+  }
+
+  @Override
+  public int hashCode() {
+    return System.identityHashCode(this);
+  }
 }
