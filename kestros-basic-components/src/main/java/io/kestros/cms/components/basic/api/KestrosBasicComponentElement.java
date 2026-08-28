@@ -45,30 +45,13 @@ import org.apache.sling.api.resource.ResourceResolver;
  */
 public interface KestrosBasicComponentElement {
 
-  /**
-   * Layout configured on the given property.
-   *
-   * @param propertyName Property to read the layout from.
-   * @return Layout configured on the given property.
-   */
-  String getLayout(String propertyName);
 
-  /**
-   * Layout the element renders with.
-   *
-   * @return Layout the element renders with.
-   */
   @Nonnull
-  String getLayout();
+  String getLayout(@Nonnull String propertyName);
 
-  /**
-   * Variations applied to the given property, for the given component type.
-   *
-   * @param propertyName Property the variation names are read from.
-   * @param componentType Component type the variations belong to.
-   * @return Variations applied to the given property, for the given component type.
-   */
-  List<ComponentVariation> getElementVariations(String propertyName, String componentType);
+  @Nonnull
+  List<ComponentVariation> getElementVariations(@Nonnull String propertyName,
+      @Nonnull String componentType);
 
   //  @Deprecated
   //  static List<ComponentVariation> getAppliedVariations(String propertyName,
@@ -151,6 +134,7 @@ public interface KestrosBasicComponentElement {
    * @throws ModelAdaptionException Resource could not be adapted to the expected model.
    */
   @JsonIgnore
+  @Nonnull
   UiFramework getUiFramework() throws InvalidThemeException, ResourceNotFoundException,
       InvalidUiFrameworkException, ThemeRetrievalException, UiFrameworkRetrievalException,
       ModelAdaptionException;
@@ -161,6 +145,7 @@ public interface KestrosBasicComponentElement {
    * @return Resource the element was built from.
    */
   @JsonIgnore
+  @Nonnull
   Resource getResource();
 
   /**
@@ -178,6 +163,7 @@ public interface KestrosBasicComponentElement {
    * @return ResourceResolver the element reads through.
    */
   @JsonIgnore
+  @Nonnull
   ResourceResolver getResourceResolver();
 
   /**
@@ -186,20 +172,13 @@ public interface KestrosBasicComponentElement {
    * @return Path of the resource that contains this element.
    */
   @JsonIgnore
+  @Nonnull
   String getParentPath();
 
-  /**
-   * Variations applied to the element.
-   *
-   * @return Variations applied to the element.
-   */
+  @Nonnull
   List<ComponentVariation> getVariations();
 
-  /**
-   * Names of the applied variations that render inline, separated by spaces.
-   *
-   * @return Names of the applied variations that render inline, separated by spaces.
-   */
+  @Nonnull
   default String getInlineVariations() {
     StringJoiner joiner = new StringJoiner(" ");
     for (ComponentVariation variation : getVariations()) {
@@ -227,13 +206,9 @@ public interface KestrosBasicComponentElement {
     return getResource().getPath();
   }
 
-  /**
-   * Whether the element is synthetic rather than backed by a stored resource.
-   *
-   * @return Whether the element is synthetic rather than backed by a stored resource.
-   */
+  @Nonnull
   default Boolean isSynthetic() {
-    return true;
+    return Boolean.TRUE;
   }
 
   /**
@@ -252,6 +227,7 @@ public interface KestrosBasicComponentElement {
    * @return Attributes to pass to the request when the element is rendered.
    */
   @JsonIgnore
+  @Nonnull
   default Map<String, String> getRequestAttributes() {
     Map<String, String> attributes = new HashMap<>();
     attributes.put("resourceType", getComponentResourceType());
@@ -266,6 +242,7 @@ public interface KestrosBasicComponentElement {
    * @return Synthetic resource for this element.
    */
   @JsonIgnore
+  @Nonnull
   Resource toSyntheticResource(@Nonnull final ResourceResolver resourceResolver,
       @Nonnull final String parentPath);
 

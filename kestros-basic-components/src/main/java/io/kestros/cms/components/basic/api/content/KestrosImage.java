@@ -30,6 +30,7 @@ public interface KestrosImage extends KestrosBasicComponentElement {
   String RESOURCE_TYPE = "/libs/kestros/commons/components/content/image";
 
   @Override
+  @Nonnull
   default String getComponentResourceType() {
     return RESOURCE_TYPE;
   }
@@ -89,10 +90,7 @@ public interface KestrosImage extends KestrosBasicComponentElement {
    */
   @Nonnull
   default String getTargetAsString() {
-    if (getTarget() != null) {
-      return getTarget().getTargetValue();
-    }
-    return AnchorTarget.SAME_WINDOW.getTargetValue();
+    return getTarget().getTargetValue();
   }
 
   /**

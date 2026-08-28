@@ -35,6 +35,7 @@ public interface KestrosCard extends KestrosContainerElement {
   String RESOURCE_TYPE = "/libs/kestros/commons/components/content/card";
 
   @Override
+  @Nonnull
   default String getComponentResourceType() {
     return RESOURCE_TYPE;
   }

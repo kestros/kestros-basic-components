@@ -60,8 +60,9 @@ public interface KestrosTopNavigationItem extends KestrosContainerElement {
    */
   @Nonnull
   default List<Resource> getNavigationItemLinks() {
-    List<Resource> resources = new ArrayList<>();
-    for (KestrosTopNavigationItem item : getNavigationItems()) {
+    List<KestrosTopNavigationItem> navigationItems = getNavigationItems();
+    List<Resource> resources = new ArrayList<>(navigationItems.size());
+    for (KestrosTopNavigationItem item : navigationItems) {
       resources.add(item.getResource());
     }
     return resources;
@@ -126,10 +127,7 @@ public interface KestrosTopNavigationItem extends KestrosContainerElement {
    */
   @Nonnull
   default String getTargetAsString() {
-    if (getTarget() != null) {
-      return getTarget().getTargetValue();
-    }
-    return AnchorTarget.SAME_WINDOW.getTargetValue();
+    return getTarget().getTargetValue();
   }
 
   /**

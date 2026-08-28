@@ -16,30 +16,29 @@
  *
  */
 
-package io.kestros.cms.components.basic.api.content;
+package io.kestros.cms.components.basic.core;
 
-import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Rich text element.
+ * Helpers for putting untrusted values into a log line.
  */
-public interface KestrosRichText extends KestrosBasicComponentElement {
+public final class LogUtils {
 
-  String RESOURCE_TYPE = "/libs/kestros/commons/components/content/richtext";
-
-  @Override
-  @Nonnull
-  default String getComponentResourceType() {
-    return RESOURCE_TYPE;
+  private LogUtils() {
+    // static helpers only.
   }
 
   /**
-   * Rich text the element renders.
+   * Strips CR and LF from a value before it is logged. Applied to every untrusted value, not only
+   * the JCR path: a JCR property is author-controlled and an exception message can carry anything,
+   * so those are the ones that can actually forge a log line.
    *
-   * @return Rich text the element renders.
+   * @param value Value about to be logged.
+   * @return The value with CR and LF removed, or null unchanged.
    */
   @Nullable
-  String getText();
+  public static String forLog(@Nullable final String value) {
+    return value == null ? null : value.replaceAll("[\r\n]", "");
+  }
 }

@@ -50,8 +50,9 @@ public interface KestrosLinkList extends KestrosContainerElement {
    */
   @Nonnull
   default List<Resource> getLinks() {
-    List<Resource> links = new ArrayList<>();
-    for (KestrosLink link : getLinkElements()) {
+    List<KestrosLink> linkElements = getLinkElements();
+    List<Resource> links = new ArrayList<>(linkElements.size());
+    for (KestrosLink link : linkElements) {
       links.add(link.getResource());
     }
     return links;

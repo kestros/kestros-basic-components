@@ -18,6 +18,8 @@
 
 package io.kestros.cms.components.basic.api.content;
 
+import javax.annotation.Nonnull;
+
 /**
  * Core button element API.
  */
@@ -25,11 +27,7 @@ public interface KestrosButton extends KestrosLink {
 
   String RESOURCE_TYPE = "/libs/kestros/commons/components/content/button";
 
-  /**
-   * Resource type the button renders as.
-   *
-   * @return Resource type the button renders as.
-   */
+  @Nonnull
   default String getComponentResourceType() {
     return RESOURCE_TYPE;
   }

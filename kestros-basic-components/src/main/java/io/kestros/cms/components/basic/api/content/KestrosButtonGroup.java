@@ -46,8 +46,9 @@ public interface KestrosButtonGroup extends KestrosContainerElement {
    */
   @Nonnull
   default List<Resource> getButtons() {
-    List<Resource> buttons = new ArrayList<>();
-    for (KestrosButton button : getButtonsElements()) {
+    List<KestrosButton> buttonElements = getButtonsElements();
+    List<Resource> buttons = new ArrayList<>(buttonElements.size());
+    for (KestrosButton button : buttonElements) {
       buttons.add(button.getResource());
     }
     return buttons;

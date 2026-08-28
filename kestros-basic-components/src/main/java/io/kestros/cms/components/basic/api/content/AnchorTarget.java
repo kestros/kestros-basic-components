@@ -48,6 +48,7 @@ public enum AnchorTarget {
    *
    * @return The corresponding AnchorTarget enum, or SAME_WINDOW if not found.
    */
+  @Nonnull
   public static AnchorTarget lookup(@Nullable String targetValue) {
     if (targetValue != null) {
       for (AnchorTarget anchorTarget : values()) {
@@ -67,6 +68,7 @@ public enum AnchorTarget {
    *
    * @return The corresponding AnchorTarget enum.
    */
+  @Nonnull
   public static AnchorTarget lookup(@Nullable Boolean openInNewWindow) {
     if (openInNewWindow != null && openInNewWindow) {
       return NEW_WINDOW;
@@ -75,18 +77,21 @@ public enum AnchorTarget {
   }
 
   /**
-   * Target configured on the given resource, defaulting to the same window.
+   * Looks up the AnchorTarget for a Resource, from its target or openInNewTab property.
    *
-   * @param resource Resource the target is read from.
-   * @return Target configured on the given resource.
+   * @param resource Resource to read the target from.
+   *
+   * @return The corresponding AnchorTarget enum, or SAME_WINDOW if not found.
    */
+  @Nonnull
   public static AnchorTarget lookup(@Nullable Resource resource) {
     AnchorTarget target = SAME_WINDOW;
     if (resource != null) {
       String anchorTargetString = resource.getValueMap().get("target", String.class);
       target = AnchorTarget.lookup(anchorTargetString);
-      if (target.equals(AnchorTarget.SAME_WINDOW)) {
-        target = AnchorTarget.lookup(resource.getValueMap().get("openInNewTab", false));
+      if (target == AnchorTarget.SAME_WINDOW) {
+        target = AnchorTarget.lookup(
+            resource.getValueMap().get("openInNewTab", Boolean.FALSE));
       }
     }
     return target;

@@ -34,17 +34,9 @@ public interface KestrosBreadCrumb extends KestrosLink {
     return RESOURCE_TYPE;
   }
 
-  /**
-   * Whether this is the first crumb in the trail.
-   *
-   * @return Whether this is the first crumb in the trail.
-   */
+  @Nonnull
   Boolean isFirstItem();
 
-  /**
-   * Whether this is the last crumb in the trail.
-   *
-   * @return Whether this is the last crumb in the trail.
-   */
+  @Nonnull
   Boolean isLastItem();
 }

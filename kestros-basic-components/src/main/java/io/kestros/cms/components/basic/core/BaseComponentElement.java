@@ -24,7 +24,6 @@ import io.kestros.cms.components.basic.api.KestrosContainerElement;
 import io.kestros.cms.componenttypes.api.exceptions.ComponentViewRetrievalException;
 import io.kestros.cms.componenttypes.api.models.ComponentUiFrameworkView;
 import io.kestros.cms.componenttypes.api.models.ComponentVariation;
-import io.kestros.cms.sitebuilding.api.models.BaseComponent;
 import io.kestros.commons.commonutils.jcr.JcrPropertyUtils;
 import io.kestros.commons.structuredslingmodels.exceptions.ModelAdaptionException;
 import java.util.ArrayList;
@@ -52,10 +51,10 @@ public abstract class BaseComponentElement implements KestrosBasicComponentEleme
   }
 
   @Override
-  public List<ComponentVariation> getElementVariations(String propertyName,
-      String componentType) {
+  @Nonnull
+  public List<ComponentVariation> getElementVariations(@Nonnull String propertyName,
+      @Nonnull String componentType) {
 
-    BaseComponent component = getResource().adaptTo(BaseComponent.class);
     final List<ComponentVariation> appliedVariations = new ArrayList<>();
     Object propertyValue = getResource().getValueMap().get(propertyName);
     // if list of maps
@@ -64,7 +63,7 @@ public abstract class BaseComponentElement implements KestrosBasicComponentEleme
         && ((List<?>) propertyValue).get(0) instanceof Map) {
       // TODO checking the map here is a bit hacky, but not sure of a better way.
       List<Map<String, Object>> variationMaps = (List<Map<String, Object>>) propertyValue;
-      appliedVariationNames = new ArrayList<>();
+      appliedVariationNames = new ArrayList<>(variationMaps.size());
       for (Map<String, Object> variationMap : variationMaps) {
         appliedVariationNames.add((String) variationMap.get("path"));
       }
@@ -79,7 +78,7 @@ public abstract class BaseComponentElement implements KestrosBasicComponentEleme
 
       final ComponentUiFrameworkView uiFrameworkView
           = getComponentUiFrameworkViewRetrievalService().getResolvedComponentUiFrameworkView(
-          componentType, getUiFramework(), component.getResourceResolver());
+          componentType, getUiFramework(), getResourceResolver());
       List<ComponentVariation> variations
           = getComponentVariationRetrievalService().getComponentVariations(uiFrameworkView);
       if (!appliedVariationNames.isEmpty()) {
@@ -110,13 +109,15 @@ public abstract class BaseComponentElement implements KestrosBasicComponentEleme
   }
 
   @Override
+  @Nonnull
   public Resource toSyntheticResource(@Nonnull ResourceResolver resourceResolver,
       @Nonnull String parentPath) {
     if (syntheticResource == null) {
       ResourceMetadata resourceMetadata = new ResourceMetadata();
       String name = "child-" + java.util.UUID.randomUUID();
-      if (this.getForcedResourceName() != null && !this.getForcedResourceName().isEmpty()) {
-        name = this.getForcedResourceName();
+      final String forcedResourceName = this.getForcedResourceName();
+      if (forcedResourceName != null && !forcedResourceName.isEmpty()) {
+        name = forcedResourceName;
       }
       String path = parentPath + "/" + name;
       if (!path.startsWith("/synthetics")) {
@@ -124,7 +125,7 @@ public abstract class BaseComponentElement implements KestrosBasicComponentEleme
       }
       resourceMetadata.setResolutionPath(path);
       resourceMetadata.setModificationTime(System.currentTimeMillis());
-      Map<String, String> parameters = new HashMap<>();
+      Map<String, String> parameters = new HashMap<>(0);
       resourceMetadata.setParameterMap(parameters);
       ObjectMapper objectMapper = new ObjectMapper();
       Map<String, Object> props = objectMapper.convertValue(this, Map.class);
@@ -141,8 +142,9 @@ public abstract class BaseComponentElement implements KestrosBasicComponentEleme
       };
       if (this instanceof KestrosContainerElement) {
         KestrosContainerElement container = (KestrosContainerElement) this;
-        Map<String, Resource> childResources = new java.util.LinkedHashMap<>();
-        for (KestrosBasicComponentElement child : container.getChildElements()) {
+        List<KestrosBasicComponentElement> childElements = container.getChildElements();
+        Map<String, Resource> childResources = new java.util.LinkedHashMap<>(childElements.size());
+        for (KestrosBasicComponentElement child : childElements) {
           Resource childSyntheticResource = child.toSyntheticResource(resourceResolver,
               syntheticResource.getPath());
           childResources.put(childSyntheticResource.getName(), childSyntheticResource);

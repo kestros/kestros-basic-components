@@ -41,6 +41,8 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Datasource that builds card list entries from the child pages of the configured page.
@@ -48,6 +50,8 @@ import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSource
     implements KestrosCardList {
+
+  private static final Logger LOG = LoggerFactory.getLogger(CardListChildPagesDataSource.class);
 
   @OSGiService
   @Optional
@@ -95,6 +99,7 @@ public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSou
     if (root == null) {
       return new ArrayList<>();
     }
+    CardListSupport.requireComponentPrerequisites(this);
     List<BaseContentPage> pages = new ArrayList<>(root.getChildPages());
 
     String sortBy = getResource().getValueMap().get("sortBy", "");
@@ -165,7 +170,9 @@ public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSou
                 page.getName(),
                 assetRetrievalService));
       } catch (Exception e) {
-        throw new RuntimeException(e);
+        // The prerequisites every card shares were checked above, so this failure belongs to this
+        // page. Drop the page, keep the rest of the list, and say which page went and why.
+        CardListSupport.logSkippedCard(LOG, page, getResource().getPath(), e);
       }
     }
     return new ArrayList<>(cards);

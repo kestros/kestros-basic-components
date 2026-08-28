@@ -27,6 +27,10 @@ import static org.junit.Assert.assertTrue;
 import io.kestros.cms.assets.api.exceptions.AssetCollectionRetrievalException;
 import io.kestros.cms.components.basic.api.content.KestrosCard;
 import io.kestros.cms.components.basic.core.BaseDataSourceTest;
+import io.kestros.cms.uiframeworks.api.exceptions.InvalidThemeException;
+import io.kestros.cms.uiframeworks.api.exceptions.ThemeRetrievalException;
+import io.kestros.cms.uiframeworks.api.exceptions.UiFrameworkRetrievalException;
+import io.kestros.commons.structuredslingmodels.exceptions.ResourceNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.sling.api.resource.Resource;
@@ -201,7 +205,8 @@ public class CardStaticDataSourceTest extends BaseDataSourceTest {
   }
 
   @Test
-  public void testGetUiFramework() {
+  public void testGetUiFramework() throws ResourceNotFoundException, InvalidThemeException,
+      ThemeRetrievalException, UiFrameworkRetrievalException {
     cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
     assertNotNull(cardStaticDataSource.getUiFramework());
   }

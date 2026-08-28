@@ -23,7 +23,11 @@ import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationExce
 import io.kestros.cms.componenttypes.api.models.ComponentVariation;
 import io.kestros.cms.componenttypes.api.services.ComponentUiFrameworkViewRetrievalService;
 import io.kestros.cms.componenttypes.api.services.ComponentVariationRetrievalService;
+import io.kestros.cms.uiframeworks.api.exceptions.InvalidThemeException;
+import io.kestros.cms.uiframeworks.api.exceptions.ThemeRetrievalException;
+import io.kestros.cms.uiframeworks.api.exceptions.UiFrameworkRetrievalException;
 import io.kestros.cms.uiframeworks.api.models.UiFramework;
+import io.kestros.commons.structuredslingmodels.exceptions.ResourceNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
@@ -65,7 +69,12 @@ public abstract class BaseSyntheticResource extends BaseComponentElement
     this.dataSource = dataSource;
     this.resourceResolver = dataSource.getResourceResolver();
     this.parentPath = dataSource.getResource().getPath();
-    this.uiFramework = dataSource.getUiFramework();
+    try {
+      this.uiFramework = dataSource.getUiFramework();
+    } catch (ResourceNotFoundException | InvalidThemeException | ThemeRetrievalException
+        | UiFrameworkRetrievalException exception) {
+      throw new ComponentConfigurationException(exception.getMessage());
+    }
     this.componentVariations = dataSource.getElementVariations(resourcePrefix + "Variations",
         getComponentResourceType());
     this.layout = dataSource.getLayout(resourcePrefix);
@@ -82,22 +91,25 @@ public abstract class BaseSyntheticResource extends BaseComponentElement
         dataSource.getComponentUiFrameworkViewRetrievalService();
   }
 
-  @Nonnull
+  @Nullable
   @Override
   public String getId() {
     return this.id;
   }
 
+  @Nonnull
   @Override
   public ResourceResolver getResourceResolver() {
     return resourceResolver;
   }
 
+  @Nonnull
   @Override
   public String getParentPath() {
     return parentPath;
   }
 
+  @Nonnull
   @Override
   public Resource getResource() {
     if (syntheticResource == null) {
@@ -118,21 +130,19 @@ public abstract class BaseSyntheticResource extends BaseComponentElement
     return resourceName;
   }
 
+  @Nonnull
   @Override
   public List<ComponentVariation> getVariations() {
     return new ArrayList<>(componentVariations);
   }
 
+  @Nonnull
   @Override
   public String getLayout() {
     return layout;
   }
 
-  /**
-   * UiFramework the synthetic resource renders against.
-   *
-   * @return UiFramework the synthetic resource renders against.
-   */
+  @Nonnull
   public UiFramework getUiFramework() {
     return uiFramework;
   }

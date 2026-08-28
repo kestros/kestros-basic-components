@@ -60,18 +60,16 @@ public abstract class BaseDataSourceComponent<T extends KestrosBasicComponentEle
     return getComponentData().getComponentVariationRetrievalService();
   }
 
+  @Nonnull
   @Override
-  public String getLayout(String propertyName) {
+  public String getLayout(@Nonnull String propertyName) {
     return getComponentData().getLayout(propertyName);
   }
 
+  @Nonnull
   @Override
-  public String getLayout() {
-    return getComponentData().getLayout();
-  }
-
-  @Override
-  public List<ComponentVariation> getElementVariations(String propertyName, String componentType) {
+  public List<ComponentVariation> getElementVariations(@Nonnull String propertyName,
+      @Nonnull String componentType) {
     return getComponentData().getElementVariations(propertyName, componentType);
   }
 
@@ -87,11 +85,19 @@ public abstract class BaseDataSourceComponent<T extends KestrosBasicComponentEle
     return getComponentData().getComponentUiFrameworkViewRetrievalService();
   }
 
+  @Nonnull
   @Override
   public List<ComponentVariation> getVariations() {
     return getComponentData().getVariations();
   }
 
+  @Nonnull
+  @Override
+  public String getLayout() {
+    return getComponentData().getLayout();
+  }
+
+  @Nonnull
   @Override
   public Resource toSyntheticResource(@Nonnull ResourceResolver resourceResolver,
       @Nonnull String parentPath) {
@@ -99,8 +105,9 @@ public abstract class BaseDataSourceComponent<T extends KestrosBasicComponentEle
     if (syntheticResource == null) {
       ResourceMetadata resourceMetadata = new ResourceMetadata();
       String name = "child-" + java.util.UUID.randomUUID();
-      if (getForcedResourceName() != null && !getForcedResourceName().isEmpty()) {
-        name = getForcedResourceName();
+      final String forcedResourceName = getForcedResourceName();
+      if (forcedResourceName != null && !forcedResourceName.isEmpty()) {
+        name = forcedResourceName;
       }
       String path = parentPath + "/" + name;
       if (!path.startsWith("/synthetics")) {
@@ -108,7 +115,7 @@ public abstract class BaseDataSourceComponent<T extends KestrosBasicComponentEle
       }
       resourceMetadata.setResolutionPath(path);
       resourceMetadata.setModificationTime(System.currentTimeMillis());
-      Map<String, String> parameters = new HashMap<>();
+      Map<String, String> parameters = new HashMap<>(0);
       resourceMetadata.setParameterMap(parameters);
       ObjectMapper objectMapper = new ObjectMapper();
       Map<String, Object> props = objectMapper.convertValue(this, Map.class);
@@ -125,8 +132,9 @@ public abstract class BaseDataSourceComponent<T extends KestrosBasicComponentEle
       };
       if (this instanceof KestrosContainerElement) {
         KestrosContainerElement container = (KestrosContainerElement) this;
-        Map<String, Resource> childResources = new HashMap<>();
-        for (KestrosBasicComponentElement child : container.getChildElements()) {
+        List<KestrosBasicComponentElement> childElements = container.getChildElements();
+        Map<String, Resource> childResources = new HashMap<>(childElements.size());
+        for (KestrosBasicComponentElement child : childElements) {
           Resource childSyntheticResource = child.toSyntheticResource(resourceResolver,
               syntheticResource.getPath());
           childResources.put(childSyntheticResource.getName(), childSyntheticResource);

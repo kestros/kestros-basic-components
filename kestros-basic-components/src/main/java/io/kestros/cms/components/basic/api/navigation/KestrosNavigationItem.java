@@ -38,11 +38,7 @@ public interface KestrosNavigationItem extends KestrosLink, KestrosContainerElem
     return RESOURCE_TYPE;
   }
 
-  /**
-   * Whether this item points at the page currently being requested.
-   *
-   * @return Whether this item points at the page currently being requested.
-   */
+  @Nonnull
   Boolean isActive();
 
   /**
@@ -60,8 +56,9 @@ public interface KestrosNavigationItem extends KestrosLink, KestrosContainerElem
    */
   @Nonnull
   default List<Resource> getNavigationItemLinks() {
-    List<Resource> resources = new ArrayList<>();
-    for (KestrosNavigationItem item : getNavigationItems()) {
+    List<KestrosNavigationItem> navigationItems = getNavigationItems();
+    List<Resource> resources = new ArrayList<>(navigationItems.size());
+    for (KestrosNavigationItem item : navigationItems) {
       resources.add(item.getResource());
     }
     return resources;
