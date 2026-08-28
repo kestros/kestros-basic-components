@@ -5,9 +5,14 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 import io.kestros.cms.assets.api.exceptions.AssetCollectionRetrievalException;
 import io.kestros.cms.components.basic.core.content.alert.AlertStaticDataSource;
+import io.kestros.cms.sitebuilding.api.models.BaseComponent;
 import io.kestros.cms.uiframeworks.api.exceptions.InvalidThemeException;
 import io.kestros.cms.uiframeworks.api.exceptions.ThemeRetrievalException;
 import io.kestros.cms.uiframeworks.api.exceptions.UiFrameworkRetrievalException;
@@ -15,6 +20,7 @@ import io.kestros.commons.structuredslingmodels.exceptions.ResourceNotFoundExcep
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.wrappers.ValueMapDecorator;
 import org.junit.Test;
 
 public class BaseSlingModelDataSourceTest extends BaseDataSourceTest {
@@ -115,10 +121,19 @@ public class BaseSlingModelDataSourceTest extends BaseDataSourceTest {
 
   @Test
   public void testGetVariationsWhenResourceDoesNotAdaptToComponent() {
-    resource = context.resourceResolver().getResource("/");
+    resource = context.create().resource("/content/alert/static/heading", properties);
     context.request().setResource(resource);
     alert = context.request().adaptTo(AlertStaticDataSource.class);
-    assertTrue(alert.getVariations().isEmpty());
+
+    Resource unadaptableResource = mock(Resource.class);
+    when(unadaptableResource.getValueMap()).thenReturn(
+        new ValueMapDecorator(new HashMap<>()));
+    when(unadaptableResource.adaptTo(BaseComponent.class)).thenReturn(null);
+
+    AlertStaticDataSource dataSource = spy(alert);
+    doReturn(unadaptableResource).when(dataSource).getResource();
+
+    assertTrue(dataSource.getVariations().isEmpty());
   }
 
   @Test
