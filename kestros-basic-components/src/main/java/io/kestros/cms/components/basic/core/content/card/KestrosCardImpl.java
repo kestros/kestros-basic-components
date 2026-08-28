@@ -48,7 +48,8 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
           @Nonnull BaseSlingModelDataSource dataSource,
           @Nonnull String resourcePrefix,
           @Nullable String forcedResourceName) throws ComponentConfigurationException {
-    this(page, buttonText, dataSource, resourcePrefix, forcedResourceName, null);
+    super(dataSource, resourcePrefix, forcedResourceName);
+    configureFromPage(page, buttonText, dataSource, forcedResourceName, null);
   }
 
   /**
@@ -56,8 +57,8 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
    * can show the asset's own title and description.
    *
    * <p>Callers that have an {@link AssetRetrievalService} should use this constructor. The
-   * five-argument one delegates here with a null service, which is why cards built by callers
-   * without one lose the asset's title and description.
+   * five-argument one builds the same card with a null service, which is why cards built by
+   * callers without one lose the asset's title and description.
    *
    * @param page Page to build the card from.
    * @param buttonText Text for the card's button, or null for no button.
@@ -75,7 +76,23 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
           @Nullable AssetRetrievalService assetRetrievalService)
           throws ComponentConfigurationException {
     super(dataSource, resourcePrefix, forcedResourceName);
+    configureFromPage(page, buttonText, dataSource, forcedResourceName, assetRetrievalService);
+  }
 
+  /**
+   * Builds the card's elements from a page. Both constructors call this rather than one delegating
+   * to the other, so the six-argument constructor's only callers are the data sources that use it.
+   *
+   * @param page Page to build the card from.
+   * @param buttonText Text for the card's button, or null for no button.
+   * @param dataSource Data source the card belongs to.
+   * @param forcedResourceName Forced resource name, or null.
+   * @param assetRetrievalService Service used to look up the image's asset, or null.
+   */
+  private void configureFromPage(final BaseContentPage page, @Nullable final String buttonText,
+          @Nonnull final BaseSlingModelDataSource dataSource,
+          @Nullable final String forcedResourceName,
+          @Nullable final AssetRetrievalService assetRetrievalService) {
     this.assetRetrievalService = assetRetrievalService;
 
     this.description = page.getDisplayDescription();
