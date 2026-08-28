@@ -31,7 +31,7 @@ public abstract class BaseSyntheticResource extends BaseComponentElement {
   private ComponentUiFrameworkViewRetrievalService componentUiFrameworkViewRetrievalService;
   private BaseSlingModelDataSource dataSource;
 
-  public BaseSyntheticResource(
+  protected BaseSyntheticResource(
       @Nonnull BaseSlingModelDataSource dataSource,
       @Nonnull String resourcePrefix, @Nullable String forcedResourceName) throws
       ComponentConfigurationException {
@@ -47,21 +47,60 @@ public abstract class BaseSyntheticResource extends BaseComponentElement {
               resourcePrefix, this.parentPath, exception.getMessage()), exception);
     }
     this.componentVariations = dataSource.getElementVariations(resourcePrefix + "Variations",
-        getComponentResourceType());
+        componentResourceTypeOf(this));
     this.layout = dataSource.getLayout(resourcePrefix);
     this.id = null;
     this.resourceName = forcedResourceName;
-    if (resourceResolver == null || this.parentPath == null || this.componentVariations == null
-        || this.layout == null || this.uiFramework == null) {
-      // SpotBugs reads these as redundant, because every source is annotated @Nonnull. They are
-      // not: BaseSyntheticResourceTest builds this from a data source that returns null for each
-      // one in turn, and the annotation is a claim about the contract, not a guarantee about a
-      // caller who breaks it. Do not remove without deleting those tests, which is not allowed.
-      throw new ComponentConfigurationException("Missing required property");
-    }
+    // Every source below is annotated @Nonnull, so these guards look unreachable. They are not:
+    // BaseSyntheticResourceTest builds this from a data source that returns null for each one in
+    // turn, and the annotation is a claim about the contract, not a guarantee about a caller who
+    // breaks it. Do not remove without deleting those tests, which is not allowed.
+    requireConfigured(this.resourceResolver, resourcePrefix, "resource resolver");
+    requireConfigured(this.parentPath, resourcePrefix, "parent path");
+    requireConfigured(this.componentVariations, resourcePrefix, "component variations");
+    requireConfigured(this.layout, resourcePrefix, "layout");
+    requireConfigured(this.uiFramework, resourcePrefix, "UiFramework");
     this.componentVariationRetrievalService = dataSource.getComponentVariationRetrievalService();
     this.componentUiFrameworkViewRetrievalService =
         dataSource.getComponentUiFrameworkViewRetrievalService();
+  }
+
+  /**
+   * Fails construction when a data source handed back nothing for a property the element needs.
+   *
+   * <p>The message names the property. All three of these used to read "Missing required
+   * property", so the three tests covering them could not tell which one had actually failed.
+   *
+   * @param value Value the data source returned.
+   * @param resourcePrefix Prefix identifying which element is being built.
+   * @param description Plain-English name of the property, used in the message.
+   * @throws ComponentConfigurationException when the value is null.
+   */
+  private static void requireConfigured(@Nullable final Object value,
+      @Nonnull final String resourcePrefix, @Nonnull final String description)
+      throws ComponentConfigurationException {
+    if (value == null) {
+      throw new ComponentConfigurationException(
+          String.format("Unable to build the %s element: its %s is missing.", resourcePrefix,
+              description));
+    }
+  }
+
+  /**
+   * Resource type of the element being constructed.
+   *
+   * <p>Read through a static helper rather than called on {@code this} in the constructor body.
+   * The method is a constant-returning default on each element's interface, but it is still
+   * overridable, and calling one from a constructor reads a subclass that has not run its own
+   * initialiser yet.
+   *
+   * @param element Element being constructed.
+   * @return The element's component resource type.
+   */
+  @Nonnull
+  private static String componentResourceTypeOf(
+      @Nonnull final KestrosBasicComponentElement element) {
+    return element.getComponentResourceType();
   }
 
   @Nullable
@@ -153,7 +192,7 @@ public abstract class BaseSyntheticResource extends BaseComponentElement {
    * @return True only when this is the same object.
    */
   @Override
-  public boolean equals(final Object other) {
+  public boolean equals(@Nullable final Object other) {
     return this == other;
   }
 

@@ -18,7 +18,7 @@ import io.kestros.cms.components.basic.core.content.buttongroup.KestrosButtonGro
 import io.kestros.cms.components.basic.core.content.heading.KestrosHeadingImpl;
 import io.kestros.cms.components.basic.core.content.image.KestrosImageImpl;
 import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -100,7 +100,7 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
     }
     try {
       if (StringUtils.isNotBlank(buttonText)) {
-        List<KestrosButton> buttons = Arrays.asList(
+        List<KestrosButton> buttons = Collections.singletonList(
                 new KestrosButtonImpl(buttonText, LinkUtils.getLink(page.getPath()), null,
                         AnchorTarget.SAME_WINDOW, null, null, null, null, false,
                         dataSource,
@@ -122,8 +122,8 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
    * does not resolve, and the caller must not have to guard the getters separately.
    */
   static final class AssetText {
-    private final String title;
-    private final String description;
+    final String title;
+    final String description;
 
     AssetText(@Nullable final String title, @Nullable final String description) {
       this.title = title;

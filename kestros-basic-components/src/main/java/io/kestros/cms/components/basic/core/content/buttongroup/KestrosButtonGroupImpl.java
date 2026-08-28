@@ -16,8 +16,7 @@ public class KestrosButtonGroupImpl extends BaseContainerSyntheticResource imple
                                                                            KestrosButtonGroup {
 
   private List<KestrosButton> buttons;
-  private List<ComponentVariation> buttonVariations;
-  private String buttonLayout;
+  private final List<ComponentVariation> buttonVariations;
 
   public KestrosButtonGroupImpl(@Nonnull final List<KestrosButton> buttons,
       @Nonnull BaseSlingModelDataSource dataSource,
@@ -37,23 +36,23 @@ public class KestrosButtonGroupImpl extends BaseContainerSyntheticResource imple
       ComponentConfigurationException {
     super(dataSource, resourcePrefix,
         forcedResourceName);
-    this.buttons = new ArrayList<>();
     this.buttonVariations = dataSource.getElementVariations("button", KestrosButton.RESOURCE_TYPE);
-    List<KestrosButton> buttons = new ArrayList<>();
+    final List<KestrosButton> childButtons = new ArrayList<>();
     for (Resource childResource : buttonResource.getChildren()) {
-      buttons.add(new KestrosButtonImpl(childResource, dataSource,
+      childButtons.add(new KestrosButtonImpl(childResource, dataSource,
           "button",
           childResource.getName()));
     }
     if (buttonResource.getValueMap().get("href", String.class) != null) {
       //In case of single button defined as button group.
-      buttons.add(new KestrosButtonImpl(buttonResource, dataSource,
+      childButtons.add(new KestrosButtonImpl(buttonResource, dataSource,
           "button",
           "buttonElement"));
     }
-    this.buttons = new ArrayList<>(buttons);
+    this.buttons = childButtons;
     if (this.buttons.isEmpty()) {
-      throw new ComponentConfigurationException("Button Group must have at least one button.");
+      throw new ComponentConfigurationException(String.format(
+          "Button group on %s has no buttons; it needs at least one.", buttonResource.getPath()));
     }
   }
 

@@ -57,4 +57,27 @@ public class KestrosGridImplTest extends BaseSyntheticTest {
     assertNotNull(syntheticResource);
     assertEquals("/synthetics/parent/gridElement", syntheticResource.getPath());
   }
+
+  /**
+   * The constructor stored its columns in a field nothing read, so the interface default answered
+   * getChildElements() with an empty list and a grid rendered with none of the columns it was
+   * built from.
+   */
+  @Test
+  public void testGetChildElementsReturnsTheColumns() {
+    assertEquals(2, grid.getChildElements().size());
+  }
+
+  @Test
+  public void testGetChildrenIsBuiltFromTheColumns() {
+    assertEquals(2, grid.getChildren().size());
+  }
+
+  /** The returned list is a copy, so a caller cannot add a column to a built grid. */
+  @Test
+  public void testGetChildElementsReturnsACopy() {
+    grid.getChildElements().clear();
+
+    assertEquals(2, grid.getChildElements().size());
+  }
 }

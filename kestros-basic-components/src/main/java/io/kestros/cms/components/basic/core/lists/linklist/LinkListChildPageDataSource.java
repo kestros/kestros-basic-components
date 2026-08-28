@@ -7,8 +7,6 @@ import io.kestros.cms.components.basic.api.lists.KestrosLinkList;
 import io.kestros.cms.components.basic.core.BaseContainerSlingModelDataSource;
 import io.kestros.cms.components.basic.core.LinkUtils;
 import io.kestros.cms.components.basic.core.content.link.KestrosLinkImpl;
-import io.kestros.cms.componenttypes.api.services.ComponentUiFrameworkViewRetrievalService;
-import io.kestros.cms.componenttypes.api.services.ComponentVariationRetrievalService;
 import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,7 +17,6 @@ import javax.annotation.Nullable;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,11 +25,6 @@ public class LinkListChildPageDataSource extends BaseContainerSlingModelDataSour
     implements KestrosLinkList {
 
   private static final Logger LOG = LoggerFactory.getLogger(LinkListChildPageDataSource.class);
-
-  @OSGiService
-  private ComponentVariationRetrievalService componentVariationRetrievalService;
-  @OSGiService
-  private ComponentUiFrameworkViewRetrievalService componentUiFrameworkViewRetrievalService;
 
   /**
    * Path whose child pages are rendered as links.
@@ -62,7 +54,7 @@ public class LinkListChildPageDataSource extends BaseContainerSlingModelDataSour
       return new ArrayList<>();
     }
     for (Resource childResource : rootResource.getChildren()) {
-      if (childResource.getName().equals("jcr:content")) {
+      if ("jcr:content".equals(childResource.getName())) {
         continue;
       }
       BaseContentPage page = childResource.adaptTo(BaseContentPage.class);

@@ -109,15 +109,8 @@ public abstract class BaseComponentElement implements KestrosBasicComponentEleme
       Map<String, Object> props = objectMapper.convertValue(this, Map.class);
       props.put("sling:resourceType", getComponentResourceType());
       props.put("jcr:primaryType", "nt:unstructured");
-      syntheticResource = new SyntheticResource(resourceResolver, resourceMetadata,
-          getComponentResourceType()) {
-        private final ValueMap valueMap = new ValueMapDecorator(props);
-
-        @Override
-        public ValueMap getValueMap() {
-          return valueMap;
-        }
-      };
+      syntheticResource = new ValueMapBackedSyntheticResource(resourceResolver, resourceMetadata,
+          getComponentResourceType(), props);
       if (this instanceof KestrosContainerElement) {
         KestrosContainerElement container = (KestrosContainerElement) this;
         List<KestrosBasicComponentElement> childElements = container.getChildElements();

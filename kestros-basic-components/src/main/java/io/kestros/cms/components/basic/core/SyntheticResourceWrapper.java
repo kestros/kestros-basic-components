@@ -58,7 +58,7 @@ public class SyntheticResourceWrapper extends ResourceWrapper {
    * @return True when both wrap an equal Resource and hold equal children.
    */
   @Override
-  public boolean equals(final Object other) {
+  public boolean equals(@Nullable final Object other) {
     if (this == other) {
       return true;
     }

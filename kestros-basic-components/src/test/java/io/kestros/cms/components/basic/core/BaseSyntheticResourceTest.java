@@ -51,7 +51,8 @@ public class BaseSyntheticResourceTest extends BaseSyntheticTest {
       exception = e;
     }
     assertNotNull(exception);
-    assertEquals("Missing required property", exception.getMessage());
+    assertEquals("Unable to build the alert element: its resource resolver is missing.",
+        exception.getMessage());
   }
 
   @Test
@@ -69,7 +70,8 @@ public class BaseSyntheticResourceTest extends BaseSyntheticTest {
       exception = e;
     }
     assertNotNull(exception);
-    assertEquals("Missing required property", exception.getMessage());
+    assertEquals("Unable to build the alert element: its parent path is missing.",
+        exception.getMessage());
   }
 
   @Test
@@ -78,6 +80,10 @@ public class BaseSyntheticResourceTest extends BaseSyntheticTest {
     resource = mock(Resource.class);
     when(alertStaticDataSource.getResource()).thenReturn(resource);
     when(alertStaticDataSource.getResourceResolver()).thenReturn(context.resourceResolver());
+    // The parent path is read off the data source's Resource, not from getParentPath(), so
+    // stubbing getParentPath alone left it null and this test stopped at the parent-path guard
+    // rather than the variations one it is named for.
+    when(resource.getPath()).thenReturn("/path");
     when(alertStaticDataSource.getParentPath()).thenReturn("/path");
     Exception exception = null;
     try {
@@ -87,7 +93,8 @@ public class BaseSyntheticResourceTest extends BaseSyntheticTest {
       exception = e;
     }
     assertNotNull(exception);
-    assertEquals("Missing required property", exception.getMessage());
+    assertEquals("Unable to build the alert element: its component variations are missing.",
+        exception.getMessage());
   }
 
   @Test
