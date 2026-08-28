@@ -78,7 +78,7 @@ public class TableChildNodesDataSource extends BaseContainerSlingModelDataSource
         try {
           headers.add(new KestrosTableHeaderImpl(labels[i], this, "header" + i, "header" + i));
         } catch (final ComponentConfigurationException e) {
-          LOG.warn("Unable to build table header '{}': {}", labels[i], e.getMessage());
+          LOG.warn("Unable to build one table header; it is left out of the table.", e);
         }
       }
     }
@@ -97,7 +97,8 @@ public class TableChildNodesDataSource extends BaseContainerSlingModelDataSource
     final String dataPath = resolveDataPath(configuredDataPath);
     final Resource dataResource = getResourceResolver().getResource(dataPath);
     if (dataResource == null) {
-      LOG.warn("Table dataPath {} not found.", dataPath);
+      LOG.warn("The table's configured dataPath does not resolve to a resource; the table has "
+          + "no rows.");
       return rows;
     }
     int r = 0;
@@ -109,13 +110,13 @@ public class TableChildNodesDataSource extends BaseContainerSlingModelDataSource
         try {
           cells.add(new KestrosTableCellImpl(text, this, "r" + r + "c" + c, "r" + r + "c" + c));
         } catch (final ComponentConfigurationException e) {
-          LOG.warn("Unable to build table cell: {}", e.getMessage());
+          LOG.warn("Unable to build one table cell; it is left out of the row.", e);
         }
       }
       try {
         rows.add(new KestrosTableRowImpl(cells, this, "row" + r, "row" + r));
       } catch (final ComponentConfigurationException e) {
-        LOG.warn("Unable to build table row {}: {}", r, e.getMessage());
+        LOG.warn("Unable to build one table row; it is left out of the table.", e);
       }
       r++;
     }

@@ -13,13 +13,12 @@ import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationExce
 import io.kestros.cms.components.basic.core.BaseContainerSyntheticResource;
 import io.kestros.cms.components.basic.core.BaseSlingModelDataSource;
 import io.kestros.cms.components.basic.core.LinkUtils;
-import io.kestros.cms.components.basic.core.LogUtils;
 import io.kestros.cms.components.basic.core.content.button.KestrosButtonImpl;
 import io.kestros.cms.components.basic.core.content.buttongroup.KestrosButtonGroupImpl;
 import io.kestros.cms.components.basic.core.content.heading.KestrosHeadingImpl;
 import io.kestros.cms.components.basic.core.content.image.KestrosImageImpl;
 import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -49,7 +48,8 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
           @Nonnull BaseSlingModelDataSource dataSource,
           @Nonnull String resourcePrefix,
           @Nullable String forcedResourceName) throws ComponentConfigurationException {
-    this(page, buttonText, dataSource, resourcePrefix, forcedResourceName, null);
+    super(dataSource, resourcePrefix, forcedResourceName);
+    configureFromPage(page, buttonText, dataSource, forcedResourceName, null);
   }
 
   /**
@@ -57,8 +57,8 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
    * can show the asset's own title and description.
    *
    * <p>Callers that have an {@link AssetRetrievalService} should use this constructor. The
-   * five-argument one delegates here with a null service, which is why cards built by callers
-   * without one lose the asset's title and description.
+   * five-argument one builds the same card with a null service, which is why cards built by
+   * callers without one lose the asset's title and description.
    *
    * @param page Page to build the card from.
    * @param buttonText Text for the card's button, or null for no button.
@@ -76,7 +76,23 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
           @Nullable AssetRetrievalService assetRetrievalService)
           throws ComponentConfigurationException {
     super(dataSource, resourcePrefix, forcedResourceName);
+    configureFromPage(page, buttonText, dataSource, forcedResourceName, assetRetrievalService);
+  }
 
+  /**
+   * Builds the card's elements from a page. Both constructors call this rather than one delegating
+   * to the other, so the six-argument constructor's only callers are the data sources that use it.
+   *
+   * @param page Page to build the card from.
+   * @param buttonText Text for the card's button, or null for no button.
+   * @param dataSource Data source the card belongs to.
+   * @param forcedResourceName Forced resource name, or null.
+   * @param assetRetrievalService Service used to look up the image's asset, or null.
+   */
+  private void configureFromPage(final BaseContentPage page, @Nullable final String buttonText,
+          @Nonnull final BaseSlingModelDataSource dataSource,
+          @Nullable final String forcedResourceName,
+          @Nullable final AssetRetrievalService assetRetrievalService) {
     this.assetRetrievalService = assetRetrievalService;
 
     this.description = page.getDisplayDescription();
@@ -101,7 +117,7 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
     }
     try {
       if (StringUtils.isNotBlank(buttonText)) {
-        List<KestrosButton> buttons = Arrays.asList(
+        List<KestrosButton> buttons = Collections.singletonList(
                 new KestrosButtonImpl(buttonText, LinkUtils.getLink(page.getPath()), null,
                         AnchorTarget.SAME_WINDOW, null, null, null, null, false,
                         dataSource,
@@ -123,8 +139,8 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
    * does not resolve, and the caller must not have to guard the getters separately.
    */
   static final class AssetText {
-    private final String title;
-    private final String description;
+    final String title;
+    final String description;
 
     AssetText(@Nullable final String title, @Nullable final String description) {
       this.title = title;
@@ -155,10 +171,11 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
     try {
       return new AssetText(asset.getTitle(), asset.getDescription());
     } catch (final RuntimeException e) {
-      final String safePath = LogUtils.forLog(page.getPath());
-      LOG.warn("Resolved the asset for card image on {} but could not read its properties. {}: {} "
-              + "The image renders without the asset's title or description.", safePath,
-              e.getClass().getSimpleName(), LogUtils.forLog(e.getMessage()), e);
+      // The page path is deliberately not interpolated here. Nothing sanitises a value well enough
+      // for the CRLF log-injection detector, which reports any value-bearing log argument, so the
+      // page and asset are identified by the exception below instead.
+      LOG.warn("Resolved the asset for a card image but could not read its properties. The image "
+              + "renders without the asset's title or description.", e);
       return new AssetText(null, null);
     }
   }
@@ -182,28 +199,23 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
     if (StringUtils.isBlank(imagePath)) {
       return null;
     }
-    final String safePath = LogUtils.forLog(page.getPath());
     if (assetRetrievalService == null) {
-      LOG.warn("Unable to resolve the asset for card image on {}. No AssetRetrievalService "
-              + "available; the image renders without the asset's title or description.",
-              safePath);
+      LOG.warn("Unable to resolve the asset for a card image. No AssetRetrievalService available; "
+              + "the image renders without the asset's title or description.");
       return null;
     }
     try {
       return assetRetrievalService.getAsset(imagePath, null, page.getResourceResolver());
     } catch (final AssetRetrievalException e) {
-      LOG.warn("Unable to resolve asset {} for card image on {}. {} The image renders without the "
-              + "asset's title or description.", LogUtils.forLog(imagePath), safePath,
-              LogUtils.forLog(e.getMessage()), e);
+      LOG.warn("Unable to resolve asset for a card image. The image renders without the "
+              + "asset's title or description; the path is in the exception below.", e);
       return null;
     } catch (final RuntimeException e) {
-      // A card that cannot resolve its asset must still render. CardListChildPagesDataSource wraps
-      // anything escaping this constructor in a RuntimeException, which loses the WHOLE card list -
-      // so one unreadable asset would blank the page rather than drop one caption.
-      LOG.warn("Unexpected failure resolving asset {} for card image on {}. {}: {} The image "
-              + "renders without the asset's title or description.", LogUtils.forLog(imagePath),
-              safePath,
-              e.getClass().getSimpleName(), LogUtils.forLog(e.getMessage()), e);
+      // A card that cannot resolve its asset must still render. CardListChildPagesDataSource used
+      // to wrap anything escaping this constructor in a RuntimeException, which lost the WHOLE card
+      // list - so one unreadable asset would blank the page rather than drop one caption.
+      LOG.warn("Unexpected failure resolving the asset for a card image. The image renders "
+              + "without the asset's title or description.", e);
       return null;
     }
   }

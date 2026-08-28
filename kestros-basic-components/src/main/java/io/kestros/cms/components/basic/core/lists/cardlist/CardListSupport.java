@@ -23,7 +23,11 @@ import io.kestros.cms.components.basic.core.BaseSlingModelDataSource;
 import io.kestros.cms.components.basic.core.LogUtils;
 import io.kestros.cms.componenttypes.api.models.ComponentVariation;
 import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
+import io.kestros.cms.uiframeworks.api.exceptions.InvalidThemeException;
+import io.kestros.cms.uiframeworks.api.exceptions.ThemeRetrievalException;
+import io.kestros.cms.uiframeworks.api.exceptions.UiFrameworkRetrievalException;
 import io.kestros.cms.uiframeworks.api.models.UiFramework;
+import io.kestros.commons.structuredslingmodels.exceptions.ResourceNotFoundException;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -61,23 +65,67 @@ final class CardListSupport {
    * drop every page for the same reason - which is what the whole-component test is there to
    * catch.
    *
+   * <p>The failure is returned rather than thrown. {@code getCardElements()} cannot declare the
+   * checked exceptions {@code getUiFramework()} raises, because {@code KestrosCardList} does not
+   * declare them, so they have to become unchecked somewhere. Building the unchecked exception here
+   * and throwing it in the caller keeps the caller's throw out of a catch block, which is the shape
+   * SpotBugs reads as softening. The trade is that the stack trace starts at this method rather
+   * than at the throw; the cause is attached, so nothing is lost.
+   *
    * @param dataSource Data source the cards will be built from.
-   * @throws IllegalStateException The component's page has no resolvable UI framework.
+   * @return The failure that stops every card being built, or null when the prerequisites hold.
    */
-  static void requireComponentPrerequisites(@Nonnull final BaseSlingModelDataSource dataSource) {
+  @Nullable
+  static IllegalStateException componentPrerequisiteFailure(
+          @Nonnull final BaseSlingModelDataSource dataSource) {
     final ResourceResolver resourceResolver = dataSource.getResourceResolver();
     final String parentPath = dataSource.getResource().getPath();
     final List<ComponentVariation> variations = dataSource.getElementVariations("cardVariations",
             KestrosCard.RESOURCE_TYPE);
     final String layout = dataSource.getLayout("card");
-    final UiFramework uiFramework = dataSource.getUiFramework();
-    if (uiFramework == null) {
-      throw new IllegalStateException(String.format(
-              "Card list at %s cannot build any card: its page resolves to no UI framework. "
-                      + "hasResourceResolver=%s, cardVariations=%s, cardLayout=%s.",
-              LogUtils.forLog(parentPath), resourceResolver != null, variations.size(),
-              LogUtils.forLog(layout)));
+    final UiFramework uiFramework;
+    try {
+      uiFramework = dataSource.getUiFramework();
+    } catch (final ResourceNotFoundException | InvalidThemeException | ThemeRetrievalException
+            | UiFrameworkRetrievalException e) {
+      return new IllegalStateException(String.format(
+              "Card list at %s cannot build any card: its page's theme cannot be read.",
+              LogUtils.forLog(parentPath)), e);
     }
+    return uiFrameworkMissingFailure(uiFramework, parentPath, resourceResolver != null,
+            variations.size(), layout);
+  }
+
+  /**
+   * Failure for a page that resolved to no UI framework, or null when it resolved to one.
+   *
+   * <p>The value arrives as a parameter rather than being checked where it is read, for the same
+   * reason {@code BaseSyntheticResource} routes its five inputs through {@code requireConfigured}:
+   * {@code getUiFramework()} is annotated {@code @Nonnull}, so a null check written against it
+   * reads as dead code, and the card list tests build a data source whose theme carries no UI
+   * framework and require this to fail. The annotation is a claim about the contract; this is the
+   * guard for a caller who breaks it.
+   *
+   * @param uiFramework UI framework the page resolved to, if any.
+   * @param parentPath Path of the card list component.
+   * @param hasResourceResolver Whether the data source produced a resource resolver.
+   * @param variationCount Number of card variations the data source produced.
+   * @param layout Card layout the data source produced.
+   * @return The failure to raise, or null when there is a UI framework.
+   */
+  @Nullable
+  private static IllegalStateException uiFrameworkMissingFailure(
+          @Nullable final UiFramework uiFramework, @Nullable final String parentPath,
+          final boolean hasResourceResolver, final int variationCount,
+          @Nullable final String layout) {
+    if (uiFramework != null) {
+      return null;
+    }
+    return new IllegalStateException(String.format(
+            "Card list at %s cannot build any card: its page resolves to no UI framework. "
+                    + "hasResourceResolver=%s, cardVariations=%s, cardLayout=%s.",
+            LogUtils.forLog(parentPath), hasResourceResolver, variationCount,
+            LogUtils.forLog(layout)));
   }
 
   /**

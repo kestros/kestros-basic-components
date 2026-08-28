@@ -33,13 +33,34 @@ public enum AnchorTarget {
   @Nonnull
   public static AnchorTarget lookup(@Nullable String targetValue) {
     if (targetValue != null) {
+      // Folded to ASCII rather than compared with equalsIgnoreCase. Every target value is an
+      // ASCII token like "_blank", and Unicode case mapping is locale-dependent and can change a
+      // string's length, so it is the wrong tool for matching an author's property to a constant.
+      final String candidate = toAsciiLowerCase(targetValue);
       for (AnchorTarget anchorTarget : values()) {
-        if (anchorTarget.getTargetValue().equalsIgnoreCase(targetValue)) {
+        if (anchorTarget.getTargetValue().equals(candidate)) {
           return anchorTarget;
         }
       }
     }
     return SAME_WINDOW;
+  }
+
+  /**
+   * Lowercases the ASCII letters in a value and leaves every other character alone.
+   *
+   * @param value Value to fold.
+   * @return The value with A-Z folded to a-z.
+   */
+  @Nonnull
+  private static String toAsciiLowerCase(@Nonnull final String value) {
+    final char[] characters = value.toCharArray();
+    for (int index = 0; index < characters.length; index++) {
+      if (characters[index] >= 'A' && characters[index] <= 'Z') {
+        characters[index] += 'a' - 'A';
+      }
+    }
+    return new String(characters);
   }
 
   /**

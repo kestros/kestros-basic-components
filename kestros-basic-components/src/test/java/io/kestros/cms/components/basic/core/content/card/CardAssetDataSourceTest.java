@@ -3,10 +3,13 @@ package io.kestros.cms.components.basic.core.content.card;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import io.kestros.cms.assets.api.exceptions.AssetCollectionRetrievalException;
 import io.kestros.cms.components.basic.api.content.KestrosCard;
 import io.kestros.cms.components.basic.core.BaseDataSourceTest;
+import io.kestros.cms.uiframeworks.api.exceptions.UiFrameworkRetrievalException;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.sling.api.resource.Resource;
@@ -76,6 +79,21 @@ public class CardAssetDataSourceTest extends BaseDataSourceTest {
     registerAssetRetrievalService();
     cardAssetDataSource = context.request().adaptTo(CardAssetDataSource.class);
     assertNotNull(cardAssetDataSource.getAsset());
+  }
+
+  /**
+   * getImageElement is declared @Nullable and already returns null when there is no asset, but an
+   * image that could not be configured was rethrown as a RuntimeException and failed the render.
+   */
+  @Test
+  public void testElementsReturnNullRatherThanThrowWhenTheyCannotBeConfigured() throws Exception {
+    registerAssetRetrievalService();
+    when(theme.getUiFramework()).thenThrow(mock(UiFrameworkRetrievalException.class));
+    cardAssetDataSource = context.request().adaptTo(CardAssetDataSource.class);
+
+    assertNotNull(cardAssetDataSource.getAsset());
+    assertNull(cardAssetDataSource.getTitleElement());
+    assertNull(cardAssetDataSource.getImageElement());
   }
 
 }

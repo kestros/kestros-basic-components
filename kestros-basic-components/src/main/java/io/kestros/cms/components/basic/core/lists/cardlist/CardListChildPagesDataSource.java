@@ -1,10 +1,7 @@
 package io.kestros.cms.components.basic.core.lists.cardlist;
 
 import io.kestros.cms.assets.api.services.AssetRetrievalService;
-import io.kestros.cms.components.basic.api.content.KestrosButton;
-import io.kestros.cms.components.basic.api.content.KestrosButtonGroup;
 import io.kestros.cms.components.basic.api.content.KestrosCard;
-import io.kestros.cms.components.basic.api.content.KestrosImage;
 import io.kestros.cms.components.basic.api.lists.KestrosCardList;
 import io.kestros.cms.components.basic.core.BaseContainerSlingModelDataSource;
 import io.kestros.cms.components.basic.core.content.card.KestrosCardImpl;
@@ -12,7 +9,6 @@ import io.kestros.cms.sitebuilding.api.models.BaseComponent;
 import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
 import io.kestros.commons.structuredslingmodels.exceptions.NoValidAncestorException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -38,21 +34,30 @@ public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSou
 
   private BaseContentPage rootPage;
 
+  /**
+   * Page whose children are rendered as cards.
+   *
+   * @return The configured pagesPath as a page, else the containing page, or null when neither
+   *     resolves.
+   */
+  @Nullable
   BaseContentPage getRootPage() {
     if (rootPage == null) {
       String pagesPath = getResource().getValueMap().get("pagesPath", String.class);
       if (pagesPath != null) {
         Resource pageResource = getResourceResolver().getResource(pagesPath);
         if (pageResource != null) {
-          try {
-            rootPage = pageResource.adaptTo(BaseContentPage.class);
-          } catch (Exception e) {
-            return null;
-          }
+          rootPage = pageResource.adaptTo(BaseContentPage.class);
         }
       } else {
+        // adaptTo returns null for a resource with no BaseComponent adapter; dereferencing it
+        // threw NullPointerException out of a method every caller treats as returning null.
+        BaseComponent component = getResource().adaptTo(BaseComponent.class);
+        if (component == null) {
+          return null;
+        }
         try {
-          rootPage = getResource().adaptTo(BaseComponent.class).getContainingPage();
+          rootPage = component.getContainingPage();
         } catch (NoValidAncestorException e) {
           return null;
         }
@@ -73,12 +78,17 @@ public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSou
     if (root == null) {
       return new ArrayList<>();
     }
-    CardListSupport.requireComponentPrerequisites(this);
+    // Every card in this list shares these prerequisites, so a failure among them belongs to the
+    // whole component and must surface rather than render an empty list.
+    IllegalStateException prerequisiteFailure = CardListSupport.componentPrerequisiteFailure(this);
+    if (prerequisiteFailure != null) {
+      throw prerequisiteFailure;
+    }
     List<BaseContentPage> pages = new ArrayList<>(root.getChildPages());
 
     String sortBy = getResource().getValueMap().get("sortBy", "");
-    boolean reverse = getResource().getValueMap().get("reverse", false);
-    int limit = 0;
+    boolean reverse = getResource().getValueMap().get("reverse", Boolean.FALSE);
+    int limit;
     try {
       limit = Integer.parseInt(getResource().getValueMap().get("limit", "0"));
     } catch (NumberFormatException e) {
@@ -88,30 +98,16 @@ public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSou
     if (!sortBy.isEmpty()) {
       switch (sortBy) {
         case "createdDate":
-          pages.sort(Comparator.comparing(p -> {
-            Calendar cal = p.getResource().getChild("jcr:content") != null
-                ? p.getResource().getChild("jcr:content").getValueMap()
-                    .get("jcr:created", Calendar.class) : null;
-            return cal != null ? cal.getTimeInMillis() : 0L;
-          }));
+          pages.sort(Comparator.comparing(CardListChildPagesDataSource::getCreatedTime));
           break;
         case "lastModified":
-          pages.sort(Comparator.comparing(p -> {
-            Calendar cal = p.getResource().getChild("jcr:content") != null
-                ? p.getResource().getChild("jcr:content").getValueMap()
-                    .get("jcr:lastModified", Calendar.class) : null;
-            return cal != null ? cal.getTimeInMillis() : 0L;
-          }));
+          pages.sort(Comparator.comparing(CardListChildPagesDataSource::getModifiedTime));
+          break;
+        case "name":
+          pages.sort(Comparator.comparing(BaseContentPage::getName));
           break;
         default:
-          pages.sort(Comparator.comparing(p -> {
-            switch (sortBy) {
-              case "name":
-                return p.getName() != null ? p.getName() : "";
-              default:
-                return p.getDisplayTitle() != null ? p.getDisplayTitle() : p.getName();
-            }
-          }));
+          pages.sort(Comparator.comparing(BaseContentPage::getDisplayTitle));
           break;
       }
     }
@@ -123,7 +119,7 @@ public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSou
       pages = pages.subList(0, limit);
     }
 
-    List<KestrosCard> cards = new ArrayList<>();
+    List<KestrosCard> cards = new ArrayList<>(pages.size());
     for (BaseContentPage page : pages) {
       try {
         cards.add(
@@ -131,15 +127,6 @@ public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSou
                 getReadMoreText(),
                 this,
                 "card",
-//                getElementVariations("titleVariations", KestrosImage.RESOURCE_TYPE),
-//                getLayout("title"),
-//                getElementVariations("imageVariations", KestrosImage.RESOURCE_TYPE),
-//                getLayout("image"),
-//                getElementVariations("buttonGroupVariations", KestrosButtonGroup.RESOURCE_TYPE),
-//                getLayout("buttonGroupLayout"),
-//                getElementVariations("buttonVariations", KestrosButton.RESOURCE_TYPE),
-//                getLayout("button"),
-//                null,
                 page.getName(),
                 assetRetrievalService));
       } catch (Exception e) {
@@ -148,7 +135,7 @@ public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSou
         CardListSupport.logSkippedCard(LOG, page, getResource().getPath(), e);
       }
     }
-    return new ArrayList<>(cards);
+    return cards;
   }
 
 }

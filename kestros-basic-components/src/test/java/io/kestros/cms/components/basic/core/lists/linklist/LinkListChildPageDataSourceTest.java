@@ -2,11 +2,14 @@ package io.kestros.cms.components.basic.core.lists.linklist;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import io.kestros.cms.assets.api.exceptions.AssetCollectionRetrievalException;
 import io.kestros.cms.components.basic.api.content.KestrosLink;
 import io.kestros.cms.components.basic.api.lists.KestrosLinkList;
 import io.kestros.cms.components.basic.core.BaseDataSourceTest;
+import io.kestros.cms.uiframeworks.api.exceptions.UiFrameworkRetrievalException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -241,5 +244,23 @@ public class LinkListChildPageDataSourceTest extends BaseDataSourceTest {
   @Test
   public void testGetLinkElementsSortByTitle() {
     assertEquals(3, adaptWithSort("title", "comp-title").getLinkElements().size());
+  }
+
+  /**
+   * A page whose link could not be configured was rethrown as a RuntimeException, losing every
+   * link in the list rather than the one that failed.
+   */
+  @Test
+  public void testGetLinkElements_whenLinksCannotBeConfigured_returnsEmptyListNotThrows()
+          throws Exception {
+    when(theme.getUiFramework()).thenThrow(mock(UiFrameworkRetrievalException.class));
+    resource = context.create().resource("/content/page/jcr:content/no-framework", properties);
+    context.request().setResource(resource);
+
+    List<KestrosLink> links =
+            context.request().adaptTo(LinkListChildPageDataSource.class).getLinkElements();
+
+    assertNotNull(links);
+    assertEquals(0, links.size());
   }
 }

@@ -8,6 +8,7 @@ import io.kestros.cms.componenttypes.api.services.ComponentUiFrameworkViewRetrie
 import io.kestros.cms.componenttypes.api.services.ComponentVariationRetrievalService;
 import io.kestros.cms.sitebuilding.api.models.DataSourceComponent;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Nonnull;
@@ -100,19 +101,13 @@ public abstract class BaseDataSourceComponent<T extends KestrosBasicComponentEle
       Map<String, Object> props = objectMapper.convertValue(this, Map.class);
       props.put("sling:resourceType", getComponentResourceType());
       props.put("jcr:primaryType", "nt:unstructured");
-      syntheticResource = new SyntheticResource(resourceResolver, resourceMetadata,
-          getComponentResourceType()) {
-        private final ValueMap valueMap = new ValueMapDecorator(props);
-
-        @Override
-        public ValueMap getValueMap() {
-          return valueMap;
-        }
-      };
+      syntheticResource = new ValueMapBackedSyntheticResource(resourceResolver, resourceMetadata,
+          getComponentResourceType(), props);
       if (this instanceof KestrosContainerElement) {
         KestrosContainerElement container = (KestrosContainerElement) this;
         List<KestrosBasicComponentElement> childElements = container.getChildElements();
-        Map<String, Resource> childResources = new HashMap<>(childElements.size());
+        Map<String, Resource> childResources =
+            new LinkedHashMap<>((int) (childElements.size() / 0.75f) + 1);
         for (KestrosBasicComponentElement child : childElements) {
           Resource childSyntheticResource = child.toSyntheticResource(resourceResolver,
               syntheticResource.getPath());

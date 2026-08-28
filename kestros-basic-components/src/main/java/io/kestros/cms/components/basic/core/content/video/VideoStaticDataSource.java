@@ -20,11 +20,24 @@ public class VideoStaticDataSource extends BaseSlingModelDataSource implements K
   @Optional
   private AssetRetrievalService assetRetrievalService;
 
+  /**
+   * Path the video is served from.
+   *
+   * <p>Guarded on the asset. With no AssetRetrievalService bound, getVideoAsset() returns null
+   * and this used to dereference it, so a video component on an instance without the asset
+   * service threw instead of falling back to its fallback text.
+   *
+   * @return Path of the video asset, or null when it cannot be resolved.
+   */
   @Nullable
   @Override
   public String getVideoSource() {
     try {
-      return getVideoAsset().getPath();
+      final Asset videoAsset = getVideoAsset();
+      if (videoAsset == null) {
+        return null;
+      }
+      return videoAsset.getPath();
     } catch (AssetRetrievalException e) {
       return null;
     }
@@ -36,10 +49,12 @@ public class VideoStaticDataSource extends BaseSlingModelDataSource implements K
     return getResource().getValueMap().get("fallbackText", StringUtils.EMPTY);
   }
 
+  @Nullable
   String getVideoPath() {
     return getResource().getValueMap().get("videoPath", String.class);
   }
 
+  @Nullable
   Asset getVideoAsset() throws AssetRetrievalException {
     if (assetRetrievalService != null) {
       return assetRetrievalService.getAsset(getVideoPath(), null, getResourceResolver());
