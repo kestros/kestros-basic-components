@@ -2,7 +2,6 @@ package io.kestros.cms.components.basic.core.lists.cardlist;
 
 import io.kestros.cms.assets.api.services.AssetRetrievalService;
 import io.kestros.cms.components.basic.api.content.KestrosCard;
-import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.components.basic.api.lists.KestrosCardList;
 import io.kestros.cms.components.basic.core.BaseContainerSlingModelDataSource;
 import io.kestros.cms.components.basic.core.content.card.KestrosCardImpl;
