@@ -3,9 +3,15 @@ package io.kestros.cms.components.basic.core;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import io.kestros.cms.assets.api.exceptions.AssetCollectionRetrievalException;
 import io.kestros.cms.components.basic.core.content.alert.AlertStaticDataSource;
+import io.kestros.cms.uiframeworks.api.exceptions.InvalidThemeException;
+import io.kestros.cms.uiframeworks.api.exceptions.ThemeRetrievalException;
+import io.kestros.cms.uiframeworks.api.exceptions.UiFrameworkRetrievalException;
+import io.kestros.commons.structuredslingmodels.exceptions.ResourceNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.sling.api.resource.Resource;
@@ -90,8 +96,29 @@ public class BaseSlingModelDataSourceTest extends BaseDataSourceTest {
   }
 
   @Test
+  public void testGetParentPathWhenResourceHasNoParent() {
+    resource = context.resourceResolver().getResource("/");
+    context.request().setResource(resource);
+    alert = context.request().adaptTo(AlertStaticDataSource.class);
+    try {
+      alert.getParentPath();
+      fail("Expected IllegalStateException when the Resource has no parent.");
+    } catch (IllegalStateException exception) {
+      assertEquals("Resource / has no parent.", exception.getMessage());
+    }
+  }
+
+  @Test
   public void testGetVariations() {
 
+  }
+
+  @Test
+  public void testGetVariationsWhenResourceDoesNotAdaptToComponent() {
+    resource = context.resourceResolver().getResource("/");
+    context.request().setResource(resource);
+    alert = context.request().adaptTo(AlertStaticDataSource.class);
+    assertTrue(alert.getVariations().isEmpty());
   }
 
   @Test
@@ -103,7 +130,8 @@ public class BaseSlingModelDataSourceTest extends BaseDataSourceTest {
   }
 
   @Test
-  public void testGetUiFramework() {
+  public void testGetUiFramework() throws ResourceNotFoundException, InvalidThemeException,
+      ThemeRetrievalException, UiFrameworkRetrievalException {
     resource = context.create().resource("/content/sites/test/jcr:content/alert/static/heading",
         properties);
     context.request().setResource(resource);
@@ -112,7 +140,8 @@ public class BaseSlingModelDataSourceTest extends BaseDataSourceTest {
   }
 
   @Test
-  public void testGetUiFrameworkWhenNoRequest() {
+  public void testGetUiFrameworkWhenNoRequest() throws ResourceNotFoundException,
+      InvalidThemeException, ThemeRetrievalException, UiFrameworkRetrievalException {
     resource = context.create().resource("/content/sites/test/jcr:content/alert/static/heading",
         properties);
     alert = resource.adaptTo(AlertStaticDataSource.class);

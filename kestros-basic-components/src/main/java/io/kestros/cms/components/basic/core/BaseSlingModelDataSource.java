@@ -9,8 +9,12 @@ import io.kestros.cms.componenttypes.api.services.ComponentVariationRetrievalSer
 import io.kestros.cms.sitebuilding.api.models.BaseComponent;
 import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
 import io.kestros.cms.sitebuilding.api.models.ComponentRequestContext;
+import io.kestros.cms.uiframeworks.api.exceptions.InvalidThemeException;
+import io.kestros.cms.uiframeworks.api.exceptions.ThemeRetrievalException;
+import io.kestros.cms.uiframeworks.api.exceptions.UiFrameworkRetrievalException;
 import io.kestros.cms.uiframeworks.api.models.UiFramework;
 import io.kestros.commons.structuredslingmodels.exceptions.NoValidAncestorException;
+import io.kestros.commons.structuredslingmodels.exceptions.ResourceNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -42,20 +46,31 @@ public abstract class BaseSlingModelDataSource
   @OSGiService
   private ComponentUiFrameworkViewRetrievalService componentUiFrameworkViewRetrievalService;
 
-  private Resource syntheticResource;
-
   @Nullable
   public String getId() {
     return getResource().getValueMap().get("id", String.class);
   }
 
+  @Nonnull
   public Boolean isSynthetic() {
-    return false;
+    return Boolean.FALSE;
   }
 
+  /**
+   * Resource this data source was adapted from.
+   *
+   * @return Resource this data source was adapted from.
+   * @throws IllegalStateException when the model was adapted from neither a Resource nor a
+   *     request.
+   */
+  @Nonnull
   public Resource getResource() {
     if (resource == null && slingHttpServletRequest != null) {
       return slingHttpServletRequest.getResource();
+    }
+    if (resource == null) {
+      throw new IllegalStateException(
+          "Unable to resolve Resource: model was adapted from neither a Resource nor a request.");
     }
     return resource;
   }
@@ -65,7 +80,13 @@ public abstract class BaseSlingModelDataSource
     return slingHttpServletRequest;
   }
 
+  /**
+   * Page the component is being rendered on, or the page that contains it.
+   *
+   * @return Page the component is being rendered on, or null when neither can be resolved.
+   */
   @JsonIgnore
+  @Nullable
   public BaseContentPage getCurrentOrContainingPage() {
     BaseContentPage currentPage = null;
     if (slingHttpServletRequest != null) {
@@ -81,22 +102,36 @@ public abstract class BaseSlingModelDataSource
         if (component != null) {
           currentPage = component.getContainingPage();
         }
-      } catch (NoValidAncestorException e) {
-        throw new RuntimeException(e);
+      } catch (NoValidAncestorException exception) {
+        return null;
       }
     }
     return currentPage;
   }
 
 
+  @Nonnull
   public ResourceResolver getResourceResolver() {
     return getResource().getResourceResolver();
   }
 
+  /**
+   * Path of the containing Resource.
+   *
+   * @return Path of the containing Resource.
+   * @throws IllegalStateException when the Resource has no parent.
+   */
+  @Nonnull
   public String getParentPath() {
-    return getResource().getParent().getPath();
+    Resource parent = getResource().getParent();
+    if (parent == null) {
+      throw new IllegalStateException(
+          String.format("Resource %s has no parent.", getResource().getPath()));
+    }
+    return parent.getPath();
   }
 
+  @Nonnull
   public List<ComponentVariation> getVariations() {
     // TODO verify this.
     List<Map<String, Object>> variationsMapList = getResource().getValueMap()
@@ -121,9 +156,14 @@ public abstract class BaseSlingModelDataSource
       }
       return variations;
     }
-    return getResource().adaptTo(BaseComponent.class).getAppliedVariations();
+    BaseComponent component = getResource().adaptTo(BaseComponent.class);
+    if (component == null) {
+      return new ArrayList<>();
+    }
+    return component.getAppliedVariations();
   }
 
+  @Nonnull
   public String getLayout() {
     return getResource().getValueMap().get("layout", "default");
   }
@@ -135,18 +175,25 @@ public abstract class BaseSlingModelDataSource
     return getResource().getName();
   }
 
-  public UiFramework getUiFramework() {
-    try {
-      if (slingHttpServletRequest != null) {
-        return slingHttpServletRequest.adaptTo(ComponentRequestContext.class).getCurrentPage()
-            .getTheme().getUiFramework();
-      } else {
-        return getResource().adaptTo(BaseComponent.class).getContainingPage().getTheme()
-            .getUiFramework();
-      }
-    } catch (Exception e) {
-      throw new RuntimeException(e);
+  /**
+   * UiFramework the current or containing page is themed with.
+   *
+   * @return UiFramework the current or containing page is themed with.
+   * @throws IllegalStateException when no current or containing page can be resolved.
+   * @throws ResourceNotFoundException when the page's Theme cannot be retrieved.
+   * @throws InvalidThemeException when the page's Theme is not valid.
+   * @throws UiFrameworkRetrievalException when the Theme's UiFramework cannot be retrieved.
+   * @throws ThemeRetrievalException when the page's Theme cannot be retrieved.
+   */
+  @Nonnull
+  public UiFramework getUiFramework() throws ResourceNotFoundException, InvalidThemeException,
+      UiFrameworkRetrievalException, ThemeRetrievalException {
+    BaseContentPage page = getCurrentOrContainingPage();
+    if (page == null) {
+      throw new IllegalStateException(
+          "Unable to resolve a current or containing page to read the UiFramework from.");
     }
+    return page.getTheme().getUiFramework();
   }
 
   @Nonnull
