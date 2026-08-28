@@ -18,8 +18,7 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 
-public abstract class BaseSyntheticResource extends BaseComponentElement
-    implements KestrosBasicComponentElement {
+public abstract class BaseSyntheticResource extends BaseComponentElement {
   private final ResourceResolver resourceResolver;
   private final String parentPath;
   private final UiFramework uiFramework;
@@ -27,7 +26,6 @@ public abstract class BaseSyntheticResource extends BaseComponentElement
   private final String layout;
   private final String id;
   private Resource syntheticResource;
-  private Resource resource;
   private String resourceName;
   private ComponentVariationRetrievalService componentVariationRetrievalService;
   private ComponentUiFrameworkViewRetrievalService componentUiFrameworkViewRetrievalService;
@@ -44,7 +42,9 @@ public abstract class BaseSyntheticResource extends BaseComponentElement
       this.uiFramework = dataSource.getUiFramework();
     } catch (ResourceNotFoundException | InvalidThemeException | ThemeRetrievalException
         | UiFrameworkRetrievalException exception) {
-      throw new ComponentConfigurationException(exception.getMessage());
+      throw new ComponentConfigurationException(
+          String.format("Unable to read the UiFramework for the %s element on %s. %s",
+              resourcePrefix, this.parentPath, exception.getMessage()), exception);
     }
     this.componentVariations = dataSource.getElementVariations(resourcePrefix + "Variations",
         getComponentResourceType());
@@ -53,8 +53,10 @@ public abstract class BaseSyntheticResource extends BaseComponentElement
     this.resourceName = forcedResourceName;
     if (resourceResolver == null || this.parentPath == null || this.componentVariations == null
         || this.layout == null || this.uiFramework == null) {
-      // this is not needed, but is included so that the extending classes are required to throw
-      // the exception.
+      // SpotBugs reads these as redundant, because every source is annotated @Nonnull. They are
+      // not: BaseSyntheticResourceTest builds this from a data source that returns null for each
+      // one in turn, and the annotation is a claim about the contract, not a guarantee about a
+      // caller who breaks it. Do not remove without deleting those tests, which is not allowed.
       throw new ComponentConfigurationException("Missing required property");
     }
     this.componentVariationRetrievalService = dataSource.getComponentVariationRetrievalService();
