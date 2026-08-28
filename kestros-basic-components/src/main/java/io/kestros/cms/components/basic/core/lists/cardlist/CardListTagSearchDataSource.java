@@ -165,6 +165,7 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
   @Nonnull
   @Override
   public List<KestrosCard> getCardElements() {
+    CardListSupport.requireComponentPrerequisites(this);
     List<BaseContentPage> pages = new ArrayList<>(getTaggedPages());
 
     String sortBy = getResource().getValueMap().get("sortBy", "");
@@ -210,8 +211,10 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
                 "card",
                 page.getName(),
                 assetRetrievalService));
-      } catch (ComponentConfigurationException e) {
-        LOG.warn("Unable to build a card for one tagged page; it is left out of the list.", e);
+      } catch (Exception e) {
+        // The prerequisites every card shares were checked above, so this failure belongs to this
+        // page. Skipping in silence is what hid this for months; say which page went and why.
+        CardListSupport.logSkippedCard(LOG, page, getResource().getPath(), e);
       }
     }
     return cards;

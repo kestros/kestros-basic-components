@@ -211,8 +211,9 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
               + "asset's title or description; the path is in the exception below.", e);
       return null;
     } catch (final RuntimeException e) {
-      // A card that cannot resolve its asset must still render. One unreadable asset would
-      // otherwise blank the page rather than drop one caption.
+      // A card that cannot resolve its asset must still render. CardListChildPagesDataSource used
+      // to wrap anything escaping this constructor in a RuntimeException, which lost the WHOLE card
+      // list - so one unreadable asset would blank the page rather than drop one caption.
       LOG.warn("Unexpected failure resolving the asset for a card image. The image renders "
               + "without the asset's title or description.", e);
       return null;

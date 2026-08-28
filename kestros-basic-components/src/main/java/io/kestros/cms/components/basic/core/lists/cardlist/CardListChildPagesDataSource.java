@@ -79,6 +79,7 @@ public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSou
     if (root == null) {
       return new ArrayList<>();
     }
+    CardListSupport.requireComponentPrerequisites(this);
     List<BaseContentPage> pages = new ArrayList<>(root.getChildPages());
 
     String sortBy = getResource().getValueMap().get("sortBy", "");
@@ -124,10 +125,10 @@ public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSou
                 "card",
                 page.getName(),
                 assetRetrievalService));
-      } catch (ComponentConfigurationException e) {
-        // Wrapping this in a RuntimeException lost the whole card list over one unbuildable page,
-        // which is what KestrosCardImpl's asset lookup was already working around.
-        LOG.warn("Unable to build a card for one child page; it is left out of the list.", e);
+      } catch (Exception e) {
+        // The prerequisites every card shares were checked above, so this failure belongs to this
+        // page. Drop the page, keep the rest of the list, and say which page went and why.
+        CardListSupport.logSkippedCard(LOG, page, getResource().getPath(), e);
       }
     }
     return cards;
