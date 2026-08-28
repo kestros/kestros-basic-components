@@ -57,7 +57,7 @@ public class TopNavigationDataSourceComponent
   @Nullable
   @Override
   public KestrosImage getImageElement() {
-      if (logo == null) {
+    if (logo == null) {
       logo = getComponentData().getImageElement();
     }
     return logo;

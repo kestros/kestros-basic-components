@@ -102,8 +102,9 @@ public abstract class BaseComponentElement implements KestrosBasicComponentEleme
         }
       }
     } catch (final ModelAdaptionException exception) {
+      // No variations can be resolved for this component, so none are applied.
     } catch (final ComponentViewRetrievalException e) {
-
+      // No variations can be resolved for this component, so none are applied.
     }
     return new ArrayList<>(appliedVariations);
   }

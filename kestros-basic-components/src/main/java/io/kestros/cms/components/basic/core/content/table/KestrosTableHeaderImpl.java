@@ -28,7 +28,8 @@ import javax.annotation.Nullable;
 /**
  * Programmatic (synthetic) {@link KestrosTableHeader}, letting a datasource build table headers in
  * code rather than from authored resources. Mirrors
- * {@link io.kestros.cms.components.basic.core.content.heading.KestrosHeadingImpl} (a text-only leaf).
+ * {@link io.kestros.cms.components.basic.core.content.heading.KestrosHeadingImpl} (a text-only
+ * leaf).
  */
 public class KestrosTableHeaderImpl extends BaseSyntheticResource implements KestrosTableHeader {
 

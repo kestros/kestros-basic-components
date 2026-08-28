@@ -40,6 +40,7 @@ public interface KestrosBreadCrumb extends KestrosLink {
    * @return Whether this is the first crumb in the trail.
    */
   Boolean isFirstItem();
+
   /**
    * Whether this is the last crumb in the trail.
    *

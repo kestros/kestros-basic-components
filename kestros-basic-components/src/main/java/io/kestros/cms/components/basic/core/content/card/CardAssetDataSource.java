@@ -117,7 +117,7 @@ public class CardAssetDataSource extends BaseContainerSlingModelDataSource imple
 
   @Nullable
   Asset getAsset() {
-    if(assetRetrievalService == null) {
+    if (assetRetrievalService == null) {
       return null;
     }
     if (asset == null) {

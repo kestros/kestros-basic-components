@@ -46,8 +46,8 @@ import org.apache.sling.models.annotations.injectorspecific.OSGiService;
  * Datasource that builds card list entries from the child pages of the configured page.
  */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
-public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSource implements
-                                                                                    KestrosCardList {
+public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSource
+    implements KestrosCardList {
 
   @OSGiService
   @Optional
@@ -152,15 +152,16 @@ public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSou
                 getReadMoreText(),
                 this,
                 "card",
-//                getElementVariations("titleVariations", KestrosImage.RESOURCE_TYPE),
-//                getLayout("title"),
-//                getElementVariations("imageVariations", KestrosImage.RESOURCE_TYPE),
-//                getLayout("image"),
-//                getElementVariations("buttonGroupVariations", KestrosButtonGroup.RESOURCE_TYPE),
-//                getLayout("buttonGroupLayout"),
-//                getElementVariations("buttonVariations", KestrosButton.RESOURCE_TYPE),
-//                getLayout("button"),
-//                null,
+                //  getElementVariations("titleVariations", KestrosImage.RESOURCE_TYPE),
+                //  getLayout("title"),
+                //  getElementVariations("imageVariations", KestrosImage.RESOURCE_TYPE),
+                //  getLayout("image"),
+                //  getElementVariations("buttonGroupVariations",
+                //      KestrosButtonGroup.RESOURCE_TYPE),
+                //  getLayout("buttonGroupLayout"),
+                //  getElementVariations("buttonVariations", KestrosButton.RESOURCE_TYPE),
+                //  getLayout("button"),
+                //  null,
                 page.getName(),
                 assetRetrievalService));
       } catch (Exception e) {

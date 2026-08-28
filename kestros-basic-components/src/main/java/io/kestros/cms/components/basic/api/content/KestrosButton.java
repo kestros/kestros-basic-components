@@ -36,6 +36,8 @@ public interface KestrosButton extends KestrosLink {
 
   /**
    * Whether the link is disabled. Disabled links should not have an href.
+   *
+   * @return Whether the link is disabled.
    */
   boolean isDisabled();
 }

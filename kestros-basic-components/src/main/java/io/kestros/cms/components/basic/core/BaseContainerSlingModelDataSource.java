@@ -45,10 +45,11 @@ public abstract class BaseContainerSlingModelDataSource extends BaseSlingModelDa
     return children;
   }
 
-  public <T extends KestrosBasicComponentElement> List<T> getChildrenAsType(String resourceType, Class<T> clazz) {
+  public <T extends KestrosBasicComponentElement> List<T> getChildrenAsType(String resourceType,
+      Class<T> clazz) {
     List<T> items = new ArrayList<>();
     for (Resource childResource : getResource().getChildren()) {
-      if(childResource.isResourceType(resourceType) == false) {
+      if (!childResource.isResourceType(resourceType)) {
         continue;
       }
       T item = childResource.adaptTo(clazz);

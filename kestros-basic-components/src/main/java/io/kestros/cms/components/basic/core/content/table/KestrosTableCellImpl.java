@@ -31,10 +31,11 @@ import javax.annotation.Nullable;
 /**
  * Programmatic (synthetic) {@link KestrosTableCell}, letting a datasource build table cells in code
  * rather than from authored child resources. Mirrors
- * {@link io.kestros.cms.components.basic.core.content.card.KestrosCardImpl}. A cell is either simple
- * text or a list of rendered content elements (e.g. a link or image).
+ * {@link io.kestros.cms.components.basic.core.content.card.KestrosCardImpl}. A cell is either
+ * simple text or a list of rendered content elements (e.g. a link or image).
  */
-public class KestrosTableCellImpl extends BaseContainerSyntheticResource implements KestrosTableCell {
+public class KestrosTableCellImpl extends BaseContainerSyntheticResource
+    implements KestrosTableCell {
 
   private final String text;
   private final List<KestrosBasicComponentElement> cellContentElements;

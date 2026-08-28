@@ -31,7 +31,8 @@ import org.apache.sling.api.resource.Resource;
 /**
  * Synthetic resource for an element that holds other elements.
  */
-public abstract class BaseContainerSyntheticResource extends BaseSyntheticResource implements KestrosContainerElement {
+public abstract class BaseContainerSyntheticResource extends BaseSyntheticResource
+    implements KestrosContainerElement {
 
   public BaseContainerSyntheticResource(
       @Nonnull BaseSlingModelDataSource dataSource,

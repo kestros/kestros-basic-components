@@ -38,18 +38,20 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Data-driven {@link KestrosTable} datasource: renders a table from a collection of structured data
- * nodes, mirroring {@link io.kestros.cms.components.basic.core.lists.cardlist.CardListChildPagesDataSource}
+ * nodes, mirroring
+ * {@link io.kestros.cms.components.basic.core.lists.cardlist.CardListChildPagesDataSource}
  * (which renders cards from child pages).
  *
  * <p>Configured on the component with:
  * <ul>
  *   <li>{@code dataPath} — path to the container whose child nodes are the rows.</li>
- *   <li>{@code columns} — ordered property names read from each data node into the row's cells.</li>
+ *   <li>{@code columns} — ordered property names read from each data node into the row's
+ *       cells.</li>
  *   <li>{@code headers} — ordered header labels (optional).</li>
  * </ul>
  * Rows/cells/headers are built programmatically as synthetic elements
- * ({@link KestrosTableRowImpl}/{@link KestrosTableCellImpl}/{@link KestrosTableHeaderImpl}) and fed to
- * the stock table component.
+ * ({@link KestrosTableRowImpl}/{@link KestrosTableCellImpl}/{@link KestrosTableHeaderImpl}) and
+ * fed to the stock table component.
  */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class TableChildNodesDataSource extends BaseContainerSlingModelDataSource

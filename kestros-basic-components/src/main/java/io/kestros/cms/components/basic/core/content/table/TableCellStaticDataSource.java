@@ -51,7 +51,9 @@ public class TableCellStaticDataSource extends BaseContainerSlingModelDataSource
   @Override
   public List<KestrosBasicComponentElement> getCellContentElements() {
     List<KestrosBasicComponentElement> cellContentElements = new ArrayList<>();
-    // This should never get hit, since we can just look to child resources instead of synthesizing them, but we need to return something here to satisfy the interface contract.
+    // This should never get hit, since we can just look to child resources instead of
+    // synthesizing them, but we need to return something here to satisfy the interface
+    // contract.
     return new ArrayList<>();
   }
 
