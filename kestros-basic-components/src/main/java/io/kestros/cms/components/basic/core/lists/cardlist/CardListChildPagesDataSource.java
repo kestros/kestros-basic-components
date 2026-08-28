@@ -78,7 +78,12 @@ public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSou
     if (root == null) {
       return new ArrayList<>();
     }
-    CardListSupport.requireComponentPrerequisites(this);
+    // Every card in this list shares these prerequisites, so a failure among them belongs to the
+    // whole component and must surface rather than render an empty list.
+    IllegalStateException prerequisiteFailure = CardListSupport.componentPrerequisiteFailure(this);
+    if (prerequisiteFailure != null) {
+      throw prerequisiteFailure;
+    }
     List<BaseContentPage> pages = new ArrayList<>(root.getChildPages());
 
     String sortBy = getResource().getValueMap().get("sortBy", "");

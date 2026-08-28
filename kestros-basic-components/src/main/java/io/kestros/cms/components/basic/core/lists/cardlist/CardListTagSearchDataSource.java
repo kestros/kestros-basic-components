@@ -164,7 +164,12 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
   @Nonnull
   @Override
   public List<KestrosCard> getCardElements() {
-    CardListSupport.requireComponentPrerequisites(this);
+    // Every card in this list shares these prerequisites, so a failure among them belongs to the
+    // whole component and must surface rather than render an empty list.
+    IllegalStateException prerequisiteFailure = CardListSupport.componentPrerequisiteFailure(this);
+    if (prerequisiteFailure != null) {
+      throw prerequisiteFailure;
+    }
     List<BaseContentPage> pages = new ArrayList<>(getTaggedPages());
 
     String sortBy = getResource().getValueMap().get("sortBy", "");
