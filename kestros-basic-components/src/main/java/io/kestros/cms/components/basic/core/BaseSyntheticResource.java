@@ -57,7 +57,7 @@ public abstract class BaseSyntheticResource extends BaseComponentElement {
     // breaks it. Do not remove without deleting those tests, which is not allowed.
     requireConfigured(this.resourceResolver, resourcePrefix, "resource resolver");
     requireConfigured(this.parentPath, resourcePrefix, "parent path");
-    requireConfigured(this.componentVariations, resourcePrefix, "component variations");
+    requireConfigured(this.componentVariations, resourcePrefix, "component variation list");
     requireConfigured(this.layout, resourcePrefix, "layout");
     requireConfigured(this.uiFramework, resourcePrefix, "UiFramework");
     this.componentVariationRetrievalService = dataSource.getComponentVariationRetrievalService();

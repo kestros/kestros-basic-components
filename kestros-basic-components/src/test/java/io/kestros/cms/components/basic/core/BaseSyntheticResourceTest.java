@@ -3,6 +3,7 @@ package io.kestros.cms.components.basic.core;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -74,15 +75,19 @@ public class BaseSyntheticResourceTest extends BaseSyntheticTest {
         exception.getMessage());
   }
 
+  /**
+   * Renamed from testInitWhenVariationsIsNull, which is not what it does. The parent path is read
+   * off the data source's Resource rather than from getParentPath(), and Mockito answers a
+   * List-returning method with an empty list rather than null, so the variations are never null
+   * here and the layout is the first thing actually missing. Every message used to be identical,
+   * so nothing showed that up. The variations guard has its own test below.
+   */
   @Test
-  public void testInitWhenVariationsIsNull() {
+  public void testInitWhenLayoutIsNull() {
     alertStaticDataSource = mock(AlertStaticDataSource.class);
     resource = mock(Resource.class);
     when(alertStaticDataSource.getResource()).thenReturn(resource);
     when(alertStaticDataSource.getResourceResolver()).thenReturn(context.resourceResolver());
-    // The parent path is read off the data source's Resource, not from getParentPath(), so
-    // stubbing getParentPath alone left it null and this test stopped at the parent-path guard
-    // rather than the variations one it is named for.
     when(resource.getPath()).thenReturn("/path");
     when(alertStaticDataSource.getParentPath()).thenReturn("/path");
     Exception exception = null;
@@ -93,7 +98,27 @@ public class BaseSyntheticResourceTest extends BaseSyntheticTest {
       exception = e;
     }
     assertNotNull(exception);
-    assertEquals("Unable to build the alert element: its component variations are missing.",
+    assertEquals("Unable to build the alert element: its layout is missing.",
+        exception.getMessage());
+  }
+
+  @Test
+  public void testInitWhenVariationsIsNull() {
+    alertStaticDataSource = mock(AlertStaticDataSource.class);
+    resource = mock(Resource.class);
+    when(alertStaticDataSource.getResource()).thenReturn(resource);
+    when(alertStaticDataSource.getResourceResolver()).thenReturn(context.resourceResolver());
+    when(resource.getPath()).thenReturn("/path");
+    when(alertStaticDataSource.getElementVariations(anyString(), anyString())).thenReturn(null);
+    Exception exception = null;
+    try {
+      alert = new KestrosAlertImpl("test", "test", alertStaticDataSource, "alert",
+          "alertElement");
+    } catch (ComponentConfigurationException e) {
+      exception = e;
+    }
+    assertNotNull(exception);
+    assertEquals("Unable to build the alert element: its component variation list is missing.",
         exception.getMessage());
   }
 
