@@ -1,3 +1,21 @@
+/*
+ *      Copyright (C) 2020  Kestros, Inc.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ */
+
 package io.kestros.cms.components.basic.core.content.card;
 
 import io.kestros.cms.assets.api.exceptions.AssetRetrievalException;
@@ -27,6 +45,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Implementation of the card element.
+ */
 public class KestrosCardImpl extends BaseContainerSyntheticResource implements KestrosCard {
 
   private static final Logger LOG = LoggerFactory.getLogger(KestrosCardImpl.class);
@@ -45,6 +66,16 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
   @Nullable
   private AssetRetrievalService assetRetrievalService;
 
+  /**
+   * Builds a card describing the given page.
+   *
+   * @param page Page the card describes.
+   * @param buttonText Text shown on the card's button.
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public KestrosCardImpl(BaseContentPage page, @Nullable String buttonText,
           @Nonnull BaseSlingModelDataSource dataSource,
           @Nonnull String resourcePrefix,
@@ -209,6 +240,18 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
   }
 
 
+  /**
+   * Builds a card from the elements it is given.
+   *
+   * @param description Description shown on the card.
+   * @param title Heading shown on the card.
+   * @param image Image shown on the card.
+   * @param buttonGroup Buttons shown on the card.
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public KestrosCardImpl(String description, KestrosHeading title, KestrosImage image,
           KestrosButtonGroup buttonGroup,
           @Nonnull BaseSlingModelDataSource dataSource, String resourcePrefix,

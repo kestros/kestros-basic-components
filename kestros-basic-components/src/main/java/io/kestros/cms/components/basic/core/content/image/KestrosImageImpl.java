@@ -1,3 +1,21 @@
+/*
+ *      Copyright (C) 2020  Kestros, Inc.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ */
+
 package io.kestros.cms.components.basic.core.content.image;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -19,6 +37,9 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 
+/**
+ * Implementation of the image element.
+ */
 public class KestrosImageImpl extends BaseSyntheticResource implements KestrosImage {
   @OSGiService
   private ComponentVariationRetrievalService componentVariationRetrievalService;
@@ -35,6 +56,23 @@ public class KestrosImageImpl extends BaseSyntheticResource implements KestrosIm
   private AnchorTarget target;
   private AssetRetrievalService assetRetrievalService;
 
+  /**
+   * Builds an image from the values it is given.
+   *
+   * @param imagePath Path to the image asset.
+   * @param altText Alternative text for the image.
+   * @param caption Caption rendered beneath the image.
+   * @param imageTitle Title shown for the image.
+   * @param href Destination the image links to.
+   * @param ariaLabel ARIA label for the image link.
+   * @param anchorTitle Title attribute for the image link.
+   * @param target Target attribute for the image link.
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @param assetRetrievalService Service the image asset is looked up through.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public KestrosImageImpl(String imagePath,
           String altText, String caption,
           String imageTitle,
@@ -60,6 +98,16 @@ public class KestrosImageImpl extends BaseSyntheticResource implements KestrosIm
     }
   }
 
+  /**
+   * Builds an image from the properties of the given resource.
+   *
+   * @param resource Resource the image properties are read from.
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @param assetRetrievalService Service the image asset is looked up through.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public KestrosImageImpl(Resource resource,
           @Nonnull BaseSlingModelDataSource dataSource,
           String resourcePrefix,
@@ -68,7 +116,7 @@ public class KestrosImageImpl extends BaseSyntheticResource implements KestrosIm
     super(dataSource, resourcePrefix, forcedResourceName);
     this.assetRetrievalService = assetRetrievalService;
     String assetPath = resource.getValueMap().get("imagePath", String.class);
-    if(LinkUtils.isLinkExternal(assetPath)) {
+    if (LinkUtils.isLinkExternal(assetPath)) {
       try {
         Asset asset = getAsset(assetPath, resource.getResourceResolver());
         this.imagePath = asset.getPath();

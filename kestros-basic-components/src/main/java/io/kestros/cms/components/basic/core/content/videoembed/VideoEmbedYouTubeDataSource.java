@@ -1,3 +1,21 @@
+/*
+ *      Copyright (C) 2020  Kestros, Inc.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ */
+
 package io.kestros.cms.components.basic.core.content.videoembed;
 
 import io.kestros.cms.components.basic.api.content.KestrosVideoEmbed;
@@ -12,6 +30,9 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 
+/**
+ * Datasource that turns a configured YouTube video id or URL into an embed iframe.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class VideoEmbedYouTubeDataSource extends BaseSlingModelDataSource
         implements KestrosVideoEmbed {
@@ -73,15 +94,14 @@ public class VideoEmbedYouTubeDataSource extends BaseSlingModelDataSource
     }
 
     return String.format(
-            "<iframe src=\"%s\" " +
-                    "        style=\"width:100%%;height:100%%;border:0;\" " +
-                    "        %s " +
-                    "        allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; "
+            "<iframe src=\"%s\" "
+                    + "        style=\"width:100%%;height:100%%;border:0;\" "
+                    + "        %s "
+                    + "        allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; "
                     + "gyroscope; "
                     + "picture-in-picture; fullscreen\" "
-                    +
-                    "        referrerpolicy=\"strict-origin-when-cross-origin\">" +
-                    "</iframe>",
+                    + "        referrerpolicy=\"strict-origin-when-cross-origin\">"
+                    + "</iframe>",
             src,
             isAllowFullscreen() ? "allowfullscreen" : ""
     );
@@ -96,9 +116,9 @@ public class VideoEmbedYouTubeDataSource extends BaseSlingModelDataSource
   }
 
 
-    /* ------------------
-       Helpers
-       ------------------ */
+  /* ------------------
+     Helpers
+     ------------------ */
 
   private boolean isAllowFullscreen() {
     return getResource().getValueMap().get("allowFullScreen", true);

@@ -1,3 +1,21 @@
+/*
+ *      Copyright (C) 2020  Kestros, Inc.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ */
+
 package io.kestros.cms.components.basic.core.content.table;
 
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
@@ -20,18 +38,20 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Data-driven {@link KestrosTable} datasource: renders a table from a collection of structured data
- * nodes, mirroring {@link io.kestros.cms.components.basic.core.lists.cardlist.CardListChildPagesDataSource}
+ * nodes, mirroring
+ * {@link io.kestros.cms.components.basic.core.lists.cardlist.CardListChildPagesDataSource}
  * (which renders cards from child pages).
  *
  * <p>Configured on the component with:
  * <ul>
  *   <li>{@code dataPath} — path to the container whose child nodes are the rows.</li>
- *   <li>{@code columns} — ordered property names read from each data node into the row's cells.</li>
+ *   <li>{@code columns} — ordered property names read from each data node into the row's
+ *       cells.</li>
  *   <li>{@code headers} — ordered header labels (optional).</li>
  * </ul>
  * Rows/cells/headers are built programmatically as synthetic elements
- * ({@link KestrosTableRowImpl}/{@link KestrosTableCellImpl}/{@link KestrosTableHeaderImpl}) and fed to
- * the stock table component.
+ * ({@link KestrosTableRowImpl}/{@link KestrosTableCellImpl}/{@link KestrosTableHeaderImpl}) and
+ * fed to the stock table component.
  */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class TableChildNodesDataSource extends BaseContainerSlingModelDataSource
