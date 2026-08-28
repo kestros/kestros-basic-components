@@ -23,7 +23,11 @@ import io.kestros.cms.components.basic.core.BaseSlingModelDataSource;
 import io.kestros.cms.components.basic.core.LogUtils;
 import io.kestros.cms.componenttypes.api.models.ComponentVariation;
 import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
+import io.kestros.cms.uiframeworks.api.exceptions.InvalidThemeException;
+import io.kestros.cms.uiframeworks.api.exceptions.ThemeRetrievalException;
+import io.kestros.cms.uiframeworks.api.exceptions.UiFrameworkRetrievalException;
 import io.kestros.cms.uiframeworks.api.models.UiFramework;
+import io.kestros.commons.structuredslingmodels.exceptions.ResourceNotFoundException;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -62,7 +66,8 @@ final class CardListSupport {
    * catch.
    *
    * @param dataSource Data source the cards will be built from.
-   * @throws IllegalStateException The component's page has no resolvable UI framework.
+   * @throws IllegalStateException The component's page has no resolvable UI framework, or its
+   *         theme cannot be read at all.
    */
   static void requireComponentPrerequisites(@Nonnull final BaseSlingModelDataSource dataSource) {
     final ResourceResolver resourceResolver = dataSource.getResourceResolver();
@@ -70,7 +75,17 @@ final class CardListSupport {
     final List<ComponentVariation> variations = dataSource.getElementVariations("cardVariations",
             KestrosCard.RESOURCE_TYPE);
     final String layout = dataSource.getLayout("card");
-    final UiFramework uiFramework = dataSource.getUiFramework();
+    final UiFramework uiFramework;
+    try {
+      uiFramework = dataSource.getUiFramework();
+    } catch (final ResourceNotFoundException | InvalidThemeException | ThemeRetrievalException
+            | UiFrameworkRetrievalException e) {
+      // getUiFramework() declares these as checked. A page whose theme cannot be read is a
+      // whole-component failure, so it surfaces like the others rather than being skipped.
+      throw new IllegalStateException(String.format(
+              "Card list at %s cannot build any card: its page's theme cannot be read.",
+              LogUtils.forLog(parentPath)), e);
+    }
     if (uiFramework == null) {
       throw new IllegalStateException(String.format(
               "Card list at %s cannot build any card: its page resolves to no UI framework. "
