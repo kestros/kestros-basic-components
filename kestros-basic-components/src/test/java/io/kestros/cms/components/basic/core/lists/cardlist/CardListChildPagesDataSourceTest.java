@@ -5,6 +5,12 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 import io.kestros.cms.assets.api.exceptions.AssetCollectionRetrievalException;
 import io.kestros.cms.components.basic.api.content.KestrosButton;
@@ -14,6 +20,9 @@ import io.kestros.cms.components.basic.api.content.KestrosImage;
 import io.kestros.cms.components.basic.api.lists.KestrosCardList;
 import io.kestros.cms.components.basic.core.BaseDataSourceTest;
 import io.kestros.cms.components.basic.core.content.image.ImageStaticDataSource;
+import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -403,6 +412,199 @@ public class CardListChildPagesDataSourceTest extends BaseDataSourceTest {
         image.getCaption());
     assertEquals("image title must come from the asset, not the page", "Asset 1 Title",
         image.getImageTitle());
+  }
+
+  // ---------------------------------------------------------------------------------------------
+  // One broken page must not blank the list.
+  //
+  // These drive getCardElements() with a page list that mixes a page which throws with pages that
+  // do not. Asserting only that no exception escaped would pass against the unfixed code, which
+  // rethrew as a RuntimeException - so every assertion below names the pages that survived.
+  // ---------------------------------------------------------------------------------------------
+
+  /** A page from the repository, adapted the same way the data source's root page adapts them. */
+  private BaseContentPage pageAt(final String path) {
+    final Resource pageResource = context.resourceResolver().getResource(path);
+    assertNotNull("the fixture must create " + path, pageResource);
+    final BaseContentPage page = pageResource.adaptTo(BaseContentPage.class);
+    assertNotNull(path + " must adapt to a page", page);
+    return page;
+  }
+
+  /**
+   * Two healthy pages with titles that tell them apart. The shared fixture titles every child
+   * "Title", which identifies nothing.
+   */
+  private void createDistinctlyTitledPages() {
+    final Map<String, Object> pageProperties = new HashMap<>();
+    pageProperties.put("jcr:primaryType", "kes:Page");
+    context.create().resource("/content/mixed", pageProperties);
+
+    final Map<String, Object> firstContent = new HashMap<>();
+    firstContent.put("jcr:primaryType", "nt:unstructured");
+    firstContent.put("jcr:title", "First Good Page");
+    context.create().resource("/content/mixed/good-1", pageProperties);
+    context.create().resource("/content/mixed/good-1/jcr:content", firstContent);
+
+    final Map<String, Object> secondContent = new HashMap<>();
+    secondContent.put("jcr:primaryType", "nt:unstructured");
+    secondContent.put("jcr:title", "Second Good Page");
+    context.create().resource("/content/mixed/good-2", pageProperties);
+    context.create().resource("/content/mixed/good-2/jcr:content", secondContent);
+  }
+
+  /**
+   * A page that fails while its card is being built. getDisplayDescription() is the first thing
+   * the card constructor asks a page for, and nothing on that path guards it.
+   */
+  private BaseContentPage brokenPage(final String path, final RuntimeException failure) {
+    final BaseContentPage broken = mock(BaseContentPage.class);
+    when(broken.getPath()).thenReturn(path);
+    when(broken.getName()).thenReturn(path.substring(path.lastIndexOf('/') + 1));
+    when(broken.getDisplayDescription()).thenThrow(failure);
+    return broken;
+  }
+
+  /**
+   * A data source whose child pages are exactly the list given. getRootPage() is stubbed rather
+   * than the loop, so getCardElements() itself runs unaltered.
+   */
+  private CardListChildPagesDataSource dataSourceOver(final List<BaseContentPage> childPages) {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("pagesPath", "/content/mixed");
+    props.put("readMoreText", "Button Text");
+    final Resource componentResource = context.create().resource(
+        "/content/page/jcr:content/comp-mixed-" + childPages.size(), props);
+    context.request().setResource(componentResource);
+
+    final CardListChildPagesDataSource dataSource = spy(
+        context.request().adaptTo(CardListChildPagesDataSource.class));
+    final BaseContentPage root = mock(BaseContentPage.class);
+    when(root.getChildPages()).thenReturn(new ArrayList<>(childPages));
+    doReturn(root).when(dataSource).getRootPage();
+    return dataSource;
+  }
+
+  @Test
+  public void testGetCardElementsSkipsTheBrokenPageAndKeepsTheRest() {
+    createDistinctlyTitledPages();
+    final CardListChildPagesDataSource dataSource = dataSourceOver(Arrays.asList(
+        pageAt("/content/mixed/good-1"),
+        brokenPage("/content/mixed/broken", new IllegalStateException("jcr:content will not adapt")),
+        pageAt("/content/mixed/good-2")));
+
+    final List<KestrosCard> cards = dataSource.getCardElements();
+
+    assertEquals("the two healthy pages must still produce cards", 2, cards.size());
+    assertEquals("good-1", cards.get(0).getForcedResourceName());
+    assertEquals("good-2", cards.get(1).getForcedResourceName());
+    assertEquals("First Good Page", cards.get(0).getTitleElement().getHeadingText());
+    assertEquals("Second Good Page", cards.get(1).getTitleElement().getHeadingText());
+  }
+
+  @Test
+  public void testGetCardElementsLogsTheSkippedPageWithTheExceptionClassAndMessage() {
+    createDistinctlyTitledPages();
+    final CardListChildPagesDataSource dataSource = dataSourceOver(Arrays.asList(
+        pageAt("/content/mixed/good-1"),
+        brokenPage("/content/mixed/broken", new IllegalStateException("jcr:content will not adapt"))));
+
+    try (RecordedWarnings warnings = new RecordedWarnings(CardListChildPagesDataSource.class)) {
+      assertEquals(1, dataSource.getCardElements().size());
+
+      assertEquals("exactly one page was skipped, so exactly one warning is expected", 1,
+          warnings.messages().size());
+      final String warning = warnings.messages().get(0);
+      assertTrue("the warning must name the skipped page: " + warning,
+          warning.contains("/content/mixed/broken"));
+      assertTrue("the warning must name the exception class: " + warning,
+          warning.contains("java.lang.IllegalStateException"));
+      assertTrue("the warning must carry the exception message: " + warning,
+          warning.contains("jcr:content will not adapt"));
+    }
+  }
+
+  /**
+   * An exception with no message must still produce a line that names the class. "Skipping the card
+   * for /x: null" tells whoever reads the log nothing at all.
+   */
+  @Test
+  public void testGetCardElementsNamesTheExceptionClassWhenThereIsNoMessage() {
+    createDistinctlyTitledPages();
+    final CardListChildPagesDataSource dataSource = dataSourceOver(Arrays.asList(
+        pageAt("/content/mixed/good-1"),
+        brokenPage("/content/mixed/broken", new NullPointerException()),
+        pageAt("/content/mixed/good-2")));
+
+    try (RecordedWarnings warnings = new RecordedWarnings(CardListChildPagesDataSource.class)) {
+      assertEquals(2, dataSource.getCardElements().size());
+
+      assertEquals(1, warnings.messages().size());
+      assertTrue("the warning must name the exception class even with a null message: "
+          + warnings.messages().get(0),
+          warnings.messages().get(0).contains("java.lang.NullPointerException"));
+    }
+  }
+
+  /** Every page broken is still every page skipped - an empty list, not a thrown exception. */
+  @Test
+  public void testGetCardElementsReturnsEmptyWhenEveryPageIsBroken() {
+    createDistinctlyTitledPages();
+    final CardListChildPagesDataSource dataSource = dataSourceOver(Arrays.asList(
+        brokenPage("/content/mixed/broken-1", new IllegalStateException("first")),
+        brokenPage("/content/mixed/broken-2", new IllegalStateException("second"))));
+
+    assertTrue(dataSource.getCardElements().isEmpty());
+  }
+
+  /** A page that cannot even say where it is must not take the list down with it. */
+  @Test
+  public void testGetCardElementsSurvivesAPageWhosePathAlsoThrows() {
+    createDistinctlyTitledPages();
+    final BaseContentPage broken = mock(BaseContentPage.class);
+    when(broken.getName()).thenReturn("broken");
+    when(broken.getDisplayDescription()).thenThrow(new IllegalStateException("unreadable"));
+    when(broken.getPath()).thenThrow(new IllegalStateException("path is unreadable too"));
+
+    final CardListChildPagesDataSource dataSource = dataSourceOver(Arrays.asList(
+        pageAt("/content/mixed/good-1"), broken, pageAt("/content/mixed/good-2")));
+
+    final List<KestrosCard> cards = dataSource.getCardElements();
+    assertEquals(2, cards.size());
+    assertEquals("good-1", cards.get(0).getForcedResourceName());
+    assertEquals("good-2", cards.get(1).getForcedResourceName());
+  }
+
+  // ---------------------------------------------------------------------------------------------
+  // A failure that belongs to the whole component still surfaces.
+  //
+  // Skipping is only correct per page. If the component itself cannot be resolved, every card would
+  // fail for the same reason, and turning that into an empty list hides an outage.
+  // ---------------------------------------------------------------------------------------------
+
+  @Test
+  public void testGetCardElementsThrowsWhenTheThemeCannotBeResolved() throws Exception {
+    when(themeProviderService.getThemeForPage(any())).thenThrow(
+        new RuntimeException("no theme for this page"));
+
+    try {
+      cardListChildPagesDataSource.getCardElements();
+      fail("a component with no resolvable theme must not render an empty card list");
+    } catch (final RuntimeException expected) {
+      assertNotNull(expected);
+    }
+  }
+
+  @Test
+  public void testGetCardElementsThrowsWhenTheThemeResolvesToNoUiFramework() throws Exception {
+    when(theme.getUiFramework()).thenReturn(null);
+
+    try {
+      cardListChildPagesDataSource.getCardElements();
+      fail("a component whose theme carries no UI framework must not render an empty card list");
+    } catch (final RuntimeException expected) {
+      assertNotNull(expected);
+    }
   }
 
 }
