@@ -2,9 +2,9 @@ package io.kestros.cms.components.basic.core.lists.linklist;
 
 import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosLink;
+import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.components.basic.api.lists.KestrosLinkList;
 import io.kestros.cms.components.basic.core.BaseContainerSlingModelDataSource;
-import io.kestros.cms.components.basic.core.LinkUtils;
 import io.kestros.cms.components.basic.core.content.link.KestrosLinkImpl;
 import io.kestros.cms.sitebuilding.api.models.BaseComponent;
 import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
@@ -12,6 +12,7 @@ import io.kestros.cms.tagging.api.models.KestrosTag;
 import io.kestros.cms.tagging.api.services.TagRetrievalService;
 import io.kestros.commons.structuredslingmodels.exceptions.NoValidAncestorException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -19,10 +20,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Tag search datasource for the link list component. Finds pages matching configured
@@ -32,12 +36,20 @@ import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 public class LinkListTagSearchDataSource extends BaseContainerSlingModelDataSource
     implements KestrosLinkList {
 
+  private static final Logger LOG = LoggerFactory.getLogger(LinkListTagSearchDataSource.class);
+
   @OSGiService
   @org.apache.sling.models.annotations.Optional
   private TagRetrievalService tagRetrievalService;
 
   private BaseContentPage containingPage;
 
+  /**
+   * Page this data source sits on.
+   *
+   * @return The containing page, or null when the resource has no page ancestor.
+   */
+  @Nullable
   BaseContentPage getContainingPage() {
     if (containingPage == null) {
       try {
@@ -61,6 +73,13 @@ public class LinkListTagSearchDataSource extends BaseContainerSlingModelDataSour
     return tags;
   }
 
+  /**
+   * Path the tag search is rooted at.
+   *
+   * @return The configured pagesPath, else the containing page's parent, or null when there is no
+   *     containing page.
+   */
+  @Nullable
   String getRootPath() {
     String pagesPath = getResource().getValueMap().get("pagesPath", String.class);
     if (pagesPath != null) {
@@ -77,6 +96,12 @@ public class LinkListTagSearchDataSource extends BaseContainerSlingModelDataSour
     return null;
   }
 
+  /**
+   * Page the tag search is rooted at.
+   *
+   * @return The root page, or null when no root path resolves to one.
+   */
+  @Nullable
   BaseContentPage getRootPage() {
     String rootPath = getRootPath();
     if (rootPath == null) {
@@ -89,10 +114,17 @@ public class LinkListTagSearchDataSource extends BaseContainerSlingModelDataSour
     return null;
   }
 
+  @Nonnull
   public AnchorTarget getTarget() {
     return AnchorTarget.lookup(getResource());
   }
 
+  /**
+   * Child pages of the root page carrying at least one of the configured tags.
+   *
+   * @return Matching pages, empty when nothing is configured or nothing matches.
+   */
+  @Nonnull
   List<BaseContentPage> getTaggedPages() {
     List<BaseContentPage> taggedPages = new ArrayList<>();
     if (tagRetrievalService == null) {
@@ -104,10 +136,7 @@ public class LinkListTagSearchDataSource extends BaseContainerSlingModelDataSour
       return taggedPages;
     }
 
-    Set<String> filterTagPaths = new HashSet<>();
-    for (String tagPath : configuredTags) {
-      filterTagPaths.add(tagPath);
-    }
+    Set<String> filterTagPaths = new HashSet<>(Arrays.asList(configuredTags));
 
     BaseContentPage currentPage = getContainingPage();
     BaseContentPage rootPage = getRootPage();
@@ -139,8 +168,8 @@ public class LinkListTagSearchDataSource extends BaseContainerSlingModelDataSour
     List<BaseContentPage> pages = new ArrayList<>(getTaggedPages());
 
     String sortBy = getResource().getValueMap().get("sortBy", "");
-    boolean reverse = getResource().getValueMap().get("reverse", false);
-    int limit = 0;
+    boolean reverse = getResource().getValueMap().get("reverse", Boolean.FALSE);
+    int limit;
     try {
       limit = Integer.parseInt(getResource().getValueMap().get("limit", "0"));
     } catch (NumberFormatException e) {
@@ -150,30 +179,16 @@ public class LinkListTagSearchDataSource extends BaseContainerSlingModelDataSour
     if (!sortBy.isEmpty()) {
       switch (sortBy) {
         case "createdDate":
-          pages.sort(Comparator.comparing(p -> {
-            Calendar cal = p.getResource().getChild("jcr:content") != null
-                ? p.getResource().getChild("jcr:content").getValueMap()
-                    .get("jcr:created", Calendar.class) : null;
-            return cal != null ? cal.getTimeInMillis() : 0L;
-          }));
+          pages.sort(Comparator.comparing(LinkListTagSearchDataSource::getCreatedTime));
           break;
         case "lastModified":
-          pages.sort(Comparator.comparing(p -> {
-            Calendar cal = p.getResource().getChild("jcr:content") != null
-                ? p.getResource().getChild("jcr:content").getValueMap()
-                    .get("jcr:lastModified", Calendar.class) : null;
-            return cal != null ? cal.getTimeInMillis() : 0L;
-          }));
+          pages.sort(Comparator.comparing(LinkListTagSearchDataSource::getModifiedTime));
+          break;
+        case "name":
+          pages.sort(Comparator.comparing(BaseContentPage::getName));
           break;
         default:
-          pages.sort(Comparator.comparing(p -> {
-            switch (sortBy) {
-              case "name":
-                return p.getName() != null ? p.getName() : "";
-              default:
-                return p.getDisplayTitle() != null ? p.getDisplayTitle() : p.getName();
-            }
-          }));
+          pages.sort(Comparator.comparing(BaseContentPage::getDisplayTitle));
           break;
       }
     }
@@ -185,15 +200,16 @@ public class LinkListTagSearchDataSource extends BaseContainerSlingModelDataSour
       pages = pages.subList(0, limit);
     }
 
-    List<KestrosLink> links = new ArrayList<>();
+    List<KestrosLink> links = new ArrayList<>(pages.size());
     for (BaseContentPage page : pages) {
       try {
         links.add(new KestrosLinkImpl(page,
             this,
             "link",
             page.getName()));
-      } catch (Exception e) {
-        // Skip links that fail to construct
+      } catch (ComponentConfigurationException e) {
+        LOG.warn("Unable to build a link for page {} in {}. It is left out of the list. {}",
+            forLog(page.getPath()), forLog(getResource().getPath()), forLog(e.getMessage()), e);
       }
     }
     return links;

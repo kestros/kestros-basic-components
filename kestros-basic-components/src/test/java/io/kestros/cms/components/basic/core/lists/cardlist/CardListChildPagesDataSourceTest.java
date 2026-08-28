@@ -5,6 +5,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import io.kestros.cms.assets.api.exceptions.AssetCollectionRetrievalException;
 import io.kestros.cms.components.basic.api.content.KestrosButton;
@@ -14,6 +16,7 @@ import io.kestros.cms.components.basic.api.content.KestrosImage;
 import io.kestros.cms.components.basic.api.lists.KestrosCardList;
 import io.kestros.cms.components.basic.core.BaseDataSourceTest;
 import io.kestros.cms.components.basic.core.content.image.ImageStaticDataSource;
+import io.kestros.cms.uiframeworks.api.exceptions.UiFrameworkRetrievalException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -403,6 +406,25 @@ public class CardListChildPagesDataSourceTest extends BaseDataSourceTest {
         image.getCaption());
     assertEquals("image title must come from the asset, not the page", "Asset 1 Title",
         image.getImageTitle());
+  }
+
+  /**
+   * A page whose card could not be configured was rethrown as a RuntimeException, so one bad page
+   * took down the whole list and the exception escaped a method declared @Nonnull. That is the
+   * failure KestrosCardImpl's asset lookup already had to work around by hand.
+   */
+  @Test
+  public void testGetCardElements_whenCardsCannotBeConfigured_returnsEmptyListNotThrows()
+          throws Exception {
+    when(theme.getUiFramework()).thenThrow(mock(UiFrameworkRetrievalException.class));
+    resource = context.create().resource("/content/page/jcr:content/no-framework", properties);
+    context.request().setResource(resource);
+
+    List<KestrosCard> cards =
+            context.request().adaptTo(CardListChildPagesDataSource.class).getCardElements();
+
+    assertNotNull(cards);
+    assertEquals(0, cards.size());
   }
 
 }

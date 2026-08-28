@@ -171,16 +171,4 @@ public class CardListAssetsDataSource extends BaseContainerSlingModelDataSource 
     return cards;
   }
 
-  /**
-   * Strips CR and LF from a value before it is logged, so an author-controlled path or an exception
-   * message cannot forge a log line.
-   *
-   * @param value Value about to be logged.
-   * @return The value with CR and LF removed, or null unchanged.
-   */
-  @Nullable
-  private static String forLog(@Nullable final String value) {
-    return value == null ? null : value.replaceAll("[\r\n]", "");
-  }
-
 }
