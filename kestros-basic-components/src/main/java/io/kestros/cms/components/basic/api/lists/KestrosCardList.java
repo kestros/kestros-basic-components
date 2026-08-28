@@ -62,6 +62,11 @@ public interface KestrosCardList extends KestrosContainerElement {
   @Nonnull
   List<KestrosCard> getCardElements();
 
+  /**
+   * Child elements of the list, which are its cards.
+   *
+   * @return Child elements of the list, which are its cards.
+   */
   @Nonnull
   default List<KestrosBasicComponentElement> getChildElements() {
     return new ArrayList<>(getCardElements());

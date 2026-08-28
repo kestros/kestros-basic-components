@@ -56,11 +56,21 @@ public enum HeadingLevels {
     return null;
   }
 
+  /**
+   * Text shown to an author when choosing this heading level.
+   *
+   * @return Text shown to an author when choosing this heading level.
+   */
   @Nonnull
   public String getDisplayText() {
     return displayText;
   }
 
+  /**
+   * Value this heading level is stored as.
+   *
+   * @return Value this heading level is stored as.
+   */
   @Nonnull
   public String getValue() {
     return value;

@@ -67,11 +67,21 @@ public abstract class BaseSlingModelDataSource
   @OSGiService
   private ComponentUiFrameworkViewRetrievalService componentUiFrameworkViewRetrievalService;
 
+  /**
+   * Unique id configured on the resource, if one was set.
+   *
+   * @return Unique id configured on the resource, if one was set.
+   */
   @Nullable
   public String getId() {
     return getResource().getValueMap().get("id", String.class);
   }
 
+  /**
+   * Whether the element is synthetic rather than backed by a stored resource.
+   *
+   * @return Whether the element is synthetic rather than backed by a stored resource.
+   */
   @Nonnull
   public Boolean isSynthetic() {
     return Boolean.FALSE;
@@ -136,6 +146,11 @@ public abstract class BaseSlingModelDataSource
   }
 
 
+  /**
+   * ResourceResolver the containing Resource was resolved with.
+   *
+   * @return ResourceResolver the containing Resource was resolved with.
+   */
   @Nonnull
   public ResourceResolver getResourceResolver() {
     return getResource().getResourceResolver();
@@ -157,6 +172,11 @@ public abstract class BaseSlingModelDataSource
     return parent.getPath();
   }
 
+  /**
+   * Variations applied to the element.
+   *
+   * @return Variations applied to the element.
+   */
   @Nonnull
   public List<ComponentVariation> getVariations() {
     // TODO verify this.
@@ -189,6 +209,11 @@ public abstract class BaseSlingModelDataSource
     return component.getAppliedVariations();
   }
 
+  /**
+   * Layout configured on the resource, defaulting to "default".
+   *
+   * @return Layout configured on the resource, defaulting to "default".
+   */
   @Nonnull
   public String getLayout() {
     return getResource().getValueMap().get("layout", "default");

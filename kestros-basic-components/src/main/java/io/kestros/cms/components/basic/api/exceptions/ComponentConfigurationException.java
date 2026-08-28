@@ -20,16 +20,35 @@ package io.kestros.cms.components.basic.api.exceptions;
 
 import javax.annotation.Nonnull;
 
+/**
+ * Thrown when a component is configured in a way it cannot be rendered from.
+ */
 public class ComponentConfigurationException extends Exception {
 
+  /**
+   * Thrown when a component is configured in a way it cannot be rendered from.
+   *
+   * @param message Description of how the component is misconfigured.
+   */
   public ComponentConfigurationException(@Nonnull String message) {
     super(message);
   }
 
+  /**
+   * Thrown when a component is configured in a way it cannot be rendered from.
+   *
+   * @param message Description of how the component is misconfigured.
+   * @param cause Exception that caused this one.
+   */
   public ComponentConfigurationException(@Nonnull String message, @Nonnull Throwable cause) {
     super(message, cause);
   }
 
+  /**
+   * Thrown when a component is configured in a way it cannot be rendered from.
+   *
+   * @param cause Exception that caused this one.
+   */
   public ComponentConfigurationException(@Nonnull Throwable cause) {
     super(cause);
   }

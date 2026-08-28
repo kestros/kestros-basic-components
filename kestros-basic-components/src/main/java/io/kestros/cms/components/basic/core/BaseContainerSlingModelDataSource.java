@@ -45,6 +45,14 @@ public abstract class BaseContainerSlingModelDataSource extends BaseSlingModelDa
     return children;
   }
 
+  /**
+   * Child resources of the given resource type, adapted to the given model.
+   *
+   * @param <T> Model the child resources are adapted to.
+   * @param resourceType Resource type the children must match.
+   * @param clazz Model the child resources are adapted to.
+   * @return Child resources of the given resource type, adapted to the given model.
+   */
   @Nonnull
   public <T extends KestrosBasicComponentElement> List<T> getChildrenAsType(
       @Nonnull String resourceType, @Nonnull Class<T> clazz) {
@@ -61,6 +69,13 @@ public abstract class BaseContainerSlingModelDataSource extends BaseSlingModelDa
     return new ArrayList<>(items);
   }
 
+  /**
+   * Child elements that could be adapted to the given model.
+   *
+   * @param <T> Model the child elements are adapted to.
+   * @param clazz Model the child elements are adapted to.
+   * @return Child elements that could be adapted to the given model.
+   */
   @Nonnull
   public <T extends KestrosBasicComponentElement> List<T> getChildrenOfType(
       @Nonnull Class<T> clazz) {

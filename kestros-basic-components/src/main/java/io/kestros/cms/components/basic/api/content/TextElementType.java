@@ -20,6 +20,9 @@ package io.kestros.cms.components.basic.api.content;
 
 import javax.annotation.Nonnull;
 
+/**
+ * Text element types a rich text component can be rendered as.
+ */
 public enum TextElementType {
   PARAGRAPH("Paragraph", "paragraph"),
   PREFORMATTED("Preformatted", "preformatted"),
@@ -33,11 +36,21 @@ public enum TextElementType {
     this.value = value;
   }
 
+  /**
+   * Text shown to an author when choosing this type.
+   *
+   * @return Text shown to an author when choosing this type.
+   */
   @Nonnull
   public String getDisplayText() {
     return displayText;
   }
 
+  /**
+   * Value this type is stored as.
+   *
+   * @return Value this type is stored as.
+   */
   @Nonnull
   public String getValue() {
     return value;

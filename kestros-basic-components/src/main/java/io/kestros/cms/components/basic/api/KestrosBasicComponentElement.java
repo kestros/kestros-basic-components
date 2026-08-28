@@ -46,9 +46,30 @@ import org.apache.sling.api.resource.ResourceResolver;
 public interface KestrosBasicComponentElement {
 
 
+  /**
+   * Layout configured on the element under the given property.
+   *
+   * @param propertyName Property the layout is read from.
+   * @return Layout configured on the element under the given property.
+   */
   @Nonnull
   String getLayout(@Nonnull String propertyName);
 
+  /**
+   * Layout the element renders with.
+   *
+   * @return Layout the element renders with.
+   */
+  @Nonnull
+  String getLayout();
+
+  /**
+   * Variations applied to the element for the given property and component type.
+   *
+   * @param propertyName Property the variations are read from.
+   * @param componentType Component type the variations belong to.
+   * @return Variations applied to the element for the given property and component type.
+   */
   @Nonnull
   List<ComponentVariation> getElementVariations(@Nonnull String propertyName,
       @Nonnull String componentType);
@@ -175,9 +196,19 @@ public interface KestrosBasicComponentElement {
   @Nonnull
   String getParentPath();
 
+  /**
+   * Variations applied to the element.
+   *
+   * @return Variations applied to the element.
+   */
   @Nonnull
   List<ComponentVariation> getVariations();
 
+  /**
+   * Names of the applied variations that render inline, space separated.
+   *
+   * @return Names of the applied variations that render inline, space separated.
+   */
   @Nonnull
   default String getInlineVariations() {
     StringJoiner joiner = new StringJoiner(" ");
@@ -206,6 +237,11 @@ public interface KestrosBasicComponentElement {
     return getResource().getPath();
   }
 
+  /**
+   * Whether the element is synthetic rather than backed by a stored resource.
+   *
+   * @return Whether the element is synthetic rather than backed by a stored resource.
+   */
   @Nonnull
   default Boolean isSynthetic() {
     return Boolean.TRUE;

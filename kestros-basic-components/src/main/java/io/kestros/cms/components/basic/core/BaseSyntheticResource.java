@@ -142,6 +142,11 @@ public abstract class BaseSyntheticResource extends BaseComponentElement
     return layout;
   }
 
+  /**
+   * UiFramework the synthetic resource renders against.
+   *
+   * @return UiFramework the synthetic resource renders against.
+   */
   @Nonnull
   public UiFramework getUiFramework() {
     return uiFramework;

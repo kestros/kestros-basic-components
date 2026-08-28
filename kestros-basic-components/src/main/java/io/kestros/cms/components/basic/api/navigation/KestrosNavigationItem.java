@@ -38,6 +38,11 @@ public interface KestrosNavigationItem extends KestrosLink, KestrosContainerElem
     return RESOURCE_TYPE;
   }
 
+  /**
+   * Whether this item points at the page currently being viewed.
+   *
+   * @return Whether this item points at the page currently being viewed.
+   */
   @Nonnull
   Boolean isActive();
 
