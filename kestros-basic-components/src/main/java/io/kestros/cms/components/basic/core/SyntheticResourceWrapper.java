@@ -1,6 +1,7 @@
 package io.kestros.cms.components.basic.core;
 
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import javax.annotation.Nonnull;
@@ -21,9 +22,12 @@ public class SyntheticResourceWrapper extends ResourceWrapper {
    * @param wrapped Wrapped Resource.
    * @param children Map of synthetic children to add to the wrapped Resource.
    */
-  public SyntheticResourceWrapper(Resource wrapped, Map<String, Resource> children) {
+  public SyntheticResourceWrapper(@Nonnull Resource wrapped,
+      @Nonnull Map<String, Resource> children) {
     super(wrapped);
-    this.children = children;
+    // Copied rather than held: the caller keeps its own reference to the map it passed, and a
+    // later put on it would silently add a child to a Resource that had already been handed out.
+    this.children = new LinkedHashMap<>(children);
   }
 
   @Nullable
@@ -54,7 +58,7 @@ public class SyntheticResourceWrapper extends ResourceWrapper {
    * @return True when both wrap an equal Resource and hold equal children.
    */
   @Override
-  public boolean equals(@Nullable final Object other) {
+  public boolean equals(final Object other) {
     if (this == other) {
       return true;
     }
@@ -71,6 +75,7 @@ public class SyntheticResourceWrapper extends ResourceWrapper {
     return Objects.hash(getResource(), children);
   }
 
+  @Nonnull
   @Override
   public String toString() {
     return "SyntheticResourceWrapper{path=" + getPath() + ", children=" + children.keySet() + "}";

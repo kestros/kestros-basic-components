@@ -127,8 +127,7 @@ public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSou
       } catch (ComponentConfigurationException e) {
         // Wrapping this in a RuntimeException lost the whole card list over one unbuildable page,
         // which is what KestrosCardImpl's asset lookup was already working around.
-        LOG.warn("Unable to build a card for page {} in {}. It is left out of the list. {}",
-            forLog(page.getPath()), forLog(getResource().getPath()), forLog(e.getMessage()), e);
+        LOG.warn("Unable to build a card for one child page; it is left out of the list.", e);
       }
     }
     return cards;

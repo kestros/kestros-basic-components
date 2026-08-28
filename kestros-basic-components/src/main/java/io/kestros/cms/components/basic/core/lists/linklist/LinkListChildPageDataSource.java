@@ -119,8 +119,7 @@ public class LinkListChildPageDataSource extends BaseContainerSlingModelDataSour
             "link", null));
       } catch (ComponentConfigurationException e) {
         // One unbuildable page used to be rethrown as a RuntimeException, losing every link.
-        LOG.warn("Unable to build a link for page {} in {}. It is left out of the list. {}",
-            forLog(page.getPath()), forLog(getResource().getPath()), forLog(e.getMessage()), e);
+        LOG.warn("Unable to build a link for one child page; it is left out of the list.", e);
       }
     }
     return links;

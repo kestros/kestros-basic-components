@@ -208,8 +208,7 @@ public class LinkListTagSearchDataSource extends BaseContainerSlingModelDataSour
             "link",
             page.getName()));
       } catch (ComponentConfigurationException e) {
-        LOG.warn("Unable to build a link for page {} in {}. It is left out of the list. {}",
-            forLog(page.getPath()), forLog(getResource().getPath()), forLog(e.getMessage()), e);
+        LOG.warn("Unable to build a link for one tagged page; it is left out of the list.", e);
       }
     }
     return links;

@@ -129,7 +129,8 @@ public class ImageStaticDataSource extends BaseSlingModelDataSource implements K
         return asset;
       }
     } catch (AssetRetrievalException e) {
-      LOG.warn("Failed to retrieve asset for image: {}", getImagePath());
+      LOG.warn("Failed to retrieve the asset behind an image; the image path is in the "
+          + "exception below.", e);
     }
     return null;
   }

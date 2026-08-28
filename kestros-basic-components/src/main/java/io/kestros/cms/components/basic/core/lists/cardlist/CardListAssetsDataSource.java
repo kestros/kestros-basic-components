@@ -139,9 +139,8 @@ public class CardListAssetsDataSource extends BaseContainerSlingModelDataSource 
         titleElement = new KestrosHeadingImpl(asset.getTitle(), "h2",
             this, "title", "titleElement");
       } catch (ComponentConfigurationException e) {
-        LOG.warn("Unable to build the heading for card {} in {}. The card renders without a "
-                + "title. {}", forLog(asset.getPath()), forLog(getResource().getPath()),
-            forLog(e.getMessage()), e);
+        LOG.warn("Unable to build the heading for one card in this list. The card renders "
+                + "without a title. The asset path is in the exception below.", e);
       }
 
       KestrosImage image = null;
@@ -152,9 +151,8 @@ public class CardListAssetsDataSource extends BaseContainerSlingModelDataSource 
       } catch (ComponentConfigurationException e) {
         // One asset whose image cannot be configured must cost one image, not the whole list.
         // Returning null here blanked every card on the page, and getCardElements is @Nonnull.
-        LOG.warn("Unable to build the image for card {} in {}. The card renders without an "
-                + "image. {}", forLog(asset.getPath()), forLog(getResource().getPath()),
-            forLog(e.getMessage()), e);
+        LOG.warn("Unable to build the image for one card in this list. The card renders "
+                + "without an image. The asset path is in the exception below.", e);
       }
       try {
         cards.add(
@@ -164,8 +162,7 @@ public class CardListAssetsDataSource extends BaseContainerSlingModelDataSource 
                 "card", null));
       } catch (ComponentConfigurationException e) {
         // Same reasoning: drop the one card that cannot be configured, keep the rest.
-        LOG.warn("Unable to build a card for asset {} in {}. It is left out of the list. {}",
-            forLog(asset.getPath()), forLog(getResource().getPath()), forLog(e.getMessage()), e);
+        LOG.warn("Unable to build a card for one asset; it is left out of the list.", e);
       }
     }
     return cards;

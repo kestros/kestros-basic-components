@@ -142,7 +142,7 @@ public abstract class BaseSyntheticResource extends BaseComponentElement
    * @return True only when this is the same object.
    */
   @Override
-  public boolean equals(@Nullable final Object other) {
+  public boolean equals(final Object other) {
     return this == other;
   }
 
