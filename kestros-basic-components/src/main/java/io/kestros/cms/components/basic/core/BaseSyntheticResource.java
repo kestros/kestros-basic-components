@@ -12,6 +12,7 @@ import io.kestros.cms.uiframeworks.api.models.UiFramework;
 import io.kestros.commons.structuredslingmodels.exceptions.ResourceNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -192,7 +193,7 @@ public abstract class BaseSyntheticResource extends BaseComponentElement {
    * @return True only when this is the same object.
    */
   @Override
-  public boolean equals(@Nullable final Object other) {
+  public boolean equals(@CheckForNull final Object other) {
     return this == other;
   }
 

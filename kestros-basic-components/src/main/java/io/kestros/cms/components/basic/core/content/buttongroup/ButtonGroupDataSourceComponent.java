@@ -27,6 +27,7 @@ public class ButtonGroupDataSourceComponent extends
     return new ArrayList<>(buttons);
   }
 
+  @Nonnull
   @Override
   public List<ComponentVariation> getButtonVariations() {
     if (componentVariations == null) {

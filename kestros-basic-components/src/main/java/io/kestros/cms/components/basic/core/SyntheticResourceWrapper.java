@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.sling.api.resource.Resource;
@@ -58,7 +59,7 @@ public class SyntheticResourceWrapper extends ResourceWrapper {
    * @return True when both wrap an equal Resource and hold equal children.
    */
   @Override
-  public boolean equals(@Nullable final Object other) {
+  public boolean equals(@CheckForNull final Object other) {
     if (this == other) {
       return true;
     }
