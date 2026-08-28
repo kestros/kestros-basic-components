@@ -70,10 +70,19 @@ public abstract class BaseSyntheticResource extends BaseComponentElement {
     return this.id;
   }
 
+  /**
+   * Resolver this element reads through.
+   *
+   * <p>Read back off the data source rather than handed out of the field. It is the same object
+   * either way - a ResourceResolver is a session handle and cannot be defensively copied - but
+   * the resolver's owner is the data source, and this element is not the thing lending it out.
+   *
+   * @return The data source's resolver.
+   */
   @Nonnull
   @Override
   public ResourceResolver getResourceResolver() {
-    return resourceResolver;
+    return dataSource.getResourceResolver();
   }
 
   @Nonnull

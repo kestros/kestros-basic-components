@@ -117,7 +117,7 @@ public final class EmbedSanitizer {
         continue;
       }
 
-      if ("src".equalsIgnoreCase(attrName)) {
+      if ("src".equals(toAsciiLowerCase(attrName))) {
         if (attrValue == null) {
           return null;
         }
@@ -184,11 +184,28 @@ public final class EmbedSanitizer {
    */
   private static boolean containsIgnoringCase(@Nonnull final Set<String> allowed,
       @Nonnull final String candidate) {
-    for (final String entry : allowed) {
-      if (entry.equalsIgnoreCase(candidate)) {
-        return true;
+    return allowed.contains(toAsciiLowerCase(candidate));
+  }
+
+  /**
+   * Lowercases the ASCII letters in a value and leaves every other character alone.
+   *
+   * <p>Neither {@code toLowerCase} nor {@code equalsIgnoreCase} is safe in front of an allowlist:
+   * both apply Unicode case mapping, which is locale-dependent and can change a string's length,
+   * so the value compared is not always the value that arrived. Every entry in both allowlists
+   * here is lowercase ASCII, so folding only A-Z is exactly the comparison intended.
+   *
+   * @param value Value read out of the author's markup.
+   * @return The value with A-Z folded to a-z.
+   */
+  @Nonnull
+  private static String toAsciiLowerCase(@Nonnull final String value) {
+    final char[] characters = value.toCharArray();
+    for (int index = 0; index < characters.length; index++) {
+      if (characters[index] >= 'A' && characters[index] <= 'Z') {
+        characters[index] += 'a' - 'A';
       }
     }
-    return false;
+    return new String(characters);
   }
 }
