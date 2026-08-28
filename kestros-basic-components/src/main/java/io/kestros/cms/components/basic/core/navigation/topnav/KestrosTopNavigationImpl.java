@@ -39,6 +39,17 @@ public class KestrosTopNavigationImpl extends BaseContainerSyntheticResource
   private KestrosImage logo;
   private String brandName;
 
+  /**
+   * Builds a top navigation from the branding and items it is given.
+   *
+   * @param brandName Brand name shown in the navigation.
+   * @param logo Image used as the branding.
+   * @param navigationLinks Items the navigation holds.
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public KestrosTopNavigationImpl(
           @Nullable String brandName,
           @Nullable KestrosImage logo,

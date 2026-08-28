@@ -23,14 +23,30 @@ package io.kestros.cms.components.basic.api.exceptions;
  */
 public class ComponentConfigurationException extends Exception {
 
+  /**
+   * Thrown when a component is configured in a way it cannot render from.
+   *
+   * @param message What was wrong with the configuration.
+   */
   public ComponentConfigurationException(String message) {
     super(message);
   }
 
+  /**
+   * Thrown when a component is configured in a way it cannot render from.
+   *
+   * @param message What was wrong with the configuration.
+   * @param cause Failure this one followed from.
+   */
   public ComponentConfigurationException(String message, Throwable cause) {
     super(message, cause);
   }
 
+  /**
+   * Thrown when a component is configured in a way it cannot render from.
+   *
+   * @param cause Failure this one followed from.
+   */
   public ComponentConfigurationException(Throwable cause) {
     super(cause);
   }

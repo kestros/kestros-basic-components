@@ -37,6 +37,16 @@ public class KestrosTopNavigationItemImpl extends BaseContainerSyntheticResource
   private KestrosLink link;
   private List<KestrosTopNavigationItem> childItems;
 
+  /**
+   * Builds a top navigation item from the link and nested items it is given.
+   *
+   * @param link Link the item points at.
+   * @param childItems Items nested beneath this one.
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public KestrosTopNavigationItemImpl(
       @Nonnull KestrosLink link,
       @Nonnull List<KestrosTopNavigationItem> childItems,

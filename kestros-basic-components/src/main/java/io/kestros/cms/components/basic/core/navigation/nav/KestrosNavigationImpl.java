@@ -37,6 +37,15 @@ public class KestrosNavigationImpl extends BaseContainerSyntheticResource
 
   private List<KestrosNavigationItem> navigationLinks;
 
+  /**
+   * Builds a navigation from the items it is given.
+   *
+   * @param navigationLinks Items the navigation holds.
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public KestrosNavigationImpl(
       @Nonnull List<KestrosNavigationItem> navigationLinks,
       @Nonnull BaseSlingModelDataSource dataSource,

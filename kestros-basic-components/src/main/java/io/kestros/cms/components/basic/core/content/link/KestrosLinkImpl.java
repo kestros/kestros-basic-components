@@ -43,6 +43,15 @@ public class KestrosLinkImpl extends BaseSyntheticResource implements KestrosLin
   private String lang;
 
 
+  /**
+   * Builds a link pointing at the given page.
+   *
+   * @param page Page the link points at.
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public KestrosLinkImpl(@Nonnull BaseContentPage page,
       @Nonnull BaseSlingModelDataSource dataSource,
       String resourcePrefix,
@@ -60,6 +69,22 @@ public class KestrosLinkImpl extends BaseSyntheticResource implements KestrosLin
   }
 
 
+  /**
+   * Builds a link from the values it is given.
+   *
+   * @param text Visible link text.
+   * @param href Destination the link points at.
+   * @param title Title attribute for the link.
+   * @param target Target attribute for the link.
+   * @param rel Relationship attribute for the link.
+   * @param ariaLabel ARIA label for the link.
+   * @param ariaDescribedBy ARIA described-by ID reference.
+   * @param lang Language of the link text.
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public KestrosLinkImpl(String text, String href, String title, AnchorTarget target, String rel,
       String ariaLabel, String ariaDescribedBy, String lang,
       @Nonnull BaseSlingModelDataSource dataSource,

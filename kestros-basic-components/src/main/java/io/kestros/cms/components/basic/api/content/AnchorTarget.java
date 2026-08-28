@@ -74,6 +74,12 @@ public enum AnchorTarget {
     return SAME_WINDOW;
   }
 
+  /**
+   * Target configured on the given resource, defaulting to the same window.
+   *
+   * @param resource Resource the target is read from.
+   * @return Target configured on the given resource.
+   */
   public static AnchorTarget lookup(@Nullable Resource resource) {
     AnchorTarget target = SAME_WINDOW;
     if (resource != null) {

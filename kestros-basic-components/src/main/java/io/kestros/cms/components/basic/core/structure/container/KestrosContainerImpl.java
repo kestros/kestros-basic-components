@@ -35,6 +35,15 @@ public class KestrosContainerImpl extends BaseContainerSyntheticResource
 
   private final List<KestrosBasicComponentElement> childElements;
 
+  /**
+   * Builds a container from the elements it is given.
+   *
+   * @param childElements Elements the container holds.
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public KestrosContainerImpl(
       @Nonnull List<KestrosBasicComponentElement> childElements,
       @Nonnull BaseSlingModelDataSource dataSource,

@@ -40,6 +40,15 @@ public class KestrosButtonGroupImpl extends BaseContainerSyntheticResource imple
   private List<ComponentVariation> buttonVariations;
   private String buttonLayout;
 
+  /**
+   * Builds a button group from the buttons it is given.
+   *
+   * @param buttons Buttons the group holds.
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public KestrosButtonGroupImpl(@Nonnull final List<KestrosButton> buttons,
       @Nonnull BaseSlingModelDataSource dataSource,
       String resourcePrefix,
@@ -51,6 +60,15 @@ public class KestrosButtonGroupImpl extends BaseContainerSyntheticResource imple
     this.buttonVariations = dataSource.getElementVariations("button", KestrosButton.RESOURCE_TYPE);
   }
 
+  /**
+   * Builds a button group holding the single button configured on the given resource.
+   *
+   * @param buttonResource Resource the button is read from.
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public KestrosButtonGroupImpl(@Nonnull Resource buttonResource,
       @Nonnull BaseSlingModelDataSource dataSource,
       String resourcePrefix,

@@ -33,6 +33,16 @@ public class KestrosHeadingImpl extends BaseSyntheticResource implements Kestros
   private String text;
   private String headingType;
 
+  /**
+   * Builds a heading from the text it is given.
+   *
+   * @param text Text shown in the heading.
+   * @param headingType Heading level the element renders at.
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public KestrosHeadingImpl(@Nonnull String text, @Nonnull String headingType,
       @Nonnull BaseSlingModelDataSource dataSource,
       String resourcePrefix, @Nullable String forcedResourceName)
@@ -43,6 +53,15 @@ public class KestrosHeadingImpl extends BaseSyntheticResource implements Kestros
     this.headingType = headingType;
   }
 
+  /**
+   * Builds a heading from the properties of the given resource.
+   *
+   * @param resource Resource the heading properties are read from.
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public KestrosHeadingImpl(@Nonnull Resource resource,
       @Nonnull BaseSlingModelDataSource dataSource,
       String resourcePrefix,

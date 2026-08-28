@@ -36,6 +36,17 @@ public class KestrosBreadCrumbImpl extends BaseSyntheticResource implements Kest
   private Boolean firstItem;
   private Boolean lastItem;
 
+  /**
+   * Builds a single breadcrumb from the link it is given.
+   *
+   * @param link Link the crumb points at.
+   * @param firstItem Whether this is the first crumb in the trail.
+   * @param lastItem Whether this is the last crumb in the trail.
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public KestrosBreadCrumbImpl(
       @Nonnull KestrosLink link,
       @Nonnull Boolean firstItem,

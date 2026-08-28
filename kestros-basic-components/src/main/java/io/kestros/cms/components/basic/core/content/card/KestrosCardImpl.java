@@ -65,6 +65,16 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
   @Nullable
   private AssetRetrievalService assetRetrievalService;
 
+  /**
+   * Builds a card describing the given page.
+   *
+   * @param page Page the card describes.
+   * @param buttonText Text shown on the card's button.
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public KestrosCardImpl(BaseContentPage page, @Nullable String buttonText,
           @Nonnull BaseSlingModelDataSource dataSource,
           @Nonnull String resourcePrefix,
@@ -242,6 +252,18 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
   }
 
 
+  /**
+   * Builds a card from the elements it is given.
+   *
+   * @param description Description shown on the card.
+   * @param title Heading shown on the card.
+   * @param image Image shown on the card.
+   * @param buttonGroup Buttons shown on the card.
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public KestrosCardImpl(String description, KestrosHeading title, KestrosImage image,
           KestrosButtonGroup buttonGroup,
           @Nonnull BaseSlingModelDataSource dataSource, String resourcePrefix,

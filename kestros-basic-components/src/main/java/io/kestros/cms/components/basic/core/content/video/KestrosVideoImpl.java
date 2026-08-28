@@ -32,6 +32,16 @@ public class KestrosVideoImpl extends BaseSyntheticResource implements KestrosVi
   private String videoSource;
   private String fallbackText;
 
+  /**
+   * Builds a video from the source it is given.
+   *
+   * @param videoSource Path to the video the element plays.
+   * @param fallbackText Text shown where the video cannot be played.
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public KestrosVideoImpl(
       @Nonnull String videoSource,
       @Nonnull String fallbackText,

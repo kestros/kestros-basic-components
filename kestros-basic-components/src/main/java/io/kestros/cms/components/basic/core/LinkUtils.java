@@ -26,11 +26,23 @@ import org.apache.commons.lang3.StringUtils;
  * Helpers for reading link properties off a resource.
  */
 public class LinkUtils {
+  /**
+   * Whether the given link points outside the site.
+   *
+   * @param value Link to test.
+   * @return Whether the given link points outside the site.
+   */
   @Nonnull
   public static boolean isLinkExternal(@Nonnull String value) {
     return StringUtils.isNotEmpty(value) && !value.startsWith("/");
   }
 
+  /**
+   * Normalises a configured link value into the href to render.
+   *
+   * @param value Configured link value.
+   * @return Href to render, or null if no value was given.
+   */
   @Nullable
   public static String getLink(@Nullable String value) {
     if (value == null) {

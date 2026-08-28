@@ -32,6 +32,15 @@ public class KestrosVideoEmbedImpl extends BaseSyntheticResource implements Kest
 
   private String videoEmbedCode;
 
+  /**
+   * Builds an embedded video from the markup it is given.
+   *
+   * @param videoEmbedCode Embed markup the element renders.
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public KestrosVideoEmbedImpl(
       @Nonnull String videoEmbedCode,
       @Nonnull BaseSlingModelDataSource dataSource,

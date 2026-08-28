@@ -56,6 +56,23 @@ public class KestrosImageImpl extends BaseSyntheticResource implements KestrosIm
   private AnchorTarget target;
   private AssetRetrievalService assetRetrievalService;
 
+  /**
+   * Builds an image from the values it is given.
+   *
+   * @param imagePath Path to the image asset.
+   * @param altText Alternative text for the image.
+   * @param caption Caption rendered beneath the image.
+   * @param imageTitle Title shown for the image.
+   * @param href Destination the image links to.
+   * @param ariaLabel ARIA label for the image link.
+   * @param anchorTitle Title attribute for the image link.
+   * @param target Target attribute for the image link.
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @param assetRetrievalService Service the image asset is looked up through.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public KestrosImageImpl(String imagePath,
           String altText, String caption,
           String imageTitle,
@@ -81,6 +98,16 @@ public class KestrosImageImpl extends BaseSyntheticResource implements KestrosIm
     }
   }
 
+  /**
+   * Builds an image from the properties of the given resource.
+   *
+   * @param resource Resource the image properties are read from.
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @param assetRetrievalService Service the image asset is looked up through.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public KestrosImageImpl(Resource resource,
           @Nonnull BaseSlingModelDataSource dataSource,
           String resourcePrefix,

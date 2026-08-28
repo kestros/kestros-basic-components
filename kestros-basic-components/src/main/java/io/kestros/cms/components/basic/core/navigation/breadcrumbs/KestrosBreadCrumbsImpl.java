@@ -37,6 +37,15 @@ public class KestrosBreadCrumbsImpl extends BaseContainerSyntheticResource
 
   private List<KestrosBreadCrumb> breadCrumbs;
 
+  /**
+   * Builds a breadcrumb trail from the crumbs it is given.
+   *
+   * @param breadCrumbs Crumbs the trail holds, in order.
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public KestrosBreadCrumbsImpl(
       @Nonnull List<KestrosBreadCrumb> breadCrumbs,
       @Nonnull BaseSlingModelDataSource dataSource,

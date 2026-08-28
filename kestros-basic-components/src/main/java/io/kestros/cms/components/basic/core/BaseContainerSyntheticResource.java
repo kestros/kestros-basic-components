@@ -34,6 +34,14 @@ import org.apache.sling.api.resource.Resource;
 public abstract class BaseContainerSyntheticResource extends BaseSyntheticResource
     implements KestrosContainerElement {
 
+  /**
+   * Builds a synthetic resource for an element that holds other elements.
+   *
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public BaseContainerSyntheticResource(
       @Nonnull BaseSlingModelDataSource dataSource,
       @Nonnull String resourcePrefix, String forcedResourceName) throws

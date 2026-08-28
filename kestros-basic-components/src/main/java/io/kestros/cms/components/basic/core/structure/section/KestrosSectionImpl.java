@@ -34,6 +34,16 @@ public class KestrosSectionImpl extends KestrosContainerImpl implements KestrosS
 
   private String backgroundImage;
 
+  /**
+   * Builds a section from the elements it is given.
+   *
+   * @param backgroundImage Path of the image shown behind the section.
+   * @param childElements Elements the section holds.
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public KestrosSectionImpl(
       @Nullable String backgroundImage,
       @Nonnull List<KestrosBasicComponentElement> childElements,

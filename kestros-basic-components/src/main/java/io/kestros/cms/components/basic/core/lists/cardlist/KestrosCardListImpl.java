@@ -34,6 +34,15 @@ public class KestrosCardListImpl extends BaseContainerSyntheticResource implemen
 
   private List<KestrosCard> cards;
 
+  /**
+   * Builds a card list from the cards it is given.
+   *
+   * @param cards Cards the list holds.
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public KestrosCardListImpl(
       @Nonnull List<KestrosCard> cards,
       @Nonnull BaseSlingModelDataSource dataSource,

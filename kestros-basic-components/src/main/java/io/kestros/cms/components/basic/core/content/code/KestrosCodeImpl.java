@@ -32,6 +32,15 @@ public class KestrosCodeImpl extends BaseSyntheticResource implements KestrosCod
 
   private final String code;
 
+  /**
+   * Builds a code block from the code it is given.
+   *
+   * @param code Code the element renders.
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public KestrosCodeImpl(@Nonnull String code,
       @Nonnull BaseSlingModelDataSource dataSource,
       @Nonnull String resourcePrefix, @Nullable String forcedResourceName)

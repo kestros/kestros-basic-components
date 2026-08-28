@@ -33,6 +33,15 @@ public class KestrosGridImpl extends BaseContainerSyntheticResource implements K
 
   private List<KestrosContainer> columns;
 
+  /**
+   * Builds a grid from the columns it is given.
+   *
+   * @param columns Columns the grid holds.
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public KestrosGridImpl(
       @Nonnull List<KestrosContainer> columns,
       @Nonnull BaseSlingModelDataSource dataSource,

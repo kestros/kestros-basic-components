@@ -40,6 +40,12 @@ public enum HeadingLevels {
     this.value = value;
   }
 
+  /**
+   * Heading level matching the given stored value.
+   *
+   * @param value Stored value to look up.
+   * @return Heading level matching the given value, or null if none matches.
+   */
   @Nullable
   public static HeadingLevels lookup(@Nonnull String value) {
     for (HeadingLevels level : HeadingLevels.values()) {

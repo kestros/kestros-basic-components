@@ -35,6 +35,15 @@ public class KestrosAccordionImpl extends BaseContainerSyntheticResource
 
   private List<KestrosAccordionPanel> panels;
 
+  /**
+   * Builds an accordion from the panels it is given.
+   *
+   * @param panels Panels the accordion holds.
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public KestrosAccordionImpl(
       @Nonnull List<KestrosAccordionPanel> panels,
       @Nonnull BaseSlingModelDataSource dataSource,

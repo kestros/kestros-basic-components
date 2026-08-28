@@ -33,6 +33,16 @@ public class KestrosAlertImpl extends BaseSyntheticResource implements KestrosAl
   private String heading;
   private String text;
 
+  /**
+   * Builds an alert from the heading and text it is given.
+   *
+   * @param heading Heading shown on the alert.
+   * @param text Body text shown on the alert.
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public KestrosAlertImpl(String heading, String text,
       @Nonnull BaseSlingModelDataSource dataSource,
       String resourcePrefix,

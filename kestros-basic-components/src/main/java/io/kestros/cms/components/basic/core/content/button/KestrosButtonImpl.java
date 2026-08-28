@@ -46,6 +46,23 @@ public class KestrosButtonImpl extends BaseSyntheticResource implements KestrosB
   private boolean disabled;
   private String resourceName;
 
+  /**
+   * Builds a button from the values it is given.
+   *
+   * @param text Visible button text.
+   * @param href Destination the button links to.
+   * @param title Title attribute for the button.
+   * @param target Target attribute for the button.
+   * @param rel Relationship attribute for the button.
+   * @param ariaLabel ARIA label for the button.
+   * @param ariaDescribedBy ARIA described-by ID reference.
+   * @param lang Language of the button text.
+   * @param disabled Whether the button is disabled.
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public KestrosButtonImpl(String text, String href,
       String title,
       AnchorTarget target, String rel,
@@ -68,6 +85,15 @@ public class KestrosButtonImpl extends BaseSyntheticResource implements KestrosB
     this.resourceName = forcedResourceName;
   }
 
+  /**
+   * Builds a button from the properties of the given resource.
+   *
+   * @param resource Resource the button properties are read from.
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public KestrosButtonImpl(@Nonnull Resource resource,
       @Nonnull BaseSlingModelDataSource dataSource,
       String resourcePrefix,

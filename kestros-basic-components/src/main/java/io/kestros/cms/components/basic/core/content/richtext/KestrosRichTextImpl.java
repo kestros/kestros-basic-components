@@ -33,6 +33,15 @@ public class KestrosRichTextImpl extends BaseSyntheticResource implements Kestro
 
   private String text;
 
+  /**
+   * Builds a rich text element from the text it is given.
+   *
+   * @param text Rich text the element renders.
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public KestrosRichTextImpl(
       @Nonnull String text,
       @Nonnull BaseSlingModelDataSource dataSource,

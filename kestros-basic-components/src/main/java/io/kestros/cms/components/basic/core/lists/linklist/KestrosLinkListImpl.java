@@ -34,6 +34,15 @@ public class KestrosLinkListImpl extends BaseContainerSyntheticResource implemen
 
   private List<KestrosLink> links;
 
+  /**
+   * Builds a link list from the links it is given.
+   *
+   * @param links Links the list holds.
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public KestrosLinkListImpl(
       @Nonnull List<KestrosLink> links,
       @Nonnull BaseSlingModelDataSource dataSource,

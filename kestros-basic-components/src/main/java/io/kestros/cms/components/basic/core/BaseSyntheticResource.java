@@ -50,6 +50,14 @@ public abstract class BaseSyntheticResource extends BaseComponentElement
   private ComponentUiFrameworkViewRetrievalService componentUiFrameworkViewRetrievalService;
   private BaseSlingModelDataSource dataSource;
 
+  /**
+   * Builds a synthetic resource for a basic component element.
+   *
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public BaseSyntheticResource(
       @Nonnull BaseSlingModelDataSource dataSource,
       @Nonnull String resourcePrefix, @Nullable String forcedResourceName) throws

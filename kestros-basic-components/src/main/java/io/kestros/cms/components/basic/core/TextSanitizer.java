@@ -30,6 +30,12 @@ public final class TextSanitizer {
   private TextSanitizer() {
   }
 
+  /**
+   * Replaces the multi-byte characters in the given text with their HTML entities.
+   *
+   * @param text Text to escape.
+   * @return Escaped text, or null if no text was given.
+   */
   @Nullable
   public static String escapeMultiByteToEntities(@Nullable String text) {
     if (text == null) {
