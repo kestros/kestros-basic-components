@@ -22,17 +22,36 @@ public class HeadingPageTitleDataSource extends HeadingStaticDataSource implemen
   @Optional
   private SlingHttpServletRequest request;
 
+  @Nullable
   BaseContentPage getPage() {
     try {
       if (isOverrideInheritedTitle()) {
-        if (request != null) {
-          return request.adaptTo(ComponentRequestContext.class).getCurrentPage();
-        } else {
+        if (request == null) {
           throw new RuntimeException(
                   "SlingHttpServletRequest is required to override inherited title.");
         }
+        ComponentRequestContext requestContext = request.adaptTo(ComponentRequestContext.class);
+        if (requestContext == null) {
+          LOG.warn("Unable to find text for page title component {}. The request does not adapt"
+                  + " to a component request context.",
+                  String.valueOf(getResource().getPath()).replaceAll("[\r\n]", ""));
+          return null;
+        }
+        return requestContext.getCurrentPage();
       } else {
-        return request.getResource().adaptTo(BaseComponent.class).getContainingPage();
+        if (request == null) {
+          LOG.warn("Unable to find text for page title component {}. No request is available.",
+                  String.valueOf(getResource().getPath()).replaceAll("[\r\n]", ""));
+          return null;
+        }
+        BaseComponent component = request.getResource().adaptTo(BaseComponent.class);
+        if (component == null) {
+          LOG.warn("Unable to find text for page title component {}. The resource does not adapt"
+                  + " to a component.",
+                  String.valueOf(getResource().getPath()).replaceAll("[\r\n]", ""));
+          return null;
+        }
+        return component.getContainingPage();
       }
     } catch (ModelAdaptionException e) {
       LOG.warn("Unable to find text for page title component {}. {}.", getResource().getPath(),
@@ -44,7 +63,11 @@ public class HeadingPageTitleDataSource extends HeadingStaticDataSource implemen
   @Nullable
   @Override
   public String getHeadingText() {
-    return getPage().getDisplayTitle();
+    BaseContentPage page = getPage();
+    if (page == null) {
+      return null;
+    }
+    return page.getDisplayTitle();
   }
 
   public Boolean isOverrideInheritedTitle() {
