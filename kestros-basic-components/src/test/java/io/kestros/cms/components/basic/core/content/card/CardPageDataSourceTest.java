@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import io.kestros.cms.assets.api.exceptions.AssetCollectionRetrievalException;
+import io.kestros.cms.components.basic.api.content.KestrosImage;
 import io.kestros.cms.components.basic.core.BaseDataSourceTest;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +20,7 @@ public class CardPageDataSourceTest extends BaseDataSourceTest {
 
   @Override
   public void doComponentSetup() {
+    registerAssetRetrievalService();
     properties.put("pagePath", "/content/page");
     resource = context.create().resource("/content/page-card", properties);
     context.request().setResource(resource);
@@ -62,6 +64,51 @@ public class CardPageDataSourceTest extends BaseDataSourceTest {
   @Test
   public void testGetImageElementWhenNoImage() {
     assertNull(cardPageDataSource.getImageElement());
+  }
+
+  /**
+   * A card built from a page must carry the asset's own title and description. Before the fix
+   * for #260, getImageElement() passed literal nulls for altText, caption and imageTitle, so an
+   * author's asset title never reached the rendered card.
+   */
+  @Test
+  public void testGetImageElementCarriesTheAssetTitleAndDescription()
+          throws AssetCollectionRetrievalException {
+    properties.put("pagePath", "/content/page-with-asset");
+    resource = context.create().resource("/content/page-card-with-asset", properties);
+    context.request().setResource(resource);
+
+    cardPageDataSource = context.request().adaptTo(CardPageDataSource.class);
+    setupSamplePage("/content/page-with-asset", "/content/assets/card-collection/asset-1");
+    setUpSampleCollection("/content/assets/card-collection");
+
+    final KestrosImage imageElement = cardPageDataSource.getImageElement();
+
+    assertNotNull(imageElement);
+    assertEquals("Asset 1 Title", imageElement.getImageTitle());
+    assertEquals("Asset 1 Description", imageElement.getCaption());
+    assertEquals("Asset 1 Title", imageElement.getAltText());
+  }
+
+  /**
+   * An asset that cannot be resolved still renders its image - it simply loses the asset's title
+   * and description. Danny, 2026-08-04: render the image, log a warning.
+   */
+  @Test
+  public void testGetImageElementStillRendersWhenTheAssetCannotBeResolved() {
+    properties.put("pagePath", "/content/page-unresolvable-asset");
+    resource = context.create().resource("/content/page-card-unresolvable", properties);
+    context.request().setResource(resource);
+
+    cardPageDataSource = context.request().adaptTo(CardPageDataSource.class);
+    setupSamplePage("/content/page-unresolvable-asset", "/content/assets/nowhere/asset-1");
+
+    final KestrosImage imageElement = cardPageDataSource.getImageElement();
+
+    assertNotNull(imageElement);
+    assertEquals("/content/assets/nowhere/asset-1", imageElement.getImagePath());
+    assertNull(imageElement.getImageTitle());
+    assertNull(imageElement.getCaption());
   }
 
   @Test
