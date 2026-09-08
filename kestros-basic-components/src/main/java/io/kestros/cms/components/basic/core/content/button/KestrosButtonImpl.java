@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core.content.button;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosButton;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
@@ -12,6 +13,11 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 
+@SuppressFBWarnings(value = "IMC_IMMATURE_CLASS_NO_TOSTRING",
+    justification = "A style rule rather than a defect: the detector fires on every class that"
+        + " does not declare toString. The fields here are author content read from the"
+        + " repository and are reached through the getters HTL calls, so a default rendering of"
+        + " them is not something to add.")
 public class KestrosButtonImpl extends BaseSyntheticResource implements KestrosButton {
 
   private String text;
@@ -23,7 +29,6 @@ public class KestrosButtonImpl extends BaseSyntheticResource implements KestrosB
   private String ariaDescribedBy;
   private String lang;
   private boolean disabled;
-  private String resourceName;
 
   public KestrosButtonImpl(String text, String href,
       String title,
@@ -44,7 +49,6 @@ public class KestrosButtonImpl extends BaseSyntheticResource implements KestrosB
     this.ariaDescribedBy = ariaDescribedBy;
     this.lang = lang;
     this.disabled = disabled;
-    this.resourceName = forcedResourceName;
   }
 
   public KestrosButtonImpl(@Nonnull Resource resource,
@@ -86,7 +90,7 @@ public class KestrosButtonImpl extends BaseSyntheticResource implements KestrosB
     return title;
   }
 
-  @Nullable
+  @Nonnull
   @Override
   public AnchorTarget getTarget() {
     return target;

@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.componenttypes.api.models.ComponentVariation;
@@ -16,25 +17,28 @@ import org.apache.sling.api.resource.ResourceResolver;
 
 public abstract class BaseSyntheticResource extends BaseComponentElement
     implements KestrosBasicComponentElement {
-  private final ResourceResolver resourceResolver;
   private final String parentPath;
   private final UiFramework uiFramework;
   private final List<ComponentVariation> componentVariations;
   private final String layout;
   private final String id;
   private Resource syntheticResource;
-  private Resource resource;
   private String resourceName;
   private ComponentVariationRetrievalService componentVariationRetrievalService;
   private ComponentUiFrameworkViewRetrievalService componentUiFrameworkViewRetrievalService;
   private BaseSlingModelDataSource dataSource;
 
+  @SuppressFBWarnings(value = {"MC_OVERRIDABLE_METHOD_CALL_IN_CONSTRUCTOR",
+      "OPM_OVERLY_PERMISSIVE_METHOD"},
+      justification = "getComponentResourceType is the subclass's declaration of which"
+          + " component it is, and the variations lookup needs it while the object is still"
+          + " being built. Every implementation returns a constant.")
   public BaseSyntheticResource(
       @Nonnull BaseSlingModelDataSource dataSource,
       @Nonnull String resourcePrefix, @Nullable String forcedResourceName) throws
       ComponentConfigurationException {
     this.dataSource = dataSource;
-    this.resourceResolver = dataSource.getResourceResolver();
+    final ResourceResolver resourceResolver = dataSource.getResourceResolver();
     this.parentPath = dataSource.getResource().getPath();
     this.uiFramework = dataSource.getUiFramework();
     this.componentVariations = dataSource.getElementVariations(resourcePrefix + "Variations",
@@ -60,19 +64,22 @@ public abstract class BaseSyntheticResource extends BaseComponentElement
   }
 
   @Override
+  @Nonnull
   public ResourceResolver getResourceResolver() {
-    return resourceResolver;
+    return dataSource.getResourceResolver();
   }
 
   @Override
+  @Nonnull
   public String getParentPath() {
     return parentPath;
   }
 
   @Override
+  @Nonnull
   public Resource getResource() {
     if (syntheticResource == null) {
-      syntheticResource = toSyntheticResource(resourceResolver, parentPath);
+      syntheticResource = toSyntheticResource(getResourceResolver(), parentPath);
     }
     return syntheticResource;
   }
@@ -90,15 +97,18 @@ public abstract class BaseSyntheticResource extends BaseComponentElement
   }
 
   @Override
+  @Nonnull
   public List<ComponentVariation> getVariations() {
     return new ArrayList<>(componentVariations);
   }
 
   @Override
+  @Nonnull
   public String getLayout() {
     return layout;
   }
 
+  @Nonnull
   public UiFramework getUiFramework() {
     return uiFramework;
   }

@@ -8,6 +8,7 @@ import javax.annotation.Nonnull;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
+import javax.annotation.Nullable;
 
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class TableCellDataSourceComponent extends BaseContainerDataSourceComponent<KestrosTableCell>
@@ -20,6 +21,7 @@ public class TableCellDataSourceComponent extends BaseContainerDataSourceCompone
   }
 
   @Override
+  @Nullable
   public String getText() {
     KestrosTableCell data = getComponentData();
     return data == null ? null : data.getText();

@@ -14,11 +14,13 @@ public class BreadCrumbDataSourceComponent
     extends BaseDataSourceComponent<KestrosBreadCrumb> implements KestrosBreadCrumb {
 
   @Override
+  @Nonnull
   public Boolean isFirstItem() {
     return getComponentData().isFirstItem();
   }
 
   @Override
+  @Nonnull
   public Boolean isLastItem() {
     return getComponentData().isLastItem();
   }

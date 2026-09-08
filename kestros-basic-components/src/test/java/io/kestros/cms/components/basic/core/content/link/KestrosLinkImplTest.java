@@ -25,6 +25,7 @@ import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.components.basic.core.BaseSyntheticTest;
 import io.kestros.cms.components.basic.core.lists.cardlist.CardListStaticDataSource;
+import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
 import org.apache.sling.api.resource.Resource;
 import org.junit.Test;
 
@@ -88,5 +89,28 @@ public class KestrosLinkImplTest extends BaseSyntheticTest {
   @Test
   public void testGetLang() {
     assertEquals("en", link.getLang());
+  }
+
+  @Test
+  public void testGetTargetWhenNoneWasSupplied() throws ComponentConfigurationException {
+    CardListStaticDataSource dataSource = context.request().adaptTo(CardListStaticDataSource.class);
+
+    KestrosLinkImpl targetless = new KestrosLinkImpl("Link Text", "/content/page.html", null,
+        null, null, null, null, null, dataSource, "link", "targetlessElement");
+
+    assertEquals(AnchorTarget.SAME_WINDOW, targetless.getTarget());
+    assertEquals("_self", targetless.getTargetAsString());
+  }
+
+  @Test
+  public void testGetTargetOnALinkBuiltFromAPage() throws ComponentConfigurationException {
+    CardListStaticDataSource dataSource = context.request().adaptTo(CardListStaticDataSource.class);
+    BaseContentPage page = context.create().resource("/content/sites/test/page",
+        "jcr:primaryType", "kes:Page").adaptTo(BaseContentPage.class);
+
+    KestrosLinkImpl pageLink = new KestrosLinkImpl(page, dataSource, "link", "pageLinkElement");
+
+    assertEquals(AnchorTarget.SAME_WINDOW, pageLink.getTarget());
+    assertNull(pageLink.getTitle());
   }
 }

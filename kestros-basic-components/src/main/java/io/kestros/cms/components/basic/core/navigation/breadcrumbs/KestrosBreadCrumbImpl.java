@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core.navigation.breadcrumbs;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosLink;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
@@ -9,6 +10,11 @@ import io.kestros.cms.components.basic.core.BaseSyntheticResource;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+@SuppressFBWarnings(value = "IMC_IMMATURE_CLASS_NO_TOSTRING",
+    justification = "A style rule rather than a defect: the detector fires on every class that"
+        + " does not declare toString. The fields here are author content read from the"
+        + " repository and are reached through the getters HTL calls, so a default rendering of"
+        + " them is not something to add.")
 public class KestrosBreadCrumbImpl extends BaseSyntheticResource implements KestrosBreadCrumb {
 
   private KestrosLink link;
@@ -29,11 +35,13 @@ public class KestrosBreadCrumbImpl extends BaseSyntheticResource implements Kest
   }
 
   @Override
+  @Nonnull
   public Boolean isFirstItem() {
     return firstItem;
   }
 
   @Override
+  @Nonnull
   public Boolean isLastItem() {
     return lastItem;
   }

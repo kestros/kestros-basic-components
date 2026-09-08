@@ -40,12 +40,14 @@ public abstract class BaseDataSourceComponent<T extends KestrosBasicComponentEle
   }
 
   @Override
-  public String getLayout(String propertyName) {
+  @Nonnull
+  public String getLayout(@Nonnull String propertyName) {
     return getComponentData().getLayout(propertyName);
   }
 
   @Override
-  public List<ComponentVariation> getElementVariations(String propertyName, String componentType) {
+  @Nonnull
+  public List<ComponentVariation> getElementVariations(@Nonnull String propertyName, String componentType) {
     return getComponentData().getElementVariations(propertyName, componentType);
   }
 
@@ -62,24 +64,28 @@ public abstract class BaseDataSourceComponent<T extends KestrosBasicComponentEle
   }
 
   @Override
+  @Nonnull
   public List<ComponentVariation> getVariations() {
     return getComponentData().getVariations();
   }
 
   @Override
+  @Nonnull
   public String getLayout() {
     return getComponentData().getLayout();
   }
 
   @Override
+  @Nonnull
   public Resource toSyntheticResource(@Nonnull ResourceResolver resourceResolver,
       @Nonnull String parentPath) {
     // TODO remove duplicate
     if (syntheticResource == null) {
       ResourceMetadata resourceMetadata = new ResourceMetadata();
+      final String forcedName = getForcedResourceName();
       String name = "child-" + java.util.UUID.randomUUID();
-      if (getForcedResourceName() != null && !getForcedResourceName().isEmpty()) {
-        name = getForcedResourceName();
+      if (forcedName != null && !forcedName.isEmpty()) {
+        name = forcedName;
       }
       String path = parentPath + "/" + name;
       if (!path.startsWith("/synthetics")) {
