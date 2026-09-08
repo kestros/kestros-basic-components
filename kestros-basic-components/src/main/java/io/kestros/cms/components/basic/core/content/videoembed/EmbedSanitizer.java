@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 
 /**
  * Defense-in-depth sanitizer for video embed HTML output. Validates that embed code
@@ -152,7 +153,7 @@ public final class EmbedSanitizer {
     return "<iframe " + sanitizedAttrs.toString() + "></iframe>";
   }
 
-  private static boolean isDomainAllowed(String url) {
+  private static boolean isDomainAllowed(@Nonnull String url) {
     // Extract domain from URL: https://domain/path
     String withoutScheme = url.substring("https://".length());
     int slashIndex = withoutScheme.indexOf('/');

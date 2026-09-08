@@ -6,6 +6,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceWrapper;
+import java.util.HashMap;
 
 /**
  * ResourceWrapper that allows for synthetic children to be added to the wrapped Resource.
@@ -20,9 +21,9 @@ public class SyntheticResourceWrapper extends ResourceWrapper {
    * @param wrapped Wrapped Resource.
    * @param children Map of synthetic children to add to the wrapped Resource.
    */
-  public SyntheticResourceWrapper(Resource wrapped, Map<String, Resource> children) {
+  public SyntheticResourceWrapper(Resource wrapped, @Nonnull Map<String, Resource> children) {
     super(wrapped);
-    this.children = children;
+    this.children = new HashMap<>(children);
   }
 
   @Nullable

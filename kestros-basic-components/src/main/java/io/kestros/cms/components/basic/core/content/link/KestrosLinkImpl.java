@@ -30,12 +30,10 @@ public class KestrosLinkImpl extends BaseSyntheticResource implements KestrosLin
     super(dataSource, resourcePrefix, forcedResourceName);
     this.text = page.getDisplayTitle();
     this.href = LinkUtils.getLink(page.getPath());
-    this.title = title;
-    this.target = target;
-    this.rel = rel;
-    this.ariaLabel = ariaLabel;
-    this.ariaDescribedBy = ariaDescribedBy;
-    this.lang = lang;
+    // title, rel, ariaLabel, ariaDescribedBy and lang have no source on a page-built link and stay
+    // null. They were each assigned from themselves here, which read as though the constructor set
+    // them and set nothing.
+    this.target = AnchorTarget.SAME_WINDOW;
   }
 
 
@@ -49,7 +47,9 @@ public class KestrosLinkImpl extends BaseSyntheticResource implements KestrosLin
     this.text = text;
     this.href = href;
     this.title = title;
-    this.target = target;
+    // A link with no target opens in the same window. getTargetAsString already said so; keeping
+    // the field null instead made getTarget break the @Nonnull the interface declares.
+    this.target = target == null ? AnchorTarget.SAME_WINDOW : target;
     this.rel = rel;
     this.ariaLabel = ariaLabel;
     this.ariaDescribedBy = ariaDescribedBy;
@@ -74,7 +74,7 @@ public class KestrosLinkImpl extends BaseSyntheticResource implements KestrosLin
     return title;
   }
 
-  @Nullable
+  @Nonnull
   @Override
   public AnchorTarget getTarget() {
     return target;

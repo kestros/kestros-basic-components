@@ -9,11 +9,19 @@ public interface KestrosImage extends KestrosBasicComponentElement {
   String RESOURCE_TYPE = "/libs/kestros/commons/components/content/image";
 
   @Override
+  @Nonnull
   default String getComponentResourceType() {
     return RESOURCE_TYPE;
   }
 
-  @Nonnull
+  /**
+   * Path of the image to render.
+   *
+   * @return The image path, or null when the component has none configured. Two of the four
+   *     implementations read it straight from a JCR property and return null when it is absent,
+   *     and their tests have always asserted that, so @Nonnull here never described the code.
+   */
+  @Nullable
   String getImagePath();
 
   @Nullable
@@ -44,10 +52,7 @@ public interface KestrosImage extends KestrosBasicComponentElement {
    */
   @Nonnull
   default String getTargetAsString() {
-    if(getTarget() != null) {
-      return getTarget().getTargetValue();
-    }
-    return AnchorTarget.SAME_WINDOW.getTargetValue();
+    return getTarget().getTargetValue();
   }
 
   /**
