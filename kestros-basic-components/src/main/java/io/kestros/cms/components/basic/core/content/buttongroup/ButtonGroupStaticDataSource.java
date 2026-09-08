@@ -30,6 +30,7 @@ public class ButtonGroupStaticDataSource extends BaseContainerSlingModelDataSour
   }
 
 
+  @Nonnull
   public List<ComponentVariation> getButtonVariations() {
     try {
       return getElementVariations("buttonVariations", KestrosButton.RESOURCE_TYPE);

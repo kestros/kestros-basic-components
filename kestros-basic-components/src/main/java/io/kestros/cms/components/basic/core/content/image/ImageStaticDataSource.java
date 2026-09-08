@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core.content.image;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.assets.api.exceptions.AssetRetrievalException;
 import io.kestros.cms.assets.api.models.Asset;
 import io.kestros.cms.assets.api.services.AssetRetrievalService;
@@ -7,8 +8,6 @@ import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosImage;
 import io.kestros.cms.components.basic.core.LinkUtils;
 import io.kestros.cms.components.basic.core.BaseSlingModelDataSource;
-import io.kestros.cms.componenttypes.api.services.ComponentUiFrameworkViewRetrievalService;
-import io.kestros.cms.componenttypes.api.services.ComponentVariationRetrievalService;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
@@ -20,6 +19,11 @@ import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@SuppressFBWarnings(value = "IMC_IMMATURE_CLASS_NO_TOSTRING",
+    justification = "A style rule rather than a defect: the detector fires on every class that"
+        + " does not declare toString. The fields here are author content read from the"
+        + " repository and are reached through the getters HTL calls, so a default rendering of"
+        + " them is not something to add.")
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class ImageStaticDataSource extends BaseSlingModelDataSource implements KestrosImage {
 
@@ -29,19 +33,15 @@ public class ImageStaticDataSource extends BaseSlingModelDataSource implements K
   @Optional
   private AssetRetrievalService assetRetrievalService;
 
-  @OSGiService
-  private ComponentVariationRetrievalService componentVariationRetrievalService;
-
-  @OSGiService
-  private ComponentUiFrameworkViewRetrievalService componentUiFrameworkViewRetrievalService;
-
   private Asset asset;
 
   @Override
+  @Nonnull
   public String getImageTitle() {
     String assetTitle = "";
-    if (getAsset() != null) {
-      assetTitle = getAsset().getTitle();
+    final Asset imageAsset = getAsset();
+    if (imageAsset != null) {
+      assetTitle = imageAsset.getTitle();
     }
     return getResource().getValueMap().get("imageTitle", assetTitle);
   }
@@ -95,7 +95,7 @@ public class ImageStaticDataSource extends BaseSlingModelDataSource implements K
     return AnchorTarget.lookup(getResource());
   }
 
-  @Nullable
+  @Nonnull
   @Override
   public String getAltText() {
     String alt = getResource().getValueMap().get("altText", String.class);
@@ -123,13 +123,15 @@ public class ImageStaticDataSource extends BaseSlingModelDataSource implements K
       return asset;
     }
     try {
-      if (getImagePath() != null) {
-        this.asset = assetRetrievalService.getAsset(getImagePath(), null,
+      final String path = getImagePath();
+      if (path != null) {
+        this.asset = assetRetrievalService.getAsset(path, null,
                 getResource().getResourceResolver());
         return asset;
       }
     } catch (AssetRetrievalException e) {
-      LOG.warn("Failed to retrieve asset for image: {}", getImagePath());
+      LOG.warn("Failed to retrieve asset for image: {}",
+          String.valueOf(getImagePath()).replaceAll("[\r\n]", ""));
     }
     return null;
   }

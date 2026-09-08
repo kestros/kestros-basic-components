@@ -21,8 +21,8 @@ public class NavigationStaticDataSource extends BaseContainerSlingModelDataSourc
   public List<KestrosNavigationItem> getNavigationLinkElements() {
     List<KestrosNavigationItem> links = new ArrayList<>();
     for (Resource childResource : getResource().getChildren()) {
-      if (childResource.getValueMap().get("sling:resourceType", StringUtils.EMPTY).equals(
-          KestrosNavigationItem.RESOURCE_TYPE)) {
+      if (KestrosNavigationItem.RESOURCE_TYPE.equals(
+          childResource.getValueMap().get("sling:resourceType", StringUtils.EMPTY))) {
         KestrosNavigationItem link = childResource.adaptTo(NavigationItemStaticDataSource.class);
         if (link != null) {
           links.add(link);

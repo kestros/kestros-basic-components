@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core.content.table;
 
+import javax.annotation.Nullable;
 import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
 import io.kestros.cms.components.basic.api.table.KestrosTableCell;
 import io.kestros.cms.components.basic.core.BaseContainerDataSourceComponent;
@@ -20,6 +21,7 @@ public class TableCellDataSourceComponent extends BaseContainerDataSourceCompone
   }
 
   @Override
+  @Nullable
   public String getText() {
     KestrosTableCell data = getComponentData();
     return data == null ? null : data.getText();

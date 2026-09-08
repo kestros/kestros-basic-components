@@ -1,5 +1,8 @@
 package io.kestros.cms.components.basic.core.content.heading;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import javax.annotation.Nonnull;
+import io.kestros.cms.components.basic.api.exceptions.ComponentElementRenderingException;
 import io.kestros.cms.components.basic.api.content.KestrosHeading;
 import io.kestros.cms.sitebuilding.api.models.BaseComponent;
 import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
@@ -15,28 +18,54 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
-public class HeadingPageTitleDataSource extends HeadingStaticDataSource implements KestrosHeading {
+public class HeadingPageTitleDataSource extends HeadingStaticDataSource {
   private static final Logger LOG = LoggerFactory.getLogger(HeadingPageTitleDataSource.class);
 
   @Self
   @Optional
   private SlingHttpServletRequest request;
 
+  @SuppressFBWarnings(value = "EXS_EXCEPTION_SOFTENING_NO_CONSTRAINTS",
+      justification = "Called from HTL, which cannot handle a checked exception. The checked"
+          + " cause is wrapped in a typed exception so the failure stays identifiable, per"
+          + " the ruling on DataSourceComponent.")
+  @Nullable
   BaseContentPage getPage() {
     try {
       if (isOverrideInheritedTitle()) {
-        if (request != null) {
-          return request.adaptTo(ComponentRequestContext.class).getCurrentPage();
-        } else {
-          throw new RuntimeException(
-                  "SlingHttpServletRequest is required to override inherited title.");
+        if (request == null) {
+          throw new ComponentElementRenderingException(String.format(
+                  "Unable to resolve the page title for %s: overrideInheritedTitle needs a"
+                  + " request, and this model was adapted from a resource.",
+                  getResource().getPath()));
         }
+        ComponentRequestContext requestContext = request.adaptTo(ComponentRequestContext.class);
+        if (requestContext == null) {
+          LOG.warn("Unable to find text for page title component {}. The request does not adapt"
+                  + " to a component request context.",
+                  String.valueOf(getResource().getPath()).replaceAll("[\r\n]", ""));
+          return null;
+        }
+        return requestContext.getCurrentPage();
       } else {
-        return request.getResource().adaptTo(BaseComponent.class).getContainingPage();
+        if (request == null) {
+          LOG.warn("Unable to find text for page title component {}. No request is available.",
+                  String.valueOf(getResource().getPath()).replaceAll("[\r\n]", ""));
+          return null;
+        }
+        BaseComponent component = request.getResource().adaptTo(BaseComponent.class);
+        if (component == null) {
+          LOG.warn("Unable to find text for page title component {}. The resource does not adapt"
+                  + " to a component.",
+                  String.valueOf(getResource().getPath()).replaceAll("[\r\n]", ""));
+          return null;
+        }
+        return component.getContainingPage();
       }
     } catch (ModelAdaptionException e) {
-      LOG.warn("Unable to find text for page title component {}. {}.", getResource().getPath(),
-              e.getMessage());
+      LOG.warn("Unable to find text for page title component {}. {}.",
+          String.valueOf(getResource().getPath()).replaceAll("[\r\n]", ""),
+          String.valueOf(e.getMessage()).replaceAll("[\r\n]", ""));
       return null;
     }
   }
@@ -44,9 +73,14 @@ public class HeadingPageTitleDataSource extends HeadingStaticDataSource implemen
   @Nullable
   @Override
   public String getHeadingText() {
-    return getPage().getDisplayTitle();
+    BaseContentPage page = getPage();
+    if (page == null) {
+      return null;
+    }
+    return page.getDisplayTitle();
   }
 
+  @Nonnull
   public Boolean isOverrideInheritedTitle() {
     return getResource().getValueMap().get("overrideInheritedTitle", Boolean.FALSE);
   }

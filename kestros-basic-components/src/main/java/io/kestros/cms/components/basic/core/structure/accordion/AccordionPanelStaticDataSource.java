@@ -20,13 +20,13 @@ public class AccordionPanelStaticDataSource extends BaseSlingModelDataSource
   @Nonnull
   @Override
   public Boolean isExpanded() {
-    return getResource().getValueMap().get("panelExpanded", false);
+    return getResource().getValueMap().get("panelExpanded", Boolean.FALSE);
   }
 
   @Nonnull
   @Override
   public Boolean isDisabled() {
-    return getResource().getValueMap().get("panelDisabled", false);
+    return getResource().getValueMap().get("panelDisabled", Boolean.FALSE);
   }
 
   @Nullable

@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core.content.videoembed;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -108,7 +109,7 @@ public final class EmbedSanitizer {
 
     Matcher attrMatcher = ATTR_PATTERN.matcher(attributesStr);
     while (attrMatcher.find()) {
-      String attrName = attrMatcher.group(1).toLowerCase();
+      String attrName = toAsciiLowerCase(attrMatcher.group(1));
       String attrValue = attrMatcher.group(2);
 
       if (!ALLOWED_ATTRIBUTES.contains(attrName)) {
@@ -134,11 +135,11 @@ public final class EmbedSanitizer {
       }
 
       if (sanitizedAttrs.length() > 0) {
-        sanitizedAttrs.append(" ");
+        sanitizedAttrs.append(' ');
       }
 
       if (attrValue != null) {
-        sanitizedAttrs.append(attrName).append("=\"").append(attrValue).append("\"");
+        sanitizedAttrs.append(attrName).append("=\"").append(attrValue).append('"');
       } else {
         sanitizedAttrs.append(attrName);
       }
@@ -152,7 +153,7 @@ public final class EmbedSanitizer {
     return "<iframe " + sanitizedAttrs.toString() + "></iframe>";
   }
 
-  private static boolean isDomainAllowed(String url) {
+  private static boolean isDomainAllowed(@Nonnull String url) {
     // Extract domain from URL: https://domain/path
     String withoutScheme = url.substring("https://".length());
     int slashIndex = withoutScheme.indexOf('/');
@@ -167,6 +168,56 @@ public final class EmbedSanitizer {
     if (portIndex > 0) {
       domain = domain.substring(0, portIndex);
     }
-    return ALLOWED_DOMAINS.contains(domain.toLowerCase());
+    // A host outside ASCII is rejected outright rather than case-folded into the allow-list.
+    // Unicode case folding maps non-ASCII characters onto ASCII ones - U+212A KELVIN SIGN
+    // lowercases to 'k', which is enough to turn an attacker-supplied host into a spelling of
+    // www.youtube-nocookie.com that Java's Set.contains accepts. Browsers happen to apply UTS46
+    // and fold the same way, so this was not exploitable, but that is a property of the browser
+    // rather than of this method, and a sanitizer should not be leaning on it. Every domain in
+    // the allow-list is ASCII, so nothing legitimate is turned away.
+    if (!isAscii(domain)) {
+      return false;
+    }
+    return ALLOWED_DOMAINS.contains(toAsciiLowerCase(domain));
+  }
+
+  /**
+   * Whether every character is ASCII.
+   *
+   * @param value The value to check.
+   *
+   * @return True if the value contains no character above U+007F.
+   */
+  private static boolean isAscii(@Nonnull String value) {
+    int length = value.length();
+    for (int i = 0; i < length; i++) {
+      if (value.charAt(i) > 0x7F) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * Lowercases the ASCII letters A-Z and leaves every other character untouched, so that no
+   * character outside ASCII can be folded onto one inside it.
+   *
+   * @param value The value to fold.
+   *
+   * @return The value with ASCII A-Z lowercased.
+   */
+  @Nonnull
+  private static String toAsciiLowerCase(@Nonnull String value) {
+    int length = value.length();
+    StringBuilder folded = new StringBuilder(length);
+    for (int i = 0; i < length; i++) {
+      char character = value.charAt(i);
+      if (character >= 'A' && character <= 'Z') {
+        folded.append((char) (character - 'A' + 'a'));
+      } else {
+        folded.append(character);
+      }
+    }
+    return folded.toString();
   }
 }

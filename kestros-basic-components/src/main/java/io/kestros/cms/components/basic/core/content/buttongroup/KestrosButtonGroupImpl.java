@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core.content.buttongroup;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.components.basic.api.content.KestrosButton;
 import io.kestros.cms.components.basic.api.content.KestrosButtonGroup;
 import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
@@ -12,12 +13,16 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import org.apache.sling.api.resource.Resource;
 
+@SuppressFBWarnings(value = "IMC_IMMATURE_CLASS_NO_TOSTRING",
+    justification = "A style rule rather than a defect: the detector fires on every class that"
+        + " does not declare toString. The fields here are author content read from the"
+        + " repository and are reached through the getters HTL calls, so a default rendering of"
+        + " them is not something to add.")
 public class KestrosButtonGroupImpl extends BaseContainerSyntheticResource implements
                                                                            KestrosButtonGroup {
 
   private List<KestrosButton> buttons;
   private List<ComponentVariation> buttonVariations;
-  private String buttonLayout;
 
   public KestrosButtonGroupImpl(@Nonnull final List<KestrosButton> buttons,
       @Nonnull BaseSlingModelDataSource dataSource,
@@ -26,7 +31,7 @@ public class KestrosButtonGroupImpl extends BaseContainerSyntheticResource imple
       ComponentConfigurationException {
     super(dataSource, resourcePrefix,
         forcedResourceName);
-    this.buttons = buttons;
+    this.buttons = new ArrayList<>(buttons);
     this.buttonVariations = dataSource.getElementVariations("button", KestrosButton.RESOURCE_TYPE);
   }
 
@@ -51,9 +56,11 @@ public class KestrosButtonGroupImpl extends BaseContainerSyntheticResource imple
           "button",
           "buttonElement"));
     }
-    this.buttons = buttons;
+    this.buttons = new ArrayList<>(buttons);
     if (this.buttons.isEmpty()) {
-      throw new ComponentConfigurationException("Button Group must have at least one button.");
+      throw new ComponentConfigurationException(String.format(
+          "Unable to build the button group %s: a button group must have at least one button.",
+          String.valueOf(resourcePrefix)));
     }
   }
 
