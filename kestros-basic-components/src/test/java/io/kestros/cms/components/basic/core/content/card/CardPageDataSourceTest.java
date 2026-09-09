@@ -3,9 +3,12 @@ package io.kestros.cms.components.basic.core.content.card;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import io.kestros.cms.assets.api.exceptions.AssetCollectionRetrievalException;
 import io.kestros.cms.components.basic.core.BaseDataSourceTest;
+import io.kestros.cms.uiframeworks.api.exceptions.UiFrameworkRetrievalException;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.sling.api.resource.Resource;
@@ -125,5 +128,25 @@ public class CardPageDataSourceTest extends BaseDataSourceTest {
     final CardPageDataSource dataSource = adaptWith(props, "card-cached");
 
     assertEquals(dataSource.getPage(), dataSource.getPage());
+  }
+
+  /**
+   * getImageElement and getButtonGroupElement are both declared @Nullable and both already return
+   * null when there is nothing to build, but an element that could not be configured was rethrown
+   * as a RuntimeException, so a card that should have rendered without an image failed the render
+   * outright.
+   */
+  @Test
+  public void testElementsReturnNullRatherThanThrowWhenTheyCannotBeConfigured() throws Exception {
+    when(theme.getUiFramework()).thenThrow(mock(UiFrameworkRetrievalException.class));
+    final Map<String, Object> props = new HashMap<>();
+    props.put("pagePath", "/content/page");
+    props.put("buttonLabel", "Read more");
+    final CardPageDataSource dataSource = adaptWith(props, "card-no-framework");
+
+    assertNotNull(dataSource.getPage());
+    assertNull(dataSource.getTitleElement());
+    assertNull(dataSource.getImageElement());
+    assertNull(dataSource.getButtonGroupElement());
   }
 }

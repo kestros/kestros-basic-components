@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -28,30 +29,26 @@ public class VideoEmbedYouTubeDataSource extends BaseSlingModelDataSource
   private static final Pattern HTML_PATTERN =
           Pattern.compile("[<>]");
 
-  boolean isValidVideoInput(String input) {
+  boolean isValidVideoInput(@Nullable String input) {
     if (input == null) {
       return false;
     }
 
     String value = input.trim();
 
-    // 🚫 reject anything that looks like HTML
+    // Reject anything that looks like HTML.
     if (HTML_PATTERN.matcher(value).find()) {
       return false;
     }
 
-    // ✅ raw video ID
+    // A raw video ID.
     if (YOUTUBE_VIDEO_ID.matcher(value).matches()) {
       return true;
     }
 
-    // ✅ known YouTube URL formats
+    // A known YouTube URL format.
     Matcher matcher = YOUTUBE_URL_ID.matcher(value);
-    if (matcher.find()) {
-      return true;
-    }
-
-    return false;
+    return matcher.find();
   }
 
 
@@ -87,28 +84,23 @@ public class VideoEmbedYouTubeDataSource extends BaseSlingModelDataSource
     );
   }
 
+  @Nullable
   private String getYoutubeVideo() {
     return getResource().getValueMap().get("youtubeVideo", String.class);
   }
 
   private boolean isMute() {
-    return getResource().getValueMap().get("mute", false);
+    return getResource().getValueMap().get("mute", Boolean.FALSE);
   }
-
-
-    /* ------------------
-       Helpers
-       ------------------ */
 
   private boolean isAllowFullscreen() {
-    return getResource().getValueMap().get("allowFullScreen", true);
+    return getResource().getValueMap().get("allowFullScreen", Boolean.TRUE);
   }
 
-  private String buildEmbedUrl(String videoId) {
-
-
+  @Nonnull
+  private String buildEmbedUrl(@Nonnull String videoId) {
     String base = "https://www.youtube.com/embed/";
-    List<String> params = new ArrayList<>();
+    List<String> params = new ArrayList<>(1);
 
     if (isMute()) {
       params.add("mute=1");
@@ -117,8 +109,14 @@ public class VideoEmbedYouTubeDataSource extends BaseSlingModelDataSource
     return base + videoId + (params.isEmpty() ? "" : "?" + String.join("&", params));
   }
 
-
-  private String extractVideoId(String value) {
+  /**
+   * Pulls the eleven-character video id out of whatever the author typed.
+   *
+   * @param value Raw id, share link or watch URL.
+   * @return The video id, or null when the value is blank or carries no id.
+   */
+  @Nullable
+  private String extractVideoId(@Nullable String value) {
     if (StringUtils.isBlank(value)) {
       return null;
     }
@@ -128,7 +126,7 @@ public class VideoEmbedYouTubeDataSource extends BaseSlingModelDataSource
     }
 
     if (value.contains("youtu.be/")) {
-      return value.substring(value.lastIndexOf("/") + 1);
+      return value.substring(value.lastIndexOf('/') + 1);
     }
 
     int index = value.indexOf("v=");

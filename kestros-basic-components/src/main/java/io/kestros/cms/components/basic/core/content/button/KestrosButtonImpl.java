@@ -23,7 +23,6 @@ public class KestrosButtonImpl extends BaseSyntheticResource implements KestrosB
   private String ariaDescribedBy;
   private String lang;
   private boolean disabled;
-  private String resourceName;
 
   public KestrosButtonImpl(String text, String href,
       String title,
@@ -44,7 +43,6 @@ public class KestrosButtonImpl extends BaseSyntheticResource implements KestrosB
     this.ariaDescribedBy = ariaDescribedBy;
     this.lang = lang;
     this.disabled = disabled;
-    this.resourceName = forcedResourceName;
   }
 
   public KestrosButtonImpl(@Nonnull Resource resource,
@@ -62,9 +60,10 @@ public class KestrosButtonImpl extends BaseSyntheticResource implements KestrosB
     this.ariaLabel = resource.getValueMap().get("ariaLabel", String.class);
     this.ariaDescribedBy = resource.getValueMap().get("ariaDescribedBy", String.class);
     this.lang = resource.getValueMap().get("lang", String.class);
-    this.disabled = resource.getValueMap().get("disabled", false);
+    this.disabled = resource.getValueMap().get("disabled", Boolean.FALSE);
     if (StringUtils.isEmpty(href)) {
-      throw new ComponentConfigurationException("Missing required property");
+      throw new ComponentConfigurationException(
+          String.format("Button on %s is missing its href property.", resource.getPath()));
     }
   }
 

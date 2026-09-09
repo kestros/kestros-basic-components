@@ -2,10 +2,16 @@ package io.kestros.cms.components.basic.core.lists.cardlist;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import io.kestros.cms.assets.api.exceptions.AssetCollectionRetrievalException;
+import io.kestros.cms.components.basic.api.content.KestrosCard;
 import io.kestros.cms.components.basic.core.BaseDataSourceTest;
+import io.kestros.cms.uiframeworks.api.exceptions.UiFrameworkRetrievalException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.apache.sling.api.resource.Resource;
 import org.junit.Test;
@@ -218,5 +224,64 @@ public class CardListAssetsDataSourceTest extends BaseDataSourceTest {
 
     assertEquals("h3",
         context.request().adaptTo(CardListAssetsDataSource.class).getHeadingLevel());
+  }
+
+  /**
+   * A card whose image cannot be configured used to return null from getCardElements, which is
+   * declared @Nonnull - so one unconfigurable asset blanked every card in the list and handed
+   * callers a null they were told could not happen. Each asset now costs at most itself.
+   */
+  @Test
+  public void testGetCardElements_whenElementsCannotBeConfigured_returnsEmptyListNotNull()
+          throws Exception {
+    registerAssetRetrievalService();
+    when(theme.getUiFramework()).thenThrow(mock(UiFrameworkRetrievalException.class));
+    resource = context.create().resource("/content/page/cardlist/assets-no-framework", properties);
+    context.request().setResource(resource);
+
+    List<KestrosCard> cards =
+            context.request().adaptTo(CardListAssetsDataSource.class).getCardElements();
+
+    assertNotNull(cards);
+    assertEquals(0, cards.size());
+  }
+
+  /**
+   * With no collectionPath configured the data source used to hand a null path straight to the
+   * asset service.
+   */
+  @Test
+  public void testGetCollection_whenNoCollectionPathConfigured_returnsNull() {
+    registerAssetRetrievalService();
+    Map<String, Object> noPath = new HashMap<>();
+    resource = context.create().resource("/content/page/cardlist/assets-no-path", noPath);
+    context.request().setResource(resource);
+
+    assertNull(context.request().adaptTo(CardListAssetsDataSource.class).getCollection());
+  }
+
+  @Test
+  public void testGetCardElements_whenNoCollectionPathConfigured_returnsEmptyList() {
+    registerAssetRetrievalService();
+    Map<String, Object> noPath = new HashMap<>();
+    resource = context.create().resource("/content/page/cardlist/assets-no-path-cards", noPath);
+    context.request().setResource(resource);
+
+    assertEquals(0,
+            context.request().adaptTo(CardListAssetsDataSource.class).getCardElements().size());
+  }
+
+  /**
+   * Every element in the bundle inherits toString from BaseComponentElement. Without it the 36
+   * concrete elements logged as Object's identity hash, which named neither the component nor its
+   * type.
+   */
+  @Test
+  public void testToStringNamesTheClassAndResourceType() {
+    registerAssetRetrievalService();
+
+    assertEquals("CardListAssetsDataSource{resourceType=/libs/kestros/commons/components/lists/"
+                    + "card-list}",
+            context.request().adaptTo(CardListAssetsDataSource.class).toString());
   }
 }

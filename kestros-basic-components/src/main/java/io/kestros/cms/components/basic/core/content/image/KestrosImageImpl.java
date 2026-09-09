@@ -56,7 +56,9 @@ public class KestrosImageImpl extends BaseSyntheticResource implements KestrosIm
     this.anchorTitle = anchorTitle;
     this.target = target != null ? target : AnchorTarget.SAME_WINDOW;
     if (StringUtils.isEmpty(this.imagePath)) {
-      throw new ComponentConfigurationException("Missing required property");
+      throw new ComponentConfigurationException(
+              "An image needs an imagePath, and the " + resourcePrefix + " element was built "
+                      + "without one.");
     }
   }
 
@@ -68,7 +70,7 @@ public class KestrosImageImpl extends BaseSyntheticResource implements KestrosIm
     super(dataSource, resourcePrefix, forcedResourceName);
     this.assetRetrievalService = assetRetrievalService;
     String assetPath = resource.getValueMap().get("imagePath", String.class);
-    if(LinkUtils.isLinkExternal(assetPath)) {
+    if (assetPath != null && LinkUtils.isLinkExternal(assetPath)) {
       try {
         Asset asset = getAsset(assetPath, resource.getResourceResolver());
         this.imagePath = asset.getPath();
@@ -88,23 +90,45 @@ public class KestrosImageImpl extends BaseSyntheticResource implements KestrosIm
     this.anchorTitle = resource.getValueMap().get("anchorTitle", String.class);
     this.target = AnchorTarget.lookup(resource);
     if (StringUtils.isEmpty(this.imagePath)) {
-      throw new ComponentConfigurationException("Missing required property");
+      throw new ComponentConfigurationException(
+              "An image needs an imagePath property, and " + resource.getPath() + " has none.");
     }
   }
 
-  Asset getAsset(String path, ResourceResolver resourceResolver) throws AssetRetrievalException {
+  /**
+   * Resolves an asset by path.
+   *
+   * @param path Path of the asset.
+   * @param resourceResolver Resolver to read it with.
+   * @return The asset at that path.
+   * @throws AssetRetrievalException No AssetRetrievalService is available, or the asset cannot be
+   *         retrieved.
+   */
+  @Nonnull
+  final Asset getAsset(@Nonnull String path, @Nonnull ResourceResolver resourceResolver)
+          throws AssetRetrievalException {
     if (assetRetrievalService == null) {
-      throw new AssetRetrievalException("AssetRetrievalService is not available.");
+      throw new AssetRetrievalException(
+              "No AssetRetrievalService is available to resolve the image at " + path + ".");
     }
     return assetRetrievalService.getAsset(path, null, resourceResolver);
   }
 
+  @Nullable
   @Override
   public String getImageTitle() {
     return imageTitle;
   }
 
-  @Nullable
+  /**
+   * Path of the image this element renders.
+   *
+   * <p>Never null: both constructors throw when it is missing, which is why this can honour the
+   * interface's @Nonnull rather than relaxing it.
+   *
+   * @return Path of the image.
+   */
+  @Nonnull
   @Override
   public String getImagePath() {
     return imagePath;

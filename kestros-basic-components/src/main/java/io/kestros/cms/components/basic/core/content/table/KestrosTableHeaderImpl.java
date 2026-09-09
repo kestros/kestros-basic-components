@@ -32,6 +32,7 @@ public class KestrosTableHeaderImpl extends BaseSyntheticResource implements Kes
     this.text = text;
   }
 
+  @Nullable
   @Override
   public String getText() {
     return text;

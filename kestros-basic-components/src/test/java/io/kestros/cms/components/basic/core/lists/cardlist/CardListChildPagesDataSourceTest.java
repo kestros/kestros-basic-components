@@ -21,6 +21,7 @@ import io.kestros.cms.components.basic.api.lists.KestrosCardList;
 import io.kestros.cms.components.basic.core.BaseDataSourceTest;
 import io.kestros.cms.components.basic.core.content.image.ImageStaticDataSource;
 import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
+import io.kestros.cms.uiframeworks.api.exceptions.UiFrameworkRetrievalException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -412,6 +413,25 @@ public class CardListChildPagesDataSourceTest extends BaseDataSourceTest {
         image.getCaption());
     assertEquals("image title must come from the asset, not the page", "Asset 1 Title",
         image.getImageTitle());
+  }
+
+  /**
+   * A theme that cannot resolve its UI framework is a whole-component failure, not a per-page one,
+   * so it must surface rather than render an empty list. This branch previously returned an empty
+   * list; #115 made the component-level failure propagate and the per-page failure skip.
+   */
+  @Test
+  public void testGetCardElementsThrowsWhenTheUiFrameworkCannotBeRetrieved() throws Exception {
+    when(theme.getUiFramework()).thenThrow(mock(UiFrameworkRetrievalException.class));
+    resource = context.create().resource("/content/page/jcr:content/no-framework", properties);
+    context.request().setResource(resource);
+
+    try {
+      context.request().adaptTo(CardListChildPagesDataSource.class).getCardElements();
+      fail("a component whose UI framework cannot be retrieved must not render an empty card list");
+    } catch (final RuntimeException expected) {
+      assertNotNull(expected);
+    }
   }
 
   // ---------------------------------------------------------------------------------------------

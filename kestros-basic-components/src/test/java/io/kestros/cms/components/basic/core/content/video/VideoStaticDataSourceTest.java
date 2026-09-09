@@ -47,6 +47,21 @@ public class VideoStaticDataSourceTest extends BaseDataSourceTest {
     assertEquals("/content/assets/collection/asset-1", videoStaticDataSource.getVideoSource());
   }
 
+  /**
+   * With no AssetRetrievalService bound, getVideoAsset() returns null. getVideoSource() used to
+   * dereference it, so a video component on an instance without the asset service threw instead
+   * of falling back to its fallback text.
+   */
+  @Test
+  public void testGetVideoSourceWhenThereIsNoAssetRetrievalService() {
+    properties.put("videoPath", "/content/assets/collection/asset-1");
+    resource = context.create().resource("/content/video/no-service", properties);
+    context.request().setResource(resource);
+    videoStaticDataSource = context.request().adaptTo(VideoStaticDataSource.class);
+
+    assertNull(videoStaticDataSource.getVideoSource());
+  }
+
   @Test
   public void testGetVideoSourceWhenAssetDoesNotExist() throws AssetCollectionRetrievalException {
     registerAssetRetrievalService();

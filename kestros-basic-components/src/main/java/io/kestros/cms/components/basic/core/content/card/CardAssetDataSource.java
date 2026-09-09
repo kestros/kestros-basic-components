@@ -12,17 +12,19 @@ import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationExce
 import io.kestros.cms.components.basic.core.BaseContainerSlingModelDataSource;
 import io.kestros.cms.components.basic.core.content.heading.KestrosHeadingImpl;
 import io.kestros.cms.components.basic.core.content.image.KestrosImageImpl;
-import io.kestros.cms.componenttypes.api.models.ComponentVariation;
-import java.util.List;
 import javax.annotation.Nullable;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class CardAssetDataSource extends BaseContainerSlingModelDataSource implements KestrosCard {
+
+  private static final Logger LOG = LoggerFactory.getLogger(CardAssetDataSource.class);
 
   private Asset asset;
 
@@ -33,59 +35,47 @@ public class CardAssetDataSource extends BaseContainerSlingModelDataSource imple
   @Nullable
   @Override
   public String getDescription() {
-    if (getAsset() != null) {
-      return getAsset().getDescription();
-    }
-    return null;
+    final Asset currentAsset = getAsset();
+    return currentAsset != null ? currentAsset.getDescription() : null;
   }
 
   @Nullable
   @Override
   public KestrosHeading getTitleElement() {
-    if (getAsset() != null) {
-      String title = getAsset().getTitle();
-      String headingLevel = getResource().getValueMap().get("headingType", "h1");
-      try {
-        return new KestrosHeadingImpl(title, headingLevel,
-                this,
-                "title",
-                "titleElement");
-      } catch (ComponentConfigurationException e) {
-        // do nothing.
-      }
+    final Asset currentAsset = getAsset();
+    if (currentAsset == null) {
       return null;
     }
-    return null;
+    String headingLevel = getResource().getValueMap().get("headingType", "h1");
+    try {
+      return new KestrosHeadingImpl(currentAsset.getTitle(), headingLevel,
+              this,
+              "title",
+              "titleElement");
+    } catch (ComponentConfigurationException e) {
+      LOG.warn("Unable to build the title heading for an asset card; it renders without one.", e);
+      return null;
+    }
   }
 
   @Nullable
   @Override
   public KestrosImage getImageElement() {
-    if (getAsset() != null) {
-      if (getAsset().getPath() != null) {
-        String imagePath = getAsset().getPath();
-        String altText = null;
-        String caption = null;
-        String imageTitle = null;
-        String href = null;
-        String ariaLabel = null;
-        String anchorTitle = null;
-        AnchorTarget target = AnchorTarget.SAME_WINDOW;
-        String id = null;
-        List<ComponentVariation> componentVariations
-                = getElementVariations("imageVariations", KestrosImage.RESOURCE_TYPE);
-        String layout = getLayout("image");
-        try {
-          return new KestrosImageImpl(imagePath, altText, caption,
-                  imageTitle, href, ariaLabel,
-                  anchorTitle, target, this, "image", "imageElement", assetRetrievalService);
-        } catch (ComponentConfigurationException e) {
-          throw new RuntimeException(e);
-        }
-      }
+    final Asset currentAsset = getAsset();
+    if (currentAsset == null) {
       return null;
     }
-    return null;
+    try {
+      return new KestrosImageImpl(currentAsset.getPath(), null, null,
+              null, null, null,
+              null, AnchorTarget.SAME_WINDOW, this, "image", "imageElement",
+              assetRetrievalService);
+    } catch (ComponentConfigurationException e) {
+      // This method already returns null when there is no asset, so a card whose image cannot be
+      // configured renders without one. Rethrowing as RuntimeException failed the whole render.
+      LOG.warn("Unable to build the image for an asset card; it renders without one.", e);
+      return null;
+    }
   }
 
   @Nullable

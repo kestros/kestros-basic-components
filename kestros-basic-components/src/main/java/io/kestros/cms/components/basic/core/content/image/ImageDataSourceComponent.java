@@ -13,6 +13,7 @@ import org.apache.sling.models.annotations.Model;
 public class ImageDataSourceComponent extends BaseDataSourceComponent<KestrosImage> implements
                                                                                     KestrosImage {
 
+  @Nullable
   @Override
   public String getImageTitle() {
     return getComponentData().getImageTitle();
