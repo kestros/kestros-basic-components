@@ -1,8 +1,29 @@
+/*
+ *      Copyright (C) 2020  Kestros, Inc.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ */
+
 package io.kestros.cms.components.basic.api.content;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * Heading levels a heading element can render at.
+ */
 public enum HeadingLevels {
   H1("Heading 1", "h1"),
   H2("Heading 2", "h2"),
@@ -19,6 +40,12 @@ public enum HeadingLevels {
     this.value = value;
   }
 
+  /**
+   * Heading level matching the given stored value.
+   *
+   * @param value Stored value to look up.
+   * @return Heading level matching the given value, or null if none matches.
+   */
   @Nullable
   public static HeadingLevels lookup(@Nonnull String value) {
     for (HeadingLevels level : HeadingLevels.values()) {
@@ -29,11 +56,21 @@ public enum HeadingLevels {
     return null;
   }
 
+  /**
+   * Text shown to an author when choosing this heading level.
+   *
+   * @return Text shown to an author when choosing this heading level.
+   */
   @Nonnull
   public String getDisplayText() {
     return displayText;
   }
 
+  /**
+   * Value this heading level is stored as.
+   *
+   * @return Value this heading level is stored as.
+   */
   @Nonnull
   public String getValue() {
     return value;

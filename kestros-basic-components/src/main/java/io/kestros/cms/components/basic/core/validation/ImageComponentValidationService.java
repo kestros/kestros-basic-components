@@ -24,6 +24,9 @@ package io.kestros.cms.components.basic.core.validation;
 // */
 //@Component(immediate = true,
 //    service = ModelValidatorRegistrationService.class)
+/**
+ * Validation service for the image component.
+ */
 public class ImageComponentValidationService {
 //        extends BaseModelValidationRegistrationService {
 //
