@@ -1,8 +1,11 @@
 package io.kestros.cms.components.basic.core.lists.linklist;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import javax.annotation.Nonnull;
 import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosLink;
 import io.kestros.cms.components.basic.api.lists.KestrosLinkList;
+import io.kestros.cms.components.basic.core.ContentPageSorter;
 import io.kestros.cms.components.basic.core.BaseContainerSlingModelDataSource;
 import io.kestros.cms.components.basic.core.LinkUtils;
 import io.kestros.cms.components.basic.core.content.link.KestrosLinkImpl;
@@ -10,15 +13,17 @@ import io.kestros.cms.componenttypes.api.services.ComponentUiFrameworkViewRetrie
 import io.kestros.cms.componenttypes.api.services.ComponentVariationRetrievalService;
 import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 
+@SuppressFBWarnings(value = "FCBL_FIELD_COULD_BE_LOCAL",
+    justification = "Both fields are @OSGiService injection points. Sling Models writes them"
+        + " after the object is constructed, so neither can be a local variable.")
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class LinkListChildPageDataSource extends BaseContainerSlingModelDataSource
     implements KestrosLinkList {
@@ -28,19 +33,34 @@ public class LinkListChildPageDataSource extends BaseContainerSlingModelDataSour
   @OSGiService
   private ComponentUiFrameworkViewRetrievalService componentUiFrameworkViewRetrievalService;
 
+  /**
+   * The path the child pages are read from.
+   *
+   * <p>Empty rather than null when no path has been configured, so the @Nonnull this already
+   * declared is true. getLinkElements treats empty the same way it used to treat null.</p>
+   *
+   * @return The configured path, or the empty string when none is set.
+   */
+  @Nonnull
   public String getRootPath() {
-    return getResource().getValueMap().get("pagesPath", String.class);
+    return getResource().getValueMap().get("pagesPath", StringUtils.EMPTY);
   }
 
+  @Nonnull
   public AnchorTarget getTarget() {
     return AnchorTarget.lookup(getResource());
   }
 
+  @SuppressFBWarnings(value = "EXS_EXCEPTION_SOFTENING_NO_CHECKED",
+      justification = "Called from HTL, which cannot handle a checked exception. The checked"
+          + " cause is wrapped in a typed ComponentElementRenderingException so the failure"
+          + " stays identifiable, per the ruling on DataSourceComponent.")
   @Override
+  @Nonnull
   public List<KestrosLink> getLinkElements() {
     List<BaseContentPage> pages = new ArrayList<>();
     String rootPath = getRootPath();
-    if (rootPath == null) {
+    if (StringUtils.isEmpty(rootPath)) {
       return new ArrayList<>();
     }
     Resource rootResource = getResourceResolver().getResource(rootPath);
@@ -48,7 +68,7 @@ public class LinkListChildPageDataSource extends BaseContainerSlingModelDataSour
       return new ArrayList<>();
     }
     for (Resource childResource : rootResource.getChildren()) {
-      if (childResource.getName().equals("jcr:content")) {
+      if ("jcr:content".equals(childResource.getName())) {
         continue;
       }
       BaseContentPage page = childResource.adaptTo(BaseContentPage.class);
@@ -58,7 +78,7 @@ public class LinkListChildPageDataSource extends BaseContainerSlingModelDataSour
     }
 
     String sortBy = getResource().getValueMap().get("sortBy", "");
-    boolean reverse = getResource().getValueMap().get("reverse", false);
+    boolean reverse = getResource().getValueMap().get("reverse", Boolean.FALSE);
     int limit = 0;
     try {
       limit = Integer.parseInt(getResource().getValueMap().get("limit", "0"));
@@ -66,36 +86,7 @@ public class LinkListChildPageDataSource extends BaseContainerSlingModelDataSour
       limit = 0;
     }
 
-    if (!sortBy.isEmpty()) {
-      switch (sortBy) {
-        case "createdDate":
-          pages.sort(Comparator.comparing(p -> {
-            Calendar cal = p.getResource().getChild("jcr:content") != null
-                ? p.getResource().getChild("jcr:content").getValueMap()
-                    .get("jcr:created", Calendar.class) : null;
-            return cal != null ? cal.getTimeInMillis() : 0L;
-          }));
-          break;
-        case "lastModified":
-          pages.sort(Comparator.comparing(p -> {
-            Calendar cal = p.getResource().getChild("jcr:content") != null
-                ? p.getResource().getChild("jcr:content").getValueMap()
-                    .get("jcr:lastModified", Calendar.class) : null;
-            return cal != null ? cal.getTimeInMillis() : 0L;
-          }));
-          break;
-        default:
-          pages.sort(Comparator.comparing(p -> {
-            switch (sortBy) {
-              case "name":
-                return p.getName() != null ? p.getName() : "";
-              default:
-                return p.getDisplayTitle() != null ? p.getDisplayTitle() : p.getName();
-            }
-          }));
-          break;
-      }
-    }
+    ContentPageSorter.sort(pages, sortBy);
 
     if (reverse) {
       Collections.reverse(pages);
@@ -104,8 +95,9 @@ public class LinkListChildPageDataSource extends BaseContainerSlingModelDataSour
       pages = pages.subList(0, limit);
     }
 
-    List<KestrosLink> links = new ArrayList<>();
-    for (BaseContentPage page : pages) {
+    final List<BaseContentPage> sourceLinks = pages;
+    final List<KestrosLink> links = new ArrayList<>(sourceLinks.size());
+    for (BaseContentPage page : sourceLinks) {
       KestrosLink link = null;
       try {
         link = new KestrosLinkImpl(page.getDisplayTitle(),

@@ -24,8 +24,9 @@ public interface KestrosNavigationItem extends KestrosLink, KestrosContainerElem
 
   @Nonnull
   default List<Resource> getNavigationItemLinks() {
-    List<Resource> resources = new ArrayList<>();
-    for (KestrosNavigationItem item : getNavigationItems()) {
+    final List<KestrosNavigationItem> sourceResources = getNavigationItems();
+    final List<Resource> resources = new ArrayList<>(sourceResources.size());
+    for (KestrosNavigationItem item : sourceResources) {
       resources.add(item.getResource());
     }
     return resources;

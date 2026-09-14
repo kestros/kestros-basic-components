@@ -40,9 +40,11 @@ public class ImageAssetDataSource extends BaseSlingModelDataSource implements Ke
   }
 
   @Override
+  @Nonnull
   public String getImageTitle() {
-    if (getAsset() != null && StringUtils.isNotBlank(getAsset().getTitle())) {
-      return getAsset().getTitle();
+    final Asset imageAsset = getAsset();
+    if (imageAsset != null && StringUtils.isNotBlank(imageAsset.getTitle())) {
+      return imageAsset.getTitle();
     }
     return getResource().getValueMap().get("imageTitle", "");
   }
@@ -54,8 +56,9 @@ public class ImageAssetDataSource extends BaseSlingModelDataSource implements Ke
     if (StringUtils.isNotBlank(alt)) {
       return alt;
     }
-    if (getAsset() != null && StringUtils.isNotBlank(getAsset().getDescription())) {
-      return getAsset().getDescription();
+    final Asset imageAsset = getAsset();
+    if (imageAsset != null && StringUtils.isNotBlank(imageAsset.getDescription())) {
+      return imageAsset.getDescription();
     }
     return "";
   }
@@ -116,14 +119,17 @@ public class ImageAssetDataSource extends BaseSlingModelDataSource implements Ke
     if (assetRetrievalService == null) {
       return null;
     }
+    final String path = getImagePath();
+    if (path == null) {
+      return null;
+    }
     try {
-      if (getImagePath() != null) {
-        this.asset = assetRetrievalService.getAsset(getImagePath(), null,
-            getResource().getResourceResolver());
-        return asset;
-      }
+      this.asset = assetRetrievalService.getAsset(path, null,
+          getResource().getResourceResolver());
+      return asset;
     } catch (AssetRetrievalException e) {
-      LOG.warn("Failed to retrieve asset for image: {}", getImagePath());
+      LOG.warn("Failed to retrieve asset for image: {}",
+          path.replaceAll("[\r\n]", ""));
     }
     return null;
   }
