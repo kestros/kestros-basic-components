@@ -19,6 +19,7 @@ public class KestrosCodeStaticDataSource extends BaseSlingModelDataSource implem
   private ComponentUiFrameworkViewRetrievalService componentUiFrameworkViewRetrievalService;
 
   @Override
+  @Nonnull
   public String getComponentResourceType() {
     return "/libs/kestros/commons/components/content/code";
   }

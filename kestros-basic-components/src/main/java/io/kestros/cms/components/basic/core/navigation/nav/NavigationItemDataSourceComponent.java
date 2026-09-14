@@ -16,8 +16,12 @@ public class NavigationItemDataSourceComponent
         implements KestrosNavigationItem {
 
   @Override
+  @Nonnull
   public Boolean isActive() {
-    return null;
+    // Was `return null` from a method the interface declares @Nonnull, so any Java caller doing
+    // `if (item.isActive())` unboxed a null and threw. FALSE preserves what HTL already rendered.
+    // Nothing computes active state for a navigation item yet - that gap is unchanged here.
+    return Boolean.FALSE;
   }
 
   @Nonnull

@@ -24,8 +24,9 @@ public interface KestrosTableRow extends KestrosContainerElement {
   @JsonIgnore
   @Nonnull
   default List<Resource> getCells() {
-    List<Resource> cells = new ArrayList<>();
-    for (KestrosTableCell cell : getCellElements()) {
+    final List<KestrosTableCell> sourceCells = getCellElements();
+    final List<Resource> cells = new ArrayList<>(sourceCells.size());
+    for (KestrosTableCell cell : sourceCells) {
       if (cell.isSynthetic()) {
         cells.add(cell.toSyntheticResource(getResourceResolver(), getPath()));
       } else {

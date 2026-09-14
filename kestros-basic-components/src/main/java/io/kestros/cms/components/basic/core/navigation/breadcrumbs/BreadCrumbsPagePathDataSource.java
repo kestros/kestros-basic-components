@@ -61,6 +61,7 @@ public class BreadCrumbsPagePathDataSource extends BaseSlingModelDataSource
     return List.of();
   }
 
+  @Nonnull
   List<BaseContentPage> getAncestorPages() {
     List<BaseContentPage> pages = new ArrayList<>();
     BaseContentPage page = getCurrentOrContainingPage();

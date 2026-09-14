@@ -16,14 +16,12 @@ import org.apache.sling.api.resource.ResourceResolver;
 
 public abstract class BaseSyntheticResource extends BaseComponentElement
     implements KestrosBasicComponentElement {
-  private final ResourceResolver resourceResolver;
   private final String parentPath;
   private final UiFramework uiFramework;
   private final List<ComponentVariation> componentVariations;
   private final String layout;
   private final String id;
   private Resource syntheticResource;
-  private Resource resource;
   private String resourceName;
   private ComponentVariationRetrievalService componentVariationRetrievalService;
   private ComponentUiFrameworkViewRetrievalService componentUiFrameworkViewRetrievalService;
@@ -34,7 +32,7 @@ public abstract class BaseSyntheticResource extends BaseComponentElement
       @Nonnull String resourcePrefix, @Nullable String forcedResourceName) throws
       ComponentConfigurationException {
     this.dataSource = dataSource;
-    this.resourceResolver = dataSource.getResourceResolver();
+    final ResourceResolver resourceResolver = dataSource.getResourceResolver();
     this.parentPath = dataSource.getResource().getPath();
     this.uiFramework = dataSource.getUiFramework();
     this.componentVariations = dataSource.getElementVariations(resourcePrefix + "Variations",
@@ -60,19 +58,22 @@ public abstract class BaseSyntheticResource extends BaseComponentElement
   }
 
   @Override
+  @Nonnull
   public ResourceResolver getResourceResolver() {
-    return resourceResolver;
+    return dataSource.getResourceResolver();
   }
 
   @Override
+  @Nonnull
   public String getParentPath() {
     return parentPath;
   }
 
   @Override
+  @Nonnull
   public Resource getResource() {
     if (syntheticResource == null) {
-      syntheticResource = toSyntheticResource(resourceResolver, parentPath);
+      syntheticResource = toSyntheticResource(getResourceResolver(), parentPath);
     }
     return syntheticResource;
   }
@@ -90,15 +91,18 @@ public abstract class BaseSyntheticResource extends BaseComponentElement
   }
 
   @Override
+  @Nonnull
   public List<ComponentVariation> getVariations() {
     return new ArrayList<>(componentVariations);
   }
 
   @Override
+  @Nonnull
   public String getLayout() {
     return layout;
   }
 
+  @Nonnull
   public UiFramework getUiFramework() {
     return uiFramework;
   }
