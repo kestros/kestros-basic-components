@@ -109,4 +109,14 @@ public class KestrosImageImplTest extends BaseSyntheticTest {
     new KestrosImageImpl("", "Alt text", null, null, null, null, null,
         AnchorTarget.SAME_WINDOW, dataSource, "image", "failElement", assetRetrievalService);
   }
+
+  @Test(expected = ComponentConfigurationException.class)
+  public void testConstructorThrowsWhenResourceHasNoImagePath()
+      throws ComponentConfigurationException {
+    Resource resource = context.create().resource("/content/parent3");
+    context.currentResource(resource);
+    CardListStaticDataSource dataSource = context.request().adaptTo(CardListStaticDataSource.class);
+
+    new KestrosImageImpl(resource, dataSource, "image", "noPathElement", assetRetrievalService);
+  }
 }

@@ -31,19 +31,24 @@ public abstract class BaseComponentElement implements KestrosBasicComponentEleme
   }
 
   @Override
-  public List<ComponentVariation> getElementVariations(String propertyName,
+  @Nonnull
+  public List<ComponentVariation> getElementVariations(@Nonnull String propertyName,
       String componentType) {
 
     BaseComponent component = getResource().adaptTo(BaseComponent.class);
     final List<ComponentVariation> appliedVariations = new ArrayList<>();
+    if (component == null) {
+      // Nothing to resolve variations against; the resolver below is read off the component.
+      return appliedVariations;
+    }
     Object propertyValue = getResource().getValueMap().get(propertyName);
     // if list of maps
     final List<String> appliedVariationNames;
     if (propertyValue instanceof List && !((List<?>) propertyValue).isEmpty()
         && ((List<?>) propertyValue).get(0) instanceof Map) {
       // TODO checking the map here is a bit hacky, but not sure of a better way.
-      List<Map<String, Object>> variationMaps = (List<Map<String, Object>>) propertyValue;
-      appliedVariationNames = new ArrayList<>();
+      final List<Map<String, Object>> variationMaps = (List<Map<String, Object>>) propertyValue;
+      appliedVariationNames = new ArrayList<>(variationMaps.size());
       for (Map<String, Object> variationMap : variationMaps) {
         appliedVariationNames.add((String) variationMap.get("path"));
       }
@@ -88,13 +93,15 @@ public abstract class BaseComponentElement implements KestrosBasicComponentEleme
   }
 
   @Override
+  @Nonnull
   public Resource toSyntheticResource(@Nonnull ResourceResolver resourceResolver,
       @Nonnull String parentPath) {
     if (syntheticResource == null) {
       ResourceMetadata resourceMetadata = new ResourceMetadata();
+      final String forcedName = this.getForcedResourceName();
       String name = "child-" + java.util.UUID.randomUUID();
-      if (this.getForcedResourceName() != null && !this.getForcedResourceName().isEmpty()) {
-        name = this.getForcedResourceName();
+      if (forcedName != null && !forcedName.isEmpty()) {
+        name = forcedName;
       }
       String path = parentPath + "/" + name;
       if (!path.startsWith("/synthetics")) {
@@ -102,25 +109,20 @@ public abstract class BaseComponentElement implements KestrosBasicComponentEleme
       }
       resourceMetadata.setResolutionPath(path);
       resourceMetadata.setModificationTime(System.currentTimeMillis());
-      Map<String, String> parameters = new HashMap<>();
+      final Map<String, String> parameters = new HashMap<>(0);
       resourceMetadata.setParameterMap(parameters);
       ObjectMapper objectMapper = new ObjectMapper();
       Map<String, Object> props = objectMapper.convertValue(this, Map.class);
       props.put("sling:resourceType", getComponentResourceType());
       props.put("jcr:primaryType", "nt:unstructured");
-      syntheticResource = new SyntheticResource(resourceResolver, resourceMetadata,
-          getComponentResourceType()) {
-        private final ValueMap valueMap = new ValueMapDecorator(props);
-
-        @Override
-        public ValueMap getValueMap() {
-          return valueMap;
-        }
-      };
+      syntheticResource = new PropertyBackedSyntheticResource(resourceResolver,
+          resourceMetadata, getComponentResourceType(), props);
       if (this instanceof KestrosContainerElement) {
-        KestrosContainerElement container = (KestrosContainerElement) this;
-        Map<String, Resource> childResources = new java.util.LinkedHashMap<>();
-        for (KestrosBasicComponentElement child : container.getChildElements()) {
+        final KestrosContainerElement container = (KestrosContainerElement) this;
+        final List<KestrosBasicComponentElement> children = container.getChildElements();
+        final Map<String, Resource> childResources =
+            new java.util.LinkedHashMap<>((int) (children.size() / 0.75f) + 1);
+        for (final KestrosBasicComponentElement child : children) {
           Resource childSyntheticResource = child.toSyntheticResource(resourceResolver,
               syntheticResource.getPath());
           childResources.put(childSyntheticResource.getName(), childSyntheticResource);

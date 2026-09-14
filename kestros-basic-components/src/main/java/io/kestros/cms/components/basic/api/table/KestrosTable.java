@@ -21,8 +21,9 @@ public interface KestrosTable extends KestrosContainerElement {
 
   @Nonnull
   default List<Resource> getHeaders() {
-    List<Resource> headers = new ArrayList<>();
-    for (KestrosTableHeader header : getHeaderElements()) {
+    final List<KestrosTableHeader> sourceHeaders = getHeaderElements();
+    final List<Resource> headers = new ArrayList<>(sourceHeaders.size());
+    for (KestrosTableHeader header : sourceHeaders) {
       if (header.isSynthetic()) {
         headers.add(header.toSyntheticResource(getResourceResolver(), getPath()));
       } else {
@@ -37,8 +38,9 @@ public interface KestrosTable extends KestrosContainerElement {
 
   @Nonnull
   default List<Resource> getRows() {
-    List<Resource> rows = new ArrayList<>();
-    for (KestrosTableRow row : getRowElements()) {
+    final List<KestrosTableRow> sourceRows = getRowElements();
+    final List<Resource> rows = new ArrayList<>(sourceRows.size());
+    for (KestrosTableRow row : sourceRows) {
       if (row.isSynthetic()) {
         rows.add(row.toSyntheticResource(getResourceResolver(), getPath()));
       } else {

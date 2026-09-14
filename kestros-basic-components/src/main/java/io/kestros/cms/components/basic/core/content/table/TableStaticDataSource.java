@@ -20,7 +20,7 @@ public class TableStaticDataSource extends BaseContainerSlingModelDataSource
   public List<KestrosTableHeader> getHeaderElements() {
     List<KestrosTableHeader> headers = new ArrayList<>();
     for (Resource childResource : getResource().getChildren()) {
-      if (childResource.getResourceType().equals(KestrosTableHeader.RESOURCE_TYPE)) {
+      if (KestrosTableHeader.RESOURCE_TYPE.equals(childResource.getResourceType())) {
         KestrosTableHeader header = childResource.adaptTo(TableHeaderStaticDataSource.class);
         if (header != null) {
           headers.add(header);
@@ -35,7 +35,7 @@ public class TableStaticDataSource extends BaseContainerSlingModelDataSource
   public List<KestrosTableRow> getRowElements() {
     List<KestrosTableRow> rows = new ArrayList<>();
     for (Resource childResource : getResource().getChildren()) {
-      if (childResource.getResourceType().equals(KestrosTableRow.RESOURCE_TYPE)) {
+      if (KestrosTableRow.RESOURCE_TYPE.equals(childResource.getResourceType())) {
         KestrosTableRow row = childResource.adaptTo(TableRowStaticDataSource.class);
         if (row != null) {
           rows.add(row);

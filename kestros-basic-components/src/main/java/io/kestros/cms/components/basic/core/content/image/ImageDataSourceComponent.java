@@ -14,6 +14,7 @@ public class ImageDataSourceComponent extends BaseDataSourceComponent<KestrosIma
                                                                                     KestrosImage {
 
   @Override
+  @Nonnull
   public String getImageTitle() {
     return getComponentData().getImageTitle();
   }

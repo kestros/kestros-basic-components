@@ -9,6 +9,7 @@ public interface KestrosVideo extends KestrosBasicComponentElement {
   String RESOURCE_TYPE = "/libs/kestros/commons/components/content/video";
 
   @Override
+  @Nonnull
   default String getComponentResourceType() {
     return RESOURCE_TYPE;
   }

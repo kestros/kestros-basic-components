@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.core.content.image;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.assets.api.exceptions.AssetRetrievalException;
 import io.kestros.cms.assets.api.models.Asset;
 import io.kestros.cms.assets.api.services.AssetRetrievalService;
@@ -17,6 +18,11 @@ import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@SuppressFBWarnings(value = "IMC_IMMATURE_CLASS_NO_TOSTRING",
+    justification = "A style rule rather than a defect: the detector fires on every class that"
+        + " does not declare toString. The fields here are author content read from the"
+        + " repository and are reached through the getters HTL calls, so a default rendering of"
+        + " them is not something to add.")
 /**
  * Datasource that resolves image properties from a referenced asset path. The asset's title,
  * description, and path are used to populate the image component fields.
@@ -40,9 +46,11 @@ public class ImageAssetDataSource extends BaseSlingModelDataSource implements Ke
   }
 
   @Override
+  @Nonnull
   public String getImageTitle() {
-    if (getAsset() != null && StringUtils.isNotBlank(getAsset().getTitle())) {
-      return getAsset().getTitle();
+    final Asset imageAsset = getAsset();
+    if (imageAsset != null && StringUtils.isNotBlank(imageAsset.getTitle())) {
+      return imageAsset.getTitle();
     }
     return getResource().getValueMap().get("imageTitle", "");
   }
@@ -54,8 +62,9 @@ public class ImageAssetDataSource extends BaseSlingModelDataSource implements Ke
     if (StringUtils.isNotBlank(alt)) {
       return alt;
     }
-    if (getAsset() != null && StringUtils.isNotBlank(getAsset().getDescription())) {
-      return getAsset().getDescription();
+    final Asset imageAsset = getAsset();
+    if (imageAsset != null && StringUtils.isNotBlank(imageAsset.getDescription())) {
+      return imageAsset.getDescription();
     }
     return "";
   }
@@ -116,14 +125,17 @@ public class ImageAssetDataSource extends BaseSlingModelDataSource implements Ke
     if (assetRetrievalService == null) {
       return null;
     }
+    final String path = getImagePath();
+    if (path == null) {
+      return null;
+    }
     try {
-      if (getImagePath() != null) {
-        this.asset = assetRetrievalService.getAsset(getImagePath(), null,
-            getResource().getResourceResolver());
-        return asset;
-      }
+      this.asset = assetRetrievalService.getAsset(path, null,
+          getResource().getResourceResolver());
+      return asset;
     } catch (AssetRetrievalException e) {
-      LOG.warn("Failed to retrieve asset for image: {}", getImagePath());
+      LOG.warn("Failed to retrieve asset for image: {}",
+          path.replaceAll("[\r\n]", ""));
     }
     return null;
   }
