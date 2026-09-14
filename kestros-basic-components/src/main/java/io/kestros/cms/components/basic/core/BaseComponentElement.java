@@ -31,19 +31,24 @@ public abstract class BaseComponentElement implements KestrosBasicComponentEleme
   }
 
   @Override
-  public List<ComponentVariation> getElementVariations(String propertyName,
+  @Nonnull
+  public List<ComponentVariation> getElementVariations(@Nonnull String propertyName,
       String componentType) {
 
     BaseComponent component = getResource().adaptTo(BaseComponent.class);
     final List<ComponentVariation> appliedVariations = new ArrayList<>();
+    if (component == null) {
+      // Nothing to resolve variations against; the resolver below is read off the component.
+      return appliedVariations;
+    }
     Object propertyValue = getResource().getValueMap().get(propertyName);
     // if list of maps
     final List<String> appliedVariationNames;
     if (propertyValue instanceof List && !((List<?>) propertyValue).isEmpty()
         && ((List<?>) propertyValue).get(0) instanceof Map) {
       // TODO checking the map here is a bit hacky, but not sure of a better way.
-      List<Map<String, Object>> variationMaps = (List<Map<String, Object>>) propertyValue;
-      appliedVariationNames = new ArrayList<>();
+      final List<Map<String, Object>> variationMaps = (List<Map<String, Object>>) propertyValue;
+      appliedVariationNames = new ArrayList<>(variationMaps.size());
       for (Map<String, Object> variationMap : variationMaps) {
         appliedVariationNames.add((String) variationMap.get("path"));
       }
@@ -88,13 +93,15 @@ public abstract class BaseComponentElement implements KestrosBasicComponentEleme
   }
 
   @Override
+  @Nonnull
   public Resource toSyntheticResource(@Nonnull ResourceResolver resourceResolver,
       @Nonnull String parentPath) {
     if (syntheticResource == null) {
       ResourceMetadata resourceMetadata = new ResourceMetadata();
+      final String forcedName = this.getForcedResourceName();
       String name = "child-" + java.util.UUID.randomUUID();
-      if (this.getForcedResourceName() != null && !this.getForcedResourceName().isEmpty()) {
-        name = this.getForcedResourceName();
+      if (forcedName != null && !forcedName.isEmpty()) {
+        name = forcedName;
       }
       String path = parentPath + "/" + name;
       if (!path.startsWith("/synthetics")) {

@@ -11,6 +11,7 @@ public interface KestrosLink extends KestrosBasicComponentElement {
 
   String RESOURCE_TYPE = "/libs/kestros/commons/components/content/link";
 
+  @Nonnull
   default String getComponentResourceType() {
     return RESOURCE_TYPE;
   }
@@ -40,10 +41,7 @@ public interface KestrosLink extends KestrosBasicComponentElement {
    */
   @Nonnull
   default String getTargetAsString() {
-    if(getTarget() != null) {
-      return getTarget().getTargetValue();
-    }
-    return AnchorTarget.SAME_WINDOW.getTargetValue();
+    return getTarget().getTargetValue();
   }
 
   /**

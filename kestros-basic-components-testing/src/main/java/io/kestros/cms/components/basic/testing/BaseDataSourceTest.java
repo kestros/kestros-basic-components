@@ -18,6 +18,7 @@
 
 package io.kestros.cms.components.basic.testing;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -41,6 +42,10 @@ import org.junit.Rule;
  * {@code context.addModelsForClasses(YourDataSource.class)} and create the resource the datasource
  * adapts from.</p>
  */
+@SuppressFBWarnings(value = "PRMC_POSSIBLY_REDUNDANT_METHOD_CALLS",
+    justification = "The repeated call the detector sees is Mockito's any() matcher, which has"
+        + " to be invoked once per stubbing. Both lookups deliberately resolve to the same"
+        + " theme.")
 public abstract class BaseDataSourceTest {
 
   @Rule

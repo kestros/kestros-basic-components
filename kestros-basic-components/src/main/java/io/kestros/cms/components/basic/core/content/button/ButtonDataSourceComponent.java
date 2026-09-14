@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
+import javax.annotation.Nonnull;
 
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class ButtonDataSourceComponent extends BaseDataSourceComponent<KestrosButton> implements
@@ -30,7 +31,7 @@ public class ButtonDataSourceComponent extends BaseDataSourceComponent<KestrosBu
     return getComponentData().getTitle();
   }
 
-  @Nullable
+  @Nonnull
   @Override
   public AnchorTarget getTarget() {
     return getComponentData().getTarget();
