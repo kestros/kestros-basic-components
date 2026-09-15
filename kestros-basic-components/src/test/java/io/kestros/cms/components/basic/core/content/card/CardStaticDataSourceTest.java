@@ -58,6 +58,27 @@ public class CardStaticDataSourceTest extends BaseDataSourceTest {
   }
 
   @Test
+  public void testGetTitleWhenNoHeadingType() {
+    properties.put("headingText", "Test Title");
+    resource = context.create().resource("/content/card/static/card-no-heading-type", properties);
+    context.request().setResource(resource);
+    cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
+
+    assertNotNull(cardStaticDataSource.getTitleElement());
+    assertNotNull(cardStaticDataSource.getTitle());
+    assertEquals("Test Title", cardStaticDataSource.getTitleElement().getHeadingText());
+    assertEquals("h1", cardStaticDataSource.getTitleElement().getHeadingType());
+  }
+
+  @Test
+  public void testGetTitleWhenNoHeadingText() {
+    cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
+
+    assertNull(cardStaticDataSource.getTitleElement());
+    assertNull(cardStaticDataSource.getTitle());
+  }
+
+  @Test
   public void testGetDescription() {
     cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
     assertEquals("Test Description", cardStaticDataSource.getDescription());
