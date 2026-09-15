@@ -43,6 +43,35 @@ public class CardPageDataSourceTest extends BaseDataSourceTest {
   }
 
   @Test
+  public void testGetTitleReadsHeadingTypeNotHeadingLevel() {
+    properties.put("headingType", "h4");
+    properties.put("headingLevel", "h6");
+    resource = context.create().resource("/content/page-card-heading-type", properties);
+    context.request().setResource(resource);
+    cardPageDataSource = context.request().adaptTo(CardPageDataSource.class);
+
+    assertEquals("h4", cardPageDataSource.getTitleElement().getHeadingType());
+  }
+
+  @Test
+  public void testGetTitleWhenHeadingTypeInheritedFromList() {
+    Map<String, Object> listProperties = new HashMap<>();
+    listProperties.put("headingType", "h3");
+    context.create().resource("/content/page-card-list", listProperties);
+
+    resource = context.create().resource("/content/page-card-list/card", properties);
+    context.request().setResource(resource);
+    cardPageDataSource = context.request().adaptTo(CardPageDataSource.class);
+
+    assertEquals("h3", cardPageDataSource.getTitleElement().getHeadingType());
+  }
+
+  @Test
+  public void testGetTitleWhenNoHeadingTypeOnCardOrList() {
+    assertEquals("h2", cardPageDataSource.getTitleElement().getHeadingType());
+  }
+
+  @Test
   public void testGetDescription() {
     assertEquals("Description", cardPageDataSource.getDescription());
   }
