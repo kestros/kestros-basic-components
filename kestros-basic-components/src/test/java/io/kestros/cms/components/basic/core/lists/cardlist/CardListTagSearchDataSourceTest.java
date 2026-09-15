@@ -161,6 +161,29 @@ public class CardListTagSearchDataSourceTest extends BaseDataSourceTest {
   }
 
   @Test
+  public void testGetCardElementsUsesTheHeadingLevelAuthoredOnTheList() {
+    Map<String, Object> headingProps = new HashMap<>();
+    headingProps.put("tags", new String[]{"/etc/tags/topic/java"});
+    headingProps.put("readMoreText", "View Session");
+    headingProps.put("headingType", "h4");
+    Resource headingResource = context.create().resource(
+        "/content/sessions/child-1/jcr:content/heading-h4-component", headingProps);
+    context.request().setResource(headingResource);
+    CardListTagSearchDataSource headingDs =
+        context.request().adaptTo(CardListTagSearchDataSource.class);
+    List<KestrosCard> cards = headingDs.getCardElements();
+    assertEquals(1, cards.size());
+    assertEquals("h4", cards.get(0).getTitleElement().getHeadingType());
+  }
+
+  @Test
+  public void testGetCardElementsWithNoHeadingLevelOnTheListUsesTheDefault() {
+    List<KestrosCard> cards = cardListTagSearchDataSource.getCardElements();
+    assertEquals(1, cards.size());
+    assertEquals("h2", cards.get(0).getTitleElement().getHeadingType());
+  }
+
+  @Test
   public void testGetCardElementsWithSortByName() {
     Map<String, Object> sortProps = new HashMap<>();
     sortProps.put("tags", new String[]{"/etc/tags/topic/java"});
