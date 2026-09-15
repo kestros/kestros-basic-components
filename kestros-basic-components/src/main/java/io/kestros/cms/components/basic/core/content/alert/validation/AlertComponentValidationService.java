@@ -22,6 +22,9 @@ package io.kestros.cms.components.basic.core.content.alert.validation;
 //@Deprecated
 //@Component(immediate = true,
 //        service = ModelValidatorRegistrationService.class)
+/**
+ * Validation service for the alert component.
+ */
 public class AlertComponentValidationService {
 //  extends BaseModelValidationRegistrationService {
 //
