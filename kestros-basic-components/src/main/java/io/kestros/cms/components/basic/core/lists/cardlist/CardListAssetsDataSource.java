@@ -120,7 +120,7 @@ public class CardListAssetsDataSource extends BaseContainerSlingModelDataSource 
       String titleLayout = getLayout("title");
       KestrosHeading titleElement = null;
       try {
-        titleElement = new KestrosHeadingImpl(asset.getTitle(), "h2",
+        titleElement = new KestrosHeadingImpl(asset.getTitle(), getHeadingLevel(),
             this,"title", "titleElement");
       } catch (ComponentConfigurationException e) {
         // do nothing.
