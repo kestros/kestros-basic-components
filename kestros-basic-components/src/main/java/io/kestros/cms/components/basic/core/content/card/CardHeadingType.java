@@ -54,6 +54,25 @@ final class CardHeadingType {
     return DEFAULT;
   }
 
+  /**
+   * Heading level for a card the list builds itself, from a page or an asset rather than from an
+   * authored card node.
+   *
+   * <p>Such a card has no resource of its own, so there is nothing to override with: the level is
+   * the list's, or the default.</p>
+   *
+   * @param listResource the card list's resource, or null when the list has none.
+   * @return an h1-h6 value, never null or blank.
+   */
+  @Nonnull
+  static String resolveFromList(@Nullable Resource listResource) {
+    String listHeadingType = getHeadingType(listResource);
+    if (listHeadingType != null) {
+      return listHeadingType;
+    }
+    return DEFAULT;
+  }
+
   @Nullable
   private static String getHeadingType(@Nullable Resource resource) {
     if (resource == null) {

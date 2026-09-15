@@ -181,6 +181,31 @@ public class CardListChildPagesDataSourceTest extends BaseDataSourceTest {
   }
 
   @Test
+  public void testGetCardElements_headingLevelAuthoredOnTheList_isUsedByEveryCardTitle() {
+    properties.put("headingType", "h4");
+    resource = context.create().resource("/content/page/jcr:content/comp-heading-h4", properties);
+    context.request().setResource(resource);
+    cardListChildPagesDataSource = context.request().adaptTo(CardListChildPagesDataSource.class);
+    List<KestrosCard> cards = cardListChildPagesDataSource.getCardElements();
+    assertEquals(3, cards.size());
+    for (KestrosCard card : cards) {
+      assertEquals("h4", card.getTitleElement().getHeadingType());
+    }
+    properties.remove("headingType");
+  }
+
+  @Test
+  public void testGetCardElements_noHeadingLevelOnTheList_titlesUseTheDefault() {
+    resource = context.create().resource("/content/page/jcr:content/comp-heading-default",
+        properties);
+    context.request().setResource(resource);
+    cardListChildPagesDataSource = context.request().adaptTo(CardListChildPagesDataSource.class);
+    List<KestrosCard> cards = cardListChildPagesDataSource.getCardElements();
+    assertEquals(3, cards.size());
+    assertEquals("h2", cards.get(0).getTitleElement().getHeadingType());
+  }
+
+  @Test
   public void testGetCardElements_limitApplied() {
     properties.put("limit", "2");
     resource = context.create().resource("/content/page/jcr:content/comp-limit-2", properties);
