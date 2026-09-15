@@ -58,7 +58,7 @@ public class CardStaticDataSourceTest extends BaseDataSourceTest {
   }
 
   @Test
-  public void testGetTitleWhenNoHeadingType() {
+  public void testGetTitleWhenNoHeadingTypeOnCardOrList() {
     properties.put("headingText", "Test Title");
     resource = context.create().resource("/content/card/static/card-no-heading-type", properties);
     context.request().setResource(resource);
@@ -67,7 +67,50 @@ public class CardStaticDataSourceTest extends BaseDataSourceTest {
     assertNotNull(cardStaticDataSource.getTitleElement());
     assertNotNull(cardStaticDataSource.getTitle());
     assertEquals("Test Title", cardStaticDataSource.getTitleElement().getHeadingText());
-    assertEquals("h1", cardStaticDataSource.getTitleElement().getHeadingType());
+    assertEquals("h2", cardStaticDataSource.getTitleElement().getHeadingType());
+  }
+
+  @Test
+  public void testGetTitleWhenHeadingTypeInheritedFromList() {
+    Map<String, Object> listProperties = new HashMap<>();
+    listProperties.put("headingType", "h3");
+    context.create().resource("/content/card/inherit-list", listProperties);
+
+    properties.put("headingText", "Test Title");
+    resource = context.create().resource("/content/card/inherit-list/card", properties);
+    context.request().setResource(resource);
+    cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
+
+    assertEquals("h3", cardStaticDataSource.getTitleElement().getHeadingType());
+  }
+
+  @Test
+  public void testGetTitleWhenCardOverridesListHeadingType() {
+    Map<String, Object> listProperties = new HashMap<>();
+    listProperties.put("headingType", "h3");
+    context.create().resource("/content/card/override-list", listProperties);
+
+    properties.put("headingText", "Test Title");
+    properties.put("headingType", "h5");
+    resource = context.create().resource("/content/card/override-list/card", properties);
+    context.request().setResource(resource);
+    cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
+
+    assertEquals("h5", cardStaticDataSource.getTitleElement().getHeadingType());
+  }
+
+  @Test
+  public void testGetTitleWhenListHeadingTypeIsBlank() {
+    Map<String, Object> listProperties = new HashMap<>();
+    listProperties.put("headingType", "");
+    context.create().resource("/content/card/blank-list", listProperties);
+
+    properties.put("headingText", "Test Title");
+    resource = context.create().resource("/content/card/blank-list/card", properties);
+    context.request().setResource(resource);
+    cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
+
+    assertEquals("h2", cardStaticDataSource.getTitleElement().getHeadingType());
   }
 
   @Test

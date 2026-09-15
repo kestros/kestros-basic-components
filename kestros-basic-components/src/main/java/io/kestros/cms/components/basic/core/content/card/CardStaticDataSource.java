@@ -42,12 +42,10 @@ public class CardStaticDataSource extends BaseContainerSlingModelDataSource impl
     if (StringUtils.isBlank(headingText)) {
       return null;
     }
-    // Heading Level is a select the author never has to touch, so headingType is routinely absent.
-    // Reading it through KestrosHeadingImpl(Resource) threw on the missing value and the whole
-    // title vanished from the card with no error. A standalone heading survives the same content:
-    // heading/common/content.html uses data-sly-element, which falls back to h1. Default it here
-    // the way CardAssetDataSource already does.
-    String headingType = titleResource.getValueMap().get("headingType", "h1");
+    // Heading Level is left on "Inherit from list" unless the author overrides it, so headingType
+    // is routinely absent here. Reading it through KestrosHeadingImpl(Resource) threw on the
+    // missing value and the whole title vanished from the card with no error anywhere.
+    String headingType = CardHeadingType.resolve(titleResource, getResource());
     try {
       return new KestrosHeadingImpl(headingText, headingType, this, "title", "titleElement");
     } catch (ComponentConfigurationException e) {
