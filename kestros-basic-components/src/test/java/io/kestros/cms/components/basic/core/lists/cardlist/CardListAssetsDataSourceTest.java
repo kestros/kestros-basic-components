@@ -366,7 +366,7 @@ public class CardListAssetsDataSourceTest extends BaseDataSourceTest {
    * every card for the same reason, and an empty list would hide that.
    */
   @Test
-  public void testGetCardElementsThrowsWhenTheThemeResolvesToNoUiFramework() {
+  public void testGetCardElementsThrowsWhenTheThemeResolvesToNoUiFramework() throws Exception {
     registerAssetRetrievalService();
     when(theme.getUiFramework()).thenReturn(null);
 
