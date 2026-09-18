@@ -165,6 +165,9 @@ public class CardListAssetsDataSource extends BaseContainerSlingModelDataSource 
   /**
    * The asset's path, or null if the asset cannot say where it is. Read before the card is built
    * and outside the try, because it is what names the asset in the log when the card fails.
+   *
+   * @param asset Asset to read the path from.
+   * @return The asset's path, or null if the asset cannot say where it is.
    */
   @Nullable
   private static String readPath(@Nonnull final Asset asset) {
