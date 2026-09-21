@@ -18,9 +18,13 @@
 
 <sly data-sly-use.card="${'io.kestros.cms.components.basic.core.content.card.CardDataSourceComponent'}"/>
 
-<div>
-    <sly data-sly-test="${card.image}" data-sly-resource="${card.image}"/>
-    <sly data-sly-test="${card.title}" data-sly-resource="${card.title}"/>
+<div class="${card.inlineVariations}">
+    <img data-sly-test="${card.imageElement}"
+         src="${card.imageElement.imagePath @ context='uri'}"
+         alt="${card.imageElement.altText}"
+         title="${card.imageElement.imageTitle}"/>
+    <figcaption data-sly-test="${card.imageElement.caption}">${card.imageElement.caption}</figcaption>
+    <sly data-sly-test="${card.titleElement}">${card.titleElement.headingText}</sly>
     <p data-sly-test="${card.description}">${card.description}</p>
-    <sly data-sly-test="${card.buttonGroup}" data-sly-resource="${card.buttonGroup}"/>
+    <sly data-sly-test="${card.buttonGroupElement}" data-sly-resource="${card.buttonGroupElement}"/>
 </div>
