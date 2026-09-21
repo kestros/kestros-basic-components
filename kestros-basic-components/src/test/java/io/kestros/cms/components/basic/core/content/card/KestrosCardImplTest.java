@@ -130,6 +130,18 @@ public class KestrosCardImplTest extends BaseSyntheticTest {
   }
 
   /**
+   * A card list whose author has chosen a heading level. The level is a property on the list's own
+   * resource, which is the resource the data source is adapted from.
+   */
+  private CardListStaticDataSource newDataSource(String listName, String headingType) {
+    Map<String, Object> listProperties = new HashMap<>();
+    listProperties.put("headingType", headingType);
+    Resource resource = context.create().resource("/content/" + listName, listProperties);
+    context.currentResource(resource);
+    return context.request().adaptTo(CardListStaticDataSource.class);
+  }
+
+  /**
    * A real adapted page rather than a bare mock: BaseResource.getResourceResolver() is final, so a
    * mock NPEs the moment the card asks it for a resolver.
    */
@@ -272,5 +284,31 @@ public class KestrosCardImplTest extends BaseSyntheticTest {
     assertEquals("the image path still comes from the page", "/content/assets/photo.jpg",
             cardImage.getImagePath());
     assertNull("an unreadable asset yields no title", cardImage.getAltText());
+  }
+
+  /**
+   * Child Pages and Tag Search build their cards from a page, and those cards have no resource of
+   * their own to carry an override. The level therefore comes from the list, or the title renders
+   * at a level the author never chose.
+   */
+  @Test
+  public void testCardBuiltFromPageUsesTheHeadingLevelAuthoredOnTheList() throws Exception {
+    KestrosCardImpl pageCard = new KestrosCardImpl(pageWithImage(), "Read more",
+            newDataSource("h4-list", "h4"), "card", "listLevelCard", null);
+
+    assertNotNull(pageCard.getTitleElement());
+    assertEquals("h4", pageCard.getTitleElement().getHeadingType());
+  }
+
+  /**
+   * A list with no level authored still renders its card titles, at the shared default.
+   */
+  @Test
+  public void testCardBuiltFromPageFallsBackToTheDefaultWhenTheListHasNoLevel() throws Exception {
+    KestrosCardImpl pageCard = new KestrosCardImpl(pageWithImage(), "Read more", newDataSource(),
+            "card", "defaultLevelCard", null);
+
+    assertNotNull(pageCard.getTitleElement());
+    assertEquals("h2", pageCard.getTitleElement().getHeadingType());
   }
 }

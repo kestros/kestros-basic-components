@@ -97,7 +97,11 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
 
     this.description = page.getDisplayDescription();
     try {
-      this.title = new KestrosHeadingImpl(page.getDisplayTitle(), "h2",
+      // The level comes from the list. A card built from a page has no resource of its own to
+      // carry an override, so hardcoding it here made the list's authored Heading Level do nothing
+      // on Child Pages and Tag Search.
+      this.title = new KestrosHeadingImpl(page.getDisplayTitle(),
+              CardHeadingType.resolveFromList(dataSource.getResource()),
               dataSource, "title", "titleElement");
     } catch (final ComponentConfigurationException e) {
       this.title = null;

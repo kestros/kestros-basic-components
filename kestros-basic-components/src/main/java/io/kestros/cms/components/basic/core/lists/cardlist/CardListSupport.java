@@ -18,6 +18,7 @@
 
 package io.kestros.cms.components.basic.core.lists.cardlist;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.kestros.cms.components.basic.api.content.KestrosCard;
 import io.kestros.cms.components.basic.core.BaseSlingModelDataSource;
 import io.kestros.cms.components.basic.core.LogUtils;
@@ -143,6 +144,11 @@ final class CardListSupport {
    * @param dataSourcePath Path of the card list component.
    * @param cause Failure that stopped the card being built.
    */
+  @SuppressFBWarnings(value = "CRLF_INJECTION_LOGS",
+          justification = "The page path is sanitised through LogUtils before it reaches the log "
+                  + "call, and the detector follows the taint through that sanitiser rather than "
+                  + "clearing it. The path cannot be dropped: the test for #115 asserts the skip "
+                  + "warning names the page that was skipped. Ruled by Danny, 2026-09-13.")
   static void logSkippedCard(@Nonnull final Logger log, @Nullable final BaseContentPage page,
           @Nullable final String dataSourcePath, @Nonnull final Exception cause) {
     log.warn("Skipping the card for {} in the card list at {}. {}: {} Every other page in the list "

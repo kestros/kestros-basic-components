@@ -46,7 +46,7 @@ public class CardAssetDataSource extends BaseContainerSlingModelDataSource imple
     if (currentAsset == null) {
       return null;
     }
-    String headingLevel = getResource().getValueMap().get("headingType", "h1");
+    String headingLevel = CardHeadingType.resolve(getResource());
     try {
       return new KestrosHeadingImpl(currentAsset.getTitle(), headingLevel,
               this,

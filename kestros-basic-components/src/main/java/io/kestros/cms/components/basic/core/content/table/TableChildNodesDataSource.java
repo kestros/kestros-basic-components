@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
@@ -68,11 +69,35 @@ public class TableChildNodesDataSource extends BaseContainerSlingModelDataSource
     return resolved.toString();
   }
 
+  /**
+   * Reads a configured multi-value property. The authoring dialog stores {@code headers} and
+   * {@code columns} as a single comma separated string, while content packages and tests supply a
+   * real multi-value property; both are accepted, and entries are trimmed.
+   *
+   * @param name property name to read.
+   * @return the configured values, or null when the property is absent.
+   */
+  @Nullable
+  private String[] getMultiValue(@Nonnull final String name) {
+    final String[] values = getResource().getValueMap().get(name, String[].class);
+    if (values == null) {
+      return null;
+    }
+    if (values.length != 1) {
+      return values;
+    }
+    final String[] split = values[0].split(",");
+    for (int i = 0; i < split.length; i++) {
+      split[i] = split[i].trim();
+    }
+    return split;
+  }
+
   @Nonnull
   @Override
   public List<KestrosTableHeader> getHeaderElements() {
     final List<KestrosTableHeader> headers = new ArrayList<>();
-    final String[] labels = getResource().getValueMap().get("headers", String[].class);
+    final String[] labels = getMultiValue("headers");
     if (labels != null) {
       for (int i = 0; i < labels.length; i++) {
         try {
@@ -90,7 +115,7 @@ public class TableChildNodesDataSource extends BaseContainerSlingModelDataSource
   public List<KestrosTableRow> getRowElements() {
     final List<KestrosTableRow> rows = new ArrayList<>();
     final String configuredDataPath = getResource().getValueMap().get("dataPath", String.class);
-    final String[] columns = getResource().getValueMap().get("columns", String[].class);
+    final String[] columns = getMultiValue("columns");
     if (configuredDataPath == null || columns == null) {
       return rows;
     }

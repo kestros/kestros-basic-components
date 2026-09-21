@@ -140,4 +140,27 @@ public class TableChildNodesDataSourceTest extends BaseDataSourceTest {
     assertEquals(2, context.request().adaptTo(TableChildNodesDataSource.class)
         .getRowElements().size());
   }
+
+  /**
+   * The authoring dialog stores columns and headers as one comma separated string, so a single
+   * value is split rather than treated as one column.
+   */
+  @Test
+  public void testGetRowElementsWithCommaSeparatedColumns() {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("dataPath", "/content/data/standings");
+    props.put("columns", "pos, club, pts");
+    props.put("headers", "Pos, Club, Pts");
+    final Resource componentResource =
+        context.create().resource("/content/page/jcr:content/table-csv", props);
+    context.request().setResource(componentResource);
+    final TableChildNodesDataSource csvDataSource =
+        context.request().adaptTo(TableChildNodesDataSource.class);
+
+    assertEquals(3, csvDataSource.getHeaderElements().size());
+    assertEquals("Club", csvDataSource.getHeaderElements().get(1).getText());
+    assertEquals(3, csvDataSource.getRowElements().get(0).getCellElements().size());
+    assertEquals("Harborside",
+        csvDataSource.getRowElements().get(0).getCellElements().get(1).getText());
+  }
 }
