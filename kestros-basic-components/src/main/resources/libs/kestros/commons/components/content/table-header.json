@@ -2,7 +2,7 @@
   "jcr:primaryType": "kes:ComponentType",
   "jcr:title": "Table Header",
   "jcr:description": "A single column header cell within a table.",
-  "componentGroup": ".hidden",
+  "componentGroup": "Table Components",
   "sling:resourceSuperType": "kestros/commons/components/kestros-parent",
   "editable": true,
   "container": false,
