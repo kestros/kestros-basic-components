@@ -13,6 +13,7 @@ import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationExce
 import io.kestros.cms.components.basic.core.BaseContainerSyntheticResource;
 import io.kestros.cms.components.basic.core.BaseSlingModelDataSource;
 import io.kestros.cms.components.basic.core.LinkUtils;
+import io.kestros.cms.components.basic.core.LogUtils;
 import io.kestros.cms.components.basic.core.content.button.KestrosButtonImpl;
 import io.kestros.cms.components.basic.core.content.buttongroup.KestrosButtonGroupImpl;
 import io.kestros.cms.components.basic.core.content.heading.KestrosHeadingImpl;
@@ -80,7 +81,11 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
 
     this.description = page.getDisplayDescription();
     try {
-      this.title = new KestrosHeadingImpl(page.getDisplayTitle(), "h2",
+      // The level comes from the list. A card built from a page has no resource of its own to
+      // carry an override, so hardcoding it here made the list's authored Heading Level do nothing
+      // on Child Pages and Tag Search.
+      this.title = new KestrosHeadingImpl(page.getDisplayTitle(),
+              CardHeadingType.resolveFromList(dataSource.getResource()),
               dataSource, "title", "titleElement");
     } catch (final ComponentConfigurationException e) {
       this.title = null;
@@ -114,19 +119,6 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
     } catch (final ComponentConfigurationException e) {
       this.buttonGroup = null;
     }
-  }
-
-  /**
-   * Strips CR and LF from a value before it is logged. Applied to every untrusted value, not only
-   * the JCR path: {@code imagePath} is an author-controlled property and an exception message can
-   * carry anything, so those are the ones that can actually forge a log line.
-   *
-   * @param value Value about to be logged.
-   * @return The value with CR and LF removed, or null unchanged.
-   */
-  @Nullable
-  private static String forLog(@Nullable final String value) {
-    return value == null ? null : value.replaceAll("[\r\n]", "");
   }
 
   /**
@@ -167,10 +159,10 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
     try {
       return new AssetText(asset.getTitle(), asset.getDescription());
     } catch (final RuntimeException e) {
-      final String safePath = forLog(page.getPath());
+      final String safePath = LogUtils.forLog(page.getPath());
       LOG.warn("Resolved the asset for card image on {} but could not read its properties. {}: {} "
               + "The image renders without the asset's title or description.", safePath,
-              e.getClass().getSimpleName(), forLog(e.getMessage()), e);
+              e.getClass().getSimpleName(), LogUtils.forLog(e.getMessage()), e);
       return new AssetText(null, null);
     }
   }
@@ -194,7 +186,7 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
     if (StringUtils.isBlank(imagePath)) {
       return null;
     }
-    final String safePath = forLog(page.getPath());
+    final String safePath = LogUtils.forLog(page.getPath());
     if (assetRetrievalService == null) {
       LOG.warn("Unable to resolve the asset for card image on {}. No AssetRetrievalService "
               + "available; the image renders without the asset's title or description.",
@@ -205,17 +197,17 @@ public class KestrosCardImpl extends BaseContainerSyntheticResource implements K
       return assetRetrievalService.getAsset(imagePath, null, page.getResourceResolver());
     } catch (final AssetRetrievalException e) {
       LOG.warn("Unable to resolve asset {} for card image on {}. {} The image renders without the "
-              + "asset's title or description.", forLog(imagePath), safePath,
-              forLog(e.getMessage()), e);
+              + "asset's title or description.", LogUtils.forLog(imagePath), safePath,
+              LogUtils.forLog(e.getMessage()), e);
       return null;
     } catch (final RuntimeException e) {
       // A card that cannot resolve its asset must still render. CardListChildPagesDataSource wraps
       // anything escaping this constructor in a RuntimeException, which loses the WHOLE card list -
       // so one unreadable asset would blank the page rather than drop one caption.
       LOG.warn("Unexpected failure resolving asset {} for card image on {}. {}: {} The image "
-              + "renders without the asset's title or description.", forLog(imagePath),
+              + "renders without the asset's title or description.", LogUtils.forLog(imagePath),
               safePath,
-              e.getClass().getSimpleName(), forLog(e.getMessage()), e);
+              e.getClass().getSimpleName(), LogUtils.forLog(e.getMessage()), e);
       return null;
     }
   }

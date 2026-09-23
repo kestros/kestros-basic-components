@@ -11,6 +11,7 @@ import io.kestros.cms.components.basic.core.content.buttongroup.KestrosButtonGro
 import io.kestros.cms.components.basic.core.content.heading.KestrosHeadingImpl;
 import io.kestros.cms.components.basic.core.content.image.KestrosImageImpl;
 import javax.annotation.Nullable;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
@@ -37,8 +38,16 @@ public class CardStaticDataSource extends BaseContainerSlingModelDataSource impl
     if (titleResource == null) {
       titleResource = getResource();
     }
+    String headingText = titleResource.getValueMap().get("headingText", String.class);
+    if (StringUtils.isBlank(headingText)) {
+      return null;
+    }
+    // Heading Level is left on "Inherit from list" unless the author overrides it, so headingType
+    // is routinely absent here. Reading it through KestrosHeadingImpl(Resource) threw on the
+    // missing value and the whole title vanished from the card with no error anywhere.
+    String headingType = CardHeadingType.resolve(titleResource, getResource());
     try {
-      return new KestrosHeadingImpl(titleResource, this, "title", "titleElement");
+      return new KestrosHeadingImpl(headingText, headingType, this, "title", "titleElement");
     } catch (ComponentConfigurationException e) {
       return null;
     }

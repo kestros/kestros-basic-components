@@ -1,0 +1,35 @@
+{
+  "jcr:primaryType": "nt:unstructured",
+  "jcr:title": "Child Nodes",
+  "group": "Kestros Core",
+  "classPath": "io.kestros.cms.components.basic.core.content.table.TableChildNodesDataSource",
+  "container": true,
+  "edit": {
+    "jcr:primaryType": "nt:unstructured",
+    "sling:resourceType": "kestros/cms2/dialog",
+    "content": {
+      "jcr:primaryType": "nt:unstructured",
+      "data-path": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/textfield",
+        "label": "Data Path",
+        "name": "dataPath",
+        "autofocus": true
+      },
+      "headers": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/textfield",
+        "label": "Headers (comma separated)",
+        "name": "headers",
+        "autofocus": false
+      },
+      "columns": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "kestros/cms2/fields/general/textfield",
+        "label": "Columns (comma separated property names)",
+        "name": "columns",
+        "autofocus": false
+      }
+    }
+  }
+}
