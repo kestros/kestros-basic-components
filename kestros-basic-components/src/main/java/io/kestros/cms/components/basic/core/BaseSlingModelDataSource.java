@@ -1,3 +1,21 @@
+/*
+ *      Copyright (C) 2020  Kestros, Inc.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ */
+
 package io.kestros.cms.components.basic.core;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -28,6 +46,9 @@ import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 
+/**
+ * Baseline Sling Model for datasource components, adaptable from either a request or a resource.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public abstract class BaseSlingModelDataSource
     extends BaseComponentElement implements KestrosBasicComponentElement {
@@ -46,11 +67,21 @@ public abstract class BaseSlingModelDataSource
   @OSGiService
   private ComponentUiFrameworkViewRetrievalService componentUiFrameworkViewRetrievalService;
 
+  /**
+   * Unique id configured on the resource, if one was set.
+   *
+   * @return Unique id configured on the resource, if one was set.
+   */
   @Nullable
   public String getId() {
     return getResource().getValueMap().get("id", String.class);
   }
 
+  /**
+   * Whether the element is synthetic rather than backed by a stored resource.
+   *
+   * @return Whether the element is synthetic rather than backed by a stored resource.
+   */
   @Nonnull
   public Boolean isSynthetic() {
     return Boolean.FALSE;
@@ -75,6 +106,11 @@ public abstract class BaseSlingModelDataSource
     return resource;
   }
 
+  /**
+   * Request the model was adapted from, if it was adapted from one.
+   *
+   * @return Request the model was adapted from, if it was adapted from one.
+   */
   @Nullable
   public SlingHttpServletRequest getRequest() {
     return slingHttpServletRequest;
@@ -110,6 +146,11 @@ public abstract class BaseSlingModelDataSource
   }
 
 
+  /**
+   * ResourceResolver the containing Resource was resolved with.
+   *
+   * @return ResourceResolver the containing Resource was resolved with.
+   */
   @Nonnull
   public ResourceResolver getResourceResolver() {
     return getResource().getResourceResolver();
@@ -131,6 +172,11 @@ public abstract class BaseSlingModelDataSource
     return parent.getPath();
   }
 
+  /**
+   * Variations applied to the element.
+   *
+   * @return Variations applied to the element.
+   */
   @Nonnull
   public List<ComponentVariation> getVariations() {
     // TODO verify this.
@@ -163,6 +209,11 @@ public abstract class BaseSlingModelDataSource
     return component.getAppliedVariations();
   }
 
+  /**
+   * Layout configured on the resource, defaulting to "default".
+   *
+   * @return Layout configured on the resource, defaulting to "default".
+   */
   @Nonnull
   public String getLayout() {
     return getResource().getValueMap().get("layout", "default");
@@ -196,11 +247,21 @@ public abstract class BaseSlingModelDataSource
     return page.getTheme().getUiFramework();
   }
 
+  /**
+   * Service the component looks its variations up through.
+   *
+   * @return Service the component looks its variations up through.
+   */
   @Nonnull
   public ComponentVariationRetrievalService getComponentVariationRetrievalService() {
     return componentVariationRetrievalService;
   }
 
+  /**
+   * Service the component looks its UiFramework views up through.
+   *
+   * @return Service the component looks its UiFramework views up through.
+   */
   @Nonnull
   public ComponentUiFrameworkViewRetrievalService getComponentUiFrameworkViewRetrievalService() {
     return componentUiFrameworkViewRetrievalService;
