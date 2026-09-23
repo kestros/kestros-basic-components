@@ -56,25 +56,4 @@
         <module>kestros-basic-components-testing</module>
     </modules>
 
-    <profiles>
-        <profile>
-            <id>strict</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.rat</groupId>
-                        <artifactId>apache-rat-plugin</artifactId>
-                        <configuration>
-                            <excludes combine.children="append">
-                                <exclude>**/*.json</exclude>
-                                <exclude>src/main/resources/content/ROOT.json</exclude>
-                                <exclude>**/favicon.svg</exclude>
-                            </excludes>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-
 </project>
