@@ -16,7 +16,6 @@ import io.kestros.cms.components.basic.core.content.button.KestrosButtonImpl;
 import io.kestros.cms.components.basic.core.content.buttongroup.KestrosButtonGroupImpl;
 import io.kestros.cms.components.basic.core.content.heading.KestrosHeadingImpl;
 import io.kestros.cms.components.basic.core.content.image.KestrosImageImpl;
-import io.kestros.cms.componenttypes.api.models.ComponentVariation;
 import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,93 +44,74 @@ public class CardPageDataSource extends BaseContainerSlingModelDataSource implem
   @Nullable
   @Override
   public KestrosHeading getTitleElement() {
-    if (getPage() != null) {
-      String title = getPage().getDisplayTitle();
-      String headingLevel = CardHeadingType.resolve(getResource());
-      try {
-        return new KestrosHeadingImpl(title, headingLevel,
-                this,
-                "title",
-                "titleElement");
-      } catch (ComponentConfigurationException e) {
-        // do nothing.
-      }
+    final BaseContentPage currentPage = getPage();
+    if (currentPage == null) {
+      return null;
     }
-    return null;
+    String headingLevel = CardHeadingType.resolve(getResource());
+    try {
+      return new KestrosHeadingImpl(currentPage.getDisplayTitle(), headingLevel,
+              this,
+              "title",
+              "titleElement");
+    } catch (ComponentConfigurationException e) {
+      LOG.warn("Unable to build the title heading for a page card; it renders without one.", e);
+      return null;
+    }
   }
 
   @Nullable
   @Override
   public String getDescription() {
-    if (getPage() != null) {
-      return getPage().getDisplayDescription();
-    }
-    return null;
+    final BaseContentPage currentPage = getPage();
+    return currentPage != null ? currentPage.getDisplayDescription() : null;
   }
 
   @Nullable
   @Override
   public KestrosImage getImageElement() {
-    if (getPage() != null) {
-      if (StringUtils.isNotEmpty(getPage().getImagePath())) {
-        String imagePath = getPage().getImagePath();
-        AssetText assetText = readAssetText(imagePath);
-        String altText = StringUtils.defaultString(assetText.title);
-        String caption = assetText.description;
-        String imageTitle = assetText.title;
-        String href = null;
-        String ariaLabel = null;
-        String anchorTitle = null;
-        AnchorTarget target = AnchorTarget.SAME_WINDOW;
-        String id = null;
-        List<ComponentVariation> componentVariations
-                = getElementVariations("imageVariations",
-                KestrosImage.RESOURCE_TYPE);
-        String layout = getLayout("image");
-        try {
-          return new KestrosImageImpl(imagePath, altText, caption,
-                  imageTitle, href, ariaLabel,
-                  anchorTitle, target,
-                  this, "image", "imageElement", assetRetrievalService);
-        } catch (ComponentConfigurationException e) {
-          throw new RuntimeException(e);
-        }
-      }
+    final BaseContentPage currentPage = getPage();
+    if (currentPage == null || StringUtils.isEmpty(currentPage.getImagePath())) {
       return null;
     }
-    return null;
+    final String imagePath = currentPage.getImagePath();
+    final AssetText assetText = readAssetText(imagePath);
+    try {
+      return new KestrosImageImpl(imagePath, StringUtils.defaultString(assetText.title),
+              assetText.description, assetText.title,
+              null, null, null, AnchorTarget.SAME_WINDOW,
+              this, "image", "imageElement", assetRetrievalService);
+    } catch (ComponentConfigurationException e) {
+      // This method already returns null when the page has no image, so a card whose image cannot
+      // be configured renders without one. Rethrowing as RuntimeException failed the whole render.
+      LOG.warn("Unable to build the image for a page card; it renders without one.", e);
+      return null;
+    }
   }
 
   @Nullable
   @Override
   public KestrosButtonGroup getButtonGroupElement() {
-    if (getPage() != null) {
-      try {
-        List<KestrosButton> buttons = new ArrayList<>();
-        String text = getResource().getValueMap().get("buttonLabel", String.class);
-        String href = LinkUtils.getLink(getPage().getPath());
-        String title = null;
-        AnchorTarget target = AnchorTarget.SAME_WINDOW;
-        String rel = null;
-        String ariaLabel = null;
-        String ariaDescribedBy = null;
-        String lang = null;
-        boolean disabled = false;
-        String buttonLayout = getLayout("button");
-        String buttonId = null;
-        buttons.add(new KestrosButtonImpl(text, href, title,
-                target, rel, ariaLabel,
-                ariaDescribedBy, lang, disabled,
-                this,
-                "button", "buttonElement"));
-        return new KestrosButtonGroupImpl(buttons,
-                this,
-                "buttonGroup", "buttonGroupElement");
-      } catch (ComponentConfigurationException e) {
-        throw new RuntimeException(e);
-      }
+    final BaseContentPage currentPage = getPage();
+    if (currentPage == null) {
+      return null;
     }
-    return null;
+    try {
+      List<KestrosButton> buttons = new ArrayList<>(1);
+      String text = getResource().getValueMap().get("buttonLabel", String.class);
+      buttons.add(new KestrosButtonImpl(text, LinkUtils.getLink(currentPage.getPath()), null,
+              AnchorTarget.SAME_WINDOW, null, null,
+              null, null, false,
+              this,
+              "button", "buttonElement"));
+      return new KestrosButtonGroupImpl(buttons,
+              this,
+              "buttonGroup", "buttonGroupElement");
+    } catch (ComponentConfigurationException e) {
+      // Same reasoning as getImageElement: the card renders without a button rather than failing.
+      LOG.warn("Unable to build the button group for a page card; it renders without one.", e);
+      return null;
+    }
   }
 
   /**

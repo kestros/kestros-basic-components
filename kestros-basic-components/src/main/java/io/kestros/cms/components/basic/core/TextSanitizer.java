@@ -17,8 +17,9 @@ public final class TextSanitizer {
     if (text == null) {
       return null;
     }
+    final int length = text.length();
     boolean hasMultiByte = false;
-    for (int i = 0; i < text.length(); i++) {
+    for (int i = 0; i < length; i++) {
       if (text.charAt(i) > 127) {
         hasMultiByte = true;
         break;
@@ -27,8 +28,8 @@ public final class TextSanitizer {
     if (!hasMultiByte) {
       return text;
     }
-    StringBuilder sb = new StringBuilder(text.length() + 32);
-    for (int i = 0; i < text.length(); i++) {
+    StringBuilder sb = new StringBuilder(length + 32);
+    for (int i = 0; i < length; i++) {
       char c = text.charAt(i);
       if (c > 127) {
         sb.append("&#").append((int) c).append(';');

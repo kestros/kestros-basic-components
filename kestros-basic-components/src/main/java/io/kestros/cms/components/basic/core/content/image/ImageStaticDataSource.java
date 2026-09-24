@@ -7,8 +7,6 @@ import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.content.KestrosImage;
 import io.kestros.cms.components.basic.core.LinkUtils;
 import io.kestros.cms.components.basic.core.BaseSlingModelDataSource;
-import io.kestros.cms.componenttypes.api.services.ComponentUiFrameworkViewRetrievalService;
-import io.kestros.cms.componenttypes.api.services.ComponentVariationRetrievalService;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
@@ -29,19 +27,15 @@ public class ImageStaticDataSource extends BaseSlingModelDataSource implements K
   @Optional
   private AssetRetrievalService assetRetrievalService;
 
-  @OSGiService
-  private ComponentVariationRetrievalService componentVariationRetrievalService;
-
-  @OSGiService
-  private ComponentUiFrameworkViewRetrievalService componentUiFrameworkViewRetrievalService;
-
   private Asset asset;
 
+  @Nullable
   @Override
   public String getImageTitle() {
     String assetTitle = "";
-    if (getAsset() != null) {
-      assetTitle = getAsset().getTitle();
+    final Asset resolvedAsset = getAsset();
+    if (resolvedAsset != null) {
+      assetTitle = resolvedAsset.getTitle();
     }
     return getResource().getValueMap().get("imageTitle", assetTitle);
   }
@@ -95,7 +89,17 @@ public class ImageStaticDataSource extends BaseSlingModelDataSource implements K
     return AnchorTarget.lookup(getResource());
   }
 
-  @Nullable
+  /**
+   * Text read out in place of the image.
+   *
+   * <p>The asset fallback below reads the field rather than calling getAsset(), so it only
+   * applies when some other getter has already resolved the asset. That is a real defect and it
+   * is left alone here: this card is SpotBugs to zero, and changing it changes what
+   * ImageStaticDataSourceTest.testGetAltText asserts. Filed separately.
+   *
+   * @return The configured alt text, the asset's description, or an empty string.
+   */
+  @Nonnull
   @Override
   public String getAltText() {
     String alt = getResource().getValueMap().get("altText", String.class);
@@ -122,14 +126,16 @@ public class ImageStaticDataSource extends BaseSlingModelDataSource implements K
     if (asset != null) {
       return asset;
     }
+    final String imagePath = getImagePath();
     try {
-      if (getImagePath() != null) {
-        this.asset = assetRetrievalService.getAsset(getImagePath(), null,
+      if (imagePath != null) {
+        this.asset = assetRetrievalService.getAsset(imagePath, null,
                 getResource().getResourceResolver());
         return asset;
       }
     } catch (AssetRetrievalException e) {
-      LOG.warn("Failed to retrieve asset for image: {}", getImagePath());
+      LOG.warn("Failed to retrieve the asset behind an image; the image path is in the "
+          + "exception below.", e);
     }
     return null;
   }

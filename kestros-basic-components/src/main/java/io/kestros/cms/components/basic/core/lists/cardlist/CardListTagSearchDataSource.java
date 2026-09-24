@@ -11,6 +11,7 @@ import io.kestros.cms.tagging.api.models.KestrosTag;
 import io.kestros.cms.tagging.api.services.TagRetrievalService;
 import io.kestros.commons.structuredslingmodels.exceptions.NoValidAncestorException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -47,6 +48,12 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
     return getResource().getValueMap().get("readMoreText", String.class);
   }
 
+  /**
+   * Page this data source sits on.
+   *
+   * @return The containing page, or null when the resource has no page ancestor.
+   */
+  @Nullable
   BaseContentPage getContainingPage() {
     if (containingPage == null) {
       try {
@@ -70,6 +77,13 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
     return tags;
   }
 
+  /**
+   * Path the tag search is rooted at.
+   *
+   * @return The configured pagesPath, else the containing page's parent, or null when there is no
+   *     containing page.
+   */
+  @Nullable
   String getRootPath() {
     String pagesPath = getResource().getValueMap().get("pagesPath", String.class);
     if (pagesPath != null) {
@@ -86,6 +100,12 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
     return null;
   }
 
+  /**
+   * Page the tag search is rooted at.
+   *
+   * @return The root page, or null when no root path resolves to one.
+   */
+  @Nullable
   BaseContentPage getRootPage() {
     String rootPath = getRootPath();
     if (rootPath == null) {
@@ -98,6 +118,12 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
     return null;
   }
 
+  /**
+   * Child pages of the root page carrying at least one of the configured tags.
+   *
+   * @return Matching pages, empty when nothing is configured or nothing matches.
+   */
+  @Nonnull
   List<BaseContentPage> getTaggedPages() {
     List<BaseContentPage> taggedPages = new ArrayList<>();
     if (tagRetrievalService == null) {
@@ -109,10 +135,7 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
       return taggedPages;
     }
 
-    Set<String> filterTagPaths = new HashSet<>();
-    for (String tagPath : configuredTags) {
-      filterTagPaths.add(tagPath);
-    }
+    Set<String> filterTagPaths = new HashSet<>(Arrays.asList(configuredTags));
 
     BaseContentPage currentPage = getContainingPage();
     BaseContentPage rootPage = getRootPage();
@@ -141,12 +164,17 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
   @Nonnull
   @Override
   public List<KestrosCard> getCardElements() {
-    CardListSupport.requireComponentPrerequisites(this);
+    // Every card in this list shares these prerequisites, so a failure among them belongs to the
+    // whole component and must surface rather than render an empty list.
+    IllegalStateException prerequisiteFailure = CardListSupport.componentPrerequisiteFailure(this);
+    if (prerequisiteFailure != null) {
+      throw prerequisiteFailure;
+    }
     List<BaseContentPage> pages = new ArrayList<>(getTaggedPages());
 
     String sortBy = getResource().getValueMap().get("sortBy", "");
-    boolean reverse = getResource().getValueMap().get("reverse", false);
-    int limit = 0;
+    boolean reverse = getResource().getValueMap().get("reverse", Boolean.FALSE);
+    int limit;
     try {
       limit = Integer.parseInt(getResource().getValueMap().get("limit", "0"));
     } catch (NumberFormatException e) {
@@ -156,30 +184,16 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
     if (!sortBy.isEmpty()) {
       switch (sortBy) {
         case "createdDate":
-          pages.sort(Comparator.comparing(p -> {
-            Calendar cal = p.getResource().getChild("jcr:content") != null
-                ? p.getResource().getChild("jcr:content").getValueMap()
-                    .get("jcr:created", Calendar.class) : null;
-            return cal != null ? cal.getTimeInMillis() : 0L;
-          }));
+          pages.sort(Comparator.comparing(CardListTagSearchDataSource::getCreatedTime));
           break;
         case "lastModified":
-          pages.sort(Comparator.comparing(p -> {
-            Calendar cal = p.getResource().getChild("jcr:content") != null
-                ? p.getResource().getChild("jcr:content").getValueMap()
-                    .get("jcr:lastModified", Calendar.class) : null;
-            return cal != null ? cal.getTimeInMillis() : 0L;
-          }));
+          pages.sort(Comparator.comparing(CardListTagSearchDataSource::getModifiedTime));
+          break;
+        case "name":
+          pages.sort(Comparator.comparing(BaseContentPage::getName));
           break;
         default:
-          pages.sort(Comparator.comparing(p -> {
-            switch (sortBy) {
-              case "name":
-                return p.getName() != null ? p.getName() : "";
-              default:
-                return p.getDisplayTitle() != null ? p.getDisplayTitle() : p.getName();
-            }
-          }));
+          pages.sort(Comparator.comparing(BaseContentPage::getDisplayTitle));
           break;
       }
     }
@@ -191,7 +205,7 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
       pages = pages.subList(0, limit);
     }
 
-    List<KestrosCard> cards = new ArrayList<>();
+    List<KestrosCard> cards = new ArrayList<>(pages.size());
     for (BaseContentPage page : pages) {
       try {
         cards.add(
@@ -207,6 +221,6 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
         CardListSupport.logSkippedCard(LOG, page, getResource().getPath(), e);
       }
     }
-    return new ArrayList<>(cards);
+    return cards;
   }
 }

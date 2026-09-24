@@ -109,15 +109,8 @@ public abstract class BaseComponentElement implements KestrosBasicComponentEleme
       Map<String, Object> props = objectMapper.convertValue(this, Map.class);
       props.put("sling:resourceType", getComponentResourceType());
       props.put("jcr:primaryType", "nt:unstructured");
-      syntheticResource = new SyntheticResource(resourceResolver, resourceMetadata,
-          getComponentResourceType()) {
-        private final ValueMap valueMap = new ValueMapDecorator(props);
-
-        @Override
-        public ValueMap getValueMap() {
-          return valueMap;
-        }
-      };
+      syntheticResource = new ValueMapBackedSyntheticResource(resourceResolver, resourceMetadata,
+          getComponentResourceType(), props);
       if (this instanceof KestrosContainerElement) {
         KestrosContainerElement container = (KestrosContainerElement) this;
         List<KestrosBasicComponentElement> childElements = container.getChildElements();
@@ -133,5 +126,20 @@ public abstract class BaseComponentElement implements KestrosBasicComponentEleme
     }
 
     return syntheticResource;
+  }
+
+  /**
+   * Identity of the element, for log lines and debugger output.
+   *
+   * <p>Built from the component's own type rather than its Resource. Every element in this bundle
+   * inherits this, and a synthetic one is routinely constructed before it has a Resource -
+   * {@code getResource()} throws in that state, and a toString that can throw is worse than none.
+   *
+   * @return Simple class name and the component's resource type.
+   */
+  @Override
+  @Nonnull
+  public String toString() {
+    return getClass().getSimpleName() + "{resourceType=" + getComponentResourceType() + "}";
   }
 }

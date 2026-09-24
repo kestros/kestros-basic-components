@@ -14,7 +14,15 @@ public interface KestrosImage extends KestrosBasicComponentElement {
     return RESOURCE_TYPE;
   }
 
-  @Nonnull
+  /**
+   * Path of the image this component renders.
+   *
+   * <p>Null when no image has been chosen. This was declared @Nonnull, and all three data sources
+   * returned null anyway, so callers were being promised something the code never provided.
+   *
+   * @return Path of the image, or null when none is configured.
+   */
+  @Nullable
   String getImagePath();
 
   @Nullable

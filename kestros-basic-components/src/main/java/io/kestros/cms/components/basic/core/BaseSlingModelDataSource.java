@@ -29,8 +29,7 @@ import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
-public abstract class BaseSlingModelDataSource
-    extends BaseComponentElement implements KestrosBasicComponentElement {
+public abstract class BaseSlingModelDataSource extends BaseComponentElement {
 
   @Self
   @Optional
@@ -69,8 +68,9 @@ public abstract class BaseSlingModelDataSource
       return slingHttpServletRequest.getResource();
     }
     if (resource == null) {
-      throw new IllegalStateException(
-          "Unable to resolve Resource: model was adapted from neither a Resource nor a request.");
+      throw new IllegalStateException(String.format(
+          "Unable to resolve a Resource for %s: the model was adapted from neither a Resource nor "
+              + "a request.", getClass().getName()));
     }
     return resource;
   }
@@ -123,10 +123,11 @@ public abstract class BaseSlingModelDataSource
    */
   @Nonnull
   public String getParentPath() {
-    Resource parent = getResource().getParent();
+    Resource ownResource = getResource();
+    Resource parent = ownResource.getParent();
     if (parent == null) {
       throw new IllegalStateException(
-          String.format("Resource %s has no parent.", getResource().getPath()));
+          String.format("Resource %s has no parent.", ownResource.getPath()));
     }
     return parent.getPath();
   }
@@ -190,8 +191,9 @@ public abstract class BaseSlingModelDataSource
       UiFrameworkRetrievalException, ThemeRetrievalException {
     BaseContentPage page = getCurrentOrContainingPage();
     if (page == null) {
-      throw new IllegalStateException(
-          "Unable to resolve a current or containing page to read the UiFramework from.");
+      throw new IllegalStateException(String.format(
+          "Unable to resolve a current or containing page for %s to read the UiFramework from.",
+          getResource().getPath()));
     }
     return page.getTheme().getUiFramework();
   }

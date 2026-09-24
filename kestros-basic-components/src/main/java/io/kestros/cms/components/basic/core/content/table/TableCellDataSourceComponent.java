@@ -5,6 +5,7 @@ import io.kestros.cms.components.basic.api.table.KestrosTableCell;
 import io.kestros.cms.components.basic.core.BaseContainerDataSourceComponent;
 import java.util.List;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
@@ -19,6 +20,7 @@ public class TableCellDataSourceComponent extends BaseContainerDataSourceCompone
     return getComponentData().getCellContentElements();
   }
 
+  @Nullable
   @Override
   public String getText() {
     KestrosTableCell data = getComponentData();
