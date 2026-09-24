@@ -22,6 +22,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.Nonnull;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
@@ -35,7 +36,9 @@ public class CardListAssetsDataSource extends BaseContainerSlingModelDataSource 
   private AssetCollection collection;
 
   String getHeadingLevel() {
-    return getResource().getValueMap().get("headingType", "h2");
+    // An unset Heading Level may be saved as an empty string; it renders at the default.
+    return StringUtils.defaultIfBlank(getResource().getValueMap().get("headingType", String.class),
+        "h2");
   }
 
   AssetCollection getCollection() {
