@@ -210,6 +210,18 @@ public class CardListAssetsDataSourceTest extends BaseDataSourceTest {
   }
 
   @Test
+  public void testGetHeadingLevelDefaultsToH2WhenBlank() {
+    registerAssetRetrievalService();
+    properties.put("headingType", "");
+    resource = context.create().resource("/content/page/cardlist/assets-blank-heading",
+        properties);
+    context.request().setResource(resource);
+
+    assertEquals("h2",
+        context.request().adaptTo(CardListAssetsDataSource.class).getHeadingLevel());
+  }
+
+  @Test
   public void testGetHeadingLevelWhenConfigured() {
     registerAssetRetrievalService();
     properties.put("headingType", "h3");
