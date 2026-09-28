@@ -77,8 +77,8 @@ public class CardPageDataSource extends BaseContainerSlingModelDataSource implem
     final String imagePath = currentPage.getImagePath();
     final AssetText assetText = readAssetText(imagePath);
     try {
-      return new KestrosImageImpl(imagePath, StringUtils.defaultString(assetText.title),
-              assetText.description, assetText.title,
+      return new KestrosImageImpl(imagePath, StringUtils.defaultString(assetText.getTitle()),
+              assetText.getDescription(), assetText.getTitle(),
               null, null, null, AnchorTarget.SAME_WINDOW,
               this, "image", "imageElement", assetRetrievalService);
     } catch (ComponentConfigurationException e) {
@@ -126,6 +126,16 @@ public class CardPageDataSource extends BaseContainerSlingModelDataSource implem
       this.title = title;
       this.description = description;
     }
+
+    @Nullable
+    String getTitle() {
+      return title;
+    }
+
+    @Nullable
+    String getDescription() {
+      return description;
+    }
   }
 
   /**
@@ -146,23 +156,24 @@ public class CardPageDataSource extends BaseContainerSlingModelDataSource implem
    */
   @Nonnull
   AssetText readAssetText(@Nonnull final String imagePath) {
+    // The image path is author-controlled and an exception message can carry anything, so neither
+    // is a format argument: SpotBugs flags both as CRLF injection even through LogUtils.forLog.
+    // The exception is passed as the throwable, so its message still reaches the log.
     if (assetRetrievalService == null) {
-      LOG.warn("Unable to resolve the asset for card image {}. No AssetRetrievalService "
-              + "available; the image renders without the asset's title or description.",
-              imagePath);
+      LOG.warn("Unable to resolve the asset for a card image. No AssetRetrievalService "
+              + "available; the image renders without the asset's title or description.");
       return new AssetText(null, null);
     }
     try {
       final Asset asset = assetRetrievalService.getAsset(imagePath, null, getResourceResolver());
       return new AssetText(asset.getTitle(), asset.getDescription());
     } catch (final AssetRetrievalException e) {
-      LOG.warn("Unable to resolve asset {} for card image. {} The image renders without the "
-              + "asset's title or description.", imagePath, e.getMessage(), e);
+      LOG.warn("Unable to resolve the asset for a card image. The image renders without the "
+              + "asset's title or description.", e);
       return new AssetText(null, null);
     } catch (final RuntimeException e) {
-      LOG.warn("Unexpected failure reading asset {} for card image. {}: {} The image renders "
-              + "without the asset's title or description.", imagePath,
-              e.getClass().getSimpleName(), e.getMessage(), e);
+      LOG.warn("Unexpected failure reading the asset for a card image. The image renders "
+              + "without the asset's title or description.", e);
       return new AssetText(null, null);
     }
   }

@@ -75,13 +75,13 @@ public class TableChildNodesDataSource extends BaseContainerSlingModelDataSource
    * real multi-value property; both are accepted, and entries are trimmed.
    *
    * @param name property name to read.
-   * @return the configured values, or null when the property is absent.
+   * @return the configured values, or an empty array when the property is absent.
    */
-  @Nullable
+  @Nonnull
   private String[] getMultiValue(@Nonnull final String name) {
     final String[] values = getResource().getValueMap().get(name, String[].class);
     if (values == null) {
-      return null;
+      return new String[0];
     }
     if (values.length != 1) {
       return values;
@@ -98,13 +98,11 @@ public class TableChildNodesDataSource extends BaseContainerSlingModelDataSource
   public List<KestrosTableHeader> getHeaderElements() {
     final List<KestrosTableHeader> headers = new ArrayList<>();
     final String[] labels = getMultiValue("headers");
-    if (labels != null) {
-      for (int i = 0; i < labels.length; i++) {
-        try {
-          headers.add(new KestrosTableHeaderImpl(labels[i], this, "header" + i, "header" + i));
-        } catch (final ComponentConfigurationException e) {
-          LOG.warn("Unable to build one table header; it is left out of the table.", e);
-        }
+    for (int i = 0; i < labels.length; i++) {
+      try {
+        headers.add(new KestrosTableHeaderImpl(labels[i], this, "header" + i, "header" + i));
+      } catch (final ComponentConfigurationException e) {
+        LOG.warn("Unable to build one table header; it is left out of the table.", e);
       }
     }
     return headers;
@@ -116,7 +114,7 @@ public class TableChildNodesDataSource extends BaseContainerSlingModelDataSource
     final List<KestrosTableRow> rows = new ArrayList<>();
     final String configuredDataPath = getResource().getValueMap().get("dataPath", String.class);
     final String[] columns = getMultiValue("columns");
-    if (configuredDataPath == null || columns == null) {
+    if (configuredDataPath == null || columns.length == 0) {
       return rows;
     }
     final String dataPath = resolveDataPath(configuredDataPath);
