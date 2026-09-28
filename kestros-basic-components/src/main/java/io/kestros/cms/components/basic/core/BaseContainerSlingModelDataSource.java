@@ -5,9 +5,9 @@ import io.kestros.cms.components.basic.api.KestrosContainerElement;
 import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.List;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import org.apache.sling.api.resource.Resource;
 
 /**
@@ -59,24 +59,48 @@ public abstract class BaseContainerSlingModelDataSource extends BaseSlingModelDa
   }
 
   /**
-   * Sort key for a page's creation date, with pages that have none sorting first.
+   * Orders pages by creation date, with pages that have none sorting first.
+   *
+   * <p>Subclasses sort with this rather than a method reference to the sort key: javac 15 and
+   * later compile a reference to an inherited protected method from another package
+   * into a synthetic lambda with no nullability annotations, which SpotBugs reports.</p>
+   *
+   * @return Comparator on jcr:created.
+   */
+  @Nonnull
+  protected static Comparator<BaseContentPage> byCreatedTime() {
+    return Comparator.comparing(BaseContainerSlingModelDataSource::getCreatedTime);
+  }
+
+  /**
+   * Orders pages by last-modified date, with pages that have none sorting first.
+   *
+   * @return Comparator on jcr:lastModified.
+   */
+  @Nonnull
+  protected static Comparator<BaseContentPage> byModifiedTime() {
+    return Comparator.comparing(BaseContainerSlingModelDataSource::getModifiedTime);
+  }
+
+  /**
+   * Sort key for a page's creation date.
    *
    * @param page Page to read the date from.
    * @return Epoch milliseconds, or 0 when the page has no jcr:created.
    */
   @Nonnull
-  protected static Long getCreatedTime(@Nonnull final BaseContentPage page) {
+  private static Long getCreatedTime(@Nonnull final BaseContentPage page) {
     return getJcrTime(page, "jcr:created");
   }
 
   /**
-   * Sort key for a page's last-modified date, with pages that have none sorting first.
+   * Sort key for a page's last-modified date.
    *
    * @param page Page to read the date from.
    * @return Epoch milliseconds, or 0 when the page has no jcr:lastModified.
    */
   @Nonnull
-  protected static Long getModifiedTime(@Nonnull final BaseContentPage page) {
+  private static Long getModifiedTime(@Nonnull final BaseContentPage page) {
     return getJcrTime(page, "jcr:lastModified");
   }
 

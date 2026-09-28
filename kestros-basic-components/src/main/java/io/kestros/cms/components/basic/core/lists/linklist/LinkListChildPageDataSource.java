@@ -75,10 +75,10 @@ public class LinkListChildPageDataSource extends BaseContainerSlingModelDataSour
     if (!sortBy.isEmpty()) {
       switch (sortBy) {
         case "createdDate":
-          pages.sort(Comparator.comparing(LinkListChildPageDataSource::getCreatedTime));
+          pages.sort(byCreatedTime());
           break;
         case "lastModified":
-          pages.sort(Comparator.comparing(LinkListChildPageDataSource::getModifiedTime));
+          pages.sort(byModifiedTime());
           break;
         case "name":
           pages.sort(Comparator.comparing(BaseContentPage::getName));
