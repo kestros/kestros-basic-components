@@ -1,19 +1,30 @@
 package io.kestros.cms.components.basic.core.content.card;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.read.ListAppender;
 import io.kestros.cms.assets.api.exceptions.AssetCollectionRetrievalException;
+import io.kestros.cms.assets.api.services.AssetRetrievalService;
 import io.kestros.cms.components.basic.api.content.KestrosImage;
 import io.kestros.cms.components.basic.core.BaseDataSourceTest;
 import io.kestros.cms.uiframeworks.api.exceptions.UiFrameworkRetrievalException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.sling.api.resource.Resource;
 import org.junit.Test;
+import org.slf4j.LoggerFactory;
 
 public class CardPageDataSourceTest extends BaseDataSourceTest {
 
@@ -224,5 +235,68 @@ public class CardPageDataSourceTest extends BaseDataSourceTest {
     assertNull(dataSource.getTitleElement());
     assertNull(dataSource.getImageElement());
     assertNull(dataSource.getButtonGroupElement());
+  }
+
+  /**
+   * The image path is author-controlled and an exception message can carry anything, so neither
+   * may be written into the warning text: a CR/LF in either would forge a log line (#686).
+   */
+  private List<String> warningsWhileReading(final CardPageDataSource dataSource,
+          final String imagePath) {
+    final Logger logger = (Logger) LoggerFactory.getLogger(CardPageDataSource.class);
+    final ListAppender<ILoggingEvent> appender = new ListAppender<>();
+    appender.start();
+    logger.addAppender(appender);
+    try {
+      final CardPageDataSource.AssetText assetText = dataSource.readAssetText(imagePath);
+      assertNull(assetText.getTitle());
+      assertNull(assetText.getDescription());
+    } finally {
+      logger.detachAppender(appender);
+    }
+    final List<String> warnings = new ArrayList<>();
+    for (final ILoggingEvent event : appender.list) {
+      if (Level.WARN.equals(event.getLevel())) {
+        warnings.add(event.getFormattedMessage());
+      }
+    }
+    return warnings;
+  }
+
+  @Test
+  public void testReadAssetTextWithNoAssetServiceDoesNotLogTheImagePath() {
+    final List<String> warnings = warningsWhileReading(new CardPageDataSource(),
+            "/content/assets/a\nFORGED");
+
+    assertEquals(1, warnings.size());
+    assertFalse(warnings.get(0).contains("FORGED"));
+  }
+
+  @Test
+  public void testReadAssetTextWhenTheAssetCannotBeResolvedDoesNotLogTheImagePath() {
+    final CardPageDataSource dataSource = adaptWith(new HashMap<>(), "card-forged-path");
+
+    final List<String> warnings = warningsWhileReading(dataSource,
+            "/content/assets/nowhere\nFORGED");
+
+    assertEquals(1, warnings.size());
+    assertFalse(warnings.get(0).contains("FORGED"));
+  }
+
+  @Test
+  public void testReadAssetTextOnAnUnexpectedFailureDoesNotLogThePathOrMessage()
+          throws Exception {
+    final AssetRetrievalService failing = mock(AssetRetrievalService.class);
+    when(failing.getAsset(any(), any(), any()))
+            .thenThrow(new IllegalStateException("boom\nFORGED-MESSAGE"));
+    final CardPageDataSource dataSource = adaptWith(new HashMap<>(), "card-failing-service");
+    FieldUtils.writeField(dataSource, "assetRetrievalService", failing, true);
+
+    final List<String> warnings = warningsWhileReading(dataSource,
+            "/content/assets/a\nFORGED-PATH");
+
+    assertEquals(1, warnings.size());
+    assertFalse(warnings.get(0).contains("FORGED-PATH"));
+    assertFalse(warnings.get(0).contains("FORGED-MESSAGE"));
   }
 }
