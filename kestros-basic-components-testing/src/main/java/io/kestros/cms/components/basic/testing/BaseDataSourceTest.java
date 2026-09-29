@@ -28,9 +28,13 @@ import io.kestros.cms.sitebuilding.api.services.ThemeProviderService;
 import io.kestros.cms.uiframeworks.api.models.Theme;
 import io.kestros.cms.uiframeworks.api.models.UiFramework;
 import io.kestros.cms.uiframeworks.api.services.ThemeRetrievalService;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.apache.sling.testing.mock.sling.junit.SlingContext;
 import org.junit.Before;
 import org.junit.Rule;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 /**
  * Base test class for Kestros datasource models. Registers the services a container datasource
@@ -65,9 +69,34 @@ public abstract class BaseDataSourceTest {
     Theme theme = mock(Theme.class);
     when(theme.getUiFramework()).thenReturn(mock(UiFramework.class));
     ThemeProviderService themeProviderService = mock(ThemeProviderService.class,
-        invocation -> Theme.class.equals(invocation.getMethod().getReturnType())
-                      ? theme
-                      : RETURNS_DEFAULTS.answer(invocation));
+        new ThemeAnswer(theme));
     context.registerService(ThemeProviderService.class, themeProviderService);
+  }
+
+  /**
+   * Answers every method returning a {@link Theme} with one theme, and anything else with
+   * Mockito's defaults.
+   */
+  private static final class ThemeAnswer implements Answer<Object> {
+
+    private final Theme theme;
+
+    /**
+     * Creates the answer.
+     *
+     * @param theme Theme every Theme lookup answers with.
+     */
+    ThemeAnswer(@Nonnull final Theme theme) {
+      this.theme = theme;
+    }
+
+    @Override
+    @Nullable
+    public Object answer(@Nonnull final InvocationOnMock invocation) throws Throwable {
+      if (Theme.class.equals(invocation.getMethod().getReturnType())) {
+        return theme;
+      }
+      return RETURNS_DEFAULTS.answer(invocation);
+    }
   }
 }
