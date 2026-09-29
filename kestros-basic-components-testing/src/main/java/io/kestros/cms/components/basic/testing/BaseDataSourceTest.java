@@ -79,7 +79,8 @@ public abstract class BaseDataSourceTest {
    */
   private static final class ThemeAnswer implements Answer<Object> {
 
-    private final Theme theme;
+    // Held as Object so both return paths of answer() share the declared type.
+    private final Object theme;
 
     /**
      * Creates the answer.
