@@ -99,6 +99,12 @@ public class CardListAssetsDataSource extends BaseContainerSlingModelDataSource 
     if (col == null) {
       return new ArrayList<>();
     }
+    // Every card in this list shares these prerequisites, so a failure among them belongs to the
+    // whole component and must surface rather than render an empty list.
+    IllegalStateException prerequisiteFailure = CardListSupport.componentPrerequisiteFailure(this);
+    if (prerequisiteFailure != null) {
+      throw prerequisiteFailure;
+    }
     List<Asset> assets = new ArrayList<>(col.getChildAssets());
 
     String sortBy = getResource().getValueMap().get("sortBy", "");
@@ -137,38 +143,55 @@ public class CardListAssetsDataSource extends BaseContainerSlingModelDataSource 
     List<KestrosCard> cards = new ArrayList<>(assets.size());
 
     for (Asset asset : assets) {
-      KestrosHeading titleElement = null;
+      String imagePath = readPath(asset);
       try {
-        titleElement = new KestrosHeadingImpl(asset.getTitle(), getHeadingLevel(),
-            this, "title", "titleElement");
-      } catch (ComponentConfigurationException e) {
-        LOG.warn("Unable to build the heading for one card in this list. The card renders "
-                + "without a title. The asset path is in the exception below.", e);
-      }
+        KestrosHeading titleElement = null;
+        try {
+          titleElement = new KestrosHeadingImpl(asset.getTitle(), getHeadingLevel(),
+              this, "title", "titleElement");
+        } catch (ComponentConfigurationException e) {
+          // The card renders without a title, as it always has. Say so rather than swallowing it.
+          CardListSupport.logDegradedCard(LOG, imagePath, getResource().getPath(), "title", e);
+        }
 
-      KestrosImage image = null;
-      try {
-        image = new KestrosImageImpl(asset.getPath(), null, null, null,
-            null, null, null, AnchorTarget.SAME_WINDOW,
-            this, "image", "imageElement", assetRetrievalService);
-      } catch (ComponentConfigurationException e) {
-        // One asset whose image cannot be configured must cost one image, not the whole list.
-        // Returning null here blanked every card on the page, and getCardElements is @Nonnull.
-        LOG.warn("Unable to build the image for one card in this list. The card renders "
-                + "without an image. The asset path is in the exception below.", e);
-      }
-      try {
+        KestrosImage image = null;
+        try {
+          image = new KestrosImageImpl(imagePath, null, null, null,
+              null, null, null, AnchorTarget.SAME_WINDOW,
+              this, "image", "imageElement", assetRetrievalService);
+        } catch (ComponentConfigurationException e) {
+          // One asset's image is not the list's problem: keep the card, and keep the cards already
+          // built for the assets before it. Returning null here handed a null list to HTL.
+          CardListSupport.logDegradedCard(LOG, imagePath, getResource().getPath(), "image", e);
+        }
         cards.add(
             new KestrosCardImpl(asset.getDescription(), titleElement, image,
                 null,
                 this,
                 "card", null));
-      } catch (ComponentConfigurationException e) {
-        // Same reasoning: drop the one card that cannot be configured, keep the rest.
-        LOG.warn("Unable to build a card for one asset; it is left out of the list.", e);
+      } catch (Exception e) {
+        // The prerequisites every card shares were checked above, so this failure belongs to this
+        // asset. Drop the asset, keep the rest of the list, and say which asset went and why.
+        CardListSupport.logSkippedCard(LOG, imagePath, getResource().getPath(), e);
       }
     }
     return cards;
+  }
+
+  /**
+   * The asset's path, or null if the asset cannot say where it is. Read before the card is built
+   * and outside the try, because it is what names the asset in the log when the card fails.
+   *
+   * @param asset Asset to read the path from.
+   * @return The asset's path, or null if the asset cannot say where it is.
+   */
+  @Nullable
+  private static String readPath(@Nonnull final Asset asset) {
+    try {
+      return asset.getPath();
+    } catch (final RuntimeException e) {
+      return null;
+    }
   }
 
 }

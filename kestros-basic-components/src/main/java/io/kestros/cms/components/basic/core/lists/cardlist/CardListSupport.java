@@ -144,16 +144,79 @@ final class CardListSupport {
    * @param dataSourcePath Path of the card list component.
    * @param cause Failure that stopped the card being built.
    */
+  static void logSkippedCard(@Nonnull final Logger log, @Nullable final BaseContentPage page,
+          @Nullable final String dataSourcePath, @Nonnull final Exception cause) {
+    logSkipped(log, describePath(page), dataSourcePath, cause, "page");
+  }
+
+  /**
+   * Records an item whose card could not be built and was therefore left out of the list.
+   *
+   * <p>The path overload exists because not every card list iterates pages: the assets list
+   * iterates assets, which share no supertype with {@link BaseContentPage} that carries a path.
+   * The caller reads the path however it can and passes null when it cannot, so that reading it
+   * cannot throw here.
+   *
+   * @param log Logger of the data source doing the skipping.
+   * @param itemPath Path of the item whose card could not be built, or null if it could not be
+   *         read.
+   * @param dataSourcePath Path of the card list component.
+   * @param cause Failure that stopped the card being built.
+   */
+  static void logSkippedCard(@Nonnull final Logger log, @Nullable final String itemPath,
+          @Nullable final String dataSourcePath, @Nonnull final Exception cause) {
+    logSkipped(log, itemPath != null ? LogUtils.forLog(itemPath) : "an unknown item",
+            dataSourcePath, cause, "item");
+  }
+
+  /**
+   * Records a card that was built without one of its elements, and kept anyway.
+   *
+   * <p>A card whose title or image cannot be configured still renders - that is the card
+   * constructor's own behaviour, not a new one. What this line adds is that the degradation is no
+   * longer silent, because a card that quietly loses its image is indistinguishable from one that
+   * was authored without one.
+   *
+   * @param log Logger of the data source building the card.
+   * @param itemPath Path of the item the card was built from, or null if it could not be read.
+   * @param dataSourcePath Path of the card list component.
+   * @param element Element that could not be built, named as an author would say it.
+   * @param cause Failure that stopped the element being built.
+   */
+  static void logDegradedCard(@Nonnull final Logger log, @Nullable final String itemPath,
+          @Nullable final String dataSourcePath, @Nonnull final String element,
+          @Nonnull final Exception cause) {
+    warnCard(log, "The {} of the card for {} in the card list at {} could not be built. {}: {} "
+                    + "The card still renders without it.", element,
+            itemPath != null ? LogUtils.forLog(itemPath) : "an unknown item",
+            LogUtils.forLog(dataSourcePath), cause.getClass().getName(), describeMessage(cause),
+            cause);
+  }
+
+  private static void logSkipped(@Nonnull final Logger log, @Nullable final String item,
+          @Nullable final String dataSourcePath, @Nonnull final Exception cause,
+          @Nonnull final String noun) {
+    warnCard(log, "Skipping the card for {} in the card list at {}. {}: {} Every other {} in the "
+                    + "list still renders.", item, LogUtils.forLog(dataSourcePath),
+            cause.getClass().getName(), describeMessage(cause), noun, cause);
+  }
+
+  /**
+   * The one place a card list writes a warning, so the one CRLF suppression covers every skipped
+   * and degraded card.
+   *
+   * @param log Logger of the data source.
+   * @param template Message template.
+   * @param arguments Template arguments, the cause last.
+   */
   @SuppressFBWarnings(value = "CRLF_INJECTION_LOGS",
-          justification = "The page path is sanitised through LogUtils before it reaches the log "
+          justification = "Every path is sanitised through LogUtils before it reaches the log "
                   + "call, and the detector follows the taint through that sanitiser rather than "
                   + "clearing it. The path cannot be dropped: the test for #115 asserts the skip "
                   + "warning names the page that was skipped. Ruled by Danny, 2026-09-13.")
-  static void logSkippedCard(@Nonnull final Logger log, @Nullable final BaseContentPage page,
-          @Nullable final String dataSourcePath, @Nonnull final Exception cause) {
-    log.warn("Skipping the card for {} in the card list at {}. {}: {} Every other page in the list "
-                    + "still renders.", describePath(page), LogUtils.forLog(dataSourcePath),
-            cause.getClass().getName(), describeMessage(cause), cause);
+  private static void warnCard(@Nonnull final Logger log, @Nonnull final String template,
+          @Nonnull final Object... arguments) {
+    log.warn(template, arguments);
   }
 
   @Nullable
