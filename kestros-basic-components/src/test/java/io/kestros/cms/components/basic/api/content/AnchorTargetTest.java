@@ -30,6 +30,16 @@ public class AnchorTargetTest {
     assertEquals(AnchorTarget.NEW_WINDOW, AnchorTarget.lookup("_BLANK"));
   }
 
+  /**
+   * The Kelvin sign lowercases to an ASCII k under Unicode case mapping, so equalsIgnoreCase
+   * treated "_blanK" written with U+212A as the real "_blank". Folding only A-Z does not, and an
+   * author's target value is an ASCII token either way.
+   */
+  @Test
+  public void testLookupDoesNotMatchAcrossAUnicodeCaseMapping() {
+    assertEquals(AnchorTarget.SAME_WINDOW, AnchorTarget.lookup("_blanK"));
+  }
+
   @Test
   public void testLookupByStringValueFallsBackToSameWindow() {
     assertEquals(AnchorTarget.SAME_WINDOW, AnchorTarget.lookup("_parent"));

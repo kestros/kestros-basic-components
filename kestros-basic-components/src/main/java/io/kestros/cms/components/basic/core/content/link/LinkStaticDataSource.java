@@ -27,7 +27,7 @@ public class LinkStaticDataSource extends BaseSlingModelDataSource implements Ke
   @Nonnull
   @Override
   public AnchorTarget getTarget() {
-    return AnchorTarget.lookup(getResource().getValueMap().get("openInNewTab", false));
+    return AnchorTarget.lookup(getResource().getValueMap().get("openInNewTab", Boolean.FALSE));
   }
 
   @Nullable

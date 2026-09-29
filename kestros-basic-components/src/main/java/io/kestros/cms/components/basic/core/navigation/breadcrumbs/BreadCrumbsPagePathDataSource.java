@@ -2,6 +2,7 @@ package io.kestros.cms.components.basic.core.navigation.breadcrumbs;
 
 import io.kestros.cms.components.basic.api.content.KestrosLink;
 import io.kestros.cms.components.basic.api.navigation.KestrosBreadCrumb;
+import io.kestros.cms.components.basic.api.exceptions.ComponentConfigurationException;
 import io.kestros.cms.components.basic.api.navigation.KestrosBreadCrumbs;
 import io.kestros.cms.components.basic.core.BaseSlingModelDataSource;
 import io.kestros.cms.components.basic.core.content.link.KestrosLinkImpl;
@@ -12,46 +13,34 @@ import javax.annotation.Nonnull;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.Optional;
-import org.apache.sling.models.annotations.injectorspecific.Self;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class BreadCrumbsPagePathDataSource extends BaseSlingModelDataSource
     implements KestrosBreadCrumbs {
 
-  @Self
-  @Optional
-  private SlingHttpServletRequest slingHttpServletRequest;
-
-  @Self
-  @Optional
-  private Resource resource;
+  private static final Logger LOG =
+      LoggerFactory.getLogger(BreadCrumbsPagePathDataSource.class);
 
   @Nonnull
   @Override
   public List<KestrosBreadCrumb> getLinkElements() {
-    List<KestrosBreadCrumb> crumbs = new ArrayList<>();
-    Boolean first = true;
-    Boolean last = false;
-    int index = 0;
     List<BaseContentPage> ancestorPages = getAncestorPages();
-    for (BaseContentPage page : ancestorPages) {
+    List<KestrosBreadCrumb> crumbs = new ArrayList<>(ancestorPages.size());
+    // first and last are read off the index rather than carried in flags. They used to be updated
+    // inside the try, so one crumb that failed to build left every crumb after it marked "first".
+    for (int index = 0; index < ancestorPages.size(); index++) {
+      final BaseContentPage page = ancestorPages.get(index);
       try {
-        if (index == ancestorPages.size() - 1) {
-          last = true;
-        }
         KestrosLink link = new KestrosLinkImpl(page, this, "crumb", page.getName());
-
-        KestrosBreadCrumb crumb = new KestrosBreadCrumbImpl(link, first, last, this, "crumb",
-            page.getName());
-        crumbs.add(crumb);
-        first = false;
-        index++;
-      } catch (Exception e) {
-        // Ignore exception and continue.
+        crumbs.add(new KestrosBreadCrumbImpl(link, index == 0,
+            index == ancestorPages.size() - 1, this, "crumb", page.getName()));
+      } catch (ComponentConfigurationException e) {
+        LOG.warn("Unable to build one breadcrumb; it is left out of the trail.", e);
       }
     }
-    return new ArrayList<>(crumbs);
+    return crumbs;
   }
 
   @Nonnull
@@ -61,6 +50,7 @@ public class BreadCrumbsPagePathDataSource extends BaseSlingModelDataSource
     return List.of();
   }
 
+  @Nonnull
   List<BaseContentPage> getAncestorPages() {
     List<BaseContentPage> pages = new ArrayList<>();
     BaseContentPage page = getCurrentOrContainingPage();

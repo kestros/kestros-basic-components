@@ -17,8 +17,26 @@ public interface KestrosNavigationItem extends KestrosLink, KestrosContainerElem
     return RESOURCE_TYPE;
   }
 
+  /**
+   * Whether this item points at the page currently being requested.
+   *
+   * <p>Both implementations returned null from this, which is declared @Nonnull, so any caller
+   * unboxing it got a NullPointerException. The body is the one KestrosTopNavigationItem already
+   * carried: the sibling interface had working logic while this one had none.
+   *
+   * @return True when the item's href matches the current request URI.
+   */
   @Nonnull
-  Boolean isActive();
+  default Boolean isActive() {
+    if (getRequest() != null) {
+      String currentPath = getRequest().getRequestURI();
+      String linkPath = getHref();
+      if (linkPath != null && !linkPath.isBlank()) {
+        return currentPath.equals(linkPath);
+      }
+    }
+    return Boolean.FALSE;
+  }
 
   @Nonnull
   List<KestrosNavigationItem> getNavigationItems();
