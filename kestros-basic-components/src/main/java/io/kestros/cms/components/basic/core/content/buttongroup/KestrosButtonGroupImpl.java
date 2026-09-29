@@ -1,3 +1,21 @@
+/*
+ *      Copyright (C) 2020  Kestros, Inc.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ */
+
 package io.kestros.cms.components.basic.core.content.buttongroup;
 
 import io.kestros.cms.components.basic.api.content.KestrosButton;
@@ -12,6 +30,9 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import org.apache.sling.api.resource.Resource;
 
+/**
+ * Implementation of the button group element.
+ */
 public class KestrosButtonGroupImpl extends BaseContainerSyntheticResource implements
                                                                            KestrosButtonGroup {
 
@@ -19,6 +40,15 @@ public class KestrosButtonGroupImpl extends BaseContainerSyntheticResource imple
   private List<ComponentVariation> buttonVariations;
   private String buttonLayout;
 
+  /**
+   * Builds a button group from the buttons it is given.
+   *
+   * @param buttons Buttons the group holds.
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public KestrosButtonGroupImpl(@Nonnull final List<KestrosButton> buttons,
       @Nonnull BaseSlingModelDataSource dataSource,
       String resourcePrefix,
@@ -30,6 +60,15 @@ public class KestrosButtonGroupImpl extends BaseContainerSyntheticResource imple
     this.buttonVariations = dataSource.getElementVariations("button", KestrosButton.RESOURCE_TYPE);
   }
 
+  /**
+   * Builds a button group holding the single button configured on the given resource.
+   *
+   * @param buttonResource Resource the button is read from.
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public KestrosButtonGroupImpl(@Nonnull Resource buttonResource,
       @Nonnull BaseSlingModelDataSource dataSource,
       String resourcePrefix,

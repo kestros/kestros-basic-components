@@ -1,3 +1,21 @@
+/*
+ *      Copyright (C) 2020  Kestros, Inc.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ */
+
 package io.kestros.cms.components.basic.core.navigation.breadcrumbs;
 
 import io.kestros.cms.components.basic.api.content.AnchorTarget;
@@ -9,12 +27,26 @@ import io.kestros.cms.components.basic.core.BaseSyntheticResource;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * Implementation of a single breadcrumb.
+ */
 public class KestrosBreadCrumbImpl extends BaseSyntheticResource implements KestrosBreadCrumb {
 
   private KestrosLink link;
   private Boolean firstItem;
   private Boolean lastItem;
 
+  /**
+   * Builds a single breadcrumb from the link it is given.
+   *
+   * @param link Link the crumb points at.
+   * @param firstItem Whether this is the first crumb in the trail.
+   * @param lastItem Whether this is the last crumb in the trail.
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public KestrosBreadCrumbImpl(
       @Nonnull KestrosLink link,
       @Nonnull Boolean firstItem,
