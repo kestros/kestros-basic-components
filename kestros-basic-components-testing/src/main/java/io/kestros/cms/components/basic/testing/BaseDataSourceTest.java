@@ -18,7 +18,7 @@
 
 package io.kestros.cms.components.basic.testing;
 
-import static org.mockito.Mockito.RETURNS_DEFAULTS;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -29,12 +29,9 @@ import io.kestros.cms.uiframeworks.api.models.Theme;
 import io.kestros.cms.uiframeworks.api.models.UiFramework;
 import io.kestros.cms.uiframeworks.api.services.ThemeRetrievalService;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import org.apache.sling.testing.mock.sling.junit.SlingContext;
 import org.junit.Before;
 import org.junit.Rule;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 /**
  * Base test class for Kestros datasource models. Registers the services a container datasource
@@ -68,36 +65,33 @@ public abstract class BaseDataSourceTest {
     // Every Theme lookup, for a page or a component, answers with the same theme.
     Theme theme = mock(Theme.class);
     when(theme.getUiFramework()).thenReturn(mock(UiFramework.class));
-    ThemeProviderService themeProviderService = mock(ThemeProviderService.class,
-        new ThemeAnswer(theme));
+    ThemeProviderService themeProviderService = mock(ThemeProviderService.class);
+    stubPageTheme(themeProviderService, theme);
+    stubComponentTheme(themeProviderService, theme);
     context.registerService(ThemeProviderService.class, themeProviderService);
   }
 
   /**
-   * Answers every method returning a {@link Theme} with one theme, and anything else with
-   * Mockito's defaults.
+   * Answers every page theme lookup with the given theme.
+   *
+   * @param themeProviderService Mocked service to stub.
+   * @param theme Theme to answer with.
+   * @throws Exception if the stubbed lookup declares one.
    */
-  private static final class ThemeAnswer implements Answer<Object> {
+  private static void stubPageTheme(@Nonnull final ThemeProviderService themeProviderService,
+      @Nonnull final Theme theme) throws Exception {
+    when(themeProviderService.getThemeForPage(any())).thenReturn(theme);
+  }
 
-    // Held as Object so both return paths of answer() share the declared type.
-    private final Object theme;
-
-    /**
-     * Creates the answer.
-     *
-     * @param theme Theme every Theme lookup answers with.
-     */
-    ThemeAnswer(@Nonnull final Theme theme) {
-      this.theme = theme;
-    }
-
-    @Override
-    @Nullable
-    public Object answer(@Nonnull final InvocationOnMock invocation) throws Throwable {
-      if (Theme.class.equals(invocation.getMethod().getReturnType())) {
-        return theme;
-      }
-      return RETURNS_DEFAULTS.answer(invocation);
-    }
+  /**
+   * Answers every component theme lookup with the given theme.
+   *
+   * @param themeProviderService Mocked service to stub.
+   * @param theme Theme to answer with.
+   * @throws Exception if the stubbed lookup declares one.
+   */
+  private static void stubComponentTheme(@Nonnull final ThemeProviderService themeProviderService,
+      @Nonnull final Theme theme) throws Exception {
+    when(themeProviderService.getThemeForComponent(any())).thenReturn(theme);
   }
 }
