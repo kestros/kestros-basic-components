@@ -55,8 +55,9 @@ public class CardPageDataSourceTest extends BaseDataSourceTest {
     assertEquals("h4", cardPageDataSource.getTitleElement().getHeadingType());
   }
 
+  // A card built on a page by an author picks its own level; the list's is not inherited.
   @Test
-  public void testGetTitleWhenHeadingTypeInheritedFromList() {
+  public void testGetTitleIgnoresTheListHeadingType() {
     Map<String, Object> listProperties = new HashMap<>();
     listProperties.put("headingType", "h3");
     context.create().resource("/content/page-card-list", listProperties);
@@ -65,7 +66,7 @@ public class CardPageDataSourceTest extends BaseDataSourceTest {
     context.request().setResource(resource);
     cardPageDataSource = context.request().adaptTo(CardPageDataSource.class);
 
-    assertEquals("h3", cardPageDataSource.getTitleElement().getHeadingType());
+    assertEquals("h2", cardPageDataSource.getTitleElement().getHeadingType());
   }
 
   @Test
