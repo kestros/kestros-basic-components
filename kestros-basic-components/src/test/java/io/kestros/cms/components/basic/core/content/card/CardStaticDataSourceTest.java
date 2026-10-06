@@ -70,8 +70,10 @@ public class CardStaticDataSourceTest extends BaseDataSourceTest {
     assertEquals("h2", cardStaticDataSource.getTitleElement().getHeadingType());
   }
 
+  // A hand-built card picks its own level; the list's is not inherited. Danny, 2026-10-05:
+  // "if building an adhoc card list, you can choose the header per card."
   @Test
-  public void testGetTitleWhenHeadingTypeInheritedFromList() {
+  public void testGetTitleIgnoresTheListHeadingType() {
     Map<String, Object> listProperties = new HashMap<>();
     listProperties.put("headingType", "h3");
     context.create().resource("/content/card/inherit-list", listProperties);
@@ -81,7 +83,7 @@ public class CardStaticDataSourceTest extends BaseDataSourceTest {
     context.request().setResource(resource);
     cardStaticDataSource = context.request().adaptTo(CardStaticDataSource.class);
 
-    assertEquals("h3", cardStaticDataSource.getTitleElement().getHeadingType());
+    assertEquals("h2", cardStaticDataSource.getTitleElement().getHeadingType());
   }
 
   @Test
