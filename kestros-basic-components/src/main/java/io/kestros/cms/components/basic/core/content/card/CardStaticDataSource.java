@@ -42,10 +42,10 @@ public class CardStaticDataSource extends BaseContainerSlingModelDataSource impl
     if (StringUtils.isBlank(headingText)) {
       return null;
     }
-    // Heading Level is left on "Inherit from list" unless the author overrides it, so headingType
-    // is routinely absent here. Reading it through KestrosHeadingImpl(Resource) threw on the
-    // missing value and the whole title vanished from the card with no error anywhere.
-    String headingType = CardHeadingType.resolve(titleResource, getResource());
+    // Content authored before the level was required may carry no headingType. Reading it through
+    // KestrosHeadingImpl(Resource) threw on the missing value and the whole title vanished from
+    // the card with no error anywhere.
+    String headingType = CardHeadingType.resolve(titleResource);
     try {
       return new KestrosHeadingImpl(headingText, headingType, this, "title", "titleElement");
     } catch (ComponentConfigurationException e) {
