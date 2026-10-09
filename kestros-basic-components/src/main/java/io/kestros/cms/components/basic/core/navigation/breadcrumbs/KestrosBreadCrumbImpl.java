@@ -28,11 +28,13 @@ public class KestrosBreadCrumbImpl extends BaseSyntheticResource implements Kest
     this.lastItem = lastItem;
   }
 
+  @Nonnull
   @Override
   public Boolean isFirstItem() {
     return firstItem;
   }
 
+  @Nonnull
   @Override
   public Boolean isLastItem() {
     return lastItem;

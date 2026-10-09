@@ -3,6 +3,7 @@ package io.kestros.cms.components.basic.core.navigation.topnav;
 import io.kestros.cms.components.basic.api.content.AnchorTarget;
 import io.kestros.cms.components.basic.api.navigation.KestrosTopNavigationItem;
 import io.kestros.cms.components.basic.core.BaseContainerDataSourceComponent;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -23,7 +24,7 @@ public class TopNavigationItemDataSourceComponent
     if (navigationItems == null) {
       navigationItems = getComponentData().getNavigationItems();
     }
-    return navigationItems;
+    return new ArrayList<>(navigationItems);
   }
 
   @Nullable

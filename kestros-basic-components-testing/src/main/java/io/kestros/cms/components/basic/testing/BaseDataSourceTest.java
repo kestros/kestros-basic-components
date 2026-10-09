@@ -28,6 +28,7 @@ import io.kestros.cms.sitebuilding.api.services.ThemeProviderService;
 import io.kestros.cms.uiframeworks.api.models.Theme;
 import io.kestros.cms.uiframeworks.api.models.UiFramework;
 import io.kestros.cms.uiframeworks.api.services.ThemeRetrievalService;
+import javax.annotation.Nonnull;
 import org.apache.sling.testing.mock.sling.junit.SlingContext;
 import org.junit.Before;
 import org.junit.Rule;
@@ -61,11 +62,36 @@ public abstract class BaseDataSourceTest {
     context.registerService(ThemeRetrievalService.class, mock(ThemeRetrievalService.class));
 
     // Elements resolve the containing page's theme and UI Framework as they are constructed.
+    // Every Theme lookup, for a page or a component, answers with the same theme.
     Theme theme = mock(Theme.class);
     when(theme.getUiFramework()).thenReturn(mock(UiFramework.class));
     ThemeProviderService themeProviderService = mock(ThemeProviderService.class);
-    when(themeProviderService.getThemeForPage(any())).thenReturn(theme);
-    when(themeProviderService.getThemeForComponent(any())).thenReturn(theme);
+    stubPageTheme(themeProviderService, theme);
+    stubComponentTheme(themeProviderService, theme);
     context.registerService(ThemeProviderService.class, themeProviderService);
+  }
+
+  /**
+   * Answers every page theme lookup with the given theme.
+   *
+   * @param themeProviderService Mocked service to stub.
+   * @param theme Theme to answer with.
+   * @throws Exception if the stubbed lookup declares one.
+   */
+  private static void stubPageTheme(@Nonnull final ThemeProviderService themeProviderService,
+      @Nonnull final Theme theme) throws Exception {
+    when(themeProviderService.getThemeForPage(any())).thenReturn(theme);
+  }
+
+  /**
+   * Answers every component theme lookup with the given theme.
+   *
+   * @param themeProviderService Mocked service to stub.
+   * @param theme Theme to answer with.
+   * @throws Exception if the stubbed lookup declares one.
+   */
+  private static void stubComponentTheme(@Nonnull final ThemeProviderService themeProviderService,
+      @Nonnull final Theme theme) throws Exception {
+    when(themeProviderService.getThemeForComponent(any())).thenReturn(theme);
   }
 }

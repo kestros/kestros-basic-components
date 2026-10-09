@@ -1,5 +1,6 @@
 package io.kestros.cms.components.basic.api.content;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.sling.api.resource.Resource;
@@ -7,6 +8,10 @@ import org.apache.sling.api.resource.Resource;
 /**
  * Enum representing anchor target options for links.
  */
+@SuppressFBWarnings(value = "METHOD_NULLABILITY",
+    justification = "javac 15+ generates a synthetic $values() method on every enum, which source "
+        + "cannot annotate, and the Kestros nullability detector exempts values/valueOf but not "
+        + "$values. Remove once #1359 fixes the detector. Ruled by Danny, 2026-09-29.")
 public enum AnchorTarget {
 
   SAME_WINDOW("_self"),
@@ -33,13 +38,34 @@ public enum AnchorTarget {
   @Nonnull
   public static AnchorTarget lookup(@Nullable String targetValue) {
     if (targetValue != null) {
+      // Folded to ASCII rather than compared with equalsIgnoreCase. Every target value is an
+      // ASCII token like "_blank", and Unicode case mapping is locale-dependent and can change a
+      // string's length, so it is the wrong tool for matching an author's property to a constant.
+      final String candidate = toAsciiLowerCase(targetValue);
       for (AnchorTarget anchorTarget : values()) {
-        if (anchorTarget.getTargetValue().equalsIgnoreCase(targetValue)) {
+        if (anchorTarget.getTargetValue().equals(candidate)) {
           return anchorTarget;
         }
       }
     }
     return SAME_WINDOW;
+  }
+
+  /**
+   * Lowercases the ASCII letters in a value and leaves every other character alone.
+   *
+   * @param value Value to fold.
+   * @return The value with A-Z folded to a-z.
+   */
+  @Nonnull
+  private static String toAsciiLowerCase(@Nonnull final String value) {
+    final char[] characters = value.toCharArray();
+    for (int index = 0; index < characters.length; index++) {
+      if (characters[index] >= 'A' && characters[index] <= 'Z') {
+        characters[index] += 'a' - 'A';
+      }
+    }
+    return new String(characters);
   }
 
   /**

@@ -20,11 +20,6 @@ public class NavigationItemStaticDataSource extends BaseContainerSlingModelDataS
   @Self
   private LinkStaticDataSource link;
 
-  @Override
-  public Boolean isActive() {
-    return null;
-  }
-
   @Nonnull
   @Override
   public List<KestrosNavigationItem> getNavigationItems() {
