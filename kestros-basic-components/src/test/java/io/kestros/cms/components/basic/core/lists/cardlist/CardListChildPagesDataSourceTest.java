@@ -21,6 +21,7 @@ import io.kestros.cms.components.basic.api.lists.KestrosCardList;
 import io.kestros.cms.components.basic.core.BaseDataSourceTest;
 import io.kestros.cms.components.basic.core.content.image.ImageStaticDataSource;
 import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
+import io.kestros.cms.uiframeworks.api.exceptions.UiFrameworkRetrievalException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -629,6 +630,19 @@ public class CardListChildPagesDataSourceTest extends BaseDataSourceTest {
       fail("a component whose theme carries no UI framework must not render an empty card list");
     } catch (final RuntimeException expected) {
       assertNotNull(expected);
+    }
+  }
+
+  @Test
+  public void testGetCardElementsThrowsIllegalStateWhenTheUiFrameworkCannotBeRetrieved()
+      throws Exception {
+    when(theme.getUiFramework()).thenThrow(new UiFrameworkRetrievalException("no UI framework"));
+
+    try {
+      cardListChildPagesDataSource.getCardElements();
+      fail("a component whose UI framework cannot be retrieved must not render an empty card list");
+    } catch (final IllegalStateException expected) {
+      assertTrue(expected.getCause() instanceof UiFrameworkRetrievalException);
     }
   }
 
