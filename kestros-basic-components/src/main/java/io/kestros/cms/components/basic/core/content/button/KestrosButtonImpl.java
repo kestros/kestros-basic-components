@@ -1,3 +1,21 @@
+/*
+ *      Copyright (C) 2020  Kestros, Inc.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ */
+
 package io.kestros.cms.components.basic.core.content.button;
 
 import io.kestros.cms.components.basic.api.content.AnchorTarget;
@@ -12,6 +30,9 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 
+/**
+ * Implementation of the button element.
+ */
 public class KestrosButtonImpl extends BaseSyntheticResource implements KestrosButton {
 
   private String text;
@@ -25,6 +46,23 @@ public class KestrosButtonImpl extends BaseSyntheticResource implements KestrosB
   private boolean disabled;
   private String resourceName;
 
+  /**
+   * Builds a button from the values it is given.
+   *
+   * @param text Visible button text.
+   * @param href Destination the button links to.
+   * @param title Title attribute for the button.
+   * @param target Target attribute for the button.
+   * @param rel Relationship attribute for the button.
+   * @param ariaLabel ARIA label for the button.
+   * @param ariaDescribedBy ARIA described-by ID reference.
+   * @param lang Language of the button text.
+   * @param disabled Whether the button is disabled.
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public KestrosButtonImpl(String text, String href,
       String title,
       @Nullable AnchorTarget target, String rel,
@@ -47,6 +85,15 @@ public class KestrosButtonImpl extends BaseSyntheticResource implements KestrosB
     this.resourceName = forcedResourceName;
   }
 
+  /**
+   * Builds a button from the properties of the given resource.
+   *
+   * @param resource Resource the button properties are read from.
+   * @param dataSource Datasource the element is built by.
+   * @param resourcePrefix Prefix for the path of the synthetic resource.
+   * @param forcedResourceName Name to force on the synthetic resource.
+   * @throws ComponentConfigurationException The element could not be configured.
+   */
   public KestrosButtonImpl(@Nonnull Resource resource,
       @Nonnull BaseSlingModelDataSource dataSource,
       String resourcePrefix,
