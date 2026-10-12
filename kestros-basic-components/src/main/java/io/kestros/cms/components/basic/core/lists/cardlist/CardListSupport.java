@@ -23,7 +23,11 @@ import io.kestros.cms.components.basic.core.BaseSlingModelDataSource;
 import io.kestros.cms.components.basic.core.LogUtils;
 import io.kestros.cms.componenttypes.api.models.ComponentVariation;
 import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
+import io.kestros.cms.uiframeworks.api.exceptions.InvalidThemeException;
+import io.kestros.cms.uiframeworks.api.exceptions.ThemeRetrievalException;
+import io.kestros.cms.uiframeworks.api.exceptions.UiFrameworkRetrievalException;
 import io.kestros.cms.uiframeworks.api.models.UiFramework;
+import io.kestros.commons.structuredslingmodels.exceptions.ResourceNotFoundException;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -70,13 +74,20 @@ final class CardListSupport {
     final List<ComponentVariation> variations = dataSource.getElementVariations("cardVariations",
             KestrosCard.RESOURCE_TYPE);
     final String layout = dataSource.getLayout("card");
-    final UiFramework uiFramework = dataSource.getUiFramework();
+    final String message = String.format(
+            "Card list at %s cannot build any card: its page resolves to no UI framework. "
+                    + "hasResourceResolver=%s, cardVariations=%s, cardLayout=%s.",
+            LogUtils.forLog(parentPath), resourceResolver != null, variations.size(),
+            LogUtils.forLog(layout));
+    final UiFramework uiFramework;
+    try {
+      uiFramework = dataSource.getUiFramework();
+    } catch (ResourceNotFoundException | InvalidThemeException | UiFrameworkRetrievalException
+            | ThemeRetrievalException e) {
+      throw new IllegalStateException(message, e);
+    }
     if (uiFramework == null) {
-      throw new IllegalStateException(String.format(
-              "Card list at %s cannot build any card: its page resolves to no UI framework. "
-                      + "hasResourceResolver=%s, cardVariations=%s, cardLayout=%s.",
-              LogUtils.forLog(parentPath), resourceResolver != null, variations.size(),
-              LogUtils.forLog(layout)));
+      throw new IllegalStateException(message);
     }
   }
 
