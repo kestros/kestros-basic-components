@@ -1,6 +1,7 @@
 package io.kestros.cms.components.basic.api.content;
 
 import io.kestros.cms.components.basic.api.KestrosBasicComponentElement;
+import java.util.Optional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -41,7 +42,7 @@ public interface KestrosLink extends KestrosBasicComponentElement {
    */
   @Nonnull
   default String getTargetAsString() {
-    return getTarget().getTargetValue();
+    return Optional.ofNullable(getTarget()).orElse(AnchorTarget.SAME_WINDOW).getTargetValue();
   }
 
   /**
