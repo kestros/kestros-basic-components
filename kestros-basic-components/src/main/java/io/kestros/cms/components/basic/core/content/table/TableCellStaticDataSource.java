@@ -6,6 +6,7 @@ import io.kestros.cms.components.basic.core.BaseContainerSlingModelDataSource;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
@@ -18,7 +19,7 @@ public class TableCellStaticDataSource extends BaseContainerSlingModelDataSource
   @Nonnull
   @Override
   public List<Resource> getCellContent() {
-    List<Resource> cellContent = new java.util.ArrayList<>();
+    List<Resource> cellContent = new ArrayList<>();
     for (Resource child : getResource().getChildren()) {
       cellContent.add(child);
     }
@@ -29,11 +30,12 @@ public class TableCellStaticDataSource extends BaseContainerSlingModelDataSource
   @Nonnull
   @Override
   public List<KestrosBasicComponentElement> getCellContentElements() {
-    List<KestrosBasicComponentElement> cellContentElements = new ArrayList<>();
-    // This should never get hit, since we can just look to child resources instead of synthesizing them, but we need to return something here to satisfy the interface contract.
+    // A static cell reads its content off child resources, so it never synthesizes elements. The
+    // interface still has to be answered, and an empty list is the honest answer.
     return new ArrayList<>();
   }
 
+  @Nullable
   @Override
   public String getText() {
     return getResource().getValueMap().get("text", String.class);

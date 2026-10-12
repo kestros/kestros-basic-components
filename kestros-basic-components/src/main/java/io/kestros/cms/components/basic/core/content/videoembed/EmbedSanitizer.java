@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -108,15 +109,15 @@ public final class EmbedSanitizer {
 
     Matcher attrMatcher = ATTR_PATTERN.matcher(attributesStr);
     while (attrMatcher.find()) {
-      String attrName = attrMatcher.group(1).toLowerCase();
+      String attrName = attrMatcher.group(1);
       String attrValue = attrMatcher.group(2);
 
-      if (!ALLOWED_ATTRIBUTES.contains(attrName)) {
+      if (!containsIgnoringCase(ALLOWED_ATTRIBUTES, attrName)) {
         // Skip disallowed attributes silently
         continue;
       }
 
-      if ("src".equals(attrName)) {
+      if ("src".equals(toAsciiLowerCase(attrName))) {
         if (attrValue == null) {
           return null;
         }
@@ -134,11 +135,11 @@ public final class EmbedSanitizer {
       }
 
       if (sanitizedAttrs.length() > 0) {
-        sanitizedAttrs.append(" ");
+        sanitizedAttrs.append(' ');
       }
 
       if (attrValue != null) {
-        sanitizedAttrs.append(attrName).append("=\"").append(attrValue).append("\"");
+        sanitizedAttrs.append(attrName).append("=\"").append(attrValue).append('"');
       } else {
         sanitizedAttrs.append(attrName);
       }
@@ -152,7 +153,7 @@ public final class EmbedSanitizer {
     return "<iframe " + sanitizedAttrs.toString() + "></iframe>";
   }
 
-  private static boolean isDomainAllowed(String url) {
+  private static boolean isDomainAllowed(@Nonnull String url) {
     // Extract domain from URL: https://domain/path
     String withoutScheme = url.substring("https://".length());
     int slashIndex = withoutScheme.indexOf('/');
@@ -167,6 +168,44 @@ public final class EmbedSanitizer {
     if (portIndex > 0) {
       domain = domain.substring(0, portIndex);
     }
-    return ALLOWED_DOMAINS.contains(domain.toLowerCase());
+    return containsIgnoringCase(ALLOWED_DOMAINS, domain);
+  }
+
+  /**
+   * Case-insensitive membership, without case-mapping the candidate first.
+   *
+   * <p>Both allowlists here decide whether untrusted markup is kept, and lowercasing a value
+   * before an allowlist check is its own hazard: Unicode case mapping is locale-dependent and can
+   * change a string's length, so the value compared is not always the value that came in.
+   *
+   * @param allowed Allowlist to look in.
+   * @param candidate Value read out of the author's markup.
+   * @return True when the allowlist holds the candidate, ignoring case.
+   */
+  private static boolean containsIgnoringCase(@Nonnull final Set<String> allowed,
+      @Nonnull final String candidate) {
+    return allowed.contains(toAsciiLowerCase(candidate));
+  }
+
+  /**
+   * Lowercases the ASCII letters in a value and leaves every other character alone.
+   *
+   * <p>Neither {@code toLowerCase} nor {@code equalsIgnoreCase} is safe in front of an allowlist:
+   * both apply Unicode case mapping, which is locale-dependent and can change a string's length,
+   * so the value compared is not always the value that arrived. Every entry in both allowlists
+   * here is lowercase ASCII, so folding only A-Z is exactly the comparison intended.
+   *
+   * @param value Value read out of the author's markup.
+   * @return The value with A-Z folded to a-z.
+   */
+  @Nonnull
+  private static String toAsciiLowerCase(@Nonnull final String value) {
+    final char[] characters = value.toCharArray();
+    for (int index = 0; index < characters.length; index++) {
+      if (characters[index] >= 'A' && characters[index] <= 'Z') {
+        characters[index] += 'a' - 'A';
+      }
+    }
+    return new String(characters);
   }
 }

@@ -72,4 +72,28 @@ public class KestrosButtonGroupImplTest extends BaseSyntheticTest {
   public void testGetButtonVariations() {
     assertNotNull(buttonGroup.getButtonVariations());
   }
+
+  /**
+   * The list handed to the constructor is copied, so a caller that keeps hold of it cannot add a
+   * button to a group that has already been built and validated.
+   */
+  @Test
+  public void testTheConstructorCopiesTheButtonsItIsGiven() throws ComponentConfigurationException {
+    Resource resource = context.create().resource("/content/copy-parent");
+    context.currentResource(resource);
+    CardListStaticDataSource dataSource = context.request().adaptTo(
+        CardListStaticDataSource.class);
+
+    List<KestrosButton> buttons = new ArrayList<>();
+    buttons.add(new KestrosButtonImpl(
+        "Button 1", "/content/page1.html",
+        null, AnchorTarget.SAME_WINDOW, null, null, null, null, false,
+        dataSource, "button", "button1"));
+
+    KestrosButtonGroupImpl group = new KestrosButtonGroupImpl(buttons, dataSource, "buttonGroup",
+        "copyGroupElement");
+    buttons.clear();
+
+    assertEquals(1, group.getButtonsElements().size());
+  }
 }
