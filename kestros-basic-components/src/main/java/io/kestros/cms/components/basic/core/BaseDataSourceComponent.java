@@ -1,3 +1,21 @@
+/*
+ *      Copyright (C) 2020  Kestros, Inc.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ */
+
 package io.kestros.cms.components.basic.core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,6 +39,9 @@ import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.wrappers.ValueMapDecorator;
 import org.apache.sling.models.annotations.Model;
 
+/**
+ * Baseline Sling Model for components rendered from datasource data.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public abstract class BaseDataSourceComponent<T extends KestrosBasicComponentElement>
     extends DataSourceComponent<T> implements KestrosBasicComponentElement {
@@ -47,6 +68,12 @@ public abstract class BaseDataSourceComponent<T extends KestrosBasicComponentEle
 
   @Nonnull
   @Override
+  public String getLayout() {
+    return getComponentData().getLayout();
+  }
+
+  @Nonnull
+  @Override
   public List<ComponentVariation> getElementVariations(@Nonnull String propertyName,
       @Nonnull String componentType) {
     return getComponentData().getElementVariations(propertyName, componentType);
@@ -68,12 +95,6 @@ public abstract class BaseDataSourceComponent<T extends KestrosBasicComponentEle
   @Override
   public List<ComponentVariation> getVariations() {
     return getComponentData().getVariations();
-  }
-
-  @Nonnull
-  @Override
-  public String getLayout() {
-    return getComponentData().getLayout();
   }
 
   @Nonnull
