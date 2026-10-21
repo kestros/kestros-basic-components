@@ -4,6 +4,7 @@ import io.kestros.cms.components.basic.api.content.KestrosImage;
 import io.kestros.cms.components.basic.api.navigation.KestrosTopNavigation;
 import io.kestros.cms.components.basic.api.navigation.KestrosTopNavigationItem;
 import io.kestros.cms.components.basic.core.BaseContainerDataSourceComponent;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -24,7 +25,7 @@ public class TopNavigationDataSourceComponent
     if (navigationLinks == null) {
       navigationLinks = getComponentData().getNavigationLinkElements();
     }
-    return navigationLinks;
+    return new ArrayList<>(navigationLinks);
   }
 
   @Nullable

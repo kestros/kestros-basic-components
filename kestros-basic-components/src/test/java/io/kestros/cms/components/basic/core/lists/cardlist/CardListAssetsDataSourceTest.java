@@ -245,6 +245,45 @@ public class CardListAssetsDataSourceTest extends BaseDataSourceTest {
         context.request().adaptTo(CardListAssetsDataSource.class).getHeadingLevel());
   }
 
+  /**
+   * With no collectionPath configured the data source used to hand a null path straight to the
+   * asset service.
+   */
+  @Test
+  public void testGetCollection_whenNoCollectionPathConfigured_returnsNull() {
+    registerAssetRetrievalService();
+    Map<String, Object> noPath = new HashMap<>();
+    resource = context.create().resource("/content/page/cardlist/assets-no-path", noPath);
+    context.request().setResource(resource);
+
+    assertNull(context.request().adaptTo(CardListAssetsDataSource.class).getCollection());
+  }
+
+  @Test
+  public void testGetCardElements_whenNoCollectionPathConfigured_returnsEmptyList() {
+    registerAssetRetrievalService();
+    Map<String, Object> noPath = new HashMap<>();
+    resource = context.create().resource("/content/page/cardlist/assets-no-path-cards", noPath);
+    context.request().setResource(resource);
+
+    assertEquals(0,
+            context.request().adaptTo(CardListAssetsDataSource.class).getCardElements().size());
+  }
+
+  /**
+   * Every element in the bundle inherits toString from BaseComponentElement. Without it the 36
+   * concrete elements logged as Object's identity hash, which named neither the component nor its
+   * type.
+   */
+  @Test
+  public void testToStringNamesTheClassAndResourceType() {
+    registerAssetRetrievalService();
+
+    assertEquals("CardListAssetsDataSource{resourceType=/libs/kestros/commons/components/lists/"
+                    + "card-list}",
+            context.request().adaptTo(CardListAssetsDataSource.class).toString());
+  }
+
   // ---------------------------------------------------------------------------------------------
   // One unbuildable asset must not take the list with it.
   //

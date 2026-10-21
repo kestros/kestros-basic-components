@@ -15,11 +15,6 @@ public class NavigationItemDataSourceComponent
         extends BaseContainerDataSourceComponent<KestrosNavigationItem>
         implements KestrosNavigationItem {
 
-  @Override
-  public Boolean isActive() {
-    return null;
-  }
-
   @Nonnull
   @Override
   public List<KestrosNavigationItem> getNavigationItems() {

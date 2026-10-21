@@ -13,11 +13,13 @@ import org.apache.sling.models.annotations.Model;
 public class BreadCrumbDataSourceComponent
     extends BaseDataSourceComponent<KestrosBreadCrumb> implements KestrosBreadCrumb {
 
+  @Nonnull
   @Override
   public Boolean isFirstItem() {
     return getComponentData().isFirstItem();
   }
 
+  @Nonnull
   @Override
   public Boolean isLastItem() {
     return getComponentData().isLastItem();
