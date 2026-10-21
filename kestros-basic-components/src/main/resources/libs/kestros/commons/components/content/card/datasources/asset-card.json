@@ -25,12 +25,6 @@
         "label": "Heading Level",
         "name": "headingType",
         "options": {
-          "inherit": {
-            "jcr:primaryType": "nt:unstructured",
-            "text": "Inherit from list",
-            "value": "",
-            "selected": true
-          },
           "h1": {
             "jcr:primaryType": "nt:unstructured",
             "text": "h1",
@@ -41,7 +35,7 @@
             "jcr:primaryType": "nt:unstructured",
             "text": "h2",
             "value": "h2",
-            "selected": false
+            "selected": true
           },
           "h3": {
             "jcr:primaryType": "nt:unstructured",

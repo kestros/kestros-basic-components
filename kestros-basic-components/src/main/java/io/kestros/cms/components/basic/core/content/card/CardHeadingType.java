@@ -8,13 +8,14 @@ import org.apache.sling.api.resource.Resource;
 /**
  * Resolves the heading level a card title renders at.
  *
- * <p>The level is authored on the card list and inherited by every card it renders. A card may
- * override it for itself. When neither is set the title still renders, at {@link #DEFAULT}.</p>
+ * <p>A card an author builds picks its own level; the list does not set it. Only the cards a list
+ * builds itself, from pages or assets, take the list's level. When no level is set the title
+ * still renders, at {@link #DEFAULT}.</p>
  */
 final class CardHeadingType {
 
   /**
-   * Level used when neither the card nor its list names one.
+   * Level used when none is set.
    */
   static final String DEFAULT = "h2";
 
@@ -23,35 +24,18 @@ final class CardHeadingType {
   }
 
   /**
-   * Heading level for a card, resolved from the card, then its list, then the default.
-   *
-   * @param cardResource the card's own resource.
-   * @return an h1-h6 value, never null or blank.
-   */
-  @Nonnull
-  static String resolve(@Nonnull Resource cardResource) {
-    return resolve(cardResource, cardResource);
-  }
-
-  /**
-   * Heading level for a card whose heading properties live on a separate resource.
+   * Heading level for a card an author built: its own, or the default. A hand-built card in a list
+   * does not take the list's level; Danny, 2026-10-05: "if building an adhoc card list, you can
+   * choose the header per card."
    *
    * @param valueResource resource carrying the card's own headingType, which may be a titleElement
    *     child rather than the card node itself.
-   * @param cardResource the card's resource, whose parent is the list to inherit from.
    * @return an h1-h6 value, never null or blank.
    */
   @Nonnull
-  static String resolve(@Nonnull Resource valueResource, @Nonnull Resource cardResource) {
+  static String resolve(@Nonnull Resource valueResource) {
     String cardHeadingType = getHeadingType(valueResource);
-    if (cardHeadingType != null) {
-      return cardHeadingType;
-    }
-    String listHeadingType = getHeadingType(cardResource.getParent());
-    if (listHeadingType != null) {
-      return listHeadingType;
-    }
-    return DEFAULT;
+    return cardHeadingType != null ? cardHeadingType : DEFAULT;
   }
 
   /**
