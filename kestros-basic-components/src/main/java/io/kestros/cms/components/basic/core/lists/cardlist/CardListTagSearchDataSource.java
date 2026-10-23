@@ -11,9 +11,7 @@ import io.kestros.cms.tagging.api.models.KestrosTag;
 import io.kestros.cms.tagging.api.services.TagRetrievalService;
 import io.kestros.commons.structuredslingmodels.exceptions.NoValidAncestorException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -119,23 +117,34 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
     if (rootPage == null) {
       return taggedPages;
     }
+    // The component's own page and the root's children describe the component, not one page, so
+    // a failure reading either still reaches the caller.
+    String currentPath = currentPage != null ? currentPage.getPath() : null;
 
     for (BaseContentPage childPage : rootPage.getChildPages()) {
-      if (currentPage != null && childPage.getPath().equals(currentPage.getPath())) {
-        continue;
-      }
-
-      List<KestrosTag> childTags = tagRetrievalService.getTagsOnResource(
-          childPage.getResource());
-      for (KestrosTag childTag : childTags) {
-        if (filterTagPaths.contains(childTag.getPath())) {
+      try {
+        if (isTaggedSibling(childPage, currentPath, filterTagPaths)) {
           taggedPages.add(childPage);
-          break;
         }
+      } catch (RuntimeException e) {
+        CardListSupport.logSkippedCard(LOG, childPage, getResource().getPath(), e);
       }
     }
 
     return taggedPages;
+  }
+
+  private boolean isTaggedSibling(@Nonnull BaseContentPage childPage,
+      @Nullable String currentPath, @Nonnull Set<String> filterTagPaths) {
+    if (childPage.getPath().equals(currentPath)) {
+      return false;
+    }
+    for (KestrosTag childTag : tagRetrievalService.getTagsOnResource(childPage.getResource())) {
+      if (filterTagPaths.contains(childTag.getPath())) {
+        return true;
+      }
+    }
+    return false;
   }
 
   @Nonnull
@@ -153,46 +162,17 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
       limit = 0;
     }
 
-    if (!sortBy.isEmpty()) {
-      switch (sortBy) {
-        case "createdDate":
-          pages.sort(Comparator.comparing(p -> {
-            Calendar cal = p.getResource().getChild("jcr:content") != null
-                ? p.getResource().getChild("jcr:content").getValueMap()
-                    .get("jcr:created", Calendar.class) : null;
-            return cal != null ? cal.getTimeInMillis() : 0L;
-          }));
-          break;
-        case "lastModified":
-          pages.sort(Comparator.comparing(p -> {
-            Calendar cal = p.getResource().getChild("jcr:content") != null
-                ? p.getResource().getChild("jcr:content").getValueMap()
-                    .get("jcr:lastModified", Calendar.class) : null;
-            return cal != null ? cal.getTimeInMillis() : 0L;
-          }));
-          break;
-        default:
-          pages.sort(Comparator.comparing(p -> {
-            switch (sortBy) {
-              case "name":
-                return p.getName() != null ? p.getName() : "";
-              default:
-                return p.getDisplayTitle() != null ? p.getDisplayTitle() : p.getName();
-            }
-          }));
-          break;
-      }
-    }
-
+    pages = CardListSupport.sortPages(LOG, pages, sortBy, getResource().getPath());
     if (reverse) {
       Collections.reverse(pages);
     }
-    if (limit > 0 && pages.size() > limit) {
-      pages = pages.subList(0, limit);
-    }
 
+    // The limit counts cards that render, so a page dropped below does not cost the list a slot.
     List<KestrosCard> cards = new ArrayList<>();
     for (BaseContentPage page : pages) {
+      if (limit > 0 && cards.size() >= limit) {
+        break;
+      }
       try {
         cards.add(
             new KestrosCardImpl(page,

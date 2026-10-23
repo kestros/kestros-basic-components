@@ -24,9 +24,15 @@ import io.kestros.cms.components.basic.core.LogUtils;
 import io.kestros.cms.componenttypes.api.models.ComponentVariation;
 import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
 import io.kestros.cms.uiframeworks.api.models.UiFramework;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.slf4j.Logger;
 
@@ -150,6 +156,80 @@ final class CardListSupport {
     log.warn("Skipping the card for {} in the card list at {}. {}: {} Every other {} in the list "
                     + "still renders.", item, LogUtils.forLog(dataSourcePath),
             cause.getClass().getName(), describeMessage(cause), noun, cause);
+  }
+
+  /**
+   * Orders a card list's pages by its authored {@code sortBy}, leaving out any page whose sort key
+   * cannot be read.
+   *
+   * <p>Each key is read once, before sorting, so a page that throws is dropped and logged here
+   * rather than escaping the comparator and blanking the whole list. The sort is stable, so pages
+   * with equal keys keep the order they came in.
+   *
+   * @param log Logger of the data source doing the sorting.
+   * @param pages Pages to sort, in their natural order.
+   * @param sortBy {@code name}, {@code createdDate}, {@code lastModified}, empty for no sort, or
+   *         anything else for title.
+   * @param dataSourcePath Path of the card list component.
+   * @return The pages whose sort key could be read, in sort order.
+   */
+  @Nonnull
+  static List<BaseContentPage> sortPages(@Nonnull final Logger log,
+          @Nonnull final List<BaseContentPage> pages, @Nonnull final String sortBy,
+          @Nullable final String dataSourcePath) {
+    switch (sortBy) {
+      case "":
+        return new ArrayList<>(pages);
+      case "createdDate":
+        return sortByKey(log, pages, page -> dateKey(page, "jcr:created"), dataSourcePath);
+      case "lastModified":
+        return sortByKey(log, pages, page -> dateKey(page, "jcr:lastModified"), dataSourcePath);
+      case "name":
+        return sortByKey(log, pages, page -> emptyIfNull(page.getName()), dataSourcePath);
+      default:
+        return sortByKey(log, pages, CardListSupport::titleKey, dataSourcePath);
+    }
+  }
+
+  @Nonnull
+  private static <K extends Comparable<K>> List<BaseContentPage> sortByKey(
+          @Nonnull final Logger log, @Nonnull final List<BaseContentPage> pages,
+          @Nonnull final Function<BaseContentPage, K> sortKey,
+          @Nullable final String dataSourcePath) {
+    final List<Map.Entry<K, BaseContentPage>> keyed = new ArrayList<>();
+    for (final BaseContentPage page : pages) {
+      try {
+        keyed.add(new AbstractMap.SimpleImmutableEntry<>(sortKey.apply(page), page));
+      } catch (final RuntimeException e) {
+        logSkippedCard(log, page, dataSourcePath, e);
+      }
+    }
+    keyed.sort(Map.Entry.comparingByKey());
+    final List<BaseContentPage> sorted = new ArrayList<>();
+    for (final Map.Entry<K, BaseContentPage> entry : keyed) {
+      sorted.add(entry.getValue());
+    }
+    return sorted;
+  }
+
+  @Nonnull
+  private static Long dateKey(@Nonnull final BaseContentPage page,
+          @Nonnull final String property) {
+    final Resource content = page.getResource().getChild("jcr:content");
+    final Calendar date = content != null ? content.getValueMap().get(property, Calendar.class)
+                                          : null;
+    return date != null ? date.getTimeInMillis() : 0L;
+  }
+
+  @Nonnull
+  private static String titleKey(@Nonnull final BaseContentPage page) {
+    final String title = page.getDisplayTitle();
+    return title != null ? title : emptyIfNull(page.getName());
+  }
+
+  @Nonnull
+  private static String emptyIfNull(@Nullable final String value) {
+    return value != null ? value : "";
   }
 
   @Nullable

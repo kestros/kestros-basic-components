@@ -495,11 +495,18 @@ public class CardListChildPagesDataSourceTest extends BaseDataSourceTest {
    * than the loop, so getCardElements() itself runs unaltered.
    */
   private CardListChildPagesDataSource dataSourceOver(final List<BaseContentPage> childPages) {
-    final Map<String, Object> props = new HashMap<>();
+    return dataSourceOver(childPages, new HashMap<>());
+  }
+
+  /** As above, with extra component properties such as sortBy or limit. */
+  private CardListChildPagesDataSource dataSourceOver(final List<BaseContentPage> childPages,
+      final Map<String, Object> extraProperties) {
+    final Map<String, Object> props = new HashMap<>(extraProperties);
     props.put("pagesPath", "/content/mixed");
     props.put("readMoreText", "Button Text");
     final Resource componentResource = context.create().resource(
-        "/content/page/jcr:content/comp-mixed-" + childPages.size(), props);
+        "/content/page/jcr:content/comp-mixed-" + childPages.size()
+            + (extraProperties.isEmpty() ? "" : "-" + extraProperties.hashCode()), props);
     context.request().setResource(componentResource);
 
     final CardListChildPagesDataSource dataSource = spy(
@@ -595,6 +602,126 @@ public class CardListChildPagesDataSourceTest extends BaseDataSourceTest {
         pageAt("/content/mixed/good-1"), broken, pageAt("/content/mixed/good-2")));
 
     final List<KestrosCard> cards = dataSource.getCardElements();
+    assertEquals(2, cards.size());
+    assertEquals("good-1", cards.get(0).getForcedResourceName());
+    assertEquals("good-2", cards.get(1).getForcedResourceName());
+  }
+
+  // ---------------------------------------------------------------------------------------------
+  // One broken page must not blank a sorted or limited list either.
+  //
+  // The sort key is read before any card is built, so a page that throws there used to escape the
+  // comparator and take every other page with it.
+  // ---------------------------------------------------------------------------------------------
+
+  /** A page that knows its path and nothing else; each test stubs the call that throws. */
+  private BaseContentPage pageAtOnly(final String path) {
+    final BaseContentPage page = mock(BaseContentPage.class);
+    when(page.getPath()).thenReturn(path);
+    return page;
+  }
+
+  private Map<String, Object> sortedBy(final String sortBy) {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("sortBy", sortBy);
+    return props;
+  }
+
+  private void assertOneSkipNaming(final RecordedWarnings warnings, final String path) {
+    assertEquals("exactly one page was dropped, so exactly one warning is expected: "
+        + warnings.messages(), 1, warnings.messages().size());
+    assertTrue("the warning must name the dropped page: " + warnings.messages().get(0),
+        warnings.messages().get(0).contains(path));
+  }
+
+  @Test
+  public void testGetCardElementsSortedByTitleSkipsAPageWhoseTitleThrows() {
+    createDistinctlyTitledPages();
+    final BaseContentPage broken = pageAtOnly("/content/mixed/broken");
+    when(broken.getDisplayTitle()).thenThrow(new IllegalStateException("title is unreadable"));
+    final CardListChildPagesDataSource dataSource = dataSourceOver(Arrays.asList(
+        pageAt("/content/mixed/good-2"), broken, pageAt("/content/mixed/good-1")),
+        sortedBy("title"));
+
+    try (RecordedWarnings warnings = new RecordedWarnings(CardListChildPagesDataSource.class)) {
+      final List<KestrosCard> cards = dataSource.getCardElements();
+
+      assertEquals(2, cards.size());
+      assertEquals("First Good Page", cards.get(0).getTitleElement().getHeadingText());
+      assertEquals("Second Good Page", cards.get(1).getTitleElement().getHeadingText());
+      assertOneSkipNaming(warnings, "/content/mixed/broken");
+    }
+  }
+
+  @Test
+  public void testGetCardElementsSortedByCreatedDateSkipsAPageWhoseResourceThrows() {
+    createDistinctlyTitledPages();
+    final BaseContentPage broken = pageAtOnly("/content/mixed/broken");
+    when(broken.getResource()).thenThrow(new IllegalStateException("resource is unreadable"));
+    final CardListChildPagesDataSource dataSource = dataSourceOver(Arrays.asList(
+        pageAt("/content/mixed/good-2"), broken, pageAt("/content/mixed/good-1")),
+        sortedBy("createdDate"));
+
+    try (RecordedWarnings warnings = new RecordedWarnings(CardListChildPagesDataSource.class)) {
+      final List<KestrosCard> cards = dataSource.getCardElements();
+
+      // Neither healthy page carries jcr:created, so their keys tie and the stable sort keeps them
+      // in the order they came in.
+      assertEquals(2, cards.size());
+      assertEquals("good-2", cards.get(0).getForcedResourceName());
+      assertEquals("good-1", cards.get(1).getForcedResourceName());
+      assertOneSkipNaming(warnings, "/content/mixed/broken");
+    }
+  }
+
+  @Test
+  public void testGetCardElementsSortedByNameSkipsAPageWhoseNameThrows() {
+    createDistinctlyTitledPages();
+    final BaseContentPage broken = pageAtOnly("/content/mixed/broken");
+    when(broken.getName()).thenThrow(new IllegalStateException("name is unreadable"));
+    final CardListChildPagesDataSource dataSource = dataSourceOver(Arrays.asList(
+        pageAt("/content/mixed/good-2"), broken, pageAt("/content/mixed/good-1")),
+        sortedBy("name"));
+
+    try (RecordedWarnings warnings = new RecordedWarnings(CardListChildPagesDataSource.class)) {
+      final List<KestrosCard> cards = dataSource.getCardElements();
+
+      assertEquals(2, cards.size());
+      assertEquals("good-1", cards.get(0).getForcedResourceName());
+      assertEquals("good-2", cards.get(1).getForcedResourceName());
+      assertOneSkipNaming(warnings, "/content/mixed/broken");
+    }
+  }
+
+  @Test
+  public void testGetCardElementsWithLimitCountsOnlyCardsThatRender() {
+    createDistinctlyTitledPages();
+    final Map<String, Object> props = new HashMap<>();
+    props.put("limit", "1");
+    final CardListChildPagesDataSource dataSource = dataSourceOver(Arrays.asList(
+        brokenPage("/content/mixed/broken", new IllegalStateException("jcr:content will not adapt")),
+        pageAt("/content/mixed/good-1"), pageAt("/content/mixed/good-2")), props);
+
+    final List<KestrosCard> cards = dataSource.getCardElements();
+
+    assertEquals("the broken page must not use up the only slot", 1, cards.size());
+    assertEquals("good-1", cards.get(0).getForcedResourceName());
+  }
+
+  @Test
+  public void testGetCardElementsSortedByTitleTreatsANullTitleAndNameAsEmpty() {
+    createDistinctlyTitledPages();
+    // Dropped later, while its card is built, so only the sort's handling of the nulls is tested.
+    final BaseContentPage nameless = brokenPage("/content/mixed/nameless",
+        new IllegalStateException("no card for this page"));
+    when(nameless.getName()).thenReturn(null);
+    when(nameless.getDisplayTitle()).thenReturn(null);
+    final CardListChildPagesDataSource dataSource = dataSourceOver(Arrays.asList(
+        pageAt("/content/mixed/good-2"), nameless, pageAt("/content/mixed/good-1")),
+        sortedBy("title"));
+
+    final List<KestrosCard> cards = dataSource.getCardElements();
+
     assertEquals(2, cards.size());
     assertEquals("good-1", cards.get(0).getForcedResourceName());
     assertEquals("good-2", cards.get(1).getForcedResourceName());
