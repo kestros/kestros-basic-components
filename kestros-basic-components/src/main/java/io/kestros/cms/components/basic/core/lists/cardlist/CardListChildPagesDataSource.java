@@ -12,9 +12,7 @@ import io.kestros.cms.sitebuilding.api.models.BaseComponent;
 import io.kestros.cms.sitebuilding.api.models.BaseContentPage;
 import io.kestros.commons.structuredslingmodels.exceptions.NoValidAncestorException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -85,46 +83,17 @@ public class CardListChildPagesDataSource extends BaseContainerSlingModelDataSou
       limit = 0;
     }
 
-    if (!sortBy.isEmpty()) {
-      switch (sortBy) {
-        case "createdDate":
-          pages.sort(Comparator.comparing(p -> {
-            Calendar cal = p.getResource().getChild("jcr:content") != null
-                ? p.getResource().getChild("jcr:content").getValueMap()
-                    .get("jcr:created", Calendar.class) : null;
-            return cal != null ? cal.getTimeInMillis() : 0L;
-          }));
-          break;
-        case "lastModified":
-          pages.sort(Comparator.comparing(p -> {
-            Calendar cal = p.getResource().getChild("jcr:content") != null
-                ? p.getResource().getChild("jcr:content").getValueMap()
-                    .get("jcr:lastModified", Calendar.class) : null;
-            return cal != null ? cal.getTimeInMillis() : 0L;
-          }));
-          break;
-        default:
-          pages.sort(Comparator.comparing(p -> {
-            switch (sortBy) {
-              case "name":
-                return p.getName() != null ? p.getName() : "";
-              default:
-                return p.getDisplayTitle() != null ? p.getDisplayTitle() : p.getName();
-            }
-          }));
-          break;
-      }
-    }
-
+    pages = CardListSupport.sortPages(LOG, pages, sortBy, getResource().getPath());
     if (reverse) {
       Collections.reverse(pages);
     }
-    if (limit > 0 && pages.size() > limit) {
-      pages = pages.subList(0, limit);
-    }
 
+    // The limit counts cards that render, so a page dropped below does not cost the list a slot.
     List<KestrosCard> cards = new ArrayList<>();
     for (BaseContentPage page : pages) {
+      if (limit > 0 && cards.size() >= limit) {
+        break;
+      }
       try {
         cards.add(
             new KestrosCardImpl(page,

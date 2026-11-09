@@ -71,6 +71,8 @@ public class CardListTagSearchDataSourceTest extends BaseDataSourceTest {
               return Arrays.asList(tag1);
             } else if ("/content/sessions/child-3".equals(path)) {
               return Collections.emptyList();
+            } else if ("/content/sessions/unreadable-tags".equals(path)) {
+              throw new IllegalStateException("tags on this page cannot be read");
             }
             return Collections.emptyList();
           }
@@ -526,11 +528,18 @@ public class CardListTagSearchDataSourceTest extends BaseDataSourceTest {
 
   /** A data source whose tag search matches exactly the pages given, in that order. */
   private CardListTagSearchDataSource dataSourceOver(final List<BaseContentPage> matches) {
-    final Map<String, Object> props = new HashMap<>();
+    return dataSourceOver(matches, new HashMap<>());
+  }
+
+  /** As above, with extra component properties such as sortBy or limit. */
+  private CardListTagSearchDataSource dataSourceOver(final List<BaseContentPage> matches,
+      final Map<String, Object> extraProperties) {
+    final Map<String, Object> props = new HashMap<>(extraProperties);
     props.put("tags", new String[]{"/etc/tags/topic/java"});
     props.put("readMoreText", "View Session");
     final Resource componentResource = context.create().resource(
-        "/content/sessions/child-1/jcr:content/comp-mixed-" + matches.size(), props);
+        "/content/sessions/child-1/jcr:content/comp-mixed-" + matches.size()
+            + (extraProperties.isEmpty() ? "" : "-" + extraProperties.hashCode()), props);
     context.request().setResource(componentResource);
 
     final CardListTagSearchDataSource dataSource = spy(
@@ -617,6 +626,151 @@ public class CardListTagSearchDataSourceTest extends BaseDataSourceTest {
       fail("a component whose theme carries no UI framework must not render an empty card list");
     } catch (final RuntimeException expected) {
       assertNotNull(expected);
+    }
+  }
+
+  // ---------------------------------------------------------------------------------------------
+  // One broken page must not blank a sorted, limited or tag-filtered list either.
+  //
+  // The tag lookup and the sort key are both read before any card is built, so a page that throws
+  // in either used to take every other page with it.
+  // ---------------------------------------------------------------------------------------------
+
+  /** A page that knows its path and nothing else; each test stubs the call that throws. */
+  private BaseContentPage pageAtOnly(final String path) {
+    final BaseContentPage page = mock(BaseContentPage.class);
+    when(page.getPath()).thenReturn(path);
+    return page;
+  }
+
+  private Map<String, Object> sortedBy(final String sortBy) {
+    final Map<String, Object> props = new HashMap<>();
+    props.put("sortBy", sortBy);
+    return props;
+  }
+
+  private void assertOneSkipNaming(final RecordedWarnings warnings, final String path) {
+    assertEquals("exactly one page was dropped, so exactly one warning is expected: "
+        + warnings.messages(), 1, warnings.messages().size());
+    assertTrue("the warning must name the dropped page: " + warnings.messages().get(0),
+        warnings.messages().get(0).contains(path));
+  }
+
+  @Test
+  public void testGetCardElementsSortedByTitleSkipsAPageWhoseTitleThrows() {
+    createDistinctlyTitledPages();
+    final BaseContentPage broken = pageAtOnly("/content/tagged/broken");
+    when(broken.getDisplayTitle()).thenThrow(new IllegalStateException("title is unreadable"));
+    final CardListTagSearchDataSource dataSource = dataSourceOver(Arrays.asList(
+        pageAt("/content/tagged/good-2"), broken, pageAt("/content/tagged/good-1")),
+        sortedBy("title"));
+
+    try (RecordedWarnings warnings = new RecordedWarnings(CardListTagSearchDataSource.class)) {
+      final List<KestrosCard> cards = dataSource.getCardElements();
+
+      assertEquals(2, cards.size());
+      assertEquals("First Tagged Page", cards.get(0).getTitleElement().getHeadingText());
+      assertEquals("Second Tagged Page", cards.get(1).getTitleElement().getHeadingText());
+      assertOneSkipNaming(warnings, "/content/tagged/broken");
+    }
+  }
+
+  @Test
+  public void testGetCardElementsSortedByCreatedDateSkipsAPageWhoseResourceThrows() {
+    createDistinctlyTitledPages();
+    final BaseContentPage broken = pageAtOnly("/content/tagged/broken");
+    when(broken.getResource()).thenThrow(new IllegalStateException("resource is unreadable"));
+    final CardListTagSearchDataSource dataSource = dataSourceOver(Arrays.asList(
+        pageAt("/content/tagged/good-2"), broken, pageAt("/content/tagged/good-1")),
+        sortedBy("createdDate"));
+
+    try (RecordedWarnings warnings = new RecordedWarnings(CardListTagSearchDataSource.class)) {
+      final List<KestrosCard> cards = dataSource.getCardElements();
+
+      // Neither healthy page carries jcr:created, so their keys tie and the stable sort keeps them
+      // in the order they came in.
+      assertEquals(2, cards.size());
+      assertEquals("good-2", cards.get(0).getForcedResourceName());
+      assertEquals("good-1", cards.get(1).getForcedResourceName());
+      assertOneSkipNaming(warnings, "/content/tagged/broken");
+    }
+  }
+
+  @Test
+  public void testGetCardElementsSortedByNameSkipsAPageWhoseNameThrows() {
+    createDistinctlyTitledPages();
+    final BaseContentPage broken = pageAtOnly("/content/tagged/broken");
+    when(broken.getName()).thenThrow(new IllegalStateException("name is unreadable"));
+    final CardListTagSearchDataSource dataSource = dataSourceOver(Arrays.asList(
+        pageAt("/content/tagged/good-2"), broken, pageAt("/content/tagged/good-1")),
+        sortedBy("name"));
+
+    try (RecordedWarnings warnings = new RecordedWarnings(CardListTagSearchDataSource.class)) {
+      final List<KestrosCard> cards = dataSource.getCardElements();
+
+      assertEquals(2, cards.size());
+      assertEquals("good-1", cards.get(0).getForcedResourceName());
+      assertEquals("good-2", cards.get(1).getForcedResourceName());
+      assertOneSkipNaming(warnings, "/content/tagged/broken");
+    }
+  }
+
+  @Test
+  public void testGetCardElementsWithLimitCountsOnlyCardsThatRender() {
+    createDistinctlyTitledPages();
+    final Map<String, Object> props = new HashMap<>();
+    props.put("limit", "1");
+    final CardListTagSearchDataSource dataSource = dataSourceOver(Arrays.asList(
+        brokenPage("/content/tagged/broken", new IllegalStateException("jcr:content will not adapt")),
+        pageAt("/content/tagged/good-1"), pageAt("/content/tagged/good-2")), props);
+
+    final List<KestrosCard> cards = dataSource.getCardElements();
+
+    assertEquals("the broken page must not use up the only slot", 1, cards.size());
+    assertEquals("good-1", cards.get(0).getForcedResourceName());
+  }
+
+  @Test
+  public void testGetCardElementsSortedByTitleTreatsANullTitleAndNameAsEmpty() {
+    createDistinctlyTitledPages();
+    // Dropped later, while its card is built, so only the sort's handling of the nulls is tested.
+    final BaseContentPage nameless = brokenPage("/content/tagged/nameless",
+        new IllegalStateException("no card for this page"));
+    when(nameless.getName()).thenReturn(null);
+    when(nameless.getDisplayTitle()).thenReturn(null);
+    final CardListTagSearchDataSource dataSource = dataSourceOver(Arrays.asList(
+        pageAt("/content/tagged/good-2"), nameless, pageAt("/content/tagged/good-1")),
+        sortedBy("title"));
+
+    final List<KestrosCard> cards = dataSource.getCardElements();
+
+    assertEquals(2, cards.size());
+    assertEquals("good-1", cards.get(0).getForcedResourceName());
+    assertEquals("good-2", cards.get(1).getForcedResourceName());
+  }
+
+  /**
+   * Runs the real tag search: the setUp answer throws for /content/sessions/unreadable-tags, which
+   * is tagged-page-shaped but whose tags cannot be read.
+   */
+  @Test
+  public void testGetCardElementsSkipsAPageWhoseTagsCannotBeReadAndKeepsTheRest() {
+    final Map<String, Object> pageProperties = new HashMap<>();
+    pageProperties.put("jcr:primaryType", "kes:Page");
+    final Map<String, Object> contentProperties = new HashMap<>();
+    contentProperties.put("jcr:primaryType", "nt:unstructured");
+    contentProperties.put("jcr:title", "Unreadable Tags");
+    context.create().resource("/content/sessions/unreadable-tags", pageProperties);
+    context.create().resource("/content/sessions/unreadable-tags/jcr:content", contentProperties);
+    final CardListTagSearchDataSource dataSource =
+        context.request().adaptTo(CardListTagSearchDataSource.class);
+
+    try (RecordedWarnings warnings = new RecordedWarnings(CardListTagSearchDataSource.class)) {
+      final List<KestrosCard> cards = dataSource.getCardElements();
+
+      assertEquals("child-2 is still tagged and must still render", 1, cards.size());
+      assertEquals("child-2", cards.get(0).getForcedResourceName());
+      assertOneSkipNaming(warnings, "/content/sessions/unreadable-tags");
     }
   }
 }
