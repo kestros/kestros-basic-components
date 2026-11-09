@@ -81,21 +81,20 @@ final class CardListSupport {
     final List<ComponentVariation> variations = dataSource.getElementVariations("cardVariations",
             KestrosCard.RESOURCE_TYPE);
     final String layout = dataSource.getLayout("card");
-    final UiFramework uiFramework;
+    UiFramework uiFramework = null;
+    Exception lookupFailure = null;
     try {
       uiFramework = dataSource.getUiFramework();
     } catch (final ResourceNotFoundException | InvalidThemeException | ThemeRetrievalException
             | UiFrameworkRetrievalException e) {
-      throw new IllegalStateException(String.format(
-              "Card list at %s cannot build any card: its page's UI framework cannot be read.",
-              LogUtils.forLog(parentPath)), e);
+      lookupFailure = e;
     }
     if (uiFramework == null) {
       throw new IllegalStateException(String.format(
               "Card list at %s cannot build any card: its page resolves to no UI framework. "
                       + "hasResourceResolver=%s, cardVariations=%s, cardLayout=%s.",
               LogUtils.forLog(parentPath), resourceResolver != null, variations.size(),
-              LogUtils.forLog(layout)));
+              LogUtils.forLog(layout)), lookupFailure);
     }
   }
 
