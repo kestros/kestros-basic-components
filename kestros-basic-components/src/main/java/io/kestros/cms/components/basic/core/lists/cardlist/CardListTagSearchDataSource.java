@@ -23,10 +23,14 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSource implements
                                                                                    KestrosCardList {
+
+  private static final Logger LOG = LoggerFactory.getLogger(CardListTagSearchDataSource.class);
 
   @OSGiService
   @org.apache.sling.models.annotations.Optional
@@ -137,6 +141,7 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
   @Nonnull
   @Override
   public List<KestrosCard> getCardElements() {
+    CardListSupport.requireComponentPrerequisites(this);
     List<BaseContentPage> pages = new ArrayList<>(getTaggedPages());
 
     String sortBy = getResource().getValueMap().get("sortBy", "");
@@ -197,7 +202,9 @@ public class CardListTagSearchDataSource extends BaseContainerSlingModelDataSour
                 page.getName(),
                 assetRetrievalService));
       } catch (Exception e) {
-        // Skip cards that fail to construct — null-safe
+        // The prerequisites every card shares were checked above, so this failure belongs to this
+        // page. Skipping in silence is what hid this for months; say which page went and why.
+        CardListSupport.logSkippedCard(LOG, page, getResource().getPath(), e);
       }
     }
     return new ArrayList<>(cards);

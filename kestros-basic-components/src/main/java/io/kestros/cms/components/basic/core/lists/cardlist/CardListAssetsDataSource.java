@@ -22,15 +22,21 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class CardListAssetsDataSource extends BaseContainerSlingModelDataSource implements
                                                                                 KestrosCardList {
+
+  private static final Logger LOG = LoggerFactory.getLogger(CardListAssetsDataSource.class);
+
   @OSGiService
   private AssetRetrievalService assetRetrievalService;
   private AssetCollection collection;
@@ -60,6 +66,7 @@ public class CardListAssetsDataSource extends BaseContainerSlingModelDataSource 
     if (col == null) {
       return new ArrayList<>();
     }
+    CardListSupport.requireComponentPrerequisites(this);
     List<Asset> assets = new ArrayList<>(col.getChildAssets());
 
     String sortBy = getResource().getValueMap().get("sortBy", "");
@@ -106,52 +113,72 @@ public class CardListAssetsDataSource extends BaseContainerSlingModelDataSource 
     }
 
     List<KestrosCard> cards = new ArrayList<>();
-    String parentPath = getPath();
 
     for (Asset asset : assets) {
-      String imagePath = asset.getPath();
-      String altText = null;
-      String caption = null;
-      String imageTitle = null;
-      String href = null;
-      String ariaLabel = null;
-      String anchorTitle = null;
-      AnchorTarget target = null;
+      String imagePath = readPath(asset);
+      try {
+        String altText = null;
+        String caption = null;
+        String imageTitle = null;
+        String href = null;
+        String ariaLabel = null;
+        String anchorTitle = null;
+        AnchorTarget target = null;
 
-      List<ComponentVariation> titleVariations = getElementVariations("titleVariations",
-          KestrosImage.RESOURCE_TYPE);
-      String titleLayout = getLayout("title");
-      KestrosHeading titleElement = null;
-      try {
-        titleElement = new KestrosHeadingImpl(asset.getTitle(), getHeadingLevel(),
-            this,"title", "titleElement");
-      } catch (ComponentConfigurationException e) {
-        // do nothing.
-      }
+        List<ComponentVariation> titleVariations = getElementVariations("titleVariations",
+            KestrosImage.RESOURCE_TYPE);
+        String titleLayout = getLayout("title");
+        KestrosHeading titleElement = null;
+        try {
+          titleElement = new KestrosHeadingImpl(asset.getTitle(), getHeadingLevel(),
+              this,"title", "titleElement");
+        } catch (ComponentConfigurationException e) {
+          // The card renders without a title, as it always has. Say so rather than swallowing it.
+          CardListSupport.logDegradedCard(LOG, imagePath, getResource().getPath(), "title", e);
+        }
 
-      List<ComponentVariation> imageVariations = getElementVariations("imageVariations",
-          KestrosImage.RESOURCE_TYPE);
-      String imageLayout = getLayout("image");
-      String imageId = null;
-      KestrosImage image = null;
-      try {
-        image = new KestrosImageImpl(imagePath, altText, caption, imageTitle,
-            href, ariaLabel, anchorTitle, target,
-            this, "image", "imageElement",assetRetrievalService);
-      } catch (ComponentConfigurationException e) {
-        return null;
-      }
-      try {
+        List<ComponentVariation> imageVariations = getElementVariations("imageVariations",
+            KestrosImage.RESOURCE_TYPE);
+        String imageLayout = getLayout("image");
+        String imageId = null;
+        KestrosImage image = null;
+        try {
+          image = new KestrosImageImpl(imagePath, altText, caption, imageTitle,
+              href, ariaLabel, anchorTitle, target,
+              this, "image", "imageElement",assetRetrievalService);
+        } catch (ComponentConfigurationException e) {
+          // One asset's image is not the list's problem: keep the card, and keep the cards already
+          // built for the assets before it. Returning null here handed a null list to HTL.
+          CardListSupport.logDegradedCard(LOG, imagePath, getResource().getPath(), "image", e);
+        }
         cards.add(
             new KestrosCardImpl(asset.getDescription(), titleElement, image,
                 null,
                 this,
                 "card", null));
       } catch (Exception e) {
-        throw new RuntimeException(e);
+        // The prerequisites every card shares were checked above, so this failure belongs to this
+        // asset. Drop the asset, keep the rest of the list, and say which asset went and why.
+        CardListSupport.logSkippedCard(LOG, imagePath, getResource().getPath(), e);
       }
     }
     return new ArrayList<>(cards);
+  }
+
+  /**
+   * The asset's path, or null if the asset cannot say where it is. Read before the card is built
+   * and outside the try, because it is what names the asset in the log when the card fails.
+   *
+   * @param asset Asset to read the path from.
+   * @return The asset's path, or null if the asset cannot say where it is.
+   */
+  @Nullable
+  private static String readPath(@Nonnull final Asset asset) {
+    try {
+      return asset.getPath();
+    } catch (final RuntimeException e) {
+      return null;
+    }
   }
 
 }
