@@ -23,6 +23,9 @@ package io.kestros.cms.components.basic.core.validation;
 // */
 //@Component(immediate = true,
 //           service = ModelValidatorRegistrationService.class)
+/**
+ * Validation service for the heading component.
+ */
 public class HeadingValidationService extends TextComponentValidationService {
 //
 //  @Reference(cardinality = ReferenceCardinality.OPTIONAL,
